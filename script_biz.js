@@ -17,7 +17,7 @@ const sourceModal = document.getElementById('sourceModal');
 const modalClose = document.querySelector('.close');
 
 // API 기본 URL
-const API_BASE_URL = 'https://127.0.0.1:5555/items/biz/paging';
+const API_BASE_URL = 'https://startups.koraia.org:5555/items/biz/paging';
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
