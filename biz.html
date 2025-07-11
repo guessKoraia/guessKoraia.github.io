@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국인공지능협회 - 회원 전용 자료실</title>
+    <link rel="stylesheet" href="styles_biz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo">
+                    <a href="/">
+                        <img src="https://koraia.org/base/img/default/img/logo_basic.png" alt="한국인공지능협회">
+                    </a>
+                </div>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#" class="active">사업공고</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main">
+        <!-- 히어로 섹션 -->
+        <section class="hero">
+            <div class="hero-container">
+                <h1>사업공고</h1>
+                <p>정부 및 기업의 AI 관련 사업공고를 한눈에 확인하세요</p>
+            </div>
+        </section>
+
+        <!-- 공고 목록 섹션 -->
+        <section class="announcements-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>공고 목록</h2>
+                    <div class="header-actions">
+                        <button id="excelDownloadBtn" class="excel-download-btn">
+                            <i class="fas fa-file-excel"></i>
+                            엑셀 다운로드
+                        </button>
+                        <button id="sourceInfoBtn" class="source-info-btn">
+                            <i class="fas fa-info-circle"></i>
+                            가져오는 곳
+                        </button>
+                        <div class="result-info">
+                            <span id="totalCount">총 0건</span>
+                            <span id="currentPage">페이지 1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 로딩 스피너 -->
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>데이터를 불러오는 중...</p>
+                </div>
+
+                <!-- 공고 목록 -->
+                <div id="announcementsList" class="announcements-list">
+                    <!-- 공고 아이템들이 여기에 동적으로 추가됩니다 -->
+                </div>
+
+                <!-- 페이지네이션 -->
+                <div id="pagination" class="pagination">
+                    <!-- 페이지네이션 버튼들이 여기에 동적으로 추가됩니다 -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>사단법인 한국인공지능협회</h3>
+                    <p>Korea Artificial Intelligence Association</p>
+                    <p>사업자등록번호: 436-82-00239</p>
+                </div>
+                <div class="footer-section">
+                    <h4>연락처</h4>
+                    <p><i class="fas fa-phone"></i> 02-713-4800</p>
+                    <p><i class="fas fa-envelope"></i> info@koraia.org</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 서울특별시 마포구 백범로 88 (대흥동) 경총회관 3층</p>
+                </div>
+    
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 한국인공지능협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 소스 정보 모달 -->
+    <div id="sourceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>사업공고 정보 수집 사이트</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">다음 사이트들에서 사업공고 정보를 수집하여 제공합니다:</p>
+                <div class="source-list">
+                    <div class="source-item">
+                        <span class="source-number">1</span>
+                        <div class="source-info">
+                            <strong>스마트공장사업관리시스템</strong>
+                            <a href="https://www.smart-factory.kr/usr/bg/ba/ma/bsnsPblanc" target="_blank">
+                                https://www.smart-factory.kr/usr/bg/ba/ma/bsnsPblanc
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">2</span>
+                        <div class="source-info">
+                            <strong>기업마당</strong>
+                            <a href="https://www.bizinfo.go.kr/web/lay1/bbs/S1T122C128/AS/74/list.do" target="_blank">
+                                https://www.bizinfo.go.kr/web/lay1/bbs/S1T122C128/AS/74/list.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">3</span>
+                        <div class="source-info">
+                            <strong>중소벤처24</strong>
+                            <a href="https://www.smes.go.kr/main/sportsBsnsPolicy?newCntcInsttCd=&cntcInsttCd=&srchDtStyle=&srchBeginDt=&srchEndDt=&progress=ok&srchCntcCmmn=&srchGubun=3&srchText=&newView=&cntPerPage=10" target="_blank">
+                                https://www.smes.go.kr/main/sportsBsnsPolicy
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">4</span>
+                        <div class="source-info">
+                            <strong>IITP 사업관리시스템</strong>
+                            <a href="https://ezone.iitp.kr/common/anno/list" target="_blank">
+                                https://ezone.iitp.kr/common/anno/list
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">5</span>
+                        <div class="source-info">
+                            <strong>IRIS 범부처통합연구지원시스템</strong>
+                            <a href="https://www.iris.go.kr/contents/retrieveBsnsAncmBtinSituListView.do" target="_blank">
+                                https://www.iris.go.kr/contents/retrieveBsnsAncmBtinSituListView.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">6</span>
+                        <div class="source-info">
+                            <strong>SBA 서울경제진흥원</strong>
+                            <a href="https://www.sba.seoul.kr/Pages/BusinessApply/Posting.aspx" target="_blank">
+                                https://www.sba.seoul.kr/Pages/BusinessApply/Posting.aspx
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">7</span>
+                        <div class="source-info">
+                            <strong>NTIS 국가R&D 통합공고</strong>
+                            <a href="https://www.ntis.go.kr/rndgate/eg/un/ra/mng.do" target="_blank">
+                                https://www.ntis.go.kr/rndgate/eg/un/ra/mng.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">8</span>
+                        <div class="source-info">
+                            <strong>NIPA 정보통신산업진흥원 사업공고</strong>
+                            <a href="https://www.nipa.kr/home/2-2?srchKey=&tab=&searchFieldNo3=&searchFieldNo=0&srchText=&searchSortKey=LAST_REG" target="_blank">
+                                https://www.nipa.kr/home/2-2
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">9</span>
+                        <div class="source-info">
+                            <strong>AI Hub 사업공고</strong>
+                            <a href="https://aihub.or.kr/aihubnews/bsnspblanc/list.do?currMenu=131&topMenu=103" target="_blank">
+                                https://aihub.or.kr/aihubnews/bsnspblanc/list.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">10</span>
+                        <div class="source-info">
+                            <strong>K-Startup 창업지원포털</strong>
+                            <a href="https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do" target="_blank">
+                                https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">11</span>
+                        <div class="source-info">
+                            <strong>TIPA 중소기업기술정보진흥원</strong>
+                            <a href="https://www.tipa.or.kr/s040101" target="_blank">
+                                https://www.tipa.or.kr/s040101
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">12</span>
+                        <div class="source-info">
+                            <strong>중소벤처기업부</strong>
+                            <a href="https://www.mss.go.kr/site/smba/ex/bbs/List.do?cbIdx=126&searchRltnYn=A" target="_blank">
+                                https://www.mss.go.kr/site/smba/ex/bbs/List.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">13</span>
+                        <div class="source-info">
+                            <strong>ITECH 산업기술R&D 정보포털</strong>
+                            <a href="https://itech.keit.re.kr/index.do#02010100" target="_blank">
+                                https://itech.keit.re.kr/index.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">14</span>
+                        <div class="source-info">
+                            <strong>NIA 한국지능정보사회진흥원</strong>
+                            <a href="https://www.nia.or.kr/site/nia_kor/ex/bbs/List.do?cbIdx=78336" target="_blank">
+                                https://www.nia.or.kr/site/nia_kor/ex/bbs/List.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">15</span>
+                        <div class="source-info">
+                            <strong>NIPA 정보통신산업진흥원</strong>
+                            <a href="https://www.nipa.kr/home/2-3?curPage=1" target="_blank">
+                                https://www.nipa.kr/home/2-3
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">16</span>
+                        <div class="source-info">
+                            <strong>SMTECH 중소기업 기술개발사업 종합관리시스템</strong>
+                            <a href="https://www.smtech.go.kr/front/ifg/no/notice02_list.do" target="_blank">
+                                https://www.smtech.go.kr/front/ifg/no/notice02_list.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">17</span>
+                        <div class="source-info">
+                            <strong>KIAT 한국산업기술진흥원</strong>
+                            <a href="https://www.kiat.or.kr/front/board/boardContentsListPage.do?board_id=90&MenuId=b159c9dac684471b87256f1e25404f5e" target="_blank">
+                                https://www.kiat.or.kr/front/board/boardContentsListPage.do
+                            </a>
+                        </div>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-number">18</span>
+                        <div class="source-info">
+                            <strong>과학기술정보통신부</strong>
+                            <a href="https://www.msit.go.kr/bbs/list.do?sCode=user&mPid=121&mId=311" target="_blank">
+                                https://www.msit.go.kr/bbs/list.do
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script_biz.js"></script>
+</body>
+</html>
