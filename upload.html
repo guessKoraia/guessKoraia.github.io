@@ -358,7 +358,7 @@
             document.getElementById('filename').value = file.name;
             
             // 파일 크기 설정 (MB 단위)
-            const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+            const sizeInMB = (file.size / (1024 * 1024)).toFixed(1);
             document.getElementById('size').value = sizeInMB;
             
             // 파일 타입 자동 설정
