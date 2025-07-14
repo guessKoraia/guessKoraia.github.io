@@ -1,4 +1,21 @@
 [
+            {
+    "filename": "AI at Work 2025: Momentum Builds, But Gaps Remain",
+    "type": "pdf",
+    "description": "보스턴 컨설팅 그룹 (BCG)가 11개국 조사 결과 발표. 일본 직장인의 일상적 AI 활용률은 51%로, 글로벌 평균(72%)에 크게 못 미쳤다고 합니다. 일본 기업 중 절반가량만이 AI를 일상 업무에 활용하며, 구직자·기성세대 모두에서 디지털 기술 격차가 나타났다고 합니다.",
+    "size": 0.6,
+    "date": "2025-07-14",
+    "link": "https://drive.google.com/file/d/10BZNVb5kB4IlYfJdJluqAFDFY_Ov_hxf/view?usp=sharing"
+},
+
+    {
+    "filename": "AI Data Security",
+    "type": "pdf",
+    "description": "美국가안보국(NSA)·CISA·FBI 등 연합 보안 기관이 발간한 AI 보안 지침서입니다. AI 개발·운영 단계별 데이터 보안 중요성을 강조하며, 데이터 암호화·진위 추적·보호 저장소 활용 등 모범 사례를 제시하고 있습니다. 특히 데이터 공급망 공격, 변조(‘포이즈닝’) 위험, 데이터 드리프트 등의 위협을 분석하고 대응 방안을 제안하고 있습니다.",
+    "size": 0.7,
+    "date": "2025-07-14",
+    "link": "https://drive.google.com/file/d/1jr9t7jaZvVwfGRwLZn0pGLuRBVrg41zD/view?usp=sharing"
+},
         {
     "filename": "맥킨지&컴퍼니_에이전트 AI 우위 확보",
     "type": "pdf",
