@@ -19,13 +19,21 @@
     <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
         media="(prefers-color-scheme: dark)">
     
-    <!-- 프리텐다드 폰트 추가 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-    <!-- 아이콘 폰트 추가 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 툴팁 라이브러리 추가 -->
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
     <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .highlight-today {
+            background-color: #ffe082; /* 부드러운 노란색 */
+            color: #4e342e; /* 어두운 갈색 텍스트 */
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 
 <body>
@@ -71,7 +79,6 @@
                     </tr>
                 </thead>
                 <tbody id="fileTableBody">
-                    <!-- 여기에 파일 목록이 표시됩니다 -->
                     <tr>
                         <td colspan="5" class="loading">데이터 로딩 중</td>
                     </tr>
@@ -79,18 +86,14 @@
             </table>
         </div>
 
-        <!-- 페이지 네비게이션 -->
         <div class="pagination" id="pagination">
-            <!-- 페이지 버튼이 여기에 표시됩니다 -->
-        </div>
+            </div>
     </div>
 
-    <!-- 상단으로 스크롤 버튼 -->
     <button class="scroll-top" id="scrollTop" title="상단으로 이동">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- 툴팁 라이브러리 -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
 
@@ -107,7 +110,7 @@
             let currentFilter = 'all';
 
             // 페이징 관련 변수
-            const itemsPerPage = getItemsPerPage(); // 화면 크기에 따라 페이지당 아이템 수 조정
+            let itemsPerPage = getItemsPerPage(); // 화면 크기에 따라 페이지당 아이템 수 조정
             let currentPage = 1;
             let totalPages = 1;
 
@@ -136,11 +139,9 @@
             // 화면 크기 변경 감지
             window.addEventListener('resize', function () {
                 const newItemsPerPage = getItemsPerPage();
-                if (newItemsPerPage !== itemsPerPage) {
-                    // 페이지당 아이템 수가 변경되면 페이지 재계산
-                    updatePagination();
-                    displayFiles(filteredFiles);
-                }
+                itemsPerPage = newItemsPerPage;
+                updatePagination(filteredFiles); // 화면 크기 변경 시 필터된 파일 목록 기준으로 페이지네이션 업데이트
+                displayFiles(filteredFiles);
             });
 
             // 파일 데이터 가져오기
@@ -184,112 +185,89 @@
                     this.classList.add('active');
                     currentFilter = this.dataset.type;
                     currentPage = 1; // 필터 변경시 첫 페이지로 이동
-                    filterFiles();
+                    performSearch(); // 검색어 유지하며 탭 필터 적용
                 });
             });
 
             function performSearch() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-
-                // 검색어가 비어있으면 전체 표시
-                if (searchTerm === '') {
-                    filteredFiles = [...files];
-                } else {
-                    filteredFiles = files.filter(file => {
-                        const filename = file.filename ? file.filename.toLowerCase() : '';
-                        const description = file.description ? file.description.toLowerCase() : '';
-                        return filename.includes(searchTerm) || description.includes(searchTerm);
-                    });
-                }
-
-                currentPage = 1; // 검색시 첫 페이지로 이동
-                filterFiles();
+                let searchResult = files.filter(file => {
+                    const filename = file.filename ? file.filename.toLowerCase() : '';
+                    const description = file.description ? file.description.toLowerCase() : '';
+                    return filename.includes(searchTerm) || description.includes(searchTerm);
+                });
+                
+                filterFiles(searchResult);
             }
 
-            function filterFiles() {
-                let result = [...filteredFiles];
+            function filterFiles(filesToFilter) {
+                let result = [...filesToFilter];
 
                 if (currentFilter !== 'all') {
                     if (currentFilter === '기타') {
-                        // 기타 - PDF와 HWP/HWPX 외의 모든 파일
                         result = result.filter(file => {
                             const fileType = file.type ? file.type.toLowerCase() : '';
-                            return fileType !== 'pdf' && fileType !== 'hwp' && fileType !== 'hwpx' && fileType !== 'xlsx' && fileType !== 'ppt';
+                            return !['pdf', 'hwp', 'hwpx', 'xlsx', 'ppt', 'pptx'].includes(fileType);
                         });
                     } else if (currentFilter === 'hwp') {
-                        // HWP 탭 - HWP와 HWPX 포함
                         result = result.filter(file => {
                             const fileType = file.type ? file.type.toLowerCase() : '';
                             return fileType === 'hwp' || fileType === 'hwpx';
                         });
+                    } else if (currentFilter === 'ppt') {
+                         result = result.filter(file => {
+                            const fileType = file.type ? file.type.toLowerCase() : '';
+                            return fileType === 'ppt' || fileType === 'pptx';
+                        });
                     } else {
-                        // 그 외 탭 (PDF, Excel, PPT 등)
                         result = result.filter(file => {
                             const fileType = file.type ? file.type.toLowerCase() : '';
                             return fileType === currentFilter.toLowerCase();
                         });
                     }
                 }
-
-                updatePagination(result);
-                displayFiles(result);
+                
+                filteredFiles = result; // 필터링된 결과를 전역 변수에 저장
+                currentPage = 1; // 필터링 후 첫 페이지로 이동
+                updatePagination(filteredFiles);
+                displayFiles(filteredFiles);
             }
 
-            // 페이지네이션 업데이트 함수
+            // 페이지네이션 업데이트 함수 (기존 코드와 동일)
             function updatePagination(filesToShow = filteredFiles) {
                 const total = filesToShow.length;
                 totalPages = Math.ceil(total / itemsPerPage);
-
-                // 페이지 버튼 생성
                 pagination.innerHTML = '';
-
-                // 모바일에서는 간소화된 페이지네이션
                 const isMobile = window.innerWidth <= 480;
                 const maxVisibleButtons = isMobile ? 3 : 5;
 
-                // 이전 페이지 버튼
-                if (totalPages > 1) {
-                    const prevBtn = document.createElement('button');
-                    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-                    prevBtn.classList.add('page-btn');
-                    prevBtn.disabled = currentPage === 1;
-                    prevBtn.addEventListener('click', () => {
-                        if (currentPage > 1) {
-                            currentPage--;
-                            scrollToTop();
-                            displayFiles(filesToShow);
-                            updatePagination(filesToShow);
-                        }
-                    });
-                    pagination.appendChild(prevBtn);
-                }
+                if (totalPages <= 1) return;
 
-                // 페이지 번호 버튼
-                let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-                let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
-
-                // 끝 페이지가 최대값에 도달한 경우 시작 페이지 조정
-                if (endPage === totalPages) {
-                    startPage = Math.max(1, endPage - maxVisibleButtons + 1);
-                }
-
-                // 첫 페이지 버튼 (필요시)
-                if (startPage > 1) {
-                    const firstBtn = document.createElement('button');
-                    firstBtn.textContent = '1';
-                    firstBtn.classList.add('page-btn');
-                    if (currentPage === 1) {
-                        firstBtn.classList.add('active');
-                    }
-                    firstBtn.addEventListener('click', () => {
-                        currentPage = 1;
+                const createButton = (text, pageNumber, disabled = false, active = false) => {
+                    const btn = document.createElement('button');
+                    btn.innerHTML = text;
+                    btn.classList.add('page-btn');
+                    if(disabled) btn.disabled = true;
+                    if(active) btn.classList.add('active');
+                    btn.addEventListener('click', () => {
+                        currentPage = pageNumber;
                         scrollToTop();
                         displayFiles(filesToShow);
                         updatePagination(filesToShow);
                     });
-                    pagination.appendChild(firstBtn);
+                    return btn;
+                };
+                
+                pagination.appendChild(createButton('<i class="fas fa-chevron-left"></i>', currentPage - 1, currentPage === 1));
 
-                    // 생략 표시
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+                if (endPage === totalPages) {
+                    startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+                }
+
+                if (startPage > 1) {
+                    pagination.appendChild(createButton('1', 1));
                     if (startPage > 2) {
                         const ellipsis = document.createElement('span');
                         ellipsis.textContent = '...';
@@ -298,69 +276,21 @@
                     }
                 }
 
-                // 중간 페이지 버튼
                 for (let i = startPage; i <= endPage; i++) {
-                    if ((i === 1 && startPage === 1) || (i === totalPages && endPage === totalPages)) {
-                        continue;
-                    }
-
-                    const pageBtn = document.createElement('button');
-                    pageBtn.textContent = i;
-                    pageBtn.classList.add('page-btn');
-                    if (i === currentPage) {
-                        pageBtn.classList.add('active');
-                    }
-
-                    pageBtn.addEventListener('click', () => {
-                        currentPage = i;
-                        scrollToTop();
-                        displayFiles(filesToShow);
-                        updatePagination(filesToShow);
-                    });
-                    pagination.appendChild(pageBtn);
+                    pagination.appendChild(createButton(i, i, false, i === currentPage));
                 }
 
-                // 마지막 페이지 버튼 (필요시)
                 if (endPage < totalPages) {
-                    // 생략 표시
-                    if (endPage < totalPages - 1) {
+                     if (endPage < totalPages - 1) {
                         const ellipsis = document.createElement('span');
                         ellipsis.textContent = '...';
                         ellipsis.classList.add('ellipsis');
                         pagination.appendChild(ellipsis);
                     }
-
-                    const lastBtn = document.createElement('button');
-                    lastBtn.textContent = totalPages;
-                    lastBtn.classList.add('page-btn');
-                    if (currentPage === totalPages) {
-                        lastBtn.classList.add('active');
-                    }
-                    lastBtn.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        scrollToTop();
-                        displayFiles(filesToShow);
-                        updatePagination(filesToShow);
-                    });
-                    pagination.appendChild(lastBtn);
+                    pagination.appendChild(createButton(totalPages, totalPages));
                 }
-
-                // 다음 페이지 버튼
-                if (totalPages > 1) {
-                    const nextBtn = document.createElement('button');
-                    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
-                    nextBtn.classList.add('page-btn');
-                    nextBtn.disabled = currentPage === totalPages;
-                    nextBtn.addEventListener('click', () => {
-                        if (currentPage < totalPages) {
-                            currentPage++;
-                            scrollToTop();
-                            displayFiles(filesToShow);
-                            updatePagination(filesToShow);
-                        }
-                    });
-                    pagination.appendChild(nextBtn);
-                }
+                
+                pagination.appendChild(createButton('<i class="fas fa-chevron-right"></i>', currentPage + 1, currentPage === totalPages));
             }
 
             // 페이지 이동 시 상단으로 스크롤
@@ -371,52 +301,30 @@
                 });
             }
 
-            // 파일 유형별 배지 HTML 생성
+            // 파일 유형별 배지 HTML 생성 (기존 코드와 동일)
             function getFileTypeBadge(fileType) {
                 if (!fileType) return '';
-                
                 const type = fileType.toLowerCase();
                 let badgeClass = 'file-type-other';
-                
-                if (type === 'pdf') {
-                    badgeClass = 'file-type-pdf';
-                } else if (type === 'hwp' || type === 'hwpx') {
-                    badgeClass = 'file-type-hwp';
-                } else if (type === 'xlsx') {
-                    badgeClass = 'file-type-xlsx';
-                } else if (type === 'ppt' || type === 'pptx') {
-                    badgeClass = 'file-type-ppt';
-                } else if (type === 'png' || type === 'jpeg' || type === 'jpg') {
-                    badgeClass = 'file-type-png';
-                }
-                
+                if (type === 'pdf') badgeClass = 'file-type-pdf';
+                else if (type === 'hwp' || type === 'hwpx') badgeClass = 'file-type-hwp';
+                else if (type === 'xlsx') badgeClass = 'file-type-xlsx';
+                else if (type === 'ppt' || type === 'pptx') badgeClass = 'file-type-ppt';
+                else if (['png', 'jpeg', 'jpg'].includes(type)) badgeClass = 'file-type-png';
                 return `<span class="file-type-badge ${badgeClass}">${fileType.toUpperCase()}</span>`;
             }
 
-            // 파일 표시 함수
+            // 파일 표시 함수 (수정됨)
             function displayFiles(filesToShow) {
                 fileTableBody.innerHTML = '';
 
                 if (filesToShow.length === 0) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td colspan="5" class="no-results">
-                            <i class="fas fa-search"></i>
-                            검색 결과가 없습니다
-                        </td>
-                    `;
-                    fileTableBody.appendChild(row);
+                    fileTableBody.innerHTML = `<tr><td colspan="5" class="no-results"><i class="fas fa-search"></i> 검색 결과가 없습니다</td></tr>`;
                     return;
                 }
 
-                // 날짜 기준 내림차순 정렬 (최신순)
-                filesToShow.sort((a, b) => {
-                    if (!a.date) return 1;
-                    if (!b.date) return -1;
-                    return new Date(b.date) - new Date(a.date);
-                });
+                filesToShow.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                // 현재 페이지에 해당하는 파일만 표시
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const endIndex = Math.min(startIndex + itemsPerPage, filesToShow.length);
                 const currentPageFiles = filesToShow.slice(startIndex, endIndex);
@@ -424,32 +332,42 @@
                 currentPageFiles.forEach(file => {
                     const row = document.createElement('tr');
                     
-                    // 날짜 포맷팅
-                    const dateDisplay = file.date ? new Date(file.date).toLocaleDateString('ko-KR') : '-';
-                    
-                    // 파일 유형 배지
-                    const fileTypeBadge = getFileTypeBadge(file.type);
+                    // --- 날짜 처리 로직 수정 ---
+                    let dateDisplay;
+                    if (file.date) {
+                        const fileDate = new Date(file.date);
+                        const today = new Date();
+                        
+                        // 시간, 분, 초를 0으로 설정하여 날짜만 비교
+                        fileDate.setHours(0, 0, 0, 0);
+                        today.setHours(0, 0, 0, 0);
 
-                    // 파일명 셀에는 툴팁을 추가하여 설명을 표시
+                        if (fileDate.getTime() === today.getTime()) {
+                            dateDisplay = `<span class="highlight-today">오늘</span>`;
+                        } else {
+                            dateDisplay = new Date(file.date).toLocaleDateString('ko-KR');
+                        }
+                    } else {
+                        dateDisplay = '-';
+                    }
+                    // --- 수정 끝 ---
+
+                    const fileTypeBadge = getFileTypeBadge(file.type);
+                    
                     const filenameContent = document.createElement('div');
                     filenameContent.className = 'filename-content';
-                    
-                    // 파일명 표시
                     const filenameSpan = document.createElement('span');
                     filenameSpan.className = 'tooltip-trigger';
                     filenameSpan.textContent = file.filename || '-';
                     filenameSpan.setAttribute('data-tippy-content', file.description || '설명 없음');
-                    
                     filenameContent.appendChild(filenameSpan);
-                    
-                    // 툴팁이 있음을 나타내는 아이콘 추가
+
                     if (file.description) {
                         const infoIcon = document.createElement('i');
                         infoIcon.className = 'fas fa-info-circle info-icon';
                         filenameContent.appendChild(infoIcon);
                     }
                     
-                    // 모든 셀을 표준 TD로 생성하고 내부에 내용을 배치
                     row.innerHTML = `
                         <td class="filename-cell"></td>
                         <td>${fileTypeBadge || '-'}</td>
@@ -458,13 +376,10 @@
                         <td><a href="${file.link}" class="download-link" target="_blank" rel="noopener"><i class="fas fa-download"></i> 받기</a></td>
                     `;
                     
-                    // 파일명 셀에 컨텐츠 삽입
                     row.querySelector('.filename-cell').appendChild(filenameContent);
-                    
                     fileTableBody.appendChild(row);
                 });
                 
-                // 툴팁 초기화
                 tippy('.tooltip-trigger', {
                     placement: 'bottom',
                     arrow: true,
@@ -475,7 +390,5 @@
             }
         });
     </script>
-
 </body>
-
 </html>
