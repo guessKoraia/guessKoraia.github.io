@@ -63,6 +63,29 @@
             align-items: center;
         }
 
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #1a73e8;
+        }
+
+        .nav-link.active {
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
         .nav-stats {
             display: flex;
             gap: 20px;
@@ -497,6 +520,12 @@
                 align-items: flex-start;
             }
             
+            .nav-menu {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
             .nav-stats {
                 gap: 15px;
                 flex-wrap: wrap;
@@ -572,10 +601,15 @@
     <header class="header">
         <div class="header-container">
             <div class="header-top">
-                <a href="/" class="site-title">AI News | (사)한국인공지능협회</a>
+                <a href="/" class="site-title">(사)한국인공지능협회</a>
                 <div class="site-subtitle">인공지능 뉴스와 정보를 한눈에 살펴보세요.</div>
             </div>
             <nav class="header-nav">
+                <div class="nav-menu">
+                    <a href="/index" class="nav-link">전문자료실</a>
+                    <a href="/info" class="nav-link active">AI 뉴스</a>
+                    <a href="/biz" class="nav-link">사업공고</a>
+                </div>
                 <div class="nav-stats">
                     <div class="stat-item">
                         총 <span class="stat-number" id="total-count">-</span>개 기사
