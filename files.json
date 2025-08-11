@@ -1,4 +1,20 @@
 [
+      {
+    "filename": "gao-25-107653.pdf",
+    "type": "pdf",
+    "description": "GAO*_미 연방기관의 생성형 AI 활용 및 관리\n*GAO(Government Accountability Office) 미의회를 위한 독립적인 감시 및 평가 기관으로, 연방 정부의 자금 지출을 조사하고 사업 성과를 평가하는 역할\n보고서는 연방정부의 생성형 AI 도입 현황, 규제 준수 전략, 예산 운용 방식, 그리고 조직 내 거버넌스 구축 방안을 심층 분석합니다. 특히, AI 책임자(CAIO) 제도, 데이터 표준화, 편향 방지·설명가능성(XAI) 확보 등은 한국 AI 기업이 공공시장 진출과 글로벌 확장 전략을 세우는 데 핵심 인사이트를 제공합니다.",
+    "size": 1.2,
+    "date": "2025-08-11",
+    "link": "https://drive.google.com/file/d/1JLT6n9AWpllxx97rbinuKFtFUHHPA_SE/view?usp=sharing"
+},
+    {
+    "filename": "JRC142224_01.pdf",
+    "type": "pdf",
+    "description": "EU_JRC* AI 기반 의료영상 혁신\n*유럽연합 집행위원회(European Commission) 산하 과학서비스 제공 연구기관\nJRC가 발간한 이번 보고서는 폐암·심혈관질환 등 주요 만성질환 진단에 특화된 AI 의료영상 혁신 사례와 정책·인프라 전략을 담고 있습니다. EUCAIM, TEF-Health, AI Factories 등 대규모 데이터·검증 인프라를 기반으로 한 글로벌 표준화와 실증 모델은 국내 기업들의 기술 개발, 규제 대응, 해외 진출 전략에 직접 적용 가능한 인사이트를 제공합니다. 데이터 연합망·분산학습·설명가능성 확보 등 향후 시장 경쟁력을 좌우할 핵심 요소를 구체적으로 제시하고 있으니 참고하시기 바랍니다.",
+    "size": 3,
+    "date": "2025-08-11",
+    "link": "https://drive.google.com/file/d/1qak2a8XxJ1gjh5JEVG6X3UtQe5s2VxQ_/view?usp=sharing"
+},
                 {
     "filename": "Singapore Named World's Top AI City in Counterpoint Research's 2025 AI City Index",
     "type": "기타",
@@ -5665,4 +5681,5 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E/view?usp=drivesdk"
     }
 ]
+
 
