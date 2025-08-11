@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>국회 AI 세미나 소식 | 한국인공지능협회</title>
+    <meta name="description" content="국회 AI 세미나 소식 | 국회에서 열리는 AI 세미나 정보를 확인하세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="국회 AI 세미나 소식 | 한국인공지능협회">
+    <meta property="og:description" content="국회에서 열리는 AI 세미나 정보를 확인하세요.">
+    <meta name="twitter:title" content="국회 AI 세미나 소식 | 한국인공지능협회">
+    <meta name="twitter:description" content="국회에서 열리는 AI 세미나 정보를 확인하세요.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png">
+    <meta name="twitter:image" content="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png">
+    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
+        media="(prefers-color-scheme: light)">
+    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
+        media="(prefers-color-scheme: dark)">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #ffffff;
+            border-bottom: 3px solid #1a73e8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-top {
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1a73e8;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .site-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        .header-nav {
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #1a73e8;
+        }
+
+        .nav-link.active {
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        .nav-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat-item {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .stat-number {
+            font-weight: 600;
+            color: #1a73e8;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 20px 0;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            border: 2px solid #e5e5e5;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1a73e8;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .search-btn:hover {
+            background: #1557b0;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .clear-search-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .clear-search-btn:hover {
+            background: #545b62;
+        }
+
+        .filter-btn {
+            border: 2px solid #17a2b8;
+            background: white;
+            color: #17a2b8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.active {
+            background: #17a2b8;
+            color: white;
+            border-color: #17a2b8;
+            box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+        }
+
+        .filter-btn.active:hover {
+            background: #138496;
+            border-color: #138496;
+        }
+
+        .report-filter-btn {
+            border: 2px solid #6f42c1;
+            background: white;
+            color: #6f42c1;
+        }
+
+        .report-filter-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .report-filter-btn.active {
+            background: #6f42c1;
+            color: white;
+            border-color: #6f42c1;
+            box-shadow: 0 2px 8px rgba(111, 66, 193, 0.3);
+        }
+
+        .report-filter-btn.active:hover {
+            background: #5a32a3;
+            border-color: #5a32a3;
+        }
+
+        .refresh-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #1e7e34;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .page-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1a73e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Articles List */
+        .articles-container {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .article-item {
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 80px;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .article-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .article-item:last-child {
+            border-bottom: none;
+        }
+
+        .article-number {
+            font-weight: 500;
+            color: #666;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .article-content {
+            min-width: 0;
+        }
+
+        .article-title {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 6px;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .article-title:hover {
+            color: #1a73e8;
+        }
+
+
+        .article-date {
+            font-size: 0.85rem;
+            color: #888;
+            text-align: center;
+        }
+
+        .article-link {
+            text-align: center;
+        }
+
+        .read-btn {
+            background: #1a73e8;
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+            display: inline-block;
+        }
+
+        .read-btn:hover {
+            background: #1557b0;
+        }
+
+        /* Search Results */
+        .search-results-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #1565c0;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            font-weight: 500;
+            padding: 1px 2px;
+        }
+
+        .event-label {
+            background: #dc3545;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        .report-label {
+            background: #6f42c1;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            background: white;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #f8f9fa;
+            border-color: #adb5bd;
+        }
+
+        .page-btn:disabled {
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+            border-color: #dee2e6;
+        }
+
+        .page-btn.active {
+            background: #1a73e8;
+            border-color: #1a73e8;
+            color: white;
+        }
+
+        .page-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 15px;
+        }
+
+        .page-input {
+            width: 60px;
+            padding: 6px 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .go-btn {
+            background: #ffc107;
+            color: #212529;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .go-btn:hover {
+            background: #e0a800;
+        }
+
+        /* Error and Empty States */
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header-nav {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .nav-stats {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+            
+            .search-controls {
+                justify-content: center;
+            }
+            
+            .article-item {
+                grid-template-columns: 1fr 80px;
+                gap: 15px;
+            }
+            
+            .article-number,
+            .article-link {
+                display: none;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .pagination {
+                gap: 4px;
+            }
+            
+            .page-btn {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+                min-width: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header-container {
+                padding: 0 15px;
+            }
+            
+            .site-title {
+                font-size: 1.8rem;
+            }
+            
+            .article-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .article-date {
+                text-align: left;
+                font-size: 0.8rem;
+            }
+        }
+
+    /* ===== 포스터 이미지 개선 ===== */
+    .seminar-content-inner { display:flex; gap:16px; align-items:flex-start; }
+    .poster-wrapper { position:relative; cursor:pointer; flex:0 0 auto; }
+    .poster-thumb { border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.18); max-height:180px; width:auto; max-width:150px; object-fit:cover; transition:transform .25s ease, box-shadow .25s ease; background:#f5f5f5; }
+    .poster-wrapper:hover .poster-thumb { transform:translateY(-3px); box-shadow:0 6px 18px rgba(0,0,0,0.3); }
+    .poster-badge { position:absolute; left:6px; top:6px; background:rgba(0,0,0,0.55); color:#fff; font-size:10px; padding:3px 6px; border-radius:12px; letter-spacing:.5px; }
+    .poster-zoom-hint { position:absolute; right:6px; bottom:6px; background:rgba(0,0,0,0.55); color:#fff; font-size:10px; padding:3px 6px; border-radius:12px; opacity:0; transition:opacity .25s; }
+    .poster-wrapper:hover .poster-zoom-hint { opacity:1; }
+    /* Lightbox */
+    .lightbox-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; z-index:1000; padding:30px 40px; }
+    .lightbox-overlay.active { display:flex; }
+    .lightbox-content { max-width:90vw; max-height:90vh; position:relative; }
+    .lightbox-img { max-width:100%; max-height:90vh; border-radius:12px; box-shadow:0 8px 28px rgba(0,0,0,0.45); }
+    .lightbox-close { position:absolute; top:-14px; right:-14px; background:#ff4757; color:#fff; border:none; width:40px; height:40px; border-radius:50%; font-size:22px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; }
+    .lightbox-close:hover { background:#e03131; }
+    @media (max-width: 640px) { .poster-thumb { max-height:150px; max-width:120px; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-top">
+                <a href="/" class="site-title">(사)한국인공지능협회</a>
+                <div class="site-subtitle">인공지능 뉴스와 정보를 한눈에 살펴보세요.</div>
+            </div>
+            <nav class="header-nav">
+                <div class="nav-menu">
+                    <a href="/index" class="nav-link">전문자료실</a>
+                    <a href="/info" class="nav-link">AI 뉴스</a>
+                    <a href="/biz" class="nav-link">사업공고</a>
+                    <a href="/seminar" class="nav-link active">국회 AI 세미나</a>
+                </div>
+                <div class="nav-stats">
+                    <div class="stat-item">
+                        총 <span class="stat-number" id="total-count">-</span>개 기사
+                    </div>
+                    <div class="stat-item">
+                        오늘 <span class="stat-number" id="today-count">-</span>개 추가
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-pages">-</span> 페이지
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="search-input" placeholder="세미나명, 주최, 장소 등으로 검색...">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
+            <div class="search-controls">
+                <button class="clear-search-btn" onclick="clearSearch()" style="display: none;" id="clear-search-btn">검색 초기화</button>
+                <button class="refresh-btn" onclick="loadSeminars()">새로고침</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="content-header">
+            <h2 class="section-title" id="section-title">국회 AI 세미나 소식</h2>
+            <div class="page-info" id="page-info">데이터를 불러오는 중...</div>
+        </div>
+
+        <div id="search-results-info" class="search-results-info" style="display: none;"></div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>세미나 정보를 불러오는 중...</p>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;">
+            <h3>오류가 발생했습니다</h3>
+            <p id="error-text"></p>
+        </div>
+
+        <div id="seminar-container" class="articles-container" style="display: none;">
+            <div id="seminars"></div>
+        </div>
+
+        <!-- Lightbox for poster full view -->
+        <div class="lightbox-overlay" id="lightbox" aria-modal="true" role="dialog" aria-label="포스터 확대 보기">
+            <div class="lightbox-content">
+                <button class="lightbox-close" id="lightbox-close" aria-label="닫기">×</button>
+                <img src="" alt="세미나 포스터" id="lightbox-img" class="lightbox-img" loading="lazy" />
+            </div>
+        </div>
+
+        <div id="pagination" class="pagination" style="display: none;"></div>
+    </main>
+
+    <script>
+        // Supabase 설정
+        const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 전역 변수
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        let totalItems = 0;
+        let totalPages = 0;
+        let currentSearchQuery = '';
+        let isSearchMode = false;
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function highlightSearchTerm(text, searchTerm) {
+            if (!searchTerm) return text;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        async function loadSeminars(page = 1) {
+            const loadingEl = document.getElementById('loading');
+            const errorEl = document.getElementById('error');
+            const seminarsEl = document.getElementById('seminars');
+            const seminarContainer = document.getElementById('seminar-container');
+            const paginationEl = document.getElementById('pagination');
+
+            currentPage = page;
+
+            loadingEl.style.display = 'block';
+            errorEl.style.display = 'none';
+            seminarContainer.style.display = 'none';
+            paginationEl.style.display = 'none';
+            seminarsEl.innerHTML = '';
+
+            try {
+                let query = supabase.from('ampos_seminar').select('*', { count: 'exact' });
+                // 검색 모드인 경우 필터 추가
+                if (isSearchMode && currentSearchQuery) {
+                    query = query.or(`seminar_name.ilike.%${currentSearchQuery}%,organizer.ilike.%${currentSearchQuery}%,location.ilike.%${currentSearchQuery}%`);
+                }
+
+                // 전체 개수 조회
+                const { count: totalCount } = await query.select('*', { count: 'exact', head: true });
+                totalItems = totalCount || 0;
+                totalPages = Math.ceil(totalItems / itemsPerPage);
+
+                // 페이지 범위 계산
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage - 1;
+
+                // 데이터 조회
+                let dataQuery = supabase.from('ampos_seminar').select('*');
+                if (isSearchMode && currentSearchQuery) {
+                    dataQuery = dataQuery.or(`seminar_name.ilike.%${currentSearchQuery}%,organizer.ilike.%${currentSearchQuery}%,location.ilike.%${currentSearchQuery}%`);
+                }
+
+                const { data: seminars, error } = await dataQuery
+                    .order('event_date', { ascending: false })
+                    .range(startIndex, endIndex);
+
+                if (error) throw error;
+
+                await updateStats();
+                loadingEl.style.display = 'none';
+
+                updateSearchResultsInfo();
+
+                if (!seminars || seminars.length === 0) {
+                    let message = '등록된 세미나가 없습니다.';
+                    if (isSearchMode) {
+                        message = `"${currentSearchQuery}" 검색 결과가 없습니다.`;
+                    }
+                    seminarsEl.innerHTML = `<div class="empty-message">${message}</div>`;
+                    return;
+                }
+
+                seminarContainer.style.display = 'block';
+                seminarsEl.innerHTML = seminars.map((seminar, index) => {
+                    const itemNumber = totalItems - startIndex - index;
+                    const highlightedName = highlightSearchTerm(seminar.seminar_name || '', currentSearchQuery);
+                    const highlightedOrganizer = highlightSearchTerm(seminar.organizer || '', currentSearchQuery);
+                    const highlightedLocation = highlightSearchTerm(seminar.location || '', currentSearchQuery);
+                    const posterHTML = seminar.poster_url ? `
+                        <div class="poster-wrapper" data-full="${seminar.poster_url}" tabindex="0" aria-label="포스터 확대 보기">
+                            <img src="${seminar.poster_url}" alt="포스터" class="poster-thumb" loading="lazy" />
+                            <span class="poster-badge">포스터</span>
+                            <span class="poster-zoom-hint">클릭 확대</span>
+                        </div>` : '';
+                    return `
+                        <div class="article-item">
+                            <div class="article-number">${itemNumber}</div>
+                            <div class="article-content">
+                                <div class="seminar-content-inner">
+                                    ${posterHTML}
+                                    <div>
+                                        <div class="article-title">${highlightedName}</div>
+                                        <div style="font-size:0.9em;color:#555;margin-top:4px;line-height:1.5;">
+                                            <div>주최: ${highlightedOrganizer || '-'}</div>
+                                            <div>장소: ${highlightedLocation || '-'}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="article-date">${formatDate(seminar.event_date)}</div>
+                            <div class="article-link">
+                                ${seminar.material_link ? `<a href="${seminar.material_link}" target="_blank" class="read-btn">자료보기</a>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                renderPagination();
+                updatePageInfo();
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+                document.getElementById('error-text').textContent = error.message;
+            }
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('search-input');
+            const searchQuery = searchInput.value.trim();
+            if (searchQuery.length === 0) {
+                clearSearch();
+                return;
+            }
+            currentSearchQuery = searchQuery;
+            isSearchMode = true;
+            currentPage = 1;
+            document.getElementById('clear-search-btn').style.display = 'inline-block';
+            document.getElementById('section-title').textContent = '검색 결과';
+            loadSeminars(1);
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            currentSearchQuery = '';
+            isSearchMode = false;
+            currentPage = 1;
+            document.getElementById('clear-search-btn').style.display = 'none';
+            document.getElementById('section-title').textContent = '국회 AI 세미나 소식';
+            document.getElementById('search-results-info').style.display = 'none';
+            loadSeminars(1);
+        }
+
+        function updateSearchResultsInfo() {
+            const searchResultsInfo = document.getElementById('search-results-info');
+            if (isSearchMode && currentSearchQuery) {
+                searchResultsInfo.style.display = 'block';
+                searchResultsInfo.innerHTML = `"<strong>${currentSearchQuery}</strong>" 검색 결과: ${totalItems}개 세미나`;
+            } else {
+                searchResultsInfo.style.display = 'none';
+            }
+        }
+
+        function renderPagination() {
+            const paginationEl = document.getElementById('pagination');
+            if (totalPages <= 1) {
+                paginationEl.style.display = 'none';
+                return;
+            }
+            paginationEl.style.display = 'flex';
+            let paginationHTML = '';
+            paginationHTML += `<button class="page-btn" onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>⏮️</button>`;
+            paginationHTML += `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>◀️</button>`;
+            const pageGroup = Math.ceil(currentPage / 10);
+            const startPage = (pageGroup - 1) * 10 + 1;
+            const endPage = Math.min(pageGroup * 10, totalPages);
+            if (startPage > 1) {
+                paginationHTML += `<button class="page-btn" onclick="goToPage(${startPage - 1})" title="이전 10페이지">...</button>`;
+            }
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            if (endPage < totalPages) {
+                paginationHTML += `<button class="page-btn" onclick="goToPage(${endPage + 1})" title="다음 10페이지">...</button>`;
+            }
+            paginationHTML += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>▶️</button>`;
+            paginationHTML += `<button class="page-btn" onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>⏭️</button>`;
+            paginationHTML += `
+                <div class="page-input-group">
+                    <input type="number" class="page-input" id="page-input" placeholder="${currentPage}" min="1" max="${totalPages}">
+                    <button class="go-btn" onclick="goToInputPage()">이동</button>
+                </div>
+            `;
+            paginationEl.innerHTML = paginationHTML;
+        }
+
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages && page !== currentPage) {
+                loadSeminars(page);
+            }
+        }
+
+        function goToInputPage() {
+            const input = document.getElementById('page-input');
+            const page = parseInt(input.value);
+            if (page >= 1 && page <= totalPages) {
+                goToPage(page);
+                input.value = '';
+            } else {
+                alert(`1부터 ${totalPages} 사이의 페이지 번호를 입력해주세요.`);
+            }
+        }
+
+        function updatePageInfo() {
+            const pageInfoEl = document.getElementById('page-info');
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+            pageInfoEl.textContent = `${startItem}-${endItem} / 총 ${totalItems}개`;
+        }
+
+        async function updateStats() {
+            try {
+                document.getElementById('total-count').textContent = totalItems;
+                document.getElementById('total-pages').textContent = totalPages;
+                const today = new Date().toISOString().split('T')[0];
+                const { count: todayCount } = await supabase
+                    .from('ampos_seminar')
+                    .select('*', { count: 'exact', head: true })
+                    .gte('created_at', today);
+                document.getElementById('today-count').textContent = todayCount || 0;
+            } catch (error) {
+                console.error('Stats error:', error);
+                document.getElementById('total-count').textContent = totalItems;
+                document.getElementById('today-count').textContent = '-';
+                document.getElementById('total-pages').textContent = totalPages;
+            }
+        }
+
+        // 이벤트 리스너
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.target.id === 'page-input' && e.key === 'Enter') {
+                goToInputPage();
+            }
+        });
+        // Lightbox 기능
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
+        function openLightbox(src){
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow='hidden';
+        }
+        function closeLightbox(){
+            lightbox.classList.remove('active');
+            lightboxImg.src = '';
+            document.body.style.overflow='';
+        }
+        document.addEventListener('click', e => {
+            const wrapper = e.target.closest('.poster-wrapper');
+            if (wrapper) {
+                openLightbox(wrapper.getAttribute('data-full'));
+            } else if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+        document.addEventListener('keydown', e => { if(e.key==='Escape' && lightbox.classList.contains('active')) closeLightbox(); });
+        lightboxClose.addEventListener('click', closeLightbox);
+
+        // 초기 로드
+        window.addEventListener('load', () => loadSeminars(1));
+        // 자동 새로고침 (5분마다)
+        setInterval(() => loadSeminars(currentPage), 5 * 60 * 1000);
+    </script>
+</body>
+</html> 
