@@ -697,29 +697,32 @@
         let isReportMode = false;
 
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            
-            const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            
-            const diff = Math.floor((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
-            
-            if (diff === 0) return '오늘';
-            if (diff === 1) return '어제';
-            if (diff > 0 && diff < 7) return `${diff}일 전`;
-            if (diff < 0) {
-                const futureDiff = Math.abs(diff);
-                if (futureDiff === 1) return '내일';
-                return `${futureDiff}일 후`;
-            }
-            
-            return date.toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
+    const date = new Date(dateString);
+    const now = new Date();
+
+    // UTC 기준으로 날짜(시간은 0시)를 새로 생성합니다.
+    const dateOnly = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    const nowOnly = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+
+    // 날짜 차이를 계산하는 로직은 그대로 유지합니다.
+    const diff = Math.floor((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
+
+    if (diff === 0) return '오늘';
+    if (diff === 1) return '어제';
+    if (diff > 0 && diff < 7) return `${diff}일 전`;
+    if (diff < 0) {
+        const futureDiff = Math.abs(diff);
+        if (futureDiff === 1) return '내일';
+        return `${futureDiff}일 후`;
+    }
+
+    // 날짜 포맷팅 부분은 원래대로 로컬 기준으로 보여주는 것이 자연스러울 수 있습니다.
+    return date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
 
         function truncateTitle(title, maxLength = 120) {
             if (title.length <= maxLength) return title;
@@ -1093,3 +1096,4 @@
 </body>
 
 </html> 
+
