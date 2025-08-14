@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국회 AI 세미나 소식 | 한국인공지능협회</title>
-    <meta name="description" content="국회 AI 세미나 소식 | 국회에서 열리는 AI 세미나 정보를 확인하세요.">
+    <meta name="description" content="국회에서 열리는 AI 세미나 정보를 확인하세요.">
     <meta property="og:type" content="website">
     <meta property="og:title" content="국회 AI 세미나 소식 | 한국인공지능협회">
     <meta property="og:description" content="국회에서 열리는 AI 세미나 정보를 확인하세요.">
@@ -430,6 +430,27 @@
             display: inline-block;
         }
 
+        /* ===== [NEW] D-Day Label Styles ===== */
+        .dday-label {
+            display: inline-block;
+            padding: 2px 8px;
+            margin-left: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 12px;
+            color: white;
+            vertical-align: middle;
+        }
+
+        .dday-today {
+            background-color: #e53935; /* Strong Red */
+        }
+
+        .dday-future {
+            background-color: #1e88e5; /* Bright Blue */
+        }
+        /* ===== End of New Styles ===== */
+
         /* Pagination */
         .pagination {
             display: flex;
@@ -691,7 +712,6 @@
             <div id="seminars"></div>
         </div>
 
-        <!-- Lightbox for poster full view -->
         <div class="lightbox-overlay" id="lightbox" aria-modal="true" role="dialog" aria-label="포스터 확대 보기">
             <div class="lightbox-content">
                 <button class="lightbox-close" id="lightbox-close" aria-label="닫기">×</button>
@@ -715,6 +735,37 @@
         let totalPages = 0;
         let currentSearchQuery = '';
         let isSearchMode = false;
+        
+        // ===== [NEW] D-Day Label Function =====
+        /**
+         * Calculates and returns a D-Day HTML label for a given date.
+         * @param {string} dateString - The event date from the database.
+         * @returns {string} - HTML string for the D-Day label, or an empty string.
+         */
+        function getDDayLabel(dateString) {
+            if (!dateString) return '';
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today to the start of the day
+
+            const eventDate = new Date(dateString);
+            eventDate.setHours(0, 0, 0, 0); // Normalize event date to the start of the day
+
+            // Don't show label for past events
+            if (eventDate < today) {
+                return '';
+            }
+
+            const diffTime = eventDate.getTime() - today.getTime();
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) {
+                return '<span class="dday-label dday-today">D-DAY</span>';
+            } else {
+                return `<span class="dday-label dday-future">D-${diffDays}</span>`;
+            }
+        }
+        // ===== End of New Function =====
 
         function formatDate(dateString) {
             if (!dateString) return '-';
@@ -801,6 +852,10 @@
                             <span class="poster-badge">포스터</span>
                             <span class="poster-zoom-hint">클릭 확대</span>
                         </div>` : '';
+                    
+                    // ===== [MODIFIED] Get D-Day label =====
+                    const dDayLabel = getDDayLabel(seminar.event_date);
+                    
                     return `
                         <div class="article-item">
                             <div class="article-number">${itemNumber}</div>
@@ -816,7 +871,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="article-date">${formatDate(seminar.event_date)}</div>
+                            <div class="article-date">
+                                ${formatDate(seminar.event_date)}
+                                ${dDayLabel}
+                            </div>
                             <div class="article-link">
                                 ${seminar.material_link ? `<a href="${seminar.material_link}" target="_blank" class="read-btn">자료보기</a>` : ''}
                             </div>
@@ -989,4 +1047,4 @@
     </script>
 </body>
 
-</html> 
+</html>
