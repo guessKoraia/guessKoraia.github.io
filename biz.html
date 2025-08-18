@@ -144,6 +144,59 @@
             flex-wrap: wrap;
         }
 
+        .search-bar {
+            display: flex;
+            align-items: stretch;
+            gap: 6px;
+            background: #f1f3f5;
+            padding: 4px 8px;
+            border-radius: 30px;
+            border: 1px solid #dee2e6;
+        }
+
+        .search-bar input[type="text"] {
+            border: none;
+            background: transparent;
+            padding: 6px 4px 6px 0;
+            outline: none;
+            min-width: 200px;
+            font-size: 0.9rem;
+        }
+
+        .search-btn, .clear-btn {
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background .2s ease;
+            white-space: nowrap;
+        }
+
+        .search-btn i, .clear-btn i { font-size: 0.8rem; }
+
+        .search-btn:hover { background: #1558b5; }
+        .clear-btn { background: #6c757d; }
+        .clear-btn:hover { background: #545b62; }
+
+        .search-active-badge {
+            background: #e7f1ff;
+            color: #1a73e8;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .excel-download-btn,
         .source-info-btn {
             background: #28a745;
@@ -201,27 +254,80 @@
         }
 
         /* Announcements List */
-        .announcements-list {
-            background: white;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 30px;
+        .announcements-list { margin-bottom:30px; }
+
+        .board-wrapper {
+            background:#fff;
+            border:1px solid #e1e5e9;
+            border-radius:10px;
+            box-shadow:0 2px 4px rgba(0,0,0,0.04);
+            overflow:hidden;
+        }
+        .board-header, .board-row {
+            display:grid;
+            grid-template-columns:70px 170px 1fr 110px;
+            align-items:center;
+            gap:16px;
+        }
+        .board-header {
+            background:#f5f7fa;
+            border-bottom:1px solid #e1e5e9;
+            padding:14px 18px;
+            font-size:0.75rem;
+            font-weight:600;
+            letter-spacing:.5px;
+            color:#556270;
+            text-transform:uppercase;
+        }
+        .board-body { max-height:none; }
+        .board-row {
+            padding:14px 18px;
+            border-bottom:1px solid #f0f2f4;
+            font-size:0.9rem;
+            transition:background .18s;
+        }
+        .board-row:last-child { border-bottom:none; }
+        .board-row:hover { background:#f9fbfd; }
+        .board-col-title a { color:#222; text-decoration:none; font-weight:500; line-height:1.35; }
+        .board-col-title a:hover { color:#1a73e8; }
+        .board-col-number { text-align:center; font-size:0.8rem; color:#6b757f; font-weight:600; }
+        .board-col-org { font-size:0.8rem; color:#4a5661; display:flex; align-items:center; gap:6px; }
+        .board-col-date { font-size:0.75rem; color:#707b85; text-align:center; white-space:nowrap; }
+        .board-col-date.today { color:#d25116; font-weight:600; }
+        .today-badge { background:#ff7043; color:#fff; font-size:0.6rem; padding:3px 7px; border-radius:20px; font-weight:600; margin-left:6px; letter-spacing:.5px; box-shadow:0 1px 2px rgba(0,0,0,.15); }
+        .today-badge:before { content:'N'; }
+        @media (max-width:860px){
+            .board-header, .board-row { grid-template-columns:60px 1fr 100px; }
+            .board-col-org{ display:none; }
+        }
+        @media (max-width:560px){
+            .board-header{ display:none; }
+            .board-row { grid-template-columns:50px 1fr; row-gap:6px; }
+            .board-col-date { justify-self:end; }
         }
 
-        .announcement-item {
-            padding: 20px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s ease;
+        /* 오늘 게시물 강조 */
+        /* .announcement-item.today {
+            background: #fff8e6;
+            border-left: 4px solid #ffa726;
+            position: relative;
+        } */
+        .today-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #b42613;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            letter-spacing: .5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .announcement-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .announcement-item:last-child {
-            border-bottom: none;
-        }
+    /* (기존 announcement-item 구조는 테이블형으로 대체) */
 
         .announcement-header {
             display: flex;
@@ -602,17 +708,7 @@
                     <a href="/biz" class="nav-link active">사업공고</a>
                     <a href="/seminar" class="nav-link">국회 AI 세미나</a>
                 </div>
-                <div class="nav-stats">
-                    <div class="stat-item">
-                        총 <span class="stat-number" id="total-count">-</span>개 공고
-                    </div>
-                    <div class="stat-item">
-                        오늘 <span class="stat-number" id="today-count">-</span>개 추가
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="total-pages">-</span> 페이지
-                    </div>
-                </div>
+
             </nav>
         </div>
     </header>
@@ -621,6 +717,12 @@
         <div class="section-header">
             <h2 class="section-title">최신 사업공고</h2>
             <div class="header-actions">
+                <form id="searchForm" class="search-bar" onsubmit="return false;">
+                    <i class="fas fa-search" style="color:#6c757d;font-size:0.85rem;"></i>
+                    <input id="searchInput" type="text" placeholder="검색어 (예: 인공지능)" aria-label="검색어 입력" />
+                    <button id="searchBtn" class="search-btn" type="button"><i class="fas fa-search"></i> 검색</button>
+                    <button id="clearBtn" class="clear-btn" type="button" style="display:none;"><i class="fas fa-times"></i> 취소</button>
+                </form>
                 <button id="excelDownloadBtn" class="excel-download-btn">
                     <i class="fas fa-file-excel"></i>
                     엑셀 다운로드
@@ -632,6 +734,7 @@
                 <div class="result-info">
                     <span id="totalCount">총 0건</span>
                     <span id="currentPage">페이지 1</span>
+                    <span id="searchState" style="display:none;"></span>
                 </div>
             </div>
         </div>
@@ -642,9 +745,19 @@
             <p>데이터를 불러오는 중...</p>
         </div>
 
-        <!-- 공고 목록 -->
-        <div id="announcementsList" class="announcements-list">
-            <!-- 공고 아이템들이 여기에 동적으로 추가됩니다 -->
+        <!-- 공고 목록 (게시판형) -->
+        <div class="announcements-list">
+            <div class="board-wrapper">
+                <div class="board-header">
+                    <div class="board-col-number">번호</div>
+                    <div class="board-col-org">기관</div>
+                    <div class="board-col-title">공고명</div>
+                    <div class="board-col-date">등록일</div>
+                </div>
+                <div id="announcementsList" class="board-body">
+                    <!-- 동적 rows -->
+                </div>
+            </div>
         </div>
 
         <!-- 페이지네이션 -->

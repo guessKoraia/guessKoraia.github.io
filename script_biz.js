@@ -4,6 +4,7 @@ let currentSize = 20;
 let totalElements = 0;
 let totalPages = 0;
 let currentData = [];
+let currentKeyword = '';
 
 // DOM 요소들
 const announcementsList = document.getElementById('announcementsList');
@@ -15,9 +16,20 @@ const excelDownloadBtn = document.getElementById('excelDownloadBtn');
 const sourceInfoBtn = document.getElementById('sourceInfoBtn');
 const sourceModal = document.getElementById('sourceModal');
 const modalClose = document.querySelector('.close');
+// 검색 관련 DOM
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const clearBtn = document.getElementById('clearBtn');
+const searchState = document.getElementById('searchState');
 
 // API 기본 URL
-const API_BASE_URL = 'https://startups.koraia.org:5555/items/biz/paging';
+// 목록 페이지네이션 전용 (키워드 없을 때)
+const API_PAGING_URL = 'https://startups.koraia.org:5555/items/biz/paging';
+// 검색 전용 (Spring Boot 제공 @GetMapping("/items/biz/search"))
+const API_SEARCH_URL = 'https://startups.koraia.org:5555/items/biz/search';
+// 향후 organization / dateRange 확장 대비 변수 (지금은 UI 없음)
+let currentOrganization = '';
+let currentDateRange = '';
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,6 +60,43 @@ function setupEventListeners() {
             sourceModal.style.display = 'none';
         }
     });
+
+    // 검색 버튼
+    if (searchBtn) {
+        searchBtn.addEventListener('click', triggerSearch);
+    }
+
+    // 검색 인풋 Enter 처리
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                triggerSearch();
+            }
+        });
+    }
+
+    // 취소 버튼
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            currentKeyword = '';
+            if (searchInput) searchInput.value = '';
+            clearBtn.style.display = 'none';
+            updateSearchState();
+            currentPage = 0;
+            loadAnnouncements();
+        });
+    }
+
+    // 초기 URL의 keyword 파라미터 처리
+    const params = new URLSearchParams(window.location.search);
+    const initKeyword = params.get('keyword');
+    if (initKeyword) {
+        currentKeyword = initKeyword.trim();
+        if (searchInput) searchInput.value = currentKeyword;
+        clearBtn.style.display = 'inline-flex';
+        updateSearchState();
+    }
 }
 
 // API에서 공고 데이터 로드
@@ -55,17 +104,30 @@ async function loadAnnouncements() {
     showLoading(true);
     
     try {
-        const params = new URLSearchParams({
-            page: currentPage,
-            size: currentSize
-        });
+        const params = new URLSearchParams({ page: currentPage, size: currentSize });
+        let endpoint = API_PAGING_URL;
+        if (currentKeyword) {
+            endpoint = API_SEARCH_URL;
+            params.append('keyword', currentKeyword);
+        }
+        if (currentOrganization) params.append('organization', currentOrganization);
+        if (currentDateRange) params.append('dateRange', currentDateRange);
 
-        const response = await fetch(`${API_BASE_URL}?${params.toString()}`, {
+        let response = await fetch(`${endpoint}?${params.toString()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
         });
+
+        // 검색 엔드포인트가 아직 서버에 반영되지 않은 경우(404 등) fallback
+        if (!response.ok && currentKeyword && response.status === 404) {
+            endpoint = API_PAGING_URL;
+            response = await fetch(`${endpoint}?${params.toString()}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -102,20 +164,20 @@ function displayAnnouncements() {
         return;
     }
 
-    const announcementsHTML = currentData.map(item => `
-        <div class="announcement-item">
-            <div class="announcement-header">
-                <a href="${item.url}" target="_blank" class="announcement-title-link">
-                    <h3 class="announcement-title">${escapeHtml(item.bizName)}</h3>
-                </a>
-                <span class="announcement-date">${formatDate(item.date)}</span>
-            </div>
-            <div class="announcement-org">
-                <i class="fas fa-building"></i>
-                ${escapeHtml(item.biz)}
-            </div>
-        </div>
-    `).join('');
+    const startNumber = totalElements - (currentPage * currentSize);
+    const announcementsHTML = currentData.map((item, idx) => {
+        const label = formatDate(item.date);
+        const isToday = label === '오늘';
+        const todayBadge = isToday ? '<span class="today-badge"></span>' : '';
+        const number = startNumber - idx;
+        return `
+            <div class="board-row ${isToday ? 'today' : ''}">
+                <div class="board-col-number">${number}</div>
+                <div class="board-col-org">${escapeHtml(item.biz)}</div>
+                <div class="board-col-title"><a href="${item.url}" target="_blank">${escapeHtml(item.bizName)} ${todayBadge}</a></div>
+                <div class="board-col-date ${isToday ? 'today' : ''}">${label}</div>
+            </div>`;
+    }).join('');
 
     announcementsList.innerHTML = announcementsHTML;
 }
@@ -193,6 +255,42 @@ function updateResultInfo() {
     currentPageSpan.textContent = `페이지 ${currentPage + 1}`;
 }
 
+// 검색 실행
+function triggerSearch() {
+    const kw = (searchInput?.value || '').trim();
+    if (kw === currentKeyword) return; // 변화 없으면 무시
+    currentKeyword = kw;
+    currentPage = 0;
+    if (currentKeyword) {
+        clearBtn.style.display = 'inline-flex';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    updateSearchState();
+    // URL 쿼리 업데이트 (history push)
+    const newParams = new URLSearchParams(window.location.search);
+    if (currentKeyword) {
+        newParams.set('keyword', currentKeyword);
+    } else {
+        newParams.delete('keyword');
+    }
+    const newUrl = `${window.location.pathname}?${newParams.toString()}`.replace(/\?$/, '');
+    window.history.replaceState({}, '', newUrl);
+    loadAnnouncements();
+}
+
+function updateSearchState() {
+    if (!searchState) return;
+    if (currentKeyword) {
+        searchState.style.display = 'inline-flex';
+        searchState.className = 'search-active-badge';
+        searchState.innerHTML = `<i class="fas fa-filter"></i> "${escapeHtml(currentKeyword)}" 검색중`;
+    } else {
+        searchState.style.display = 'none';
+        searchState.textContent = '';
+    }
+}
+
 // 로딩 상태 표시/숨김
 function showLoading(show) {
     loadingSpinner.style.display = show ? 'block' : 'none';
@@ -259,19 +357,30 @@ async function downloadExcel() {
         for (let page = 0; page < maxPages; page++) {
             const progress = Math.round(((page + 1) / maxPages) * 100);
             excelDownloadBtn.innerHTML = `<i class=\"fas fa-spinner fa-spin\"></i> 다운로드 중... ${progress}%`;
-
-            const params = new URLSearchParams({
-                page: page,
-                size: itemsPerPage
-            });
+            const params = new URLSearchParams({ page: page, size: itemsPerPage });
+            let endpoint = API_PAGING_URL;
+            if (currentKeyword) {
+                endpoint = API_SEARCH_URL;
+                params.append('keyword', currentKeyword);
+            }
+            if (currentOrganization) params.append('organization', currentOrganization);
+            if (currentDateRange) params.append('dateRange', currentDateRange);
 
             try {
-                const response = await fetch(`${API_BASE_URL}?${params.toString()}`, {
+                let response = await fetch(`${endpoint}?${params.toString()}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     }
                 });
+                if (!response.ok && currentKeyword && response.status === 404) {
+                    // fallback
+                    endpoint = API_PAGING_URL;
+                    response = await fetch(`${endpoint}?${params.toString()}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
                 if (response.ok) {
                     const data = await response.json();
                     const pageData = data.content || [];
