@@ -1,4 +1,28 @@
 [
+          {
+    "filename": "(AI&Digital_Inclusion_Brief)_특별호_OpenAI_생산성_노트를_통해_본_ChatGPT_사용_현황과_의미.pdf",
+    "type": "pdf",
+    "description": "OpenAI 보고서를 기반으로 ChatGPT 사용 현황과 그\n의미를 살펴보고자 한다. 특히, 보고서에서 미국 내 ChatGPT 사용률\n상위권에 해당하는 15개 주를 표시한 지도를 제시하였으나, 이에 대한\n별도의 설명은 없었다. 따라서 본 보고서에서는 특정 주를 중심으로\nChatGPT 활용이 높은 이유를 추론해 보고, 지역 간 격차 발생에 대한\n이유와 그 의미에 대해 살펴보고자 한다.",
+    "size": 0.4,
+    "date": "2025-08-19",
+    "link": "https://drive.google.com/file/d/1JyD6B7HQQaczlqW7hEUykjOLyjfL4TrM/view?usp=sharing"
+},
+    {
+    "filename": "(한국은행)AI의 빠른 확산과 생산성 효과,가계조사를 바탕으로.pdf",
+    "type": "pdf",
+    "description": "AI 정책 논의에 필요한 기초자료를 마련하기 위해 직업분포를 반영한 대표 표본을 구축하고 가계조\n사(representative household survey)를 실시하였다. 이를 바탕으로 근로자의 AI 활용 현황\n과 이에 따른 생산성 효과 등을 분석하였다.",
+    "size": 2.2,
+    "date": "2025-08-19",
+    "link": "https://drive.google.com/file/d/1eHJkVmR7oS97m6vXIHx7I5o3miztahlC/view?usp=sharing"
+},
+    {
+    "filename": "AI_시대의_일자리_변화_및_정책_대응_전략_최종본.pdf",
+    "type": "pdf",
+    "description": "AI 기술 발전에 따른 노동시장 변화 양상을 분석하고, 국내외 대응 사례를\n바탕으로 AI 시대의 한국형 일자리 대응 전략 수립을 위한 정책적 시사점을 도출하고자 함",
+    "size": 1.2,
+    "date": "2025-08-19",
+    "link": "https://drive.google.com/file/d/1Vb-44M0FSfa7NpxLnazaSsqSEAZLSf6O/view?usp=sharing"
+},
       {
     "filename": "gao-25-107653.pdf",
     "type": "pdf",
@@ -5681,5 +5705,6 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E/view?usp=drivesdk"
     }
 ]
+
 
 
