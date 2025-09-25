@@ -91,29 +91,6 @@
             align-items: center;
         }
 
-        .info-section {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .info-section p {
-            padding: .2rem .8rem;
-            border-radius: 20px;
-            background: #eee;
-            font-size: .8rem;
-            font-weight: 500;
-            border: 1px solid #eee;
-            margin: 0;
-        }
-
-        body.dark .info-section p {
-            background: transparent;
-            border: 1px solid var(--border-color-dark);
-        }
-
         .btn {
             padding: .4rem .8rem;
             border-radius: .6rem;
@@ -317,10 +294,6 @@
                     alt="KORAIA">
                 <h1>AI 뉴스레터</h1>
             </div>
-            <div class="info-section">
-                <p><span id="currentDate"></span></p>
-                <p style="background-color:transparent">업데이트 : <span id="updateDate" style="font-weight:400"></span></p>
-            </div>
         </div>
         <nav>
             <button class="nav-btn selected" data-cat="all">📜전체</button>
@@ -377,8 +350,6 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const currentDateEl = document.getElementById("currentDate");
-        const updateDateEl = document.getElementById("updateDate");
         const navBtns = document.querySelectorAll(".nav-btn");
         const cardSectionEl = document.getElementById("cardSection");
         const summaryEl = document.getElementById("summary");
@@ -410,8 +381,6 @@
 
         const initialized = () => {
             cardSectionEl.innerHTML = "";
-            currentDateEl.textContent = "";
-            updateDateEl.textContent = "";
         };
 
         const fetchAndStoreData = async () => {
@@ -425,9 +394,6 @@
 
                 if (!data || !data[0]) return;
                 fetchedData = data[0];
-
-                currentDateEl.textContent = fetchedData.news_date;
-                updateDateEl.textContent = formatDate(fetchedData.updated_at);
 
                 handleRenderInsights(fetchedData, currentCategory);
             } catch (err) {
@@ -512,6 +478,4 @@
     </script>
 </body>
 
-
 </html>
-
