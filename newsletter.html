@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 뉴스레터</title>
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --bg-light: #f9fafb;
+            --bg-dark: #111827;
+            --text-light: #111827;
+            --text-dark: #f3f4f6;
+            --card-light: #ffffff;
+            --card-dark: #1f2937;
+            --primary: #3b82f6;
+            --border-color-dark: #374151;
+        }
+
+        html {
+            font-size: 18px;
+        }
+
+        body {
+            font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", sans-serif;
+            margin: 0;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: background-color .3s, color .3s;
+            line-height: 1.6;
+            letter-spacing: .02em;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, .7);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 2rem 1rem .8rem;
+            transition: background-color .3s;
+        }
+
+        body.dark header {
+            background: rgba(17, 24, 39, .7);
+            border-color: var(--border-color-dark);
+        }
+
+        .header-container {
+            max-width: 1100px;
+            min-height: 40px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .title img {
+            height: 30px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: .45rem;
+            align-items: center;
+        }
+
+        .info-section {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .info-section p {
+            padding: .2rem .8rem;
+            border-radius: 20px;
+            background: #eee;
+            font-size: .8rem;
+            font-weight: 500;
+            border: 1px solid #eee;
+            margin: 0;
+        }
+
+        body.dark .info-section p {
+            background: transparent;
+            border: 1px solid var(--border-color-dark);
+        }
+
+        .btn {
+            padding: .4rem .8rem;
+            border-radius: .6rem;
+            font-size: .9rem;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            background: var(--card-light);
+            color: var(--text-light);
+            transition: transform .2s, background .3s, color .3s, border-color .3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        body.dark .btn {
+            border: none;
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+
+        body.dark .btn:hover {
+            background: var(--border-color-dark);
+        }
+
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: .8rem;
+            line-height: 1;
+            border-radius: 50%;
+        }
+
+        .icon-btn svg {
+            stroke: var(--text-light);
+            transition: stroke .3s;
+        }
+
+        body.dark .icon-btn svg {
+            stroke: var(--text-dark);
+        }
+
+        nav {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            gap: .5rem;
+            padding-top: .8rem;
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            padding: .5rem 1rem;
+            border-radius: 1rem;
+            font-size: .8rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            color: #262626;
+            background: transparent;
+            border: 1px solid #eee;
+            transition: transform .2s, background .3s;
+        }
+
+        .nav-btn:hover {
+            background: #eff0f3;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.selected {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        body.dark .nav-btn {
+            color: #93c5fd;
+            border: 1px solid var(--border-color-dark);
+        }
+
+        body.dark .nav-btn:hover {
+            background: #1e3a8a;
+        }
+
+        body.dark .nav-btn.selected {
+            background: #1d4ed8;
+            color: #fff;
+        }
+
+        .summary-section {
+            max-width: 1100px;
+            margin: auto;
+            padding: 2rem 1rem;
+            padding-bottom: 0;
+        }
+
+        .card-section {
+            max-width: 1100px;
+            margin: auto;
+            padding: 2rem 1rem 4rem 1rem;
+        }
+
+        .category-block {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            color: var(--primary);
+        }
+
+        .category-cards {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width:640px) {
+            .category-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width:1024px) {
+            .category-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card {
+            background: var(--card-light);
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        body.dark .card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: .8rem 0 .5rem;
+        }
+
+        .card p {
+            font-size: .85rem;
+            line-height: 1.6;
+            color: var(--border-color-dark);
+        }
+
+        body.dark .card p {
+            color: #d1d5db;
+        }
+
+        .error {
+            color: #d81d1d;
+            background: #ffe8e8;
+            padding: .5rem;
+            border-radius: 6px;
+        }
+
+        @media (max-width:639px) {
+            header {
+                padding-top: 1.5rem;
+            }
+
+            .header-container {
+                gap: .8rem;
+            }
+
+            .nav-btn {
+                padding: .3rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="title">
+                <img src="https://raw.githubusercontent.com/koraiadev/img/bac6e32c862f2d6c9b25e022fe1123fdad7fb29f/koraia/logo-koraia.svg"
+                    alt="KORAIA">
+                <h1>AI 뉴스레터</h1>
+            </div>
+            <div class="info-section">
+                <p><span id="currentDate"></span></p>
+                <p style="background-color:transparent">업데이트 : <span id="updateDate" style="font-weight:400"></span></p>
+            </div>
+        </div>
+        <nav>
+            <button class="nav-btn selected" data-cat="all">📜전체</button>
+            <button class="nav-btn" data-cat="domestic">🏠국내동향</button>
+            <button class="nav-btn" data-cat="global">✈️해외동향</button>
+            <button class="nav-btn" data-cat="government">🏛️정부동향</button>
+            <button class="nav-btn" data-cat="corporate">🏢기업동향</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="summary-section">
+            <article class="card">
+                <span style="font-weight:bold; color:var(--primary)">✅ 핵심 요약</span>
+                <p id="summary">요약을 불러오는 중입니다.</p>
+            </article>
+        </div>
+
+        <div id="cardSection" class="card-section"></div>
+
+        <div class="controls">
+            <button id="darkToggle" class="btn icon-btn" aria-label="다크 모드 전환">
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="display:none;">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+            </button>
+
+            <button id="refreshBtn" class="btn icon-btn" aria-label="새로고침">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 4v6h-6" />
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const currentDateEl = document.getElementById("currentDate");
+        const updateDateEl = document.getElementById("updateDate");
+        const navBtns = document.querySelectorAll(".nav-btn");
+        const cardSectionEl = document.getElementById("cardSection");
+        const summaryEl = document.getElementById("summary");
+        const summarySectionEl = document.querySelector(".summary-section > .card");
+
+        let currentCategory = "all";
+        let fetchedData = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            handleViewModeEvent();
+            fetchAndStoreData();
+        });
+
+        // 다크모드 토글
+        const handleViewModeEvent = () => {
+            const darkToggle = document.getElementById("darkToggle");
+            const sunIcon = darkToggle.querySelector('.sun-icon');
+            const moonIcon = darkToggle.querySelector('.moon-icon');
+
+            const setMode = (isDark) => {
+                isDark ? document.body.classList.add("dark") : document.body.classList.remove("dark");
+                sunIcon.style.display = isDark ? 'block' : 'none';
+                moonIcon.style.display = isDark ? 'none' : 'block';
+            };
+
+            darkToggle.addEventListener("click", () => setMode(!document.body.classList.contains("dark")));
+            setMode(document.body.classList.contains("dark"));
+        };
+
+        const initialized = () => {
+            cardSectionEl.innerHTML = "";
+            currentDateEl.textContent = "";
+            updateDateEl.textContent = "";
+        };
+
+        const fetchAndStoreData = async () => {
+            initialized();
+
+            try {
+                const { data, error } = await supabase
+                    .from('ai_newsletter_daily')
+                    .select('*')
+                    .order('news_date', { ascending: false });
+
+                if (!data || !data[0]) return;
+                fetchedData = data[0];
+
+                currentDateEl.textContent = fetchedData.news_date;
+                updateDateEl.textContent = formatDate(fetchedData.updated_at);
+
+                handleRenderInsights(fetchedData, currentCategory);
+            } catch (err) {
+                summarySectionEl.innerHTML = `
+                    <span class="error">❌ 문제 발생</span>
+                    <p id="error">${err}</p>
+                `;
+            }
+        };
+
+        const formatDate = (isoString) => {
+            const d = new Date(isoString);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            const hh = String(d.getHours()).padStart(2, "0");
+            const mi = String(d.getMinutes()).padStart(2, "0");
+            return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+        };
+
+        const handleRenderInsights = (row, category = "all") => {
+            function renderCards(insights) {
+                if (!insights) return '';
+                return insights.map(insight => {
+                    const match = insight.match(/^\*\*(.+?)\*\*:/);
+                    const title = match ? match[1].trim() : null;
+                    const content = match ? insight.replace(match[0], '').trim() : insight;
+
+                    return `
+                        <article class="card">
+                            ${title ? `<h2>${title}</h2>` : ``}
+                            <p>${content}</p>
+                        </article>
+                    `;
+                }).join('');
+            }
+
+            summaryEl.textContent = row.key_summary || "";
+
+            const categories = [
+                { key: "domestic_insights", type: "domestic", icon: "🏠", label: "국내동향" },
+                { key: "global_insights", type: "global", icon: "✈️", label: "해외동향" },
+                { key: "government_insights", type: "government", icon: "🏛️", label: "정부동향" },
+                { key: "corporate_insights", type: "corporate", icon: "🏢", label: "기업동향" },
+            ];
+
+            let html = '';
+            categories.forEach(({ key, type, icon, label }) => {
+                if (category === "all" || category === type) {
+                    const cards = renderCards(row[key]);
+                    if (cards) {
+                        html += `
+                            <section class="category-block">
+                                <h3 class="category-title">${icon} ${label}</h3>
+                                <div class="category-cards">${cards}</div>
+                            </section>
+                        `;
+                    }
+                }
+            });
+
+            cardSectionEl.style.opacity = 0;
+            cardSectionEl.innerHTML = html;
+            requestAnimationFrame(() => {
+                cardSectionEl.style.transition = "opacity .4s ease";
+                cardSectionEl.style.opacity = 1;
+            });
+        };
+
+        navBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                navBtns.forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                currentCategory = btn.dataset.cat;
+                if (fetchedData) {
+                    handleRenderInsights(fetchedData, currentCategory);
+                }
+            });
+        });
+
+        document.getElementById("refreshBtn").addEventListener("click", fetchAndStoreData);
+    </script>
+</body>
+
+</html>
