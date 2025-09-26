@@ -242,6 +242,55 @@
             border: 1px solid var(--border-color-dark);
         }
 
+        /* 카테고리별 카드 색상 - 접근성 개선 버전 */
+        .card.domestic {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-color: #f3e8ff;
+        }
+
+        .card.global {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            border-color: #e0e7ff;
+        }
+
+        .card.government {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            border-color: #dcfce7;
+        }
+
+        .card.corporate {
+            background: #fdf2f8;
+            border-left: 4px solid #ec4899;
+            border-color: #fce7f3;
+        }
+
+        body.dark .card.domestic {
+            background: #1c1917;
+            border-left: 4px solid #f59e0b;
+            border-color: #292524;
+        }
+
+        body.dark .card.global {
+            background: #1e293b;
+            border-left: 4px solid #3b82f6;
+            border-color: #334155;
+        }
+
+        body.dark .card.government {
+            background: #14532d;
+            border-left: 4px solid #10b981;
+            border-color: #166534;
+        }
+
+        body.dark .card.corporate {
+            background: #831843;
+            border-left: 4px solid #ec4899;
+            border-color: #9d174d;
+        }
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
@@ -251,15 +300,68 @@
             font-size: 1rem;
             font-weight: bold;
             margin: .8rem 0 .5rem;
+            color: var(--text-light);
+        }
+
+        body.dark .card h2 {
+            color: var(--text-dark);
+        }
+
+        /* 카테고리별 제목 색상 */
+        .card.domestic h2 {
+            color: #92400e;
+        }
+
+        .card.global h2 {
+            color: #1d4ed8;
+        }
+
+        .card.government h2 {
+            color: #047857;
+        }
+
+        .card.corporate h2 {
+            color: #be185d;
+        }
+
+        body.dark .card.domestic h2,
+        body.dark .card.global h2,
+        body.dark .card.government h2,
+        body.dark .card.corporate h2 {
+            color: var(--text-dark);
         }
 
         .card p {
             font-size: .85rem;
             line-height: 1.6;
-            color: var(--border-color-dark);
+            color: #4b5563;
         }
 
         body.dark .card p {
+            color: #d1d5db;
+        }
+
+        /* 카테고리별 텍스트 색상 조정 */
+        .card.domestic p {
+            color: #78350f;
+        }
+
+        .card.global p {
+            color: #1e40af;
+        }
+
+        .card.government p {
+            color: #065f46;
+        }
+
+        .card.corporate p {
+            color: #be185d;
+        }
+
+        body.dark .card.domestic p,
+        body.dark .card.global p,
+        body.dark .card.government p,
+        body.dark .card.corporate p {
             color: #d1d5db;
         }
 
@@ -360,6 +462,37 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             handleViewModeEvent();
+            handleUrlNavigation();
+            fetchAndStoreData();
+        });
+
+        // URL 해시 네비게이션 처리
+        const handleUrlNavigation = () => {
+            const hash = window.location.hash.substring(1); // # 제거
+            const validCategories = ['domestic', 'global', 'government', 'corporate'];
+            
+            if (validCategories.includes(hash)) {
+                currentCategory = hash;
+                // 네비게이션 버튼 업데이트
+                navBtns.forEach(btn => {
+                    btn.classList.remove("selected");
+                    if (btn.dataset.cat === hash) {
+                        btn.classList.add("selected");
+                    }
+                });
+            }
+        };
+
+        // 브라우저 뒤로가기/앞으로가기 버튼 대응
+        window.addEventListener('hashchange', () => {
+            handleUrlNavigation();
+            if (fetchedData) {
+                handleRenderInsights(fetchedData, currentCategory);
+            }
+        });
+
+        // URL 쿼리 파라미터 변경 감지 (새로고침 없이)
+        window.addEventListener('popstate', () => {
             fetchAndStoreData();
         });
 
@@ -383,18 +516,42 @@
             cardSectionEl.innerHTML = "";
         };
 
+        // URL 쿼리 파라미터에서 날짜 추출
+        const getDateFromUrl = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('date');
+        };
+
         const fetchAndStoreData = async () => {
             initialized();
 
             try {
-                const { data, error } = await supabase
+                const targetDate = getDateFromUrl();
+                let query = supabase
                     .from('ai_newsletter_daily')
-                    .select('*')
-                    .order('news_date', { ascending: false });
+                    .select('*');
 
-                if (!data || !data[0]) return;
+                if (targetDate) {
+                    // 특정 날짜 데이터 조회
+                    query = query.eq('news_date', targetDate);
+                } else {
+                    // 기본: 최신 데이터 조회
+                    query = query.order('news_date', { ascending: false });
+                }
+
+                const { data, error } = await query;
+
+                if (!data || !data[0]) {
+                    if (targetDate) {
+                        summarySectionEl.innerHTML = `
+                            <span class="error">❌ 해당 날짜의 데이터가 없습니다</span>
+                            <p id="error">${targetDate} 날짜의 뉴스레터를 찾을 수 없습니다.</p>
+                        `;
+                    }
+                    return;
+                }
+                
                 fetchedData = data[0];
-
                 handleRenderInsights(fetchedData, currentCategory);
             } catch (err) {
                 summarySectionEl.innerHTML = `
@@ -415,15 +572,38 @@
         };
 
         const handleRenderInsights = (row, category = "all") => {
-            function renderCards(insights) {
+            function renderCards(insights, categoryType) {
                 if (!insights) return '';
                 return insights.map(insight => {
-                    const match = insight.match(/^\*\*(.+?)\*\*:/);
-                    const title = match ? match[1].trim() : null;
-                    const content = match ? insight.replace(match[0], '').trim() : insight;
+                    // 개선된 제목 파싱 로직
+                    let title = null;
+                    let content = insight;
+                    
+                    // 1. 이모지 제거 후 **제목**: 패턴 찾기
+                    let cleanInsight = insight.replace(/^[\u{1F000}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*/u, '');
+                    let match = cleanInsight.match(/^\*\*(.+?)\*\*:/);
+                    
+                    if (match) {
+                        title = match[1].trim();
+                        content = cleanInsight.replace(match[0], '').trim();
+                    } else {
+                        // 2. **제목** (콜론 없는 경우) 패턴 찾기
+                        match = cleanInsight.match(/^\*\*(.+?)\*\*\s*/);
+                        if (match) {
+                            title = match[1].trim();
+                            content = cleanInsight.replace(match[0], '').trim();
+                        } else {
+                            // 3. 이모지 + **제목**: 패턴 찾기
+                            match = insight.match(/^[\u{1F000}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*\*\*(.+?)\*\*:?/u);
+                            if (match) {
+                                title = match[1].trim();
+                                content = insight.replace(match[0], '').trim();
+                            }
+                        }
+                    }
 
                     return `
-                        <article class="card">
+                        <article class="card ${categoryType}">
                             ${title ? `<h2>${title}</h2>` : ``}
                             <p>${content}</p>
                         </article>
@@ -443,7 +623,7 @@
             let html = '';
             categories.forEach(({ key, type, icon, label }) => {
                 if (category === "all" || category === type) {
-                    const cards = renderCards(row[key]);
+                    const cards = renderCards(row[key], type);
                     if (cards) {
                         html += `
                             <section class="category-block">
@@ -468,6 +648,14 @@
                 navBtns.forEach(b => b.classList.remove("selected"));
                 btn.classList.add("selected");
                 currentCategory = btn.dataset.cat;
+                
+                // URL 해시 업데이트
+                if (currentCategory === 'all') {
+                    window.location.hash = '';
+                } else {
+                    window.location.hash = currentCategory;
+                }
+                
                 if (fetchedData) {
                     handleRenderInsights(fetchedData, currentCategory);
                 }
