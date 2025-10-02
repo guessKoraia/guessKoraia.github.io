@@ -602,6 +602,10 @@
                         }
                     }
 
+                    if (content) {
+                        content = content.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+                    }
+
                     return `
                         <article class="card ${categoryType}">
                             ${title ? `<h2>${title}</h2>` : ``}
@@ -665,5 +669,6 @@
         document.getElementById("refreshBtn").addEventListener("click", fetchAndStoreData);
     </script>
 </body>
+
 
 </html>
