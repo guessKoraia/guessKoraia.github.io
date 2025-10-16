@@ -12,14 +12,17 @@
     <meta name="twitter:title" content="전문보고서 자료실 | 한국인공지능협회">
     <meta name="twitter:description" content="연구자료 및 정책문서를 검색하고 다운로드 할 수 있는 자료실입니다.">
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
+    <meta name="twitter:image"
+        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
     <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
         media="(prefers-color-scheme: light)">
     <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
         media="(prefers-color-scheme: dark)">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
 
@@ -37,6 +40,17 @@
             line-height: 1.6;
         }
 
+
+        /* 로딩 중인 다운로드 버튼 스타일 */
+        .download-link.loading {
+            background-color: #6c757d;
+            /* 회색 계열로 변경 */
+            cursor: wait;
+            /* 대기 커서 모양으로 변경 */
+            pointer-events: none;
+            /* 여러 번 클릭되는 것을 방지 */
+        }
+
         /* Header */
         .header {
             background: #ffffff;
@@ -44,7 +58,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-container {
@@ -461,46 +475,46 @@
                 gap: 15px;
                 align-items: flex-start;
             }
-            
+
             .nav-menu {
                 flex-direction: column;
                 gap: 10px;
                 align-items: flex-start;
             }
-            
+
             .nav-stats {
                 gap: 15px;
                 flex-wrap: wrap;
             }
-            
+
             .search-container {
                 flex-direction: column;
                 align-items: stretch;
             }
-            
+
             .search-box {
                 min-width: auto;
             }
-            
+
             .category-tabs {
                 justify-content: flex-start;
             }
-            
+
             .content-header {
                 flex-direction: column;
                 gap: 10px;
                 align-items: flex-start;
             }
-            
+
             table {
                 font-size: 0.9rem;
             }
-            
+
             thead th,
             tbody td {
                 padding: 10px;
             }
-            
+
             .tooltip-trigger {
                 max-width: 200px;
             }
@@ -510,28 +524,28 @@
             .container {
                 padding: 15px;
             }
-            
+
             .header-container {
                 padding: 0 15px;
             }
-            
+
             .site-title {
                 font-size: 1.8rem;
             }
-            
+
             .category-tabs {
                 padding: 15px;
             }
-            
+
             .tab {
                 font-size: 0.8rem;
                 padding: 6px 12px;
             }
-            
+
             table {
                 font-size: 0.8rem;
             }
-            
+
             thead th,
             tbody td {
                 padding: 8px;
@@ -650,7 +664,7 @@
             function updateStats() {
                 document.getElementById('total-files').textContent = filteredFiles.length;
                 document.getElementById('current-page-info').textContent = totalPages;
-                
+
                 // 오늘 추가된 파일 계산
                 const today = new Date().toDateString();
                 const todayFiles = files.filter(file => {
@@ -663,7 +677,7 @@
             }
 
             // 스크롤 버튼 표시/숨김 처리
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 if (window.pageYOffset > 300) {
                     scrollTopBtn.classList.add('visible');
                 } else {
@@ -672,7 +686,7 @@
             });
 
             // 스크롤 상단 버튼 클릭 이벤트
-            scrollTopBtn.addEventListener('click', function() {
+            scrollTopBtn.addEventListener('click', function () {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -741,7 +755,7 @@
                     const description = file.description ? file.description.toLowerCase() : '';
                     return filename.includes(searchTerm) || description.includes(searchTerm);
                 });
-                
+
                 filterFiles(searchResult);
             }
 
@@ -760,7 +774,7 @@
                             return fileType === 'hwp' || fileType === 'hwpx';
                         });
                     } else if (currentFilter === 'ppt') {
-                         result = result.filter(file => {
+                        result = result.filter(file => {
                             const fileType = file.type ? file.type.toLowerCase() : '';
                             return fileType === 'ppt' || fileType === 'pptx';
                         });
@@ -771,7 +785,7 @@
                         });
                     }
                 }
-                
+
                 filteredFiles = result; // 필터링된 결과를 전역 변수에 저장
                 currentPage = 1; // 필터링 후 첫 페이지로 이동
                 updateStats();
@@ -793,8 +807,8 @@
                     const btn = document.createElement('button');
                     btn.innerHTML = text;
                     btn.classList.add('page-btn');
-                    if(disabled) btn.disabled = true;
-                    if(active) btn.classList.add('active');
+                    if (disabled) btn.disabled = true;
+                    if (active) btn.classList.add('active');
                     btn.addEventListener('click', () => {
                         currentPage = pageNumber;
                         scrollToTop();
@@ -803,7 +817,7 @@
                     });
                     return btn;
                 };
-                
+
                 pagination.appendChild(createButton('<i class="fas fa-chevron-left"></i>', currentPage - 1, currentPage === 1));
 
                 let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
@@ -827,7 +841,7 @@
                 }
 
                 if (endPage < totalPages) {
-                     if (endPage < totalPages - 1) {
+                    if (endPage < totalPages - 1) {
                         const ellipsis = document.createElement('span');
                         ellipsis.textContent = '...';
                         ellipsis.classList.add('ellipsis');
@@ -835,7 +849,7 @@
                     }
                     pagination.appendChild(createButton(totalPages, totalPages));
                 }
-                
+
                 pagination.appendChild(createButton('<i class="fas fa-chevron-right"></i>', currentPage + 1, currentPage === totalPages));
             }
 
@@ -877,13 +891,13 @@
 
                 currentPageFiles.forEach(file => {
                     const row = document.createElement('tr');
-                    
+
                     // --- 날짜 처리 로직 수정 ---
                     let dateDisplay;
                     if (file.date) {
                         const fileDate = new Date(file.date);
                         const today = new Date();
-                        
+
                         // 시간, 분, 초를 0으로 설정하여 날짜만 비교
                         fileDate.setHours(0, 0, 0, 0);
                         today.setHours(0, 0, 0, 0);
@@ -898,7 +912,7 @@
                     }
 
                     const fileTypeBadge = getFileTypeBadge(file.type);
-                    
+
                     const filenameContent = document.createElement('div');
                     filenameContent.className = 'filename-content';
                     const filenameSpan = document.createElement('span');
@@ -912,7 +926,7 @@
                         infoIcon.className = 'fas fa-info-circle info-icon';
                         filenameContent.appendChild(infoIcon);
                     }
-                    
+
                     row.innerHTML = `
                         <td class="filename-cell"></td>
                         <td>${fileTypeBadge || '-'}</td>
@@ -920,11 +934,41 @@
                         <td>${file.size || '-'}</td>
                         <td><a href="${file.link}" class="download-link" target="_blank" rel="noopener"><i class="fas fa-download"></i> 받기</a></td>
                     `;
-                    
+
                     row.querySelector('.filename-cell').appendChild(filenameContent);
                     fileTableBody.appendChild(row);
                 });
-                
+
+                // 다운로드 버튼 클릭 시 로딩 애니메이션 효과 추가 (이벤트 위임)
+                fileTableBody.addEventListener('click', function (event) {
+                    // 클릭된 요소가 '.download-link'인지 확인
+                    const downloadLink = event.target.closest('.download-link');
+
+                    if (downloadLink) {
+                        // 이미 로딩 중이면 다시 실행하지 않음
+                        if (downloadLink.classList.contains('loading')) {
+                            event.preventDefault(); // 기본 동작(링크 이동) 방지
+                            return;
+                        }
+
+                        // 버튼의 원래 내용을 저장
+                        const originalContent = downloadLink.innerHTML;
+
+                        // 'loading' 클래스를 추가하고 내용을 변경
+                        downloadLink.classList.add('loading');
+                        downloadLink.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 처리 중...';
+
+                        // 4초 후에 버튼을 원래 상태로 되돌림
+                        // 다운로드 완료 시점을 정확히 알 수 없으므로, UX를 위해 일정 시간 후 복원
+                        setTimeout(() => {
+                            downloadLink.classList.remove('loading');
+                            downloadLink.innerHTML = originalContent;
+                        }, 4000); // 4000ms = 4초
+                    }
+                });
+
+
+
                 tippy('.tooltip-trigger', {
                     placement: 'bottom',
                     arrow: true,
@@ -936,7 +980,5 @@
         });
     </script>
 </body>
+
 </html>
-
-
-
