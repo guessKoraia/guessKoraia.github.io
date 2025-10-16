@@ -496,14 +496,31 @@
             renderFileList();
         }
 
-        // 최종 JSON 생성 버튼 이벤트
+        // 🚀 최종 JSON 생성 버튼 이벤트 (수정된 부분)
         generateAllBtn.addEventListener('click', function() {
             if (fileList.length === 0) {
                 alert('목록에 추가된 파일이 없습니다.');
                 return;
             }
 
-            const jsonString = JSON.stringify(fileList, null, 4);
+            // 각 파일의 링크를 변환하는 로직 추가
+            const processedList = fileList.map(file => {
+                const newFile = { ...file }; // 원본 데이터 수정을 피하기 위해 객체 복사
+                
+                // 링크가 구글 드라이브 형식인지 확인하고 변환
+                if (newFile.link && newFile.link.includes('drive.google.com/file/d/')) {
+                    const regex = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+                    const match = newFile.link.match(regex);
+                    if (match && match[1]) {
+                        const fileId = match[1];
+                        newFile.link = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                    }
+                }
+                return newFile;
+            });
+
+            // 변환된 리스트를 JSON으로 변환
+            const jsonString = JSON.stringify(processedList, null, 4);
             jsonContent.textContent = jsonString;
             resultContainer.style.display = 'block';
             
