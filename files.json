@@ -1,5 +1,13 @@
 [
     {
+        "filename": "[프로그램] 공무원 보고서 편집 자동화, 범정부오피스",
+        "type": "pdf",
+        "description": "인공지능 타임라인",
+        "size": 8,
+        "date": "2025-10-16",
+        "link": "https://www.innovation.go.kr/ucms/bbs/B0000043/view.do?nttId=18191&searchType=1&menuNo=300193&sort=01&searchCnd=&pageIndex=1&searchWrd="
+    },
+    {
         "filename": "History of AI Poster - 한눈에 살펴보는 인공지능 히스토리",
         "type": "pdf",
         "description": "인공지능 타임라인",
@@ -5775,6 +5783,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E/view?usp=drivesdk"
     }
 ]
+
 
 
 
