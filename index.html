@@ -380,7 +380,7 @@
         .loading,
         .no-results {
             text-align: center;
-            padding: 60px 20px;
+            /* padding: 60px 20px; */
             color: #666;
             background: #f8f9fa;
         }
@@ -932,7 +932,7 @@
                         <td>${fileTypeBadge || '-'}</td>
                         <td>${dateDisplay}</td>
                         <td>${file.size || '-'}</td>
-                        <td><a href="${file.link}" class="download-link" target="_blank" rel="noopener"><i class="fas fa-download"></i> 받기</a></td>
+                        <td><a href="${file.link}" class="download-link" rel="noopener"><i class="fas fa-download"></i> 받기</a></td>
                     `;
 
                     row.querySelector('.filename-cell').appendChild(filenameContent);
