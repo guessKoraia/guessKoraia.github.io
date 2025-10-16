@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>파일 정보 생성기</title>
+    <title>다중 파일 정보 생성기</title>
     <style>
         * {
             margin: 0;
@@ -162,11 +162,11 @@
         select {
             cursor: pointer;
         }
-
-        .generate-btn {
+        
+        /* 버튼 스타일 */
+        .btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -176,14 +176,68 @@
             transition: all 0.3s ease;
             margin-top: 10px;
         }
-
-        .generate-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
         }
 
-        .generate-btn:active {
-            transform: translateY(0);
+        .add-btn {
+            background: #28a745;
+        }
+        .add-btn:hover {
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .generate-btn:hover {
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* 파일 목록 스타일 */
+        #fileListContainer {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .file-list-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e1e5e9;
+        }
+        .file-list-info {
+            font-size: 14px;
+        }
+        .file-list-info strong {
+            color: #333;
+        }
+        .file-list-info span {
+            color: #666;
+            margin-left: 8px;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .remove-btn:hover {
+            background: #c0392b;
         }
 
         .result-container {
@@ -199,17 +253,18 @@
         }
 
         .json-output {
-            background: #f8f9fa;
-            border: 2px solid #e1e5e9;
+            background: #2d2d2d;
+            border: 2px solid #444;
             border-radius: 10px;
             padding: 20px;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             white-space: pre-wrap;
             word-wrap: break-word;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
             position: relative;
+            color: #f8f8f2;
         }
 
         .copy-btn {
@@ -243,30 +298,35 @@
             color: #666;
             margin-top: 5px;
         }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">📁 파일 정보 생성기</h1>
+        <h1 class="title">📦 다중 파일 정보 생성기</h1>
         
-        <!-- 파일 업로드 영역 -->
         <div class="file-upload-area" id="fileUploadArea">
             <input type="file" class="file-input" id="fileInput" accept="*/*">
-            <div class="file-upload-icon">📁</div>
-            <div class="file-upload-text">파일을 드래그하여 놓거나 클릭하여 선택하세요</div>
-            <div class="file-upload-hint">PDF, PPT, HWP, Excel 등 모든 파일 형식 지원</div>
+            <div class="file-upload-icon">📄</div>
+            <div class="file-upload-text">파일을 드래그하여 폼을 자동으로 채우세요</div>
+            <div class="file-upload-hint">(선택 사항) 또는 모든 정보를 수동으로 입력하세요</div>
         </div>
 
-        <!-- 선택된 파일 정보 표시 -->
         <div class="selected-file" id="selectedFile">
-            <div class="selected-file-info">✅ 파일이 선택되었습니다</div>
+            <div class="selected-file-info">✅ 폼 자동 채우기 완료</div>
             <div class="selected-file-details" id="fileDetails"></div>
         </div>
         
-        <form id="uploadForm">
+        <form id="fileInfoForm">
             <div class="form-group">
                 <label for="filename">파일명 <span class="required">*</span></label>
-                <input type="text" id="filename" name="filename" required placeholder="예: 국정기획위_대한민국 진짜 성장을 위한 전략">
+                <input type="text" id="filename" name="filename" required placeholder="예: 대한민국 성장 전략">
             </div>
 
             <div class="form-group">
@@ -282,8 +342,8 @@
             </div>
 
             <div class="form-group">
-                <label for="description">설명 <span class="required">*</span></label>
-                <textarea id="description" name="description" required placeholder="파일에 대한 상세 설명을 입력하세요..."></textarea>
+                <label for="description">설명 </label>
+                <textarea id="description" name="description" placeholder="파일에 대한 상세 설명을 입력하세요..."></textarea>
             </div>
 
             <div class="form-group">
@@ -298,116 +358,98 @@
             </div>
 
             <div class="form-group">
-                <label for="link">링크 <span class="required">*</span></label>
+                <label for="link">링크 (구글 드라이브 등) <span class="required">*</span></label>
                 <input type="url" id="link" name="link" required placeholder="https://drive.google.com/file/d/...">
             </div>
 
-            <button type="submit" class="generate-btn">🚀 JSON 생성하기</button>
+            <button type="submit" class="btn add-btn">➕ 목록에 추가하기</button>
         </form>
 
+        <hr>
+
+        <div id="generationArea" style="display: none;">
+             <h3 class="result-title">추가된 파일 목록:</h3>
+             <div id="fileListContainer"></div>
+             <button class="btn generate-btn" id="generateAllBtn">🚀 전체 JSON 생성하기</button>
+        </div>
+
+
         <div class="result-container" id="resultContainer">
-            <h3 class="result-title">생성된 JSON:</h3>
-            <div class="json-output" id="jsonOutput">
+            <h3 class="result-title">생성된 JSON 배열:</h3>
+            <div class="json-output">
                 <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">📋 복사</button>
-                <div id="jsonContent"></div>
+                <pre><code id="jsonContent"></code></pre>
             </div>
         </div>
     </div>
 
     <script>
-        // 오늘 날짜를 기본값으로 설정
-        document.getElementById('date').valueAsDate = new Date();
-
-        // 파일 업로드 관련 요소들
+        const fileInfoForm = document.getElementById('fileInfoForm');
         const fileUploadArea = document.getElementById('fileUploadArea');
         const fileInput = document.getElementById('fileInput');
         const selectedFile = document.getElementById('selectedFile');
         const fileDetails = document.getElementById('fileDetails');
+        const fileListContainer = document.getElementById('fileListContainer');
+        const generationArea = document.getElementById('generationArea');
+        const generateAllBtn = document.getElementById('generateAllBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const jsonContent = document.getElementById('jsonContent');
+        const copyBtn = document.getElementById('copyBtn');
+
+        let fileList = [];
+
+        // 오늘 날짜를 기본값으로 설정
+        document.getElementById('date').valueAsDate = new Date();
 
         // 드래그 앤 드롭 이벤트
-        fileUploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            fileUploadArea.classList.add('dragover');
+        ['dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, preventDefaults, false);
         });
 
-        fileUploadArea.addEventListener('dragleave', function(e) {
+        function preventDefaults(e) {
             e.preventDefault();
+            e.stopPropagation();
+        }
+
+        fileUploadArea.addEventListener('dragover', () => fileUploadArea.classList.add('dragover'));
+        fileUploadArea.addEventListener('dragleave', () => fileUploadArea.classList.remove('dragover'));
+        fileUploadArea.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        function handleDrop(e) {
             fileUploadArea.classList.remove('dragover');
-        });
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            handleFile(file);
+        }
 
-        fileUploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            fileUploadArea.classList.remove('dragover');
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFile(files[0]);
-            }
-        });
-
-        // 파일 선택 이벤트
-        fileInput.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                handleFile(e.target.files[0]);
-            }
-        });
-
-        // 파일 처리 함수
+        // 파일 처리 함수 (폼 자동 채우기)
         function handleFile(file) {
-            // 파일명 설정
-            document.getElementById('filename').value = file.name;
-            
-            // 파일 크기 설정 (MB 단위)
+            if (!file) return;
+
+            document.getElementById('filename').value = file.name.split('.').slice(0, -1).join('.');
             const sizeInMB = (file.size / (1024 * 1024)).toFixed(1);
             document.getElementById('size').value = sizeInMB;
             
-            // 파일 타입 자동 설정
             const fileExtension = file.name.split('.').pop().toLowerCase();
             const typeSelect = document.getElementById('type');
             
-            // 파일 확장자에 따른 타입 매핑
             const typeMapping = {
-                'pdf': 'pdf',
-                'ppt': 'ppt',
-                'pptx': 'ppt',
-                'hwp': 'hwp',
-                'hwpx': 'hwp',
-                'xlsx': 'xlsx',
-                'xls': 'xlsx',
-                'doc': '기타',
-                'docx': '기타',
-                'txt': '기타',
-                'jpg': '기타',
-                'jpeg': '기타',
-                'png': '기타',
-                'gif': '기타',
-                'zip': '기타',
-                'rar': '기타'
+                'pdf': 'pdf', 'ppt': 'ppt', 'pptx': 'ppt', 'hwp': 'hwp', 'hwpx': 'hwp',
+                'xlsx': 'xlsx', 'xls': 'xlsx'
             };
+            typeSelect.value = typeMapping[fileExtension] || '기타';
             
-            const mappedType = typeMapping[fileExtension] || '기타';
-            typeSelect.value = mappedType;
-            
-            // 선택된 파일 정보 표시
-            const fileInfo = `
-                <strong>파일명:</strong> ${file.name}<br>
-                <strong>크기:</strong> ${sizeInMB} MB<br>
-                <strong>타입:</strong> ${fileExtension.toUpperCase()}
-            `;
+            const fileInfo = `<strong>파일명:</strong> ${file.name}<br><strong>크기:</strong> ${sizeInMB} MB`;
             fileDetails.innerHTML = fileInfo;
             selectedFile.classList.add('show');
-            
         }
 
-        // 폼 제출 이벤트
-        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        // 폼 제출 이벤트 (목록에 추가)
+        fileInfoForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            generateJSON();
-        });
-
-        function generateJSON() {
-            const formData = new FormData(document.getElementById('uploadForm'));
             
+            const formData = new FormData(fileInfoForm);
             const data = {
                 filename: formData.get('filename'),
                 type: formData.get('type'),
@@ -417,45 +459,72 @@
                 link: formData.get('link')
             };
 
-            const jsonString = JSON.stringify(data, null, 4);
-            const formattedJson = `    ${jsonString},`;
+            fileList.push(data);
+            renderFileList();
             
-            document.getElementById('jsonContent').textContent = formattedJson;
-            document.getElementById('resultContainer').style.display = 'block';
-            
-            // 결과로 스크롤
-            document.getElementById('resultContainer').scrollIntoView({ 
-                behavior: 'smooth' 
+            // 폼 초기화
+            fileInfoForm.reset();
+            document.getElementById('date').valueAsDate = new Date();
+            selectedFile.classList.remove('show');
+        });
+
+        function renderFileList() {
+            fileListContainer.innerHTML = ''; // 목록 비우기
+            if (fileList.length > 0) {
+                generationArea.style.display = 'block';
+            } else {
+                generationArea.style.display = 'none';
+            }
+
+            fileList.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-list-item';
+                item.innerHTML = `
+                    <div class="file-list-info">
+                        <strong>${file.filename}</strong>
+                        <span>${file.type.toUpperCase()}</span>
+                        <span>${file.size} MB</span>
+                    </div>
+                    <button class="remove-btn" onclick="removeFile(${index})">삭제</button>
+                `;
+                fileListContainer.appendChild(item);
             });
         }
+        
+        function removeFile(index) {
+            fileList.splice(index, 1);
+            renderFileList();
+        }
+
+        // 최종 JSON 생성 버튼 이벤트
+        generateAllBtn.addEventListener('click', function() {
+            if (fileList.length === 0) {
+                alert('목록에 추가된 파일이 없습니다.');
+                return;
+            }
+
+            const jsonString = JSON.stringify(fileList, null, 4);
+            jsonContent.textContent = jsonString;
+            resultContainer.style.display = 'block';
+            
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        });
 
         function copyToClipboard() {
-            const jsonContent = document.getElementById('jsonContent').textContent;
-            navigator.clipboard.writeText(jsonContent).then(function() {
-                const copyBtn = document.getElementById('copyBtn');
+            navigator.clipboard.writeText(jsonContent.textContent).then(() => {
                 const originalText = copyBtn.textContent;
                 copyBtn.textContent = '✅ 복사됨!';
                 copyBtn.classList.add('copy-success');
                 
-                setTimeout(function() {
+                setTimeout(() => {
                     copyBtn.textContent = originalText;
                     copyBtn.classList.remove('copy-success');
                 }, 2000);
-            }).catch(function(err) {
-                alert('복사에 실패했습니다. 수동으로 선택해서 복사해주세요.');
-                console.error('복사 실패:', err);
+            }).catch(err => {
+                alert('복사에 실패했습니다.');
+                console.error('Copy failed:', err);
             });
         }
-
-        // 엔터키로 폼 제출 방지 (textarea 제외)
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.type !== 'submit') {
-                e.preventDefault();
-                if (e.target.closest('form')) {
-                    generateJSON();
-                }
-            }
-        });
     </script>
 </body>
 </html>
