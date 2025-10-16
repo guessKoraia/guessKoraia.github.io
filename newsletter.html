@@ -8,6 +8,19 @@
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="description" content="한국인공지능협회 인공지능 소식 모음 | 인공지능 관련 최신 정보를 확인하세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="인공지능 소식 모음 | 한국인공지능협회">
+    <meta property="og:description" content="인공지능 관련 최신 정보를 확인하세요.">
+    <meta name="twitter:title" content="인공지능 소식 모음 | 한국인공지능협회">
+    <meta name="twitter:description" content="인공지능 관련 최신 정보를 확인하세요.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_2.png">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_2.png">
+    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
+        media="(prefers-color-scheme: light)">
+    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
+        media="(prefers-color-scheme: dark)">
 
     <style>
         :root {
@@ -335,6 +348,15 @@
             font-size: .85rem;
             line-height: 1.6;
             color: #4b5563;
+            margin: .6rem 0;
+        }
+
+        .card p:first-of-type {
+            margin-top: 0;
+        }
+
+        .card p:last-of-type {
+            margin-bottom: 0;
         }
 
         body.dark .card p {
@@ -385,6 +407,188 @@
                 padding: .3rem 1rem;
             }
         }
+
+        /* Footer 스타일 */
+        footer {
+            border-top: 1px solid #e5e7eb;
+            background: rgba(255, 255, 255, .7);
+            backdrop-filter: blur(12px);
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+            transition: background-color .3s;
+        }
+
+        body.dark footer {
+            background: rgba(17, 24, 39, .7);
+            border-color: var(--border-color-dark);
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .date-navigation {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .date-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .nav-date-btn {
+            padding: .6rem 1.2rem;
+            border-radius: .8rem;
+            font-size: .9rem;
+            font-weight: 500;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            background: var(--card-light);
+            color: var(--text-light);
+            transition: transform .2s, background .3s, color .3s;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .nav-date-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-date-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        body.dark .nav-date-btn {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+
+        body.dark .nav-date-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+
+        .footer-info {
+            text-align: center;
+            color: #6b7280;
+            font-size: .85rem;
+            line-height: 1.6;
+        }
+
+        body.dark .footer-info {
+            color: #9ca3af;
+        }
+
+        @media (max-width:639px) {
+            .date-navigation {
+                gap: .5rem;
+            }
+
+            .nav-date-btn {
+                padding: .5rem 1rem;
+                font-size: .85rem;
+            }
+
+            .date-display {
+                font-size: 1rem;
+                min-width: 120px;
+            }
+        }
+
+        /* 하단 카테고리 네비게이션 */
+        .bottom-category-nav {
+            max-width: 1100px;
+            margin: 3rem auto 2rem;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .bottom-category-nav h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin: 0 0 1.5rem;
+        }
+
+        body.dark .bottom-category-nav h3 {
+            color: var(--text-dark);
+        }
+
+        .bottom-nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: .8rem;
+            flex-wrap: wrap;
+        }
+
+        .bottom-nav-btn {
+            padding: .7rem 1.5rem;
+            border-radius: 1rem;
+            font-size: .9rem;
+            font-weight: 500;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            background: var(--card-light);
+            color: var(--text-light);
+            transition: transform .2s, background .3s, color .3s;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .bottom-nav-btn:hover {
+            transform: translateY(-2px);
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        body.dark .bottom-nav-btn {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+
+        body.dark .bottom-nav-btn:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        @media (max-width:639px) {
+            .bottom-category-nav {
+                margin: 2rem auto 1.5rem;
+            }
+
+            .bottom-category-nav h3 {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .bottom-nav-buttons {
+                gap: .5rem;
+            }
+
+            .bottom-nav-btn {
+                padding: .6rem 1.2rem;
+                font-size: .85rem;
+            }
+        }
     </style>
 </head>
 
@@ -415,6 +619,18 @@
         </div>
 
         <div id="cardSection" class="card-section"></div>
+
+        <!-- 하단 카테고리 네비게이션 -->
+        <div id="bottomCategoryNav" class="bottom-category-nav" style="display: none;">
+            <h3>📌 다른 소식도 볼까요?</h3>
+            <div class="bottom-nav-buttons">
+                <button class="bottom-nav-btn" data-cat="all">📜 전체보기</button>
+                <button class="bottom-nav-btn" data-cat="domestic">🏠 국내동향</button>
+                <button class="bottom-nav-btn" data-cat="global">✈️ 해외동향</button>
+                <button class="bottom-nav-btn" data-cat="government">🏛️ 정부동향</button>
+                <button class="bottom-nav-btn" data-cat="corporate">🏢 기업동향</button>
+            </div>
+        </div>
 
         <div class="controls">
             <button id="darkToggle" class="btn icon-btn" aria-label="다크 모드 전환">
@@ -447,6 +663,32 @@
         </div>
     </main>
 
+    <footer>
+        <div class="footer-container">
+            <div class="date-navigation">
+                <button id="prevDayBtn" class="nav-date-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    이전날
+                </button>
+                <div class="date-display" id="currentDateDisplay">오늘</div>
+                <button id="nextDayBtn" class="nav-date-btn">
+                    다음날
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+            <div class="footer-info">
+                <p style="margin: 0;">바쁜 당신을 위한 AI 일간지</p>
+                <p style="margin: .5rem 0 0;">매일 업데이트되는 AI 관련 최신 소식을 확인하세요</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
@@ -456,6 +698,8 @@
         const cardSectionEl = document.getElementById("cardSection");
         const summaryEl = document.getElementById("summary");
         const summarySectionEl = document.querySelector(".summary-section > .card");
+        const bottomCategoryNav = document.getElementById("bottomCategoryNav");
+        const bottomNavBtns = document.querySelectorAll(".bottom-nav-btn");
 
         let currentCategory = "all";
         let fetchedData = null;
@@ -571,6 +815,31 @@
             return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
         };
 
+        const updateBottomNav = (category) => {
+            // 핵심 요약 섹션 표시/숨김
+            const summarySectionEl = document.querySelector(".summary-section");
+            if (category === "all") {
+                // 전체보기일 때는 핵심 요약 표시, 하단 네비게이션 숨김
+                summarySectionEl.style.display = "block";
+                bottomCategoryNav.style.display = "none";
+                return;
+            }
+
+            // 특정 카테고리일 때는 핵심 요약 숨김, 하단 네비게이션 표시
+            summarySectionEl.style.display = "none";
+            bottomCategoryNav.style.display = "block";
+
+            // 현재 선택된 카테고리를 제외한 나머지 버튼만 보이게
+            bottomNavBtns.forEach(btn => {
+                const btnCat = btn.dataset.cat;
+                if (btnCat === category) {
+                    btn.style.display = "none"; // 현재 카테고리 버튼은 숨김
+                } else {
+                    btn.style.display = "inline-flex"; // 나머지 버튼은 표시
+                }
+            });
+        };
+
         const handleRenderInsights = (row, category = "all") => {
             function renderCards(insights, categoryType) {
                 if (!insights) return '';
@@ -604,18 +873,138 @@
 
                     if (content) {
                         content = content.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+                        
+                        // 문단 나누기: 줄바꿈 또는 문장 단위로 분리
+                        let paragraphs = [];
+                        
+                        // 1. 줄바꿈이 있으면 줄바꿈 기준으로 나누기
+                        if (content.includes('\n')) {
+                            paragraphs = content.split('\n').map(p => p.trim()).filter(p => p);
+                        } else {
+                            // 2. 문장 부호로 문장 분리 (개선된 버전)
+                            let temp = content;
+                            let currentParagraph = '';
+                            let charCount = 0;
+                            let sentenceCount = 0;
+                            
+                            for (let i = 0; i < temp.length; i++) {
+                                const char = temp[i];
+                                currentParagraph += char;
+                                charCount++;
+                                
+                                // 문장 부호(. ! ?) 뒤에 공백이 오는 경우
+                                if (/[.!?]/.test(char) && i < temp.length - 1 && /\s/.test(temp[i + 1])) {
+                                    // 다음 문자가 한글이나 대문자인지 확인 (새 문장 시작)
+                                    let nextCharIndex = i + 1;
+                                    while (nextCharIndex < temp.length && /\s/.test(temp[nextCharIndex])) {
+                                        currentParagraph += temp[nextCharIndex];
+                                        nextCharIndex++;
+                                        i++;
+                                    }
+                                    
+                                    if (nextCharIndex < temp.length && /[가-힣A-Z"""'']/.test(temp[nextCharIndex])) {
+                                        sentenceCount++;
+                                        
+                                        // 80자 이상이면서 2문장 이상이거나, 150자 이상이면 문단 나누기
+                                        if ((charCount >= 80 && sentenceCount >= 2) || charCount >= 150) {
+                                            paragraphs.push(currentParagraph.trim());
+                                            currentParagraph = '';
+                                            charCount = 0;
+                                            sentenceCount = 0;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if (currentParagraph.trim()) {
+                                paragraphs.push(currentParagraph.trim());
+                            }
+                            
+                            // 문단이 하나도 없으면 원본 유지
+                            if (paragraphs.length === 0) {
+                                paragraphs = [content];
+                            }
+                        }
+                        
+                        // 여러 개의 p 태그로 렌더링
+                        content = paragraphs.map(p => `<p>${p}</p>`).join('');
                     }
 
                     return `
                         <article class="card ${categoryType}">
                             ${title ? `<h2>${title}</h2>` : ``}
-                            <p>${content}</p>
+                            ${content}
                         </article>
                     `;
                 }).join('');
             }
 
-            summaryEl.textContent = row.key_summary || "";
+            // 핵심 요약도 문단으로 나누기
+            if (row.key_summary) {
+                let summaryContent = row.key_summary.trim();
+                let summaryParagraphs = [];
+                
+                // 줄바꿈이 있으면 줄바꿈 기준으로 나누기
+                if (summaryContent.includes('\n')) {
+                    summaryParagraphs = summaryContent.split('\n').map(p => p.trim()).filter(p => p);
+                } else {
+                    // 문장 부호로 문장 분리 (개선된 버전)
+                    let temp = summaryContent;
+                    let currentParagraph = '';
+                    let charCount = 0;
+                    let sentenceCount = 0;
+                    
+                    for (let i = 0; i < temp.length; i++) {
+                        const char = temp[i];
+                        currentParagraph += char;
+                        charCount++;
+                        
+                        // 문장 부호(. ! ?) 뒤에 공백이 오는 경우
+                        if (/[.!?]/.test(char) && i < temp.length - 1 && /\s/.test(temp[i + 1])) {
+                            // 다음 문자가 한글이나 대문자인지 확인 (새 문장 시작)
+                            let nextCharIndex = i + 1;
+                            while (nextCharIndex < temp.length && /\s/.test(temp[nextCharIndex])) {
+                                currentParagraph += temp[nextCharIndex];
+                                nextCharIndex++;
+                                i++;
+                            }
+                            
+                            if (nextCharIndex < temp.length && /[가-힣A-Z"""'']/.test(temp[nextCharIndex])) {
+                                sentenceCount++;
+                                
+                                // 80자 이상이면서 2문장 이상이거나, 150자 이상이면 문단 나누기
+                                if ((charCount >= 80 && sentenceCount >= 2) || charCount >= 150) {
+                                    summaryParagraphs.push(currentParagraph.trim());
+                                    currentParagraph = '';
+                                    charCount = 0;
+                                    sentenceCount = 0;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (currentParagraph.trim()) {
+                        summaryParagraphs.push(currentParagraph.trim());
+                    }
+                    
+                    // 문단이 하나도 없으면 원본 유지
+                    if (summaryParagraphs.length === 0) {
+                        summaryParagraphs = [summaryContent];
+                    }
+                }
+                
+                // innerHTML로 여러 p 태그 렌더링
+                summaryEl.innerHTML = summaryParagraphs.map(p => `<p style="margin: .6rem 0; line-height: 1.7;">${p}</p>`).join('');
+                
+                // 첫/마지막 p 태그 margin 조정
+                const summaryPs = summaryEl.querySelectorAll('p');
+                if (summaryPs.length > 0) {
+                    summaryPs[0].style.marginTop = '0';
+                    summaryPs[summaryPs.length - 1].style.marginBottom = '0';
+                }
+            } else {
+                summaryEl.textContent = "";
+            }
 
             const categories = [
                 { key: "domestic_insights", type: "domestic", icon: "🏠", label: "국내동향" },
@@ -645,28 +1034,123 @@
                 cardSectionEl.style.transition = "opacity .4s ease";
                 cardSectionEl.style.opacity = 1;
             });
+
+            // 하단 네비게이션 업데이트
+            updateBottomNav(category);
+        };
+
+        const switchCategory = (category) => {
+            // 상단 네비게이션 버튼 업데이트
+            navBtns.forEach(b => b.classList.remove("selected"));
+            const targetBtn = Array.from(navBtns).find(b => b.dataset.cat === category);
+            if (targetBtn) targetBtn.classList.add("selected");
+            
+            currentCategory = category;
+            
+            // URL 해시 업데이트
+            if (currentCategory === 'all') {
+                window.location.hash = '';
+            } else {
+                window.location.hash = currentCategory;
+            }
+            
+            if (fetchedData) {
+                handleRenderInsights(fetchedData, currentCategory);
+            }
+
+            // 상단으로 부드럽게 스크롤
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         navBtns.forEach(btn => {
             btn.addEventListener("click", () => {
-                navBtns.forEach(b => b.classList.remove("selected"));
-                btn.classList.add("selected");
-                currentCategory = btn.dataset.cat;
-                
-                // URL 해시 업데이트
-                if (currentCategory === 'all') {
-                    window.location.hash = '';
-                } else {
-                    window.location.hash = currentCategory;
-                }
-                
-                if (fetchedData) {
-                    handleRenderInsights(fetchedData, currentCategory);
-                }
+                switchCategory(btn.dataset.cat);
+            });
+        });
+
+        // 하단 네비게이션 버튼 이벤트
+        bottomNavBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                switchCategory(btn.dataset.cat);
             });
         });
 
         document.getElementById("refreshBtn").addEventListener("click", fetchAndStoreData);
+
+        // 날짜 네비게이션 기능
+        const prevDayBtn = document.getElementById("prevDayBtn");
+        const nextDayBtn = document.getElementById("nextDayBtn");
+        const currentDateDisplay = document.getElementById("currentDateDisplay");
+
+        const formatDisplayDate = (dateStr) => {
+            if (!dateStr) return "오늘";
+            const d = new Date(dateStr);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            return `${yyyy}년 ${mm}월 ${dd}일`;
+        };
+
+        const getCurrentDate = () => {
+            const dateParam = getDateFromUrl();
+            if (dateParam) return dateParam;
+            
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, "0");
+            const dd = String(today.getDate()).padStart(2, "0");
+            return `${yyyy}-${mm}-${dd}`;
+        };
+
+        const navigateToDate = (dateStr) => {
+            const url = new URL(window.location);
+            url.searchParams.set('date', dateStr);
+            window.history.pushState({}, '', url);
+            fetchAndStoreData();
+            updateDateDisplay();
+        };
+
+        const updateDateDisplay = () => {
+            const currentDate = getCurrentDate();
+            currentDateDisplay.textContent = formatDisplayDate(currentDate);
+            
+            // 미래 날짜는 "다음날" 버튼 비활성화
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const current = new Date(currentDate);
+            current.setHours(0, 0, 0, 0);
+            
+            nextDayBtn.disabled = (current >= today);
+        };
+
+        prevDayBtn.addEventListener("click", () => {
+            const currentDate = getCurrentDate();
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() - 1);
+            
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+            const newDate = `${yyyy}-${mm}-${dd}`;
+            
+            navigateToDate(newDate);
+        });
+
+        nextDayBtn.addEventListener("click", () => {
+            const currentDate = getCurrentDate();
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() + 1);
+            
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+            const newDate = `${yyyy}-${mm}-${dd}`;
+            
+            navigateToDate(newDate);
+        });
+
+        // 초기 날짜 표시 업데이트
+        updateDateDisplay();
     </script>
 </body>
 
