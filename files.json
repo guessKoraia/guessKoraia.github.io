@@ -1,7 +1,135 @@
 [
     {
-        "filename": "[프로그램] 공무원 보고서 편집 자동화, 범정부오피스",
+        "filename": "[특집 2호] AI·디지털 생태계 공정경쟁 및 이용자 정책방향",
         "type": "pdf",
+        "description": "",
+        "size": 1.8,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1qsTMANSYKA4D9AdYNeRmmn88YoJHgSJa"
+    },
+    {
+        "filename": "[특집 1호] 글로벌 AI 경쟁전략 및 대응방안_ 풀스택(Full-stack)의 관점에서 ",
+        "type": "pdf",
+        "description": "",
+        "size": 2,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1U36HCMPoRQEZAA8zeJDrQNsLEdc_Hu1d"
+    },
+    {
+        "filename": "AI 기반 소프트웨어 정의 공장을 활용한 제조 혁신",
+        "type": "pdf",
+        "description": "",
+        "size": 0.4,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=17QKDE1R3XwgjaOSGjejRtA9FLmi4mCP8"
+    },
+    {
+        "filename": "인간-휴머노이드 AI간의 언어 형상화와 사용자 경험",
+        "type": "pdf",
+        "description": "",
+        "size": 0.8,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1Ql4bruqFGcqzo4NVGzXUPqg6EpfLJKO3"
+    },
+    {
+        "filename": "저작권법에서 본 데이터 윤리",
+        "type": "pdf",
+        "description": "",
+        "size": 0.9,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1cy7cRrolY1irJSAYkGqb5R8s82-FNhb5"
+    },
+    {
+        "filename": "Physical AI 시대에 대응한 On-device AI 반도체 경쟁력 강화 방향",
+        "type": "pdf",
+        "description": "",
+        "size": 1.1,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1tskF64hcCtDlcJ7vlV34X0wrig37t2Wg"
+    },
+    {
+        "filename": "디지털 기술과 웰빙에 관한 소고",
+        "type": "pdf",
+        "description": "",
+        "size": 0.7,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1CSxiRQChUKCkfQXtdNv6KVIpTSEJy9A3"
+    },
+    {
+        "filename": "인공지능 기술이 근로관계에 미치는 영향과 노동법적 대응 방안",
+        "type": "pdf",
+        "description": "",
+        "size": 0.4,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1ibHxZVmCwqVxITIUOGcf0m3jeKfeQgE0"
+    },
+    {
+        "filename": "AI 중견국의 전략",
+        "type": "pdf",
+        "description": "",
+        "size": 0.9,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1m0xe7OM__ZersSIqBWGvl6Uk539Gk3JP"
+    },
+    {
+        "filename": "인공지능과 사이버보안_ AI보안 거버넌스 체계 강화 방안을 중심으로",
+        "type": "pdf",
+        "description": "",
+        "size": 0.4,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1c9CBXPnGS_WqeFt21BME3wKcaiyhDAXL"
+    },
+    {
+        "filename": "글로벌 AI 안전 거버넌스의 다극화와 한국의 전략적 대응 방향",
+        "type": "pdf",
+        "description": "",
+        "size": 0.4,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=19PTlAUh40RSHwxY5Wwu_KdjOtp_FDd4m"
+    },
+    {
+        "filename": "AI@Data_Report_한국형_데이터_스페이스(K-Data_Space)_추진전략_Final",
+        "type": "pdf",
+        "description": "",
+        "size": 2.4,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1mLm-WP7JJU7OKgz80TyDo94e7VCsN3xT"
+    },
+    {
+        "filename": "AI 에이전트의 부상과 정책과제",
+        "type": "pdf",
+        "description": "",
+        "size": 2.3,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1MtZOXhsDCE1sudgImMd7bd7fsn0PACJ8"
+    },
+    {
+        "filename": "AI 시대의 이동통신 인프라 고도화를 위한 중립 호스트 모델 검토",
+        "type": "pdf",
+        "description": "",
+        "size": 2.7,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1wPuLTsqRdZakQbcWBGl0jkN5hRbH1VgZ"
+    },
+    {
+        "filename": "미‧중 AI 경쟁 양상과 시사점",
+        "type": "pdf",
+        "description": "",
+        "size": 0.9,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1oRP00C8yvCeRr3bW7fieDZNYjP0ULbhC"
+    },
+    {
+        "filename": "모두의 진짜 성장을 위한 AI 에이전트 경제 전략",
+        "type": "pdf",
+        "description": "",
+        "size": 3.9,
+        "date": "2025-10-21",
+        "link": "https://drive.google.com/uc?export=download&id=1tluL-QwXuD9AlOx3p_Ad4RxFv0cd1p8X"
+    },
+    {
+        "filename": "[프로그램] 공무원 보고서 편집 자동화, 범정부오피스",
+        "type": "web",
         "description": "'범정부오피스'는 문서 작성의 효율성을 높이기 위해 개발한 간호직공무원(파견) 개인이 만든 문서 자동화 도구 입니다. 업무 현장에서 반복적으로 수행되는 문서 편집 작업을 간소화하여, 공무원들이 보다 창의적이고 본질적인 행정업무에 집중할 수 있도록 지원합니다. ",
         "size": 8,
         "date": "2025-10-16",
@@ -5783,3 +5911,4 @@
         "link": "https://drive.google.com/uc?export=download&id=1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
