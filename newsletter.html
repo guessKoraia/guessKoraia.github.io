@@ -15,8 +15,10 @@
     <meta name="twitter:title" content="인공지능 소식 모음 | 한국인공지능협회">
     <meta name="twitter:description" content="인공지능 관련 최신 정보를 확인하세요.">
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_2.png">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_2.png">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_2.png">
+    <meta name="twitter:image"
+        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_2.png">
     <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
         media="(prefers-color-scheme: light)">
     <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
@@ -304,10 +306,7 @@
             border-color: #9d174d;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
-        }
+
 
         .card h2 {
             font-size: 1rem;
@@ -714,7 +713,7 @@
         const handleUrlNavigation = () => {
             const hash = window.location.hash.substring(1); // # 제거
             const validCategories = ['domestic', 'global', 'government', 'corporate'];
-            
+
             if (validCategories.includes(hash)) {
                 currentCategory = hash;
                 // 네비게이션 버튼 업데이트
@@ -794,7 +793,7 @@
                     }
                     return;
                 }
-                
+
                 fetchedData = data[0];
                 handleRenderInsights(fetchedData, currentCategory);
             } catch (err) {
@@ -842,70 +841,102 @@
 
         const handleRenderInsights = (row, category = "all") => {
             function renderCards(insights, categoryType) {
+
+
+
                 if (!insights) return '';
                 return insights.map(insight => {
-                    // 개선된 제목 파싱 로직
+                    // =========================
+                    // 제목/본문 파싱 (개선 버전)
+                    // =========================
                     let title = null;
                     let content = insight;
-                    
-                    // 1. 이모지 제거 후 **제목**: 패턴 찾기
-                    let cleanInsight = insight.replace(/^[\u{1F000}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*/u, '');
-                    let match = cleanInsight.match(/^\*\*(.+?)\*\*:/);
-                    
-                    if (match) {
-                        title = match[1].trim();
-                        content = cleanInsight.replace(match[0], '').trim();
+
+                    // 0) 전처리: 트림 + 이모지(최신 범위) 제거
+                    let cleanInsight = insight.trim()
+                        .replace(/^(?:\p{Extended_Pictographic}[\uFE0F]?\s*)+/u, '');
+
+                    // 1) 라인 전체가 **굵게** 블록들(+ 연결어)로만 구성된 경우 → 통째로 제목
+                    //    예) **A** 와 **B**는 / **X**에서 **Y**로 / **M** 및 **N**
+                    const boldOnlyLine = /^(?:\*\*[^*]+?\*\*)(?:\s*(?:[와과및]|에서|으로|로|,|\/|[-–—]|→|->)\s*(?:\*\*[^*]+?\*\*))*\s*(?:은|는|이다|:)?\s*$/u;
+
+                    if (boldOnlyLine.test(cleanInsight)) {
+                        title = cleanInsight.replace(/\*\*(.+?)\*\*/g, '$1').trim();
+                        content = '';
                     } else {
-                        // 2. **제목** (콜론 없는 경우) 패턴 찾기
-                        match = cleanInsight.match(/^\*\*(.+?)\*\*\s*/);
+                        // 2) 맨 앞 "**제목**:" 패턴
+                        let match = cleanInsight.match(/^\*\*(.+?)\*\*:/);
                         if (match) {
                             title = match[1].trim();
                             content = cleanInsight.replace(match[0], '').trim();
                         } else {
-                            // 3. 이모지 + **제목**: 패턴 찾기
-                            match = insight.match(/^[\u{1F000}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*\*\*(.+?)\*\*:?/u);
+                            // 3) 맨 앞 "**제목**" (콜론 없음)
+                            match = cleanInsight.match(/^\*\*(.+?)\*\*\s*/);
                             if (match) {
                                 title = match[1].trim();
-                                content = insight.replace(match[0], '').trim();
+                                content = cleanInsight.replace(match[0], '').trim();
+                            } else {
+                                // 4) 이모지 + "**제목**"
+                                match = insight.match(/^\p{Extended_Pictographic}[\uFE0F]?\s*\*\*(.+?)\*\*:?/u);
+                                if (match) {
+                                    title = match[1].trim();
+                                    content = insight.replace(match[0], '').trim();
+                                } else {
+                                    // 5) 줄바꿈 기준: 첫 줄이 짧으면 제목으로 간주 (보조 규칙)
+                                    const lines = cleanInsight.split(/\n+/).map(l => l.trim()).filter(l => l);
+                                    if (!title && lines.length > 1 && lines[0].length > 0 && lines[0].length < 40) {
+                                        title = lines[0];
+                                        content = lines.slice(1).join('\n').trim();
+                                    }
+                                    // 6) 문장 중간/다음 줄에 등장하는 **제목** 패턴 (보조 규칙)
+                                    if (!title) {
+                                        const midMatch = cleanInsight.match(/\n?\s*\*\*(.+?)\*\*/);
+                                        if (midMatch) {
+                                            title = midMatch[1].trim();
+                                            content = cleanInsight.replace(midMatch[0], '').trim();
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
 
+                    // =========================
+                    // 본문 처리 (볼드 → <b>, 문단 분리)
+                    // =========================
                     if (content) {
+                        // **bold** → <b>bold</b>
                         content = content.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-                        
-                        // 문단 나누기: 줄바꿈 또는 문장 단위로 분리
+
+                        // 문단 나누기: 줄바꿈 우선, 없으면 문장 단위로
                         let paragraphs = [];
-                        
-                        // 1. 줄바꿈이 있으면 줄바꿈 기준으로 나누기
+
                         if (content.includes('\n')) {
                             paragraphs = content.split('\n').map(p => p.trim()).filter(p => p);
                         } else {
-                            // 2. 문장 부호로 문장 분리 (개선된 버전)
-                            let temp = content;
+                            const temp = content;
                             let currentParagraph = '';
                             let charCount = 0;
                             let sentenceCount = 0;
-                            
+
                             for (let i = 0; i < temp.length; i++) {
                                 const char = temp[i];
                                 currentParagraph += char;
                                 charCount++;
-                                
-                                // 문장 부호(. ! ?) 뒤에 공백이 오는 경우
+
+                                // 문장부호(. ! ?) 뒤 공백 → 새 문장 후보
                                 if (/[.!?]/.test(char) && i < temp.length - 1 && /\s/.test(temp[i + 1])) {
-                                    // 다음 문자가 한글이나 대문자인지 확인 (새 문장 시작)
+                                    // 다음 문자가 한글/대문자/따옴표 등 → 새 문장 시작
                                     let nextCharIndex = i + 1;
                                     while (nextCharIndex < temp.length && /\s/.test(temp[nextCharIndex])) {
                                         currentParagraph += temp[nextCharIndex];
                                         nextCharIndex++;
                                         i++;
                                     }
-                                    
-                                    if (nextCharIndex < temp.length && /[가-힣A-Z"""'']/.test(temp[nextCharIndex])) {
+
+                                    if (nextCharIndex < temp.length && /[가-힣A-Z"']/.test(temp[nextCharIndex])) {
                                         sentenceCount++;
-                                        
-                                        // 80자 이상이면서 2문장 이상이거나, 150자 이상이면 문단 나누기
+                                        // 80자+에 2문장 이상이거나 150자 이상이면 문단 분리
                                         if ((charCount >= 80 && sentenceCount >= 2) || charCount >= 150) {
                                             paragraphs.push(currentParagraph.trim());
                                             currentParagraph = '';
@@ -915,17 +946,17 @@
                                     }
                                 }
                             }
-                            
+
                             if (currentParagraph.trim()) {
                                 paragraphs.push(currentParagraph.trim());
                             }
-                            
+
                             // 문단이 하나도 없으면 원본 유지
                             if (paragraphs.length === 0) {
                                 paragraphs = [content];
                             }
                         }
-                        
+
                         // 여러 개의 p 태그로 렌더링
                         content = paragraphs.map(p => `<p>${p}</p>`).join('');
                     }
@@ -943,36 +974,30 @@
             if (row.key_summary) {
                 let summaryContent = row.key_summary.trim();
                 let summaryParagraphs = [];
-                
-                // 줄바꿈이 있으면 줄바꿈 기준으로 나누기
+
                 if (summaryContent.includes('\n')) {
                     summaryParagraphs = summaryContent.split('\n').map(p => p.trim()).filter(p => p);
                 } else {
-                    // 문장 부호로 문장 분리 (개선된 버전)
-                    let temp = summaryContent;
+                    const temp = summaryContent;
                     let currentParagraph = '';
                     let charCount = 0;
                     let sentenceCount = 0;
-                    
+
                     for (let i = 0; i < temp.length; i++) {
                         const char = temp[i];
                         currentParagraph += char;
                         charCount++;
-                        
-                        // 문장 부호(. ! ?) 뒤에 공백이 오는 경우
+
                         if (/[.!?]/.test(char) && i < temp.length - 1 && /\s/.test(temp[i + 1])) {
-                            // 다음 문자가 한글이나 대문자인지 확인 (새 문장 시작)
                             let nextCharIndex = i + 1;
                             while (nextCharIndex < temp.length && /\s/.test(temp[nextCharIndex])) {
                                 currentParagraph += temp[nextCharIndex];
                                 nextCharIndex++;
                                 i++;
                             }
-                            
-                            if (nextCharIndex < temp.length && /[가-힣A-Z"""'']/.test(temp[nextCharIndex])) {
+
+                            if (nextCharIndex < temp.length && /[가-힣A-Z"']/.test(temp[nextCharIndex])) {
                                 sentenceCount++;
-                                
-                                // 80자 이상이면서 2문장 이상이거나, 150자 이상이면 문단 나누기
                                 if ((charCount >= 80 && sentenceCount >= 2) || charCount >= 150) {
                                     summaryParagraphs.push(currentParagraph.trim());
                                     currentParagraph = '';
@@ -982,20 +1007,18 @@
                             }
                         }
                     }
-                    
+
                     if (currentParagraph.trim()) {
                         summaryParagraphs.push(currentParagraph.trim());
                     }
-                    
-                    // 문단이 하나도 없으면 원본 유지
                     if (summaryParagraphs.length === 0) {
                         summaryParagraphs = [summaryContent];
                     }
                 }
-                
+
                 // innerHTML로 여러 p 태그 렌더링
-                summaryEl.innerHTML = summaryParagraphs.map(p => `<p style="margin: .6rem 0; line-height: 1.7;">${p}</p>`).join('');
-                
+                summaryEl.innerHTML = summaryParagraphs.map(p => `<p style="margin: .6rem 0; line-height: 1.7;">${p.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`).join('');
+
                 // 첫/마지막 p 태그 margin 조정
                 const summaryPs = summaryEl.querySelectorAll('p');
                 if (summaryPs.length > 0) {
@@ -1044,16 +1067,16 @@
             navBtns.forEach(b => b.classList.remove("selected"));
             const targetBtn = Array.from(navBtns).find(b => b.dataset.cat === category);
             if (targetBtn) targetBtn.classList.add("selected");
-            
+
             currentCategory = category;
-            
+
             // URL 해시 업데이트
             if (currentCategory === 'all') {
                 window.location.hash = '';
             } else {
                 window.location.hash = currentCategory;
             }
-            
+
             if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
@@ -1094,7 +1117,7 @@
         const getCurrentDate = () => {
             const dateParam = getDateFromUrl();
             if (dateParam) return dateParam;
-            
+
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, "0");
@@ -1113,13 +1136,13 @@
         const updateDateDisplay = () => {
             const currentDate = getCurrentDate();
             currentDateDisplay.textContent = formatDisplayDate(currentDate);
-            
+
             // 미래 날짜는 "다음날" 버튼 비활성화
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const current = new Date(currentDate);
             current.setHours(0, 0, 0, 0);
-            
+
             nextDayBtn.disabled = (current >= today);
         };
 
@@ -1127,12 +1150,12 @@
             const currentDate = getCurrentDate();
             const date = new Date(currentDate);
             date.setDate(date.getDate() - 1);
-            
+
             const yyyy = date.getFullYear();
             const mm = String(date.getMonth() + 1).padStart(2, "0");
             const dd = String(date.getDate()).padStart(2, "0");
             const newDate = `${yyyy}-${mm}-${dd}`;
-            
+
             navigateToDate(newDate);
         });
 
@@ -1140,12 +1163,12 @@
             const currentDate = getCurrentDate();
             const date = new Date(currentDate);
             date.setDate(date.getDate() + 1);
-            
+
             const yyyy = date.getFullYear();
             const mm = String(date.getMonth() + 1).padStart(2, "0");
             const dd = String(date.getDate()).padStart(2, "0");
             const newDate = `${yyyy}-${mm}-${dd}`;
-            
+
             navigateToDate(newDate);
         });
 
