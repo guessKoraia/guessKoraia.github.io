@@ -282,6 +282,20 @@
             border-color: #fce7f3;
         }
 
+        .card.legal {
+            background: #f3f4f6;
+            border-left: 4px solid #6b7280;
+            border-color: #e5e7eb;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .card.legal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+            background: #e5e7eb;
+        }
+
         body.dark .card.domestic {
             background: #1c1917;
             border-left: 4px solid #f59e0b;
@@ -304,6 +318,27 @@
             background: #831843;
             border-left: 4px solid #ec4899;
             border-color: #9d174d;
+        }
+
+        body.dark .card.legal {
+            background: #374151;
+            border-left: 4px solid #9ca3af;
+            border-color: #4b5563;
+        }
+
+        body.dark .card.legal:hover {
+            background: #4b5563;
+        }
+
+        .card.legal .report-date {
+            margin: 0 0 .5rem;
+            font-size: .8rem;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        body.dark .card.legal .report-date {
+            color: #9ca3af;
         }
 
 
@@ -336,10 +371,15 @@
             color: #be185d;
         }
 
+        .card.legal h2 {
+            color: #374151;
+        }
+
         body.dark .card.domestic h2,
         body.dark .card.global h2,
         body.dark .card.government h2,
-        body.dark .card.corporate h2 {
+        body.dark .card.corporate h2,
+        body.dark .card.legal h2 {
             color: var(--text-dark);
         }
 
@@ -379,10 +419,15 @@
             color: #be185d;
         }
 
+        .card.legal p {
+            color: #4b5563;
+        }
+
         body.dark .card.domestic p,
         body.dark .card.global p,
         body.dark .card.government p,
-        body.dark .card.corporate p {
+        body.dark .card.corporate p,
+        body.dark .card.legal p {
             color: #d1d5db;
         }
 
@@ -588,6 +633,92 @@
                 font-size: .85rem;
             }
         }
+
+        /* iframe 모달 스타일 */
+        .iframe-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .9);
+            z-index: 9999;
+            animation: fadeIn .3s ease;
+        }
+
+        .iframe-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .iframe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, .95);
+            color: white;
+        }
+
+        .iframe-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .iframe-close-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: .5rem 1.5rem;
+            border-radius: .5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background .2s, color .2s;
+        }
+
+        .iframe-close-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        .iframe-container {
+            flex: 1;
+            width: 100%;
+            height: calc(100% - 70px);
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 639px) {
+            .iframe-header {
+                padding: .8rem 1rem;
+            }
+
+            .iframe-title {
+                font-size: 1rem;
+            }
+
+            .iframe-close-btn {
+                padding: .4rem 1rem;
+                font-size: .9rem;
+            }
+        }
     </style>
 </head>
 
@@ -606,6 +737,7 @@
             <button class="nav-btn" data-cat="global">✈️해외동향</button>
             <button class="nav-btn" data-cat="government">🏛️정부동향</button>
             <button class="nav-btn" data-cat="corporate">🏢기업동향</button>
+            <button class="nav-btn" data-cat="legal">⚖️AI 특화 법률 리포트</button>
         </nav>
     </header>
 
@@ -682,11 +814,22 @@
                 </button>
             </div>
             <div class="footer-info">
-                <p style="margin: 0;">바쁜 당신을 위한 AI 일간지</p>
+                <a href="https://report.koraia.org" target="_blank" style="text-decoration: none; color: inherit;"><p style="margin: 0;">바쁜 당신을 위한 AI 일간지</p></a>
                 <p style="margin: .5rem 0 0;">매일 업데이트되는 AI 관련 최신 소식을 확인하세요</p>
             </div>
         </div>
     </footer>
+
+    <!-- iframe 모달 -->
+    <div id="iframeModal" class="iframe-modal">
+        <div class="iframe-header">
+            <h2 class="iframe-title" id="iframeModalTitle">법률 리포트</h2>
+            <button class="iframe-close-btn" id="closeIframeBtn">✕ 닫기</button>
+        </div>
+        <div class="iframe-container">
+            <iframe id="iframeContent" src="" allowfullscreen></iframe>
+        </div>
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
@@ -703,6 +846,40 @@
         let currentCategory = "all";
         let fetchedData = null;
 
+        // AI 특화 법률 리포트 데이터 (최신순)
+        const legalReports = [
+            {
+                title: "AI 국가과제 수주, '부당한 입찰'에 좌절하지 마십시오: 법적 구제수단 '가처분' 활용 전략 서문",
+                url: "https://stib.ee/HllJ",
+                date: "2025. 10. 27",
+                description: "AI 국가과제 입찰에서 부당한 처분을 받았을 때 활용할 수 있는 법적 구제수단에 대해 알아봅니다."
+            },
+            {
+                title: "생성형 AI 시대, CEO가 챙겨야 할 개인정보 리스크 5가지",
+                url: "https://stib.ee/cJZJ",
+                date: "2025. 10. 14",
+                description: "생성형 AI를 도입할 때 CEO가 반드시 고려해야 할 개인정보 보호 관련 리스크를 정리합니다."
+            },
+            {
+                title: "AI 스타트업이 유의해야 할 법률 실무 3가지",
+                url: "https://stib.ee/i7YJ",
+                date: "2025. 9. 30",
+                description: "AI 스타트업이 사업을 진행하면서 꼭 알아야 할 핵심 법률 실무 사항을 다룹니다."
+            },
+            {
+                title: "생성형 AI가 경쟁법 규제에 미칠 영향",
+                url: "https://stib.ee/xaSI",
+                date: "2025. 9. 8",
+                description: "생성형 AI 기술의 발전이 경쟁법 규제 환경에 미치는 영향을 분석합니다."
+            },
+            {
+                title: "경쟁사의 데이터를 훔친다는 것에 대하여 — AI, 법, 그리고 책임 사이에서",
+                url: "https://stib.ee/rOSI",
+                date: "2025. 8. 28",
+                description: "AI 개발 과정에서 발생할 수 있는 데이터 무단 사용과 관련된 법적 책임을 살펴봅니다."
+            }
+        ];
+
         document.addEventListener("DOMContentLoaded", () => {
             handleViewModeEvent();
             handleUrlNavigation();
@@ -712,7 +889,7 @@
         // URL 해시 네비게이션 처리
         const handleUrlNavigation = () => {
             const hash = window.location.hash.substring(1); // # 제거
-            const validCategories = ['domestic', 'global', 'government', 'corporate'];
+            const validCategories = ['domestic', 'global', 'government', 'corporate', 'legal'];
 
             if (validCategories.includes(hash)) {
                 currentCategory = hash;
@@ -729,7 +906,9 @@
         // 브라우저 뒤로가기/앞으로가기 버튼 대응
         window.addEventListener('hashchange', () => {
             handleUrlNavigation();
-            if (fetchedData) {
+            if (currentCategory === 'legal') {
+                renderLegalReports();
+            } else if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
         });
@@ -767,6 +946,12 @@
 
         const fetchAndStoreData = async () => {
             initialized();
+
+            // legal 카테고리인 경우 법률 리포트만 표시
+            if (currentCategory === 'legal') {
+                renderLegalReports();
+                return;
+            }
 
             try {
                 const targetDate = getDateFromUrl();
@@ -814,12 +999,106 @@
             return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
         };
 
+        // 법률 리포트 렌더링
+        const renderLegalReports = () => {
+            // 요약 섹션 숨기기
+            const summarySectionEl = document.querySelector(".summary-section");
+            summarySectionEl.style.display = "none";
+
+            // 법률 리포트 카드 생성
+            const html = `
+                <section class="category-block">
+                    <h3 class="category-title">⚖️ AI 특화 법률 리포트</h3>
+                    <div class="category-cards">
+                        ${legalReports.map((report, index) => `
+                            <article class="card legal" data-url="${report.url}" data-title="${report.title}" data-index="${index}">
+                                <p class="report-date">📅 ${report.date}</p>
+                                <h2>${report.title}</h2>
+                                <p>${report.description}</p>
+                                <p style="margin-top: 1rem; font-weight: 600; color: var(--primary);">📄 클릭하여 전체 내용 보기 →</p>
+                            </article>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+
+            cardSectionEl.style.opacity = 0;
+            cardSectionEl.innerHTML = html;
+
+            // 카드 클릭 이벤트 추가
+            const legalCards = cardSectionEl.querySelectorAll('.card.legal');
+            legalCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const url = card.dataset.url;
+                    const title = card.dataset.title;
+                    openIframeModal(url, title);
+                });
+            });
+
+            requestAnimationFrame(() => {
+                cardSectionEl.style.transition = "opacity .4s ease";
+                cardSectionEl.style.opacity = 1;
+            });
+
+            // 하단 네비게이션 숨기기
+            bottomCategoryNav.style.display = "none";
+        };
+
+        // iframe 모달 열기
+        const openIframeModal = (url, title) => {
+            const modal = document.getElementById('iframeModal');
+            const iframe = document.getElementById('iframeContent');
+            const modalTitle = document.getElementById('iframeModalTitle');
+
+            modalTitle.textContent = title;
+            iframe.src = url;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 스크롤 방지
+        };
+
+        // iframe 모달 닫기
+        const closeIframeModal = () => {
+            const modal = document.getElementById('iframeModal');
+            const iframe = document.getElementById('iframeContent');
+
+            modal.classList.remove('active');
+            iframe.src = ''; // iframe 초기화
+            document.body.style.overflow = ''; // 스크롤 복원
+        };
+
+        // 닫기 버튼 이벤트
+        document.getElementById('closeIframeBtn').addEventListener('click', closeIframeModal);
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('iframeModal');
+                if (modal.classList.contains('active')) {
+                    closeIframeModal();
+                }
+            }
+        });
+
+        // 모달 배경 클릭시 닫기
+        document.getElementById('iframeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'iframeModal') {
+                closeIframeModal();
+            }
+        });
+
         const updateBottomNav = (category) => {
             // 핵심 요약 섹션 표시/숨김
             const summarySectionEl = document.querySelector(".summary-section");
             if (category === "all") {
                 // 전체보기일 때는 핵심 요약 표시, 하단 네비게이션 숨김
                 summarySectionEl.style.display = "block";
+                bottomCategoryNav.style.display = "none";
+                return;
+            }
+
+            // legal 카테고리는 하단 네비게이션 숨김
+            if (category === "legal") {
+                summarySectionEl.style.display = "none";
                 bottomCategoryNav.style.display = "none";
                 return;
             }
@@ -1077,7 +1356,10 @@
                 window.location.hash = currentCategory;
             }
 
-            if (fetchedData) {
+            // legal 카테고리일 경우 법률 리포트 렌더링
+            if (category === 'legal') {
+                renderLegalReports();
+            } else if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
 
