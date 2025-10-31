@@ -384,7 +384,7 @@
         }
 
         .card p {
-            font-size: .85rem;
+            font-size: .90rem;
             line-height: 1.6;
             color: #4b5563;
             margin: .6rem 0;
@@ -737,6 +737,7 @@
             <button class="nav-btn" data-cat="global">✈️해외동향</button>
             <button class="nav-btn" data-cat="government">🏛️정부동향</button>
             <button class="nav-btn" data-cat="corporate">🏢기업동향</button>
+            <button class="nav-btn" data-cat="interview">📣인터뷰·기고문</button>
             <button class="nav-btn" data-cat="legal">⚖️AI 특화 법률 리포트</button>
         </nav>
     </header>
@@ -760,6 +761,7 @@
                 <button class="bottom-nav-btn" data-cat="global">✈️ 해외동향</button>
                 <button class="bottom-nav-btn" data-cat="government">🏛️ 정부동향</button>
                 <button class="bottom-nav-btn" data-cat="corporate">🏢 기업동향</button>
+                <button class="bottom-nav-btn" data-cat="interview">📣 인터뷰·기고문</button>
             </div>
         </div>
 
@@ -889,7 +891,7 @@
         // URL 해시 네비게이션 처리
         const handleUrlNavigation = () => {
             const hash = window.location.hash.substring(1); // # 제거
-            const validCategories = ['domestic', 'global', 'government', 'corporate', 'legal'];
+            const validCategories = ['domestic', 'global', 'government', 'corporate', 'legal', 'interview'];
 
             if (validCategories.includes(hash)) {
                 currentCategory = hash;
@@ -908,6 +910,8 @@
             handleUrlNavigation();
             if (currentCategory === 'legal') {
                 renderLegalReports();
+            } else if (currentCategory === 'interview') {
+                renderInterviewTimeline();
             } else if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
@@ -947,9 +951,12 @@
         const fetchAndStoreData = async () => {
             initialized();
 
-            // legal 카테고리인 경우 법률 리포트만 표시
+            // legal/인터뷰 카테고리인 경우 전용 렌더링만 표시
             if (currentCategory === 'legal') {
                 renderLegalReports();
+                return;
+            } else if (currentCategory === 'interview') {
+                renderInterviewTimeline();
                 return;
             }
 
@@ -1042,6 +1049,135 @@
 
             // 하단 네비게이션 숨기기
             bottomCategoryNav.style.display = "none";
+        };
+
+        // 인터뷰 · 기고문 데이터 (타입, 제목, 링크, 날짜)
+        const interviewOpedItems = [
+            { type: 'oped', title: '[기고] TDM(텍스트·데이터 마이닝) 면책, AI 혁신의 고르디우스 매듭을 끊을 결단이 필요하다 - 매일경제', url: 'https://www.mk.co.kr/news/world/11456313', date: '2025-10-31' },
+            { type: 'interview', title: '"PC사랑은 문화와 추억의 일부"... 김현철 한국인공지능협회 회장 [명사가 기억하는 PC사랑] - 디지털포스트(PC사랑)', url: 'https://www.ilovepc.co.kr/news/articleView.html?idxno=56114', date: '2025-09-27' },
+            { type: 'oped', title: 'AI 독립, "한국의 운명을 스스로 결정하는 힘" [815 기획 인터뷰] - 디지털데일리', url: 'https://m.ddaily.co.kr/page/view/2025081416022046568', date: '2025-08-15' },
+            { type: 'interview', title: '[특별 인터뷰] ▒ 김현철 한국인공지능협회 회장 | 서울신문', url: 'https://www.seoul.co.kr/news/society/2025/09/02/20250902500017', date: '2025-09-03', imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png' },
+            { type: 'oped', title: '본 게임은 ‘에이전트·피지컬 AI’, 반도체·제조 강국 한국에 절호 찬스 온다 - 월간중앙', url: 'https://www.m-joongang.com/news/articleView.html?idxno=401377', date: '2025-07-21' },
+            { type: 'interview', title: '[창간 11주년 인터뷰①] 한국인공지능협회 김현철 회장 "산업(기업)·정부·학계와 국제규범·시장표준 ‘룰-메이커 국가’ 길 열 것"', url: 'https://www.getnews.co.kr/news/articleView.html?idxno=837461', date: '2025-08-26' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
+            { type: 'oped', title: 'AI PC의 현재, 그리고 기대... 개인용 컴퓨팅의 새로운 지평 - 디지털포스트(PC사랑)', url: 'https://www.ilovepc.co.kr/news/articleView.html?idxno=54618', date: '2025-07-15' },
+            { type: 'interview', title: 'AI 독립, "한국의 운명을 스스로 결정하는 힘" [815 기획 인터뷰] - 디지털데일리', url: 'https://www.ddaily.co.kr/page/view/2025081416022046568', date: '2025-08-15' },
+            { type: 'oped', title: "[기고] 인공지능 시대, '구독형 모델' 전환이 언론 산업의 살 길", url: 'https://www.newspim.com/news/view/20250325000588', date: '2025-03-25' },
+            { type: 'interview', title: '이코노미스트 - “온디바이스 AI, 우리 삶에 혁신 가져다줄 것” [이코노 인터뷰]', url: 'https://economist.co.kr/article/view/ecn202402190019', date: '2024-02-26' },
+            { type: 'oped', title: '중앙 정부에 집행권 가진 ‘인공지능부’ 신설하자 - 월간중앙', url: 'https://www.m-joongang.com/news/articleView.html?idxno=400770', date: '2025-02-20' },
+            { type: 'interview', title: "[이슈 인터뷰] 김현철 한국인공지능협회장이 본 ‘챗GPT 시대 대한민국 변화’ - 월간중앙", url: 'https://www.m-joongang.com/news/articleView.html?idxno=337468', date: '2023-02-24' },
+            { type: 'oped', title: '[기고] 버티컬 AI로 여는 대한민국 산업의 새로운 기회 - 매일경제', url: 'https://www.mk.co.kr/news/economy/11197960', date: '2024-12-18' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
+            { type: 'interview', title: '[특별한 인터뷰] 한국인공지능협회 김현철 회장 “전 산업에 인공지능 도입하는 ‘산업 지능화’가 협회의 비전 ”', url: 'https://elec4.co.kr/m/article/articleView.asp?idx=30675', date: '2022-10-17', imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png' },
+            { type: 'oped', title: '[기고] AI 기본법, 정부의 역할을 재정립하자', url: 'https://www.newspim.com/news/view/20241126000646', date: '2024-11-26' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
+            { type: 'interview', title: '［인터뷰］ 이상하게, 스타트업의 향기가 난다. ‘한국인공지능협회’ - 테크월드뉴스', url: 'https://www.epnc.co.kr/news/articleView.html?idxno=93610', date: '2020-01-21' },
+            { type: 'oped', title: '[기고] AI 시대의 새로운 도전 : 데이터 고갈과 저작권의 딜레마', url: 'https://www.newspim.com/news/view/20241119000770', date: '2024-11-19' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
+            { type: 'oped', title: '[기고] AI 스타트업이 무너지면 대한민국의 미래도 무너진다', url: 'https://www.newspim.com/news/view/20241108001070', date: '2024-11-08' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
+            { type: 'oped', title: '[칼럼] 소버린 AI와 상용 AI의 이원화 시대: 국가 전략자산으로서의 인공지능 관리 체계는? - 인공지능신문', url: 'https://www.aitimes.kr/news/articleView.html?idxno=32633', date: '2024-11-01' },
+            { type: 'oped', title: '[기고] 인공지능 시대, 이제는 국가 중심의 컨트롤타워가 필요하다', url: 'https://www.newspim.com/news/view/20241023000448', date: '2024-10-23' }
+        ];
+
+        const getTypeBadge = (type) => type === 'interview' ? '📣 인터뷰' : '🖊️ 기고/정책';
+
+        const DEFAULT_THUMB = 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png';
+
+        const fetchOgImage = async (url) => {
+            try {
+                const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}&meta=true`);
+                const json = await res.json();
+                const img = json?.data?.image?.url || json?.data?.logo?.url;
+                return img || null;
+            } catch (e) {
+                return null;
+            }
+        };
+
+        const getHostname = (url) => {
+            try { return new URL(url).hostname.replace(/^www\./,''); } catch { return ''; }
+        };
+
+        const renderInterviewTimeline = async () => {
+            // 요약 숨김, 하단 네비 숨김
+            const summarySection = document.querySelector(".summary-section");
+            summarySection.style.display = "none";
+            bottomCategoryNav.style.display = "none";
+
+            // 최신순 정렬
+            const items = [...interviewOpedItems].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+            const html = `
+                <section class="category-block">
+                    <h3 class="category-title">📣 인터뷰 · 기고문 타임라인</h3>
+                    <div class="timeline-list">
+                        ${items.map((it, idx) => `
+                            <a class="timeline-item" href="${it.url}" target="_blank" rel="noopener noreferrer">
+                                <div class="thumb-wrap">
+                                    <img class="og-thumb" data-url="${it.url}" data-img="${it.imgUrl || ''}" alt="thumb ${idx}" />
+                                </div>
+                                <div class="content-wrap">
+                                    <div class="meta">
+                                        <span class="badge ${it.type}">${getTypeBadge(it.type)}</span>
+                                        <span class="date">${it.date}</span>
+                                        <span class="source"><img class="fav" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(getHostname(it.url))}&sz=16" alt=""/>${getHostname(it.url)}</span>
+                                    </div>
+                                    <h4 class="title">${it.title}</h4>
+                                </div>
+                            </a>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+
+            cardSectionEl.style.opacity = 0;
+            cardSectionEl.innerHTML = html;
+
+            // 간단 스타일 (스코프 최소화)
+            const styleId = 'interview-timeline-style';
+            if (!document.getElementById(styleId)) {
+                const style = document.createElement('style');
+                style.id = styleId;
+                style.textContent = `
+                    .timeline-list { position: relative; margin-left: 0; }
+                    .timeline-item { position: relative; display: grid; grid-template-columns: 180px 1fr; gap: 18px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; margin: 16px 0; text-decoration: none; color: inherit; background: var(--card-bg); transition: border-color .2s, box-shadow .2s, transform .15s, background-color .2s; }
+                    .timeline-item:hover { border-color: var(--primary); box-shadow: 0 6px 18px rgba(0,0,0,.10); transform: translateY(-1px); }
+                    .timeline-item:nth-child(even) { background: rgba(0,0,0,.02); }
+                    body.dark .timeline-item:nth-child(even) { background: rgba(255,255,255,.04); }
+                    .thumb-wrap { width: 180px; height: 100px; overflow: hidden; border-radius: 10px; background: #f2f2f2; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+                    .og-thumb { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .25s ease; }
+                    .timeline-item:hover .og-thumb { transform: scale(1.02); }
+                    .content-wrap .meta { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+                    .badge { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); font-weight: 600; }
+                    .badge.interview { background: rgba(255, 196, 0, .18); border-color: rgba(255, 196, 0, .36); }
+                    .badge.oped { background: rgba(57, 158, 245, .18); border-color: rgba(57, 158, 245, .36); }
+                    .date { font-size: 12px; color: var(--muted); }
+                    .source { display:inline-flex; align-items:center; gap:6px; font-size:12px; color: var(--muted); }
+                    .source .fav { width: 14px; height: 14px; border-radius: 3px; }
+                    @media (max-width: 640px) {
+                        .timeline-item { grid-template-columns: 1fr; }
+                        .thumb-wrap { width: 100%; height: 190px; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            requestAnimationFrame(() => {
+                cardSectionEl.style.transition = "opacity .4s ease";
+                cardSectionEl.style.opacity = 1;
+            });
+
+            // OG/직접 이미지 로딩 (imgUrl 우선 → Microlink → 스크린샷 → 기본)
+            const imgs = cardSectionEl.querySelectorAll('.og-thumb');
+            imgs.forEach(async (img) => {
+                const url = img.getAttribute('data-url');
+                const direct = img.getAttribute('data-img');
+                if (direct) {
+                    img.onerror = () => { img.onerror = null; img.src = DEFAULT_THUMB; };
+                    img.src = direct;
+                    return;
+                }
+                let src = await fetchOgImage(url);
+                if (!src) src = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=640`;
+                img.onerror = () => { img.onerror = null; img.src = DEFAULT_THUMB; };
+                img.src = src || DEFAULT_THUMB;
+            });
         };
 
         // iframe 모달 열기
@@ -1356,9 +1492,11 @@
                 window.location.hash = currentCategory;
             }
 
-            // legal 카테고리일 경우 법률 리포트 렌더링
+            // 전용 카테고리 렌더링
             if (category === 'legal') {
                 renderLegalReports();
+            } else if (category === 'interview') {
+                renderInterviewTimeline();
             } else if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
