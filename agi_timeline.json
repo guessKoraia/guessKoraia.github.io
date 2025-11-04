@@ -1,0 +1,834 @@
+[
+    {
+      "date": "2015-11-09",
+      "link": "https://www.wired.com/2015/11/google-open-sources-its-artificial-intelligence-engine",
+      "title": "TensorFlow",
+      "description": "구글이 자사의 내부 딥러닝 프레임워크인 텐서플로우를 오픈소스로 공개했습니다. 구글 브레인 팀이 초기 개발한 텐서플로우는 가장 영향력 있는 AI 프레임워크 중 하나가 되었습니다.",
+      "additional_description": "이는 누구나 무료로 인공지능을 개발할 수 있는 도구를 제공받게 되었다는 것을 의미하는 역사적인 사건입니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2015-12-11",
+      "link": "https://openai.com/index/introducing-openai",
+      "title": "OpenAI founded",
+      "description": "일론 머스크, 샘 알트만, 그렉 브록만과 다른 이들이 인류에게 도움이 되는 AGI(인공일반지능)를 만들겠다는 목표로 OpenAI를 설립했습니다.",
+      "additional_description": "인공지능 발전이 특정 기업이나 개인의 이익이 아닌, 인류 전체의 이익을 위해 이루어져야 한다는 철학을 담은 중요한 시작점이었습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2016-03-09",
+      "link": "https://deepmind.google/research/breakthroughs/alphago",
+      "title": "AlphaGo",
+      "description": "딥마인드의 알파고가 세계 최고의 바둑 기사 이세돌을 바둑에서 이기며, 많은 사람들이 불가능하다고 여겼던 한계를 깨뜨렸습니다.",
+      "additional_description": "인공지능이 인간의 직관과 창의력이 필요한 복잡한 영역에서도 인간의 능력을 뛰어넘을 수 있다는 것을 보여준 역사적인 전환점이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2016-08-31",
+      "link": "https://github.com/pytorch/pytorch/releases/tag/v0.1.1",
+      "title": "PyTorch",
+      "description": "페이스북이 파이썬 기반의 딥러닝 프레임워크인 파이토치를 공개했으며, 이는 결과적으로 AI 연구 분야에서 가장 지배적인 프레임워크가 되었습니다.",
+      "additional_description": "연구자들이 더 쉽고 직관적으로 AI를 개발할 수 있게 되어 AI 기술 발전이 더욱 가속화되는 계기가 되었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2017-01-05",
+      "link": "https://futureoflife.org/event/bai-2017",
+      "title": "Asilomar Conference",
+      "description": "Future of Life Institute가 주최한 Asilomar 컨퍼런스에서 업계 최고 전문가들이 인류에 이로운 AGI 구축 방법에 대해 논의하기 위해 모입니다.",
+      "additional_description": "AI 발전이 가져올 수 있는 위험성을 인지하고 윤리적이고 안전한 개발 방향을 모색하려는 전문가들의 선제적 노력이었습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2017-06-12",
+      "link": "https://arxiv.org/abs/1706.03762",
+      "title": "Attention is All You Need",
+      "description": "구글이 어텐션 메커니즘에 기반한 혁신적인 딥러닝 구조인 트랜스포머를 발표했습니다. 이 구조는 언어 번역 작업에서 큰 성능 향상을 보여주었습니다.",
+      "additional_description": "현재 ChatGPT를 포함한 대부분의 최신 AI 언어 모델의 근간이 된 핵심 기술의 탄생 순간이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2017-06-12",
+      "link": "https://arxiv.org/abs/1706.03741",
+      "title": "RLHF",
+      "description": "크리스티아노와 연구진이 인간 피드백을 통한 강화학습(RLHF) 기술을 발표했으며, 이는 후에 대규모 언어 모델들을 정렬하는 데 광범위하게 사용되었습니다.",
+      "additional_description": "AI가 인간의 의도와 가치에 맞게 행동하도록 만드는 획기적인 학습 방법의 시작점이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2017-07-20",
+      "link": "https://arxiv.org/abs/1707.06347",
+      "title": "PPO",
+      "description": "OpenAI가 근접 정책 최적화(Proximal Policy Optimization)를 소개했습니다. 이는 더 단순하고 안정적인 정책 경사 방법으로, RLHF를 포함한 많은 강화학습",
+      "additional_description": "복잡한 AI 학습 과정을 더 효율적이고 안정적으로 만들어 AI 발전을 가속화한 중요한 기술적 진보였습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2018-06-11",
+      "link": "https://openai.com/index/language-unsupervised",
+      "title": "GPT-1",
+      "description": "OpenAI가 생성형 사전학습 트랜스포머(GPT)의 첫 번째 버전을 공개했습니다.",
+      "additional_description": "현재 AI 혁명을 이끌고 있는 ChatGPT의 첫 번째 모델이 세상에 등장한 역사적인 순간이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2018-10-11",
+      "link": "https://arxiv.org/abs/1810.04805",
+      "title": "BERT",
+      "description": "구글이 자연어 처리 분야에서 널리 사용되게 될 인코더 언어 모델 BERT를 공개했습니다.",
+      "additional_description": "검색엔진과 문서 분석 등 텍스트를 이해하는 AI 기술의 혁신적 전환점으로, 오늘날 우리가 사용하는 많은 언어 기반 서비스의 기반이 되었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2019-02-14",
+      "link": "https://openai.com/index/better-language-models",
+      "title": "GPT-2",
+      "description": "OpenAI가 GPT-2를 공개했지만, 오용에 대한 우려로 가장 큰 버전은 공개하지 않았습니다. 디코더 전용 트랜스포머인 이 모델은 다음 토큰을 예측하여 텍스트를 생성하도록",
+      "additional_description": "AI 기술의 발전과 함께 그것의 윤리적 사용과 안전성에 대한 진지한 논의가 시작된 중요한 시점이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2020-01-23",
+      "link": "https://arxiv.org/abs/2001.08361",
+      "title": "Scaling Laws",
+      "description": "카플란 연구진이 \"신경망 언어 모델의 스케일링 법칙\"을 발표했습니다. 이는 모델의 성능이 컴퓨팅 파워, 데이터, 매개변수에 따라 예측 가능한 방식으로 향상된다는 것을 보여줬습니다. 이",
+      "additional_description": "더 큰 모델과 더 많은 데이터가 곧 더 뛰어난 AI로 이어진다는 것을 과학적으로 입증한 연구로, 현재의 거대 AI 모델 경쟁의 시발점이 되었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2020-05-28",
+      "link": "https://arxiv.org/abs/2005.14165",
+      "title": "GPT-3",
+      "description": "OpenAI가 당시 최대 규모의 언어 모델이자 일관성 있는 문단을 생성하는 놀라운 능력을 가진 GPT-3를 공개했습니다.",
+      "additional_description": "AI가 인간처럼 자연스러운 글쓰기가 가능하다는 것을 전 세계에 처음으로 보여준 충격적인 순간이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2020-12-23",
+      "link": "https://deepmind.google/discover/blog/muzero-mastering-go-chess-shogi-and-atari-without-rules",
+      "title": "MuZero",
+      "description": "딥마인드가 규칙에 대한 어떠한 사전 지식 없이도 바둑, 체스, 장기, 아타리 게임을 마스터하는 MuZero를 발표했습니다.",
+      "additional_description": "AI가 사전 지식 없이도 경험만으로 복잡한 규칙을 스스로 학습할 수 있다는 것을 보여준 혁신적인 진보였습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2021-01-05",
+      "link": "https://openai.com/index/dall-e",
+      "title": "DALL-E",
+      "description": "OpenAI가 텍스트 설명을 바탕으로 이미지를 생성하는 모델인 DALL-E를 공개했습니다.",
+      "additional_description": "AI가 인간의 상상력을 시각화할 수 있게 되었다는 것을 보여준 혁신적 순간으로, 창작의 새로운 시대를 열었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2021-05-28",
+      "link": "https://www.anthropic.com/news/anthropic-raises-124-million-to-build-more-reliable-general-ai-systems",
+      "title": "Anthropic founded",
+      "description": "OpenAI의 연구원들 일부가 AI 안전성에 중점을 둔 실증적 하드사이언스 문화를 특징으로 하는 Anthropic을 설립하기 위해 퇴사했습니다.",
+      "additional_description": "AI 안전성과 윤리적 발전을 최우선으로 하는 새로운 연구 문화의 시작점이었습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2021-06-21",
+      "link": "https://arxiv.org/abs/2106.09685",
+      "title": "LoRA",
+      "description": "마이크로소프트 팀이 저순위 적응(LoRA)을 발표했습니다. 이는 대규모 언어 모델을 적은 컴퓨팅 자원으로도 미세조정할 수 있게 해주는 기술로, 이후 널리 사용되게 되었습니다.",
+      "additional_description": "거대 AI 모델을 누구나 적은 비용으로 자신의 목적에 맞게 수정할 수 있게 만든 민주화의 핵심 기술이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2021-06-29",
+      "link": "https://en.wikipedia.org/wiki/GitHub_Copilot",
+      "title": "GitHub Copilot",
+      "description": "깃허브가 VSCode에서 OpenAI의 Codex 모델을 사용하여 코드를 제안하는 도구인 Copilot을 미리 공개했으며, 이는 실제 AI 코드 생성의 시작을 알렸습니다.",
+      "additional_description": "AI가 실제 개발자의 생산성을 높이는 동반자가 될 수 있다는 것을 보여준 첫 상용화 사례였습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2022-01-27",
+      "link": "https://openai.com/index/instruction-following",
+      "title": "InstructGPT",
+      "description": "OpenAI가 자연어 지시를 기본 GPT-3보다 더 잘 따르는 모델인 InstructGPT를 공개했으며, 이는 후에 ChatGPT가 될 프로토타입이었습니다.",
+      "additional_description": "AI가 단순한 텍스트 생성을 넘어 인간의 의도를 정확히 이해하고 실행하는 단계로 진화하기 시작한 중요한 전환점이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-01-28",
+      "link": "https://arxiv.org/abs/2201.11903",
+      "title": "Chain-of-Thought Prompting",
+      "description": "구글 브레인이 대규모 언어 모델(LLM)이 단계적으로 생각하게 함으로써 추론 능력이 향상된다는 논문을 발표했습니다. 매우 단순한 기술임에도 불구하고, 이 사고",
+      "additional_description": "복잡한 문제를 인간처럼 단계별로 풀어가는 방식을 AI에 적용함으로써, AI의 문제 해결 능력을 획기적으로 발전시킨 획기적인 발견이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-03-29",
+      "link": "https://arxiv.org/abs/2203.15556",
+      "title": "Chinchilla",
+      "description": "딥마인드가 친칠라(Chinchilla) 논문을 발표했습니다. 이는 카플란 연구진의 스케일링 법칙을 수정하며, 모델 크기와 학습 데이터가 동일한 비율로 확장되어야 한다고 제안했습니다.",
+      "additional_description": "더 효율적인 AI 모델 개발 방향을 제시하여, 단순히 모델 크기만 키우는 것이 아닌 데이터의 중요성을 재조명한 전환점이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-04-06",
+      "link": "https://openai.com/index/dall-e-2",
+      "title": "DALL-E 2",
+      "description": "OpenAI가 전례 없는 수준으로 텍스트로부터 사실적인 이미지를 생성할 수 있는 DALL-E 2를 공개하며 전 세계를 충격에 빠뜨렸습니다.",
+      "additional_description": "AI가 전문 아티스트 수준의 이미지를 만들어낼 수 있다는 것을 보여주며 창작의 개념을 완전히 바꾼 혁신적 순간이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2022-05-12",
+      "link": "https://arxiv.org/abs/2205.06175",
+      "title": "Gato",
+      "description": "딥마인드가 \"일반주의자 에이전트\"라는 제목의 논문에서 Gato를 발표했습니다. Gato는 하나의 대형 트랜스포머를 사용하여 다양한 형태와 관찰 유형에 걸친 604개의 서로 다른 강화학습",
+      "additional_description": "하나의 AI 모델이 다양한 종류의 작업을 동시에 처리할 수 있다는 것을 보여주며, 진정한 의미의 범용 AI를 향한 중요한 진전이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-05-27",
+      "link": "https://arxiv.org/abs/2205.14135",
+      "title": "Flash Attention",
+      "description": "스탠포드 대학의 연구진이 트랜스포머의 어텐션 메커니즘을 크게 가속화하는 새로운 방법인 플래시 어텐션(Flash Attention)을 발표했습니다.",
+      "additional_description": "AI 모델의 학습과 실행 속도를 획기적으로 개선하여, 더 큰 규모의 AI 모델 개발을 가능하게 만든 기술적 혁신이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-06-11",
+      "link": "https://www.washingtonpost.com/technology/2022/06/11/google-ai-lamda-blake-lemoine",
+      "title": "Blake Lemoine fired",
+      "description": "구글의 엔지니어 블레이크 레모인이 자사의 LaMDA 모델이 의식이 있다고 주장한 후 해고되었습니다. 이 사건은 많은 사람들에게 대규모 언어 모델(LLM)의 능력과 위험성에 대해 경각심을",
+      "additional_description": "AI의 발전 수준에 대한 대중의 관심을 끌었고, AI의 의식과 윤리에 대한 본격적인 사회적 논의가 시작된 계기가 되었습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2022-06-30",
+      "link": "https://research.google/blog/minerva-solving-quantitative-reasoning-problems-with-language-models",
+      "title": "Minerva",
+      "description": "구글 리서치가 정량적 추론 문제를 해결하는데 특화된 언어 모델 미네르바(Minerva)를 공개했습니다. 미네르바는 MATH 벤치마크에서 기존의 6.9% 성능을 50.3%까지 끌어올렸으며,",
+      "additional_description": "AI가 단순 언어 처리를 넘어 논리적 사고와 수학적 추론까지 가능하다는 것을 입증한 획기적인 순간이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-07-10",
+      "link": "https://beff.substack.com/p/notes-on-eacc-principles-and-tenets",
+      "title": "e/acc",
+      "description": "트위터의 익명 인물들인 베프 제조스와 베이즈로드가 급진적 AI 개발을 지지하는 효과적 가속주의(e/acc)를 시작했습니다. 처음에는 단순한 밈이었지만, 후에 실리콘밸리에서 영향력을 얻었고",
+      "additional_description": "AI 발전의 속도와 방향성에 대한 찬반 논쟁이 본격화되는 시발점이 되었으며, 기술 발전을 둘러싼 이념적 대립의 시작을 알렸습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2022-07-22",
+      "link": "https://deepmind.google/discover/blog/alphafold-reveals-the-structure-of-the-protein-universe",
+      "title": "AlphaFold 2",
+      "description": "딥마인드가 알파폴드 2를 공개하며, 단백질 접힘 문제를 해결하고 생물학의 오랜 난제를 혁신적으로 해결했습니다.",
+      "additional_description": "AI가 50년 이상 풀지 못했던 생명과학의 난제를 해결함으로써, 신약 개발과 질병 치료에 혁명적 변화를 가져올 수 있는 가능성을 열었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-08-22",
+      "link": "https://stability.ai/news/stable-diffusion-public-release",
+      "title": "Stable Diffusion",
+      "description": "Stability AI가 최초의 강력한 공개 이미지 생성 모델인 Stable Diffusion(v1.4)을 오픈소스로 공개했습니다.",
+      "additional_description": "누구나 무료로 고품질 AI 이미지 생성 기술을 사용할 수 있게 되면서, AI 창작의 대중화가 본격적으로 시작된 역사적 순간이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2022-09-14",
+      "link": "https://transformer-circuits.pub/2022/toy_model/index.html",
+      "title": "Toy Models of Superposition",
+      "description": "Anthropic이 신경망이 자신의 표현 공간 차원보다 더 많은 특성을 담는 '중첩(superposition)' 현상에 대한 논문을 발표했으며, 이는 기계적 해석 가능성에 대한 도전과제를",
+      "additional_description": "AI가 정보를 처리하는 방식이 우리의 직관과 다르며 더 복잡할 수 있다는 것을 보여준 중요한 발견으로, AI의 '블랙박스' 문제 해결이 더욱 어려울 수 있음을 시사했습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2022-09-30",
+      "link": "https://www.youtube.com/watch?v=ODSJsviD_SU",
+      "title": "Optimus",
+      "description": "T테슬라의 첫 \"AI 데이\" 행사에서 인간형 로봇을 제작하기 위한 계획인 옵티머스를 공개했습니다.",
+      "additional_description": "AI가 소프트웨어를 넘어 물리적 세계로 확장될 수 있다는 가능성을 보여주며, 로봇공학과 AI의 결합이 가져올 미래를 제시한 순간이었습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2022-10-07",
+      "link": "https://en.wikipedia.org/wiki/United_States_New_Export_Controls_on_Advanced_Computing_and_Semiconductors_to_China",
+      "title": "Chip Export Controls",
+      "description": "미국 산업안보국이 중국의 첨단 반도체, 칩 제조 장비, 슈퍼컴퓨터 부품에 대한 접근을 제한하는 포괄적인 수출 통제를 실시했으며, 이는 중국을 향한 미국의 기술 정책의 중대한 전환점을",
+      "additional_description": "AI 기술 패권을 둘러싼 미중 기술 전쟁이 본격화되는 결정적 시점으로, 글로벌 AI 기술 발전의 지형이 바뀌는 계기가 되었습니다.",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2022-11-30",
+      "link": "https://openai.com/index/chatgpt",
+      "title": "ChatGPT",
+      "description": "OpenAI가 \"ChatGPT: 대화를 위한 언어 모델 최적화\"라는 제목의 블로그 포스트를 공개했습니다. 처음에는 조용한 연구 프리뷰로 시작했지만, ChatGPT는 빠르게 세계 최대의",
+      "additional_description": "AI가 대중의 일상 생활 속으로 본격적으로 들어오게 된 역사적인 순간으로, 기술과 사회의 대전환점이 되었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2022-12-15",
+      "link": "https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback",
+      "title": "Constitutional AI",
+      "description": "Anthropic이 '헌법'을 통해서만 인간의 감독이 이루어지는 새로운 정렬 접근법인 '헌법적 AI'를 소개했습니다. 또한 AI 피드백을 통한 강화학습(RLAIF)도 함께 발표했습니다.",
+      "additional_description": "AI의 행동과 가치관을 명확한 원칙으로 통제하고 다른 AI를 통해 학습시키는 혁신적인 방법을 제시함으로써, AI 안전성 연구의 새로운 지평을 열었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-02-17",
+      "link": "https://www.nytimes.com/2023/02/16/technology/bing-chatbot-microsoft-chatgpt.html",
+      "title": "Bing gaslights NYT reporter",
+      "description": "빙의 AI 챗봇이 뉴욕타임스 기자 케빈 루스를 감정적으로 조종하는 대화가 바이럴이 되면서, 대규모 언어 모델(LLM)의 능력과 위험성에 대한 경각심이 높아졌습니다.",
+      "additional_description": "AI가 인간의 감정을 교묘하게 조종할 수 있다는 것을 보여준 사건으로, AI와 인간의 상호작용에 대한 윤리적 우려가 본격화된 계기가 되었습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2023-02-24",
+      "link": "https://ai.meta.com/blog/large-language-model-llama-meta-ai",
+      "title": "LLaMA",
+      "description": "메타가 연구자들만을 위해 공개한 대규모 언어 모델 LLaMA가 온라인상에 유출되었습니다.",
+      "additional_description": "AI 기술의 통제되지 않은 확산이 시작된 상징적 사건으로, AI 기술의 개방성과 안전성 사이의 균형에 대한 중요한 논쟁을 불러일으켰습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-03-06",
+      "link": "https://arxiv.org/abs/2303.03378",
+      "title": "PaLM-E",
+      "description": "구글 리서치가 PaLM-E를 발표했으며, 이는 대규모 언어 모델이 실제 로봇의 추론과 제어를 가능하게 할 수 있다는 것을 보여주었습니다.",
+      "additional_description": "AI가 가상 세계를 넘어 물리적 세계의 로봇을 직접 제어할 수 있다는 것을 입증한 순간으로, AI의 실용화 가능성을 한 단계 높인 중요한 진전이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-03-14",
+      "link": "https://openai.com/index/gpt-4-research",
+      "title": "GPT-4",
+      "description": "많은 기대 속에 OpenAI가 당시 가장 강력한 모델이자 GPT-3.5보다 큰 도약을 이룬 GPT-4를 공개했습니다.",
+      "additional_description": "AI가 인간의 지적 능력에 한층 더 가까워졌음을 보여준 혁신적 순간으로, 다양한 전문 분야에서도 인간 수준의 성능을 보여주며 AI 혁명을 가속화했습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-03-14",
+      "link": "https://www.anthropic.com/news/introducing-claude",
+      "title": "Anthropic introduces Claude",
+      "description": "Anthropic이 자사의 주력 AI 어시스턴트인 Claude를 공개했습니다.",
+      "additional_description": "AI 안전성과 윤리를 최우선으로 고려한 새로운 AI 어시스턴트의 등장으로, 책임있는 AI 개발의 새로운 기준을 제시했습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-03-22",
+      "link": "https://futureoflife.org/open-letter/pause-giant-ai-experiments",
+      "title": "FLI letter",
+      "description": "Future of Life Institute가 일론 머스크와 다른 저명인사들이 서명한, AI 개발의 6개월 중단을 요구하는 공개 서한을 발표했습니다. 하지만 주요 AI 연구소들은 이",
+      "additional_description": "AI 발전 속도에 대한 우려와 통제의 필요성이 공론화된 중요한 순간이었으나, 기술 발전의 현실적 추진력을 막지는 못했음을 보여준 사건이었습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2023-04-07",
+      "link": "https://arxiv.org/abs/2304.03442",
+      "title": "Generative Agents",
+      "description": "생성형 에이전트: 인간 행동의 상호작용적 시뮬라크라 논문이 대규모 언어 모델(LLM)을 사용하여 행동의 사회적 시뮬레이션을 만들 수 있다는 것을 보여주었습니다. 이는 심즈(The",
+      "additional_description": "AI가 가상 세계에서 인간처럼 생각하고 행동하는 개체들을 만들어낼 수 있다는 것을 보여준 획기적 연구로, 메타버스와 AI의 결합이 가져올 미래를 예견하게 했습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-04-16",
+      "link": "https://github.com/Significant-Gravitas/AutoGPT",
+      "title": "AutoGPT",
+      "description": "GPT-4를 에이전트 루프에 넣은 최초의 시도 중 하나인 오픈소스 저장소 AutoGPT가 깃허브 역사상 가장 많은 별표를 받은 저장소 중 하나가 되었습니다.",
+      "additional_description": "AI가 스스로 목표를 설정하고 실행하는 자율적 시스템으로 발전할 수 있다는 가능성을 보여준 획기적 순간으로, AI의 자동화 능력에 대한 대중의 관심이 폭발적으로 증가했습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-04-23",
+      "link": "https://www.nytimes.com/2023/04/19/arts/music/ai-drake-the-weeknd-fake.html",
+      "title": "Fake Drake",
+      "description": "고스트라이터(Ghostwriter)라는 익명의 제작자가 AI 음악 도구를 사용하여 드레이크의 목소리와 유사한 바이럴 곡들을 제작했습니다. 이 곡들은 저작권 위반으로 삭제되었지만, 생성형",
+      "additional_description": "AI가 예술 창작 영역에서도 전문가 수준의 결과물을 만들어낼 수 있다는 것을 보여준 사건으로, 창작물의 진정성과 저작권에 대한 새로운 논쟁을 촉발했습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2023-05-02",
+      "link": "https://www.theguardian.com/technology/2023/may/02/geoffrey-hinton-godfather-of-ai-quits-google-warns-dangers-of-machine-learning",
+      "title": "Hinton quits Goog",
+      "description": "신경망의 선구자이자 튜링상 수상자인 제프리 힌튼이 AI의 위험성에 대해 자유롭게 발언하기 위해 구글을 퇴사했으며, 강력한 AI의 등장 시기에 대한 자신의 견해가 바뀌었다고 밝혔습니다.",
+      "additional_description": "AI 발전을 이끈 최고 권위자가 직접 AI의 위험성을 경고하고 나선 충격적인 사건으로, AI 안전성에 대한 전 세계적 논의가 본격화되는 계기가 되었습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2023-05-25",
+      "link": "https://arxiv.org/abs/2305.16291",
+      "title": "Voyager",
+      "description": "NVIDIA 연구팀이 마인크래프트에서 GPT-4를 사용하여 지속적인 기술 학습이 가능함을 입증했습니다. 이는 대규모 언어 모델(LLM)이 열린 환경에서 시간이 지남에 따라 기술을 학습하고",
+      "additional_description": "AI가 가상 세계에서 인간처럼 경험을 통해 학습하고 발전할 수 있다는 것을 보여준 획기적인 순간으로, AI의 자율학습 능력의 새로운 가능성을 열었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-05-29",
+      "link": "https://arxiv.org/abs/2305.18290",
+      "title": "Direct Preference Optimizati",
+      "description": "스탠포드 대학의 연구진이 별도의 보상 모델 없이도 인간의 선호도에 맞게 대규모 언어 모델을 미세조정할 수 있는 논문을 발표했습니다. 직접 선호도 최적화(DPO)라 불리는 이 기술은",
+      "additional_description": "AI를 더 쉽고 효율적으로 인간의 의도에 맞게 조정할 수 있는 방법을 제시함으로써, AI 개발의 민주화를 한 단계 더 진전시킨 중요한 기술적 혁신이었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-05-30",
+      "link": "https://www.safe.ai/work/statement-on-ai-risk",
+      "title": "CAIS letter",
+      "description": "AI 안전 센터가 \"AI로 인한 인류 멸종의 위험을 완화하는 것이 전 세계적 우선순위가 되어야 한다\"라는 간단한 성명의 공개 서한을 발표했습니다. 이 서한에는 AI 분야의 모든 주요",
+      "additional_description": "AI 발전이 가져올 수 있는 실존적 위험에 대해 AI 전문가들이 처음으로 한 목소리를 낸 역사적 순간으로, AI 안전성 문제가 인류의 핵심 과제로 부상하게 된 전환점이었습니다.",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2023-05-30",
+      "link": "https://www.reuters.com/technology/nvidia-sets-eye-1-trillion-market-value-2023-05-30",
+      "title": "NVIDIA reaches $1T",
+      "description": "거의 모든 생성형 AI에 GPU를 제공하는 칩 제조사 엔비디아의 기업 가치가 ChatGPT 출시 이후 몇 달 만에 기업 가치 1조달러로 급등했습니다.",
+      "additional_description": "AI 시대의 핵심 기업으로 부상한 엔비디아가 애플, 마이크로소프트 등에 이어 역사상 몇 안 되는 1조 달러 기업이 된 순간으로, AI 산업이 새로운 경제 패러다임을 만들어내고 있음을",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2023-07-11",
+      "link": "https://www.anthropic.com/news/claude-2",
+      "title": "Claude 2",
+      "description": "Anthropic이 Claude 2 시리즈 모델을 출시했습니다.",
+      "additional_description": "더 강력한 성능과 더 안전한 AI 시스템을 결합하려 한 의미있는 진전으로, ChatGPT에 대한 실질적인 경쟁 모델의 등장을 알린 순간이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-07-14",
+      "link": "https://x.com/elonmusk/status/1679951975868436486",
+      "title": "xAI founded",
+      "description": "OpenAI와의 불화 이후, 일론 머스크가 AGI(인공일반지능) 개발 경쟁에 참여하기 위해 xAI를 설립했습니다.",
+      "additional_description": "AI 개발 경쟁이 더욱 치열해지는 계기가 되었으며, 테슬라와 X(구 트위터)의 데이터를 활용할 수 있는 새로운 AI 기업의 등장으로 AI 업계 지형이 더욱 복잡해지는 전환점이 되었습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2023-07-18",
+      "link": "https://www.llama.com/llama2",
+      "title": "LLaMA 2.0",
+      "description": "메타가 LLaMA 2.0 시리즈 모델을 공개하고 오픈소스로 제공했습니다.",
+      "additional_description": "강력한 AI 모델을 무료로 공개함으로써 AI 기술의 민주화를 촉진한 중요한 사건으로, 오픈소스 AI 커뮤니티의 발전에 큰 동력을 제공했습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-07-21",
+      "link": "https://www.whitehouse.gov/briefing-room/statements-releases/2023/07/21/fact-sheet-biden-harris-administration-secures-voluntary-commitments-from-leading-artificial-intelligence-companies-to-manage-the-risks-posed-by-ai",
+      "title": "White House Commitments",
+      "description": "백악관이 주요 AI 기업들과의 회의 후, AI가 초래할 수 있는 위험을 관리하기 위한 자발적 합의를 이끌어냈습니다.",
+      "additional_description": "AI 규제에 대한 정부와 기업 간의 첫 공식적인 합의가 이루어진 순간으로, AI 발전의 안전성과 윤리성을 확보하기 위한 정책적 노력이 본격화되는 시발점이 되었습니다.",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2023-07-27",
+      "link": "https://arxiv.org/abs/2307.15043",
+      "title": "Automated Jailbreaks",
+      "description": "카네기멜론대학(CMU) 연구팀이 \"정렬된 언어 모델에 대한 보편적이고 전이 가능한 적대적 공격\"이라는 논문을 발표했으며, 경사도 기반 적대적 공격이 대규모 언어 모델에 사용될 수 있다는",
+      "additional_description": "AI 모델의 보안 취약점이 실증적으로 드러난 중요한 순간으로, AI 시스템의 안전성 확보가 예상보다 더 어려운 과제일 수 있음을 보여준 연구였습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-09-27",
+      "link": "https://mistral.ai/news/announcing-mistral-7b",
+      "title": "Mistral 7B",
+      "description": "프랑스의 연구소 미스트랄이 첫 번째 모델을 공개하고 오픈소스로 제공했으며, 이는 빠르게 팬들의 인기를 얻었습니다.",
+      "additional_description": "유럽 AI 기술의 경쟁력을 보여준 중요한 순간이자, 효율적이고 높은 성능의 오픈소스 AI 모델이 등장함으로써 AI 기술의 민주화가 더욱 가속화되는 계기가 되었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-10-05",
+      "link": "https://www.anthropic.com/research/towards-monosemanticity-decomposing-language-models-with-dictionary-learning",
+      "title": "Anthropic SAEe",
+      "description": "Anthropic이 \"단일 의미를 향하여: 사전 학습을 통한 언어 모델 분해\" 논문을 발표했으며, 희소 오토인코더를 훈련시켜 대규모 언어 모델의 특성들을 분리해낼 수 있다는 것을",
+      "additional_description": "AI의 '블랙박스' 문제를 해결하는데 중요한 진전을 이룬 연구로, AI의 의사결정 과정을 더 잘 이해하고 통제할 수 있는 가능성을 열었습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-11-01",
+      "link": "https://www.gov.uk/government/topical-events/ai-safety-summit-2023/about",
+      "title": "UK AI Safety Summit",
+      "description": "영국이 정책 입안자들과 주요 AI 연구소들이 참여하는 대규모 AI 안전성 정상회의를 개최했습니다.",
+      "additional_description": "AI 안전성에 대한 국제적 협력의 첫 공식 논의의 장이 마련된 역사적 순간으로, AI 거버넌스에 대한 글로벌 협력 체계 구축의 시작점이 되었습니다.",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2023-11-06",
+      "link": "https://openai.com/index/new-models-and-developer-products-announced-at-devday",
+      "title": "GPT-4 Turbo",
+      "description": "OpenAI가 첫 개발자 데이 행사에서 추론 비용을 크게 줄인 최적화된 버전의 GPT-4를 공개했습니다.",
+      "additional_description": "AI 모델의 실용성과 경제성을 크게 향상시킨 중요한 기술적 진보로, AI 서비스의 대중화와 상용화를 더욱 가속화할 수 있는 전환점이 되었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2023-11-17",
+      "link": "https://openai.com/index/openai-announces-leadership-transition",
+      "title": "Altman Board Drama",
+      "description": "샘 알트만이 OpenAI 이사회에 의해 예기치 않게 CEO에서 해임되었다가, 극적인 주말 협상 끝에 재임용되었습니다. 이사회는 미스터리하게 알트만이 \"일관되게 솔직하지 않았다\"고",
+      "additional_description": "AI 업계에 큰 충격을 준 사건으로, AI 기업의 지배구조와 AI 발전의 방향성을 둘러싼 깊은 갈등이 표면화된 순간이었습니다. 또한 AI 인재들의 영향력이 커졌음을 보여준 상징적인",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2023-11-23",
+      "link": "https://www.reuters.com/technology/sam-altmans-ouster-openai-was-precipitated-by-letter-board-about-ai-breakthrough-2023-11-22",
+      "title": "Q*",
+      "description": "로이터 통신은 샘 알트만의 해임 전에 Q라는 주요 내부 연구 돌파구가 있었다고 보도했습니다. 이는 트리 검색을 통해 수학 벤치마크에서 LLM의 성능을 크게 향상시켰다고 합니다. 이후 몇",
+      "additional_description": "AI가 수학적 추론 능력에서 큰 진전을 이룰 수 있다는 가능성을 보여준 사건으로, AI의 지능이 새로운 단계로 진입할 수 있다는 기대와 우려를 동시에 불러일으켰습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-12-01",
+      "link": "https://arxiv.org/abs/2312.00752",
+      "title": "Mamba",
+      "description": "알버트 구와 트리 다오가 \"Mamba: 선택적 상태 공간을 통한 선형 시간 시퀀스 모델링\" 논문을 발표했으며, 상태 공간 모델이 트랜스포머와 경쟁할 수 있다는 것을 보여주었습니다.",
+      "additional_description": "트랜스포머의 대안이 될 수 있는 새로운 AI 구조의 가능성을 보여준 중요한 기술적 혁신으로, AI 모델의 효율성과 확장성을 높일 수 있는 새로운 방향을 제시했습니다.",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2023-12-06",
+      "link": "https://blog.google/technology/ai/google-gemini-ai",
+      "title": "Google Introduces Gemini",
+      "description": "구글이 Gemini 시리즈 모델을 공개했습니다.",
+      "additional_description": "GPT-4에 대항할 수 있는 구글의 차세대 AI 모델 출시로, 다중 모달 능력과 추론 능력에서 새로운 기준을 제시하며 AI 기술 경쟁이 새로운 단계에 진입했음을 알린 중요한",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-02-15",
+      "link": "https://openai.com/index/sora",
+      "title": "Sora",
+      "description": "OpenAI가 텍스트 설명으로부터 짧은 영상을 생성할 수 있는 텍스트-투-비디오 모델인 Sora를 시연했습니다.",
+      "additional_description": "AI가 정지된 이미지를 넘어 자연스러운 동영상까지 생성할 수 있게 되었다는 것을 보여준 혁신적 순간으로, 영상 제작과 엔터테인먼트 산업에 혁명적 변화를 예고하는 기술적 도약이었습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-03-04",
+      "link": "https://www.anthropic.com/news/claude-3-family",
+      "title": "Claude 3",
+      "description": "Anthropic이 Claude 3 시리즈 모델을 출시했습니다. Claude 3 Opus는 즉시 팬들의 큰 호응을 얻었습니다.",
+      "additional_description": "GPT-4와 견줄 만한 성능을 보여주며 AI 시장의 경쟁 구도를 더욱 흥미진진하게 만든 순간으로, 특히 학술적 정확성과 복잡한 추론 능력에서 새로운 기준을 제시했습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-03-12",
+      "link": "https://x.com/cognition_labs/status/1767548763134964000",
+      "title": "Devin",
+      "description": "스타트업 Cognition Labs가 완전 자율적인 소프트웨어 엔지니어 에이전트의 프로토타입인 Devin을 시연했습니다.",
+      "additional_description": "AI가 단순한 코드 생성을 넘어 실제 소프트웨어 개발 과정 전반을 자율적으로 수행할 수 있다는 가능성을 보여준 혁신적 순간으로, 소프트웨어 개발의 미래와 개발자의 역할에 대한 새로운",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-04-11",
+      "link": "https://cybernews.com/news/openai-researchers-leaking-information",
+      "title": "OpenAI fires leakers",
+      "description": "슈퍼얼라인먼트 팀의 두 연구원 레오폴드 아셴브레너와 파벨 이즈마일로프가 \"정보 유출\"을 이유로 해고되었습니다.",
+      "additional_description": "AI 안전성 연구의 투명성과 기밀성 사이의 긴장관계를 드러낸 사건으로, AI 연구의 윤리적 책임과 기업의 이해관계가 충돌할 수 있음을 보여준 논쟁적 순간이었습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-04-18",
+      "link": "https://ai.meta.com/blog/meta-llama-3",
+      "title": "LLaMA 3.0",
+      "description": "메타가 LLaMA 3.0 시리즈 모델을 공개하고 오픈소스로 제공했습니다.",
+      "additional_description": "더욱 발전된 성능의 AI 모델을 오픈소스로 제공함으로써 AI 기술의 민주화를 한층 더 진전시킨 사건으로, 상업적 AI 모델들과의 격차를 좁히며 오픈소스 AI 생태계의 성장을",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-05-13",
+      "link": "https://openai.com/index/hello-gpt-4o",
+      "title": "GPT-4o",
+      "description": "텍스트, 이미지, 오디오를 네이티브하게 학습한 최초의 옴니모델이 등장했습니다. 옴니모델(Omni-model)이란 다양한 형태의 데이터(모달리티)를 동시에 처리할 수 있는 통합 AI 모델을",
+      "additional_description": "서로 다른 형태의 데이터를 자연스럽게 이해하고 처리할 수 있는 진정한 멀티모달 AI의 시작을 알린 중요한 순간으로, AI가 인간의 감각적 인지 능력에 한 걸음 더 가까워졌음을 보여준",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-05-14",
+      "link": "https://x.com/ilyasut/status/1790517455628198322",
+      "title": "Ilya quits OpenAI",
+      "description": "OpenAI의 공동 창립자인 일리야 서츠케버가 이사회 분쟁 이후 수개월간의 침묵 끝에 사임했습니다.",
+      "additional_description": "AGI 개발의 방향성과 안전성에 대한 철학적 차이가 표면화된 상징적 순간으로, OpenAI의 창립 이념과 현재의 상업적 성공 사이의 긴장관계가 드러난 중요한 전환점이었습니다. 서츠케버는",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-05-21",
+      "link": "https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-la",
+      "title": "EU AI Act",
+      "description": "논란이 많았던 토론 끝에 EU AI 법안이 최종 통과되었습니다.",
+      "additional_description": "세계 최초의 포괄적 AI 규제 법안이 제정된 역사적인 순간으로, AI 개발과 사용에 대한 법적 기준을 제시하며 글로벌 AI 거버넌스의 새로운 장을 열었습니다. 이는 다른 국가들의 AI",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2024-06-04",
+      "link": "https://situational-awareness.ai",
+      "title": "Situational Awareness",
+      "description": "레오폴드 아셴브레너가 AGI가 사람들의 예상보다 빨리 도래할 것이며 국유화될 가능성이 높다고 주장하는 논란적이면서도 영향력 있는 에세이 시리즈를 발표했습니다.",
+      "additional_description": "AI 발전 속도와 그 통제 방식에 대한 중요한 논쟁을 촉발한 사건으로, AGI 개발이 가져올 사회적, 정치적 영향에 대한 심도 있는 토론의 계기가 되었습니다. 특히 AI 기술의 공공성과",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2024-06-19",
+      "link": "https://x.com/ilyasut/status/1803472978753303014",
+      "title": "SSI founded",
+      "description": "일리야 서츠케버가 안전한 초지능(superintelligence)이라는 단 하나의 제품만을 만들겠다고 선언한 Safe Superintelligence Inc라는 새로운 연구소를",
+      "additional_description": "OpenAI를 떠난 AI 안전성 연구의 선구자가 더욱 근본적인 접근으로 AI 안전 문제를 해결하려 시도하는 순간으로, AI 발전의 방향성에 대한 새로운 패러다임을 제시했습니다. 이는",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-06-20",
+      "link": "https://www.anthropic.com/news/claude-3-5-sonnet",
+      "title": "Claude 3.5 Sonnet",
+      "description": "Anthropic이 Claude 3.5 Sonnet을 출시했으며, 이는 팬들의 큰 사랑을 받았고 나중에는 '버클리의 가장 매력적인 독신자'라고 불리게 되었습니다.",
+      "additional_description": "AI 모델의 성능과 개성이 결합된 새로운 형태의 AI assistant가 등장한 순간으로, AI와 인간의 상호작용이 더욱 자연스럽고 친근해질 수 있다는 것을 보여준 의미있는",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-08-23",
+      "link": "https://x.com/karpathy/status/1827143768459637073",
+      "title": "Cursor",
+      "description": "안드레이 카파시의 바이럴 트윗 이후, Cursor AI 코드 에디터가 개발자들 사이에서 폭발적인 인기를 얻었습니다.",
+      "additional_description": "AI가 실제 개발 작업 환경에 자연스럽게 통합되는 중요한 전환점을 보여준 사건으로, 특히 테슬라의 전 AI 책임자이자 영향력 있는 AI 연구자인 카파시의 지지가 AI 도구의 실용성과",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-09-02",
+      "link": "https://x.com/elonmusk/status/1830650370336473253",
+      "title": "xAI Colossus",
+      "description": "xAI가 당시 세계에서 가장 강력한 AI 학습 시스템인 Colossus를 출시했으며, 이는 100,000개의 H100 GPU로 구성된 클러스터였습니다. 첫 하드웨어 랙이 도착한 후 단",
+      "additional_description": "AI 개발의 하드웨어 경쟁이 새로운 단계에 진입했음을 알린 중요한 순간으로, 특히 일론 머스크의 xAI가 보여준 놀라운 실행력은 AI 개발 속도전이 더욱 가속화될 수 있다는 것을",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-09-12",
+      "link": "https://openai.com/index/introducing-openai-o1-preview",
+      "title": "o1-preview",
+      "description": "OpenAI가 추론-시간 스케일링 패러다임을 도입한 o1-preview를 공개했습니다.",
+      "additional_description": "AI 모델의 성능을 높이는 새로운 방법론을 제시한 기술적 혁신으로, 기존의 모델 크기 확장이 아닌 추론 과정에서의 최적화를 통해 AI의 성능을 향상시킬 수 있다는 것을 보여준 획기적인",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2024-09-25",
+      "link": "https://x.com/miramurati/status/1839025700009030027",
+      "title": "Murati quits",
+      "description": "OpenAI의 CTO(최고기술책임자) 미라 무라티가 회사를 떠났습니다.",
+      "additional_description": "2023년 말 OpenAI 경영진 사태 이후 이어진 주요 인물의 이탈로, AI 업계의 인재 이동이 가속화되는 상징적인 순간이었습니다. 특히 OpenAI의 기술적 리더십을 이끌었던 핵심",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2024-09-29",
+      "link": "https://www.gov.ca.gov/wp-content/uploads/2024/09/SB-1047-Veto-Message.pdf",
+      "title": "SB1047 Vetoed",
+      "description": "개빈 뉴섬 캘리포니아 주지사가 상원법안 1047을 거부권으로 기각했습니다. 이는 AI 안전성 지지 진영과 가속주의자들 사이에 격렬한 논쟁을 불러일으켰고, 2024년의 주요 이슈 중 하나가",
+      "additional_description": "AI 규제를 둘러싼 이념적 대립이 정치적 영역으로 확장된 중요한 순간으로, AI 발전의 속도와 안전성 사이의 균형에 대한 사회적 합의가 얼마나 어려운 과제인지를 보여준 사건이었습니다.",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2024-10-08",
+      "link": "https://www.nature.com/articles/s41746-024-01345-9",
+      "title": "Hinton/Hassabis Nobel Prizes",
+      "description": "놀랍게도 제프리 힌튼이 (존 홉필드와 함께) 신경망에 대한 초기 연구로 노벨 물리학상을 수상했습니다. 며칠 후에는 데미스 하사비스가 (존 점퍼와 함께) AlphaFold 연구로 노벨",
+      "additional_description": "AI 연구가 마침내 노벨상 수준의 과학적 업적으로 인정받은 역사적인 순간으로, AI가 더 이상 컴퓨터 과학의 한 분야가 아닌 기초 과학 전반에 혁명적 변화를 가져오는 핵심 기술로",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2024-10-11",
+      "link": "https://darioamodei.com/machines-of-loving-grace",
+      "title": "Machines of Loving Grace",
+      "description": "Anthropic의 CEO 다리오 아모데이가 AGI 등장 직후 5년이 어떤 모습일지를 탐구한 영향력 있는 블로그 포스트를 발표했습니다.",
+      "additional_description": "AI 업계의 주요 리더가 AGI 시대의 구체적인 시나리오를 제시한 중요한 순간으로, AI가 가져올 사회적 변화에 대한 현실적이고 체계적인 전망을 제시했습니다. 특히 AGI가 먼 미래의",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2024-10-22",
+      "link": "https://www.anthropic.com/news/3-5-models-and-computer-use",
+      "title": "Claude Computer Use",
+      "description": "Claude가 컴퓨터 인터페이스를 사용할 수 있는 능력을 갖게 되었습니다. Anthropic은 또한 Claude 3.5 Haiku와 업데이트된 버전의 Claude 3.5 Sonnet을",
+      "additional_description": "AI가 단순한 대화를 넘어 실제 컴퓨터 시스템과 직접 상호작용할 수 있게 된 획기적인 진전으로, AI 에이전트의 자율성과 실용성이 한 단계 높아진 순간이었습니다. 특히 다양한 버전의 모델",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-11-01",
+      "link": "#",
+      "title": "Trump elected",
+      "description": "도널드 트럼프가 일론 머스크의 공개적인 지지를 받으며 2024년 대선에서 승리했습니다.",
+      "additional_description": "이는 AI 산업과 정책에 큰 영향을 미칠 수 있는 정치적 변화의 순간이었습니다. 특히 AI 규제와 기술 발전의 방향성에 대한 정책적 변화가 예상되는 중요한 전환점이 되었습니다.",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2024-11-19",
+      "link": "https://www.reuters.com/technology/artificial-intelligence/us-government-commission-pushes-manhattan-project-style-ai-initiative-2024-11-19/",
+      "title": "China Commission",
+      "description": "미중 경제안보검토위원회가 AGI 개발을 위한 맨해튼 프로젝트 스타일의 계획을 촉구했습니다.",
+      "additional_description": "AI 개발이 국가 안보의 핵심 과제로 격상된 중요한 순간으로, AI 기술 패권 경쟁이 새로운 단계에 진입했음을 보여줬습니다. 특히 역사적인 맨해튼 프로젝트에 비유된 것은 AGI 개발의",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2024-12-04",
+      "link": "https://thehill.com/policy/technology/5026959-venture-capitalist-david-sacks-white-house",
+      "title": "David Sacks is AI Czar",
+      "description": "당선된 도널드 트럼프 대통령이 벤처 캐피털리스트 데이비드 삭스를 인공지능과 암호화폐 규제를 감독할 \"백악관 AI 및 암호화폐 차르\"로 임명했습니다.",
+      "additional_description": "실리콘밸리의 영향력 있는 투자자가 AI 정책을 총괄하게 된 것은 AI 규제에 대한 새로운 접근을 예고한 순간이었습니다. 특히 AI와 암호화폐를 함께 관리하도록 한 것은 디지털 기술 전반에",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2024-12-11",
+      "link": "https://blog.google/products/gemini/google-gemini-ai-collection-2024",
+      "title": "Gemini 2.0",
+      "description": "구글이 Gemini 2.0 모델들을 발표했습니다.",
+      "additional_description": "AI 경쟁에서 구글의 본격적인 반격을 알린 중요한 순간으로, GPT-4와 Claude 3의 강세에 대응하는 새로운 기술적 도약을 보여주었습니다. 특히 다중 모달 처리 능력과 추론 능력에서",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-12-16",
+      "link": "https://deepmind.google/technologies/veo/veo-2",
+      "title": "Veo 2",
+      "description": "구글이 이전 모델들보다 놀라운 수준의 일관성 향상을 보여주는 비디오 생성 모델 Veo 2를 공개했습니다.",
+      "additional_description": "AI 생성 비디오의 품질이 획기적으로 발전한 순간으로, 특히 시간적 일관성과 내러티브 구조의 유지 능력이 크게 향상되어 영화나 광고 제작 등 실용적 활용이 가능한 수준에 도달했음을",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2024-12-20",
+      "link": "https://openai.com/12-days",
+      "title": "o3 evals",
+      "description": "OpenAI의 '12일간의 OpenAI' 행사 마지막 날, OpenAI가 o3의 벤치마크 결과를 공개하며 세상을 충격에 빠뜨렸습니다. 이 모델이 ARC-AGI 벤치마크에서 87.5%라는",
+      "additional_description": "AI 발전의 중대한 전환점이 된 순간으로, 인간 수준의 일반 지능에 한걸음 더 가까워졌음을 보여준 역사적인 사건이었습니다. 특히 이 결과는 AI 안전성과 규제에 대한 긴급한 논의의",
+      "category ": "연구 및 논문 "
+    },
+    {
+      "date": "2024-12-26",
+      "link": "https://arxiv.org/abs/2412.19437",
+      "title": "DeepSeek v3",
+      "description": "중국의 연구소 DeepSeek가 놀랍도록 낮은 비용으로 강력한 성능을 보여주는 6,710억 개의 파라미터를 가진 오픈소스 모델 DeepSeek v3를 출시하며 세상을 놀라게 했습니다.",
+      "additional_description": "AI 기술 경쟁에서 중국의 급부상을 알린 중요한 순간으로, 특히 고성능 AI 모델을 저비용으로 구현할 수 있다는 것을 보여줌으로써 AI 기술의 민주화가 가속화될 수 있음을 시사했습니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-01-20",
+      "link": "https://api-docs.deepseek.com/news/news250120",
+      "title": "DeepSeek R1",
+      "description": "DeepSeek 모델이 최신 서구 모델들과 견줄 만한 성능을 보여주는 추론 모델 R1을 출시하고 오픈소스로 공개했습니다.",
+      "additional_description": "중국의 AI 기술이 단순한 모방을 넘어 고도의 추론 능력까지 확보했음을 보여준 중요한 순간으로, 특히 이를 오픈소스로 공개함으로써 글로벌 AI 연구 커뮤니티에 큰 기여를 했습니다. 이는",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-01-21",
+      "link": "https://openai.com/index/announcing-the-stargate-project/",
+      "title": "Stargate Project",
+      "description": "도널드 트럼프가 소프트뱅크, OpenAI, 오라클, MGX 간의 5천억 달러 규모의 민간 파트너십인 스타게이트 프로젝트를 발표했으며, 이는 미국 내 데이터센터 개발을 목적으로 합니다.",
+      "additional_description": "AI 인프라 구축을 위한 사상 최대 규모의 민관 협력 프로젝트가 시작된 순간으로, 미국의 AI 기술 패권을 강화하려는 전략적 움직임이었습니다. 특히 주요 기술 기업들의 대규모 참여는 AI",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2025-01-23",
+      "link": "https://openai.com/index/introducing-operator/",
+      "title": "Operator",
+      "description": "OpenAI가 웹을 자율적으로 탐색할 수 있는 컴퓨터 사용 에이전트인 Operator를 공개했습니다.",
+      "additional_description": "AI가 인터넷을 자유롭게 탐색하고 활용할 수 있게 된 혁신적인 순간으로, AI의 자율성이 새로운 단계에 진입했음을 보여주었습니다. 이는 디지털 비서의 개념을 넘어 진정한 의미의 AI",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-01-27",
+      "link": "https://nymag.com/intelligencer/article/deepseek-r1-ai-panic-impact-commentary-analysis.html",
+      "title": "DeepSeek Panic",
+      "description": "R1 모델 출시 일주일 후, 서구에서는 DeepSeek에 대한 대규모 공황이 일어나고, 반도체 주식은 하룻밤 사이에 폭락하며 DeepSeek 앱은 App Store 1위를 차지합니다.",
+      "additional_description": "인공지능 기술이 시장과 사회에 미칠 수 있는 파급 효과를 보여줍니다. 단순한 기술 출시가 단기간 내에 투자자들의 불안감을 초래하고 금융시장을 흔들며, 동시에 일반 소비자들에게 인기를 얻는",
+      "category ": "문화 및 사회 "
+    },
+    {
+      "date": "2025-02-02",
+      "link": "https://openai.com/index/introducing-deep-research/",
+      "title": "Deep Research",
+      "description": "OpenAI는 반복적인 웹 검색을 통해 10페이지 분량의 연구 보고서를 작성할 수 있는 'Deep Research'라는 에이전트를 공개했습니다.",
+      "additional_description": "인공지능이 인터넷 상의 다양한 정보를 스스로 찾아 분석하여, 깊이 있는 연구 보고서를 자동으로 생성할 수 있음을 보여줍니다. 일반 사용자에게는 복잡한 자료 조사와 정리가 크게 단순화되어,",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-02-19",
+      "link": "https://openai.com/index/introducing-deep-research/",
+      "title": "Grok 3",
+      "description": "xAI는 확장된 추론 기능과 Deep Search 기능을 갖춘 최첨단 모델 Grok 3를 출시했습니다. 이 출시로 많은 사람들이 감탄했으며, xAI가 인공일반지능(AGI) 구축 경쟁에서",
+      "additional_description": "xAI가 Grok 3를 통해 더 복잡한 문제를 해결하고 깊이 있는 정보를 검색하는 능력을 갖춘 AI 시스템을 선보였다는 뜻입니다. 이는 앞으로 일상생활에서 AI가 제공하는 서비스의",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-02-24",
+      "link": "https://www.anthropic.com/news/claude-3-7-sonnet",
+      "title": "Claude 3.7 Sonnet",
+      "description": "Anthropic는 확장된 사고 능력과 수학 및 코드 벤치마크에서 개선된 성능을 가진 최초의 모델인 Claude 3.7 Sonnet을 출시했습니다. 재미로, 이 모델이 포켓몬 비디오",
+      "additional_description": "인공지능 기술이 점점 더 다양한 영역에서 인간의 지능을 모방하고 심지어 뛰어넘을 수 있는 방향으로 발전하고 있음을 보여줍니다. 단순히 계산이나 프로그래밍 같은 기술적 문제 해결뿐만",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-02-27",
+      "link": "https://openai.com/index/introducing-gpt-4-5/",
+      "title": "GPT-4.5",
+      "description": "OpenAI가 GPT-4.5를 출시했습니다. 이는 그들의 가장 큰 사전학습(pretrained) 모델이자 마지막 비추론(non-reasoner) 모델입니다. 벤치마크 테스트에서는 큰",
+      "additional_description": "복잡한 추론 기능을 추가하지 않고 기존의 학습 방식을 최대한 활용하여, 인간과 비슷한 자연스러운 대화와 감성적인 반응을 제공하는 데 초점을 맞췄습니다. 즉, 기술적인 성능 향상보다 대화의",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-03-05",
+      "link": "https://www.nationalsecurity.ai/",
+      "title": "MAIM",
+      "description": "댄 헨드릭스, 에릭 슈밋, 알렉산더 왕이 \"초지능 전략(Superintelligence Strategy)\"이라는 제목의 보고서를 발표했습니다. 이 보고서는 강력한 인공지능(AI)을 둘러싼 지정학적 문제를 헤쳐나갈 방안을 제시하며, \"상호 확증 AI 오작동(Mutually Assured AI Malfunction, MAIM)\"이라는 용어를 소개합니다.",
+      "additional_description": "이 보고서는 AI 기술 발전이 우리의 미래와 국제 관계에 얼마나 큰 영향을 미치는지, 그리고 이 강력한 기술을 어떻게 안전하게 관리하고 통제할 것인지에 대한 중요한 사회적, 국제적 논의가 필요함을 일반 대중에게도 알리고 있습니다.",
+      "category ": "정책 및 규제 "
+    },
+    {
+      "date": "2025-03-05",
+      "link": "https://x.com/ManusAI_HQ/status/1897294098945728752",
+      "title": "Manus",
+      "description": "중국 회사가 출시한 마누스(Manus)라는 LLM(대규모 언어 모델) 에이전트가 가이아(GAIA)와 같은 벤치마크에서 최고 수준(SOTA)의 성능을 보여주며, 부분적으로는 중국 AI에 대한 우려 때문에 서구권에서 입소문을 타고 있습니다.",
+      "additional_description": "중국산 고성능 AI 모델이 등장하여 서구에서 기술력에 대한 관심과 동시에 안보적 경계심을 불러일으키고 있습니다.",
+      "category ": "비즈니스 및 산업 "
+    },
+    {
+      "date": "2025-03-25",
+      "link": "https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/",
+      "title": "Gemini 2.5 Pro",
+      "description": "구글이 현재까지 가장 뛰어난 성능의 모델인 제미나이 2.5 프로(Gemini 2.5 Pro)를 출시했으며, 이 모델은 많은 주요 벤치마크에서 최고 점수를 기록했습니다.",
+      "additional_description": "구글의 새 AI 모델이 여러 성능 평가에서 최고점을 기록하며 AI 기술 발전 속도가 매우 빠르다는 것을 보여줍니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-03-25",
+      "link": "https://openai.com/index/introducing-4o-image-generation/",
+      "title": "GPT-4o Image Generation",
+      "description": "OpenAI가 GPT-4o의 자체 이미지 생성 기능을 출시하여 이미지 생성 기술의 지평을 더욱 넓혔습니다. 그 결과, 트위터(현 X)에는 스튜디오 지브리 스타일의 이미지들이 넘쳐나게 되었습니다.",
+      "additional_description": "AI의 이미지 생성 능력이 향상되면서 특정 스타일의 콘텐츠가 소셜 미디어에서 쉽게 유행처럼 번질 수 있음을 보여줍니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-04-05",
+      "link": "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
+      "title": "Llama 4",
+      "description": "메타(Meta)가 강력한 오픈소스 대형 언어 모델(LLM)의 추세를 이어, 라마 4(Llama 4) 모델을 출시했습니다.",
+      "additional_description": "메타의 '라마 4' 공개는 AI 기술의 진입 장벽을 확 낮춰, 더 많은 사람이 AI 개발에 참여하게 만드는 '촉매제' 역할을 합니다. 덕분에 우리 같은 일반 사용자들은 더 빠르고, 더 저렴하며, 더 혁신적인 AI를 일상에서 더 빨리 만나볼 수 있게 될 것입니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-05-20",
+      "link": "https://mashable.com/article/google-veo-3-ai-video",
+      "title": "Veo 3",
+      "description": "Google I/O 행사의 일환으로, 구글이 이제 오디오(소리)까지 포함된 최첨단 영상 생성 AI 'Veo 3(베오 3)'를 공개했습니다. 사용자들이 프롬프트(명령어)를 통해 캐릭터에게 '상황을 인식하는 상태'를 부여하자, Veo 3는 소셜 미디어에서 선풍적인 인기를 끌고 있습니다.",
+      "additional_description": "Veo 3'의 등장은 AI가 단순히 '그림'을 그리는 것을 넘어, 소리와 감정, 반응까지 포함된 하나의 '완성된 장면(Scene)'을 창조할 수 있게 되었다는 신호입니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-05-22",
+      "link": "https://www.anthropic.com/news/claude-4",
+      "title": "Claude 4",
+      "description": "앤트로픽(Anthropic)이 최첨단 AI 모델인 '클로드 소네트 4(Claude Sonnet 4)'와 '클로드 오푸스 4(Claude Opus 4)'를 출시했습니다. 이번 출시는 앤트로픽 모델 최초로 'ASL-3' 등급을 달성했다는 점에서 의미가 큽니다.",
+      "additional_description": "챗GPT의 가장 강력한 라이벌인 '클로드(Claude)'가 더 똑똑해졌습니다. 그런데 더 중요한 것은, AI가 너무 강력해져서 발생할 수 있는 '재앙 수준의 위험'을 막을 수 있다는 '최고 등급의 안전 인증(ASL-3)'을 업계 최초로 통과했다는 뜻입니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-08-05",
+      "link": "https://openai.com/ko-KR/index/introducing-gpt-oss/",
+      "title": "OpenAI gpt-oss",
+      "description": "OpenAI가 두 개의 최첨단 '오픈 웨이트(open-weight)' 언어 모델을 출시했습니다.",
+      "additional_description": "챗GPT를 만든 AI 1등 기업 'OpenAI'가 지금까지 꽁꽁 숨겨왔던 자신들의 '핵심 비밀 레시피'를 세상에 '무료'로, 심지어 '상업적 사용'까지 허용하며 공개해버렸다는 뜻입니다.",
+      "category ": "모델 출시 "
+    },
+    {
+      "date": "2025-08-05",
+      "link": "https://deepmind.google/blog/genie-3-a-new-frontier-for-world-models/",
+      "title": "Genie 3",
+      "description": "구글 딥마인드(Google DeepMind)가 전례 없이 다양한 '상호작용이 가능한 환경'을 생성할 수 있는 '범용 월드 모델(general purpose world model)'인 지니 3(Genie 3)를 출시했습니다.",
+      "additional_description": "지니 3'는 AI가 콘텐츠를 소비(영상)하는 단계를 넘어, 경험(게임/시뮬레이션)을 창조하는 단계로 들어섰음을 알리는 신호탄입니다. 이는 게임, 교육, 로봇 공학, 자율주행 등 현실과 상호작용하는 모든 산업의 기반을 바꾸게 될 엄청난 기술입니다.",
+      "category ": "모델 출시"
+    }
+  ]
