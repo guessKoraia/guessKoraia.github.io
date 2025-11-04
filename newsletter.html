@@ -26,13 +26,13 @@
 
     <style>
         :root {
-            --bg-light: #f9fafb;
-            --bg-dark: #111827;
-            --text-light: #111827;
-            --text-dark: #f3f4f6;
+            --bg-light: #f8fafc;
+            --bg-dark: #0b1220;
+            --text-light: #0f172a;
+            --text-dark: #e5e7eb;
             --card-light: #ffffff;
-            --card-dark: #1f2937;
-            --primary: #3b82f6;
+            --card-dark: #111827;
+            --primary: #2563eb; /* 비즈니스 블루 */
             --border-color-dark: #374151;
         }
 
@@ -103,6 +103,7 @@
             display: flex;
             flex-direction: column;
             gap: .45rem;
+            z-index: 1000;
             align-items: center;
         }
 
@@ -204,6 +205,25 @@
             padding: 2rem 1rem;
             padding-bottom: 0;
         }
+
+        /* 핵심 요약 리디자인 */
+        .summary-card { border: 1px solid var(--border); border-radius: 8px; background: var(--card-light); padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,.03); }
+        body.dark .summary-card { background: var(--card-dark); }
+        .summary-head { display:flex; align-items:center; justify-content: space-between; margin-bottom: .4rem; }
+        .summary-badge { display:inline-block; border: 1px solid var(--border); background: rgba(37,99,235,.06); color: #2563eb; font-weight: 800; font-size: .85rem; padding: 4px 10px; border-radius: 999px; letter-spacing: .02em; }
+        .summary-body p { margin: .45rem 0; line-height: 1.7; color: #374151; }
+        body.dark .summary-body p { color: #d1d5db; }
+
+        /* AGI filter bar */
+        .agi-filter-bar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin: 8px 0 14px; }
+        .agi-filter-btn { border: 1px solid var(--border); background: transparent; color: inherit; padding: 6px 10px; border-radius: 999px; cursor: pointer; font-weight: 700; }
+        .agi-filter-btn.selected { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .agi-filter-btn:hover { filter:brightness(.98); }
+        body.dark .summary-card { background: var(--card-dark); }
+        .summary-head { display:flex; align-items:center; justify-content: space-between; margin-bottom: .4rem; }
+        .summary-badge { display:inline-block; border: 1px solid var(--border); background: rgba(37,99,235,.06); color: #2563eb; font-weight: 800; font-size: .85rem; padding: 4px 10px; border-radius: 999px; letter-spacing: .02em; }
+        .summary-body p { margin: .45rem 0; line-height: 1.7; color: #374151; }
+        body.dark .summary-body p { color: #d1d5db; }
 
         .card-section {
             max-width: 1100px;
@@ -719,6 +739,7 @@
                 font-size: .9rem;
             }
         }
+        /* (삭제) 고정 인디케이터 스타일 사용 안 함 */
     </style>
 </head>
 
@@ -728,25 +749,24 @@
             <div class="title">
                 <img src="https://raw.githubusercontent.com/koraiadev/img/bac6e32c862f2d6c9b25e022fe1123fdad7fb29f/koraia/logo-koraia.svg"
                     alt="KORAIA">
-                <h1>AI 뉴스레터</h1>
+                <h1>오늘의 AI 뉴스레터</h1>
             </div>
         </div>
         <nav>
-            <button class="nav-btn selected" data-cat="all">📜전체</button>
-            <button class="nav-btn" data-cat="domestic">🏠국내동향</button>
-            <button class="nav-btn" data-cat="global">✈️해외동향</button>
-            <button class="nav-btn" data-cat="government">🏛️정부동향</button>
-            <button class="nav-btn" data-cat="corporate">🏢기업동향</button>
+            <button class="nav-btn selected" data-cat="all">📜AI 정보</button>
             <button class="nav-btn" data-cat="interview">📣인터뷰·기고문</button>
+            <button class="nav-btn" data-cat="agi">🧠AGI 타임라인</button>
             <button class="nav-btn" data-cat="legal">⚖️AI 특화 법률 리포트</button>
         </nav>
     </header>
 
     <main>
         <div class="summary-section">
-            <article class="card">
-                <span style="font-weight:bold; color:var(--primary)">✅ 핵심 요약</span>
-                <p id="summary">요약을 불러오는 중입니다.</p>
+            <article class="summary-card">
+                <div class="summary-head">
+                    <span class="summary-badge">핵심 요약</span>
+                </div>
+                <div class="summary-body" id="summary">요약을 불러오는 중입니다.</div>
             </article>
         </div>
 
@@ -762,6 +782,7 @@
                 <button class="bottom-nav-btn" data-cat="government">🏛️ 정부동향</button>
                 <button class="bottom-nav-btn" data-cat="corporate">🏢 기업동향</button>
                 <button class="bottom-nav-btn" data-cat="interview">📣 인터뷰·기고문</button>
+                <button class="bottom-nav-btn" data-cat="agi">🧠 AGI 타임라인</button>
             </div>
         </div>
 
@@ -854,31 +875,36 @@
                 title: "AI 국가과제 수주, '부당한 입찰'에 좌절하지 마십시오: 법적 구제수단 '가처분' 활용 전략 서문",
                 url: "https://stib.ee/HllJ",
                 date: "2025. 10. 27",
-                description: "AI 국가과제 입찰에서 부당한 처분을 받았을 때 활용할 수 있는 법적 구제수단에 대해 알아봅니다."
+                description: "AI 국가과제 입찰에서 부당한 처분을 받았을 때 활용할 수 있는 법적 구제수단에 대해 알아봅니다.",
+                imgUrl: "https://img2.stibee.com/6849_3047450_1760927572271642769.png"
             },
             {
                 title: "생성형 AI 시대, CEO가 챙겨야 할 개인정보 리스크 5가지",
                 url: "https://stib.ee/cJZJ",
                 date: "2025. 10. 14",
-                description: "생성형 AI를 도입할 때 CEO가 반드시 고려해야 할 개인정보 보호 관련 리스크를 정리합니다."
+                description: "생성형 AI를 도입할 때 CEO가 반드시 고려해야 할 개인정보 보호 관련 리스크를 정리합니다.",
+                imgUrl: "https://img2.stibee.com/6849_3023555_1760320295499714922.png"
             },
             {
                 title: "AI 스타트업이 유의해야 할 법률 실무 3가지",
                 url: "https://stib.ee/i7YJ",
                 date: "2025. 9. 30",
-                description: "AI 스타트업이 사업을 진행하면서 꼭 알아야 할 핵심 법률 실무 사항을 다룹니다."
+                description: "AI 스타트업이 사업을 진행하면서 꼭 알아야 할 핵심 법률 실무 사항을 다룹니다.",
+                imgUrl: "https://img2.stibee.com/6849_3021263_1759115035595459837.png"
             },
             {
                 title: "생성형 AI가 경쟁법 규제에 미칠 영향",
                 url: "https://stib.ee/xaSI",
                 date: "2025. 9. 8",
-                description: "생성형 AI 기술의 발전이 경쟁법 규제 환경에 미치는 영향을 분석합니다."
+                description: "생성형 AI 기술의 발전이 경쟁법 규제 환경에 미치는 영향을 분석합니다.",
+                imgUrl: "https://img2.stibee.com/6849_2891842_1752113319093599429.png"
             },
             {
                 title: "경쟁사의 데이터를 훔친다는 것에 대하여 — AI, 법, 그리고 책임 사이에서",
                 url: "https://stib.ee/rOSI",
                 date: "2025. 8. 28",
-                description: "AI 개발 과정에서 발생할 수 있는 데이터 무단 사용과 관련된 법적 책임을 살펴봅니다."
+                description: "AI 개발 과정에서 발생할 수 있는 데이터 무단 사용과 관련된 법적 책임을 살펴봅니다.",
+                imgUrl: "https://img2.stibee.com/6849_3047450_1760927572271642769.png"
             }
         ];
 
@@ -891,7 +917,7 @@
         // URL 해시 네비게이션 처리
         const handleUrlNavigation = () => {
             const hash = window.location.hash.substring(1); // # 제거
-            const validCategories = ['domestic', 'global', 'government', 'corporate', 'legal', 'interview'];
+            const validCategories = ['domestic', 'global', 'government', 'corporate', 'legal', 'interview', 'agi'];
 
             if (validCategories.includes(hash)) {
                 currentCategory = hash;
@@ -912,6 +938,8 @@
                 renderLegalReports();
             } else if (currentCategory === 'interview') {
                 renderInterviewTimeline();
+            } else if (currentCategory === 'agi') {
+                renderAgiTimeline();
             } else if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
@@ -957,6 +985,9 @@
                 return;
             } else if (currentCategory === 'interview') {
                 renderInterviewTimeline();
+                return;
+            } else if (currentCategory === 'agi') {
+                renderAgiTimeline();
                 return;
             }
 
@@ -1012,18 +1043,24 @@
             const summarySectionEl = document.querySelector(".summary-section");
             summarySectionEl.style.display = "none";
 
-            // 법률 리포트 카드 생성
+            // 한 줄 가로(명함형) 레이아웃: 모든 항목을 와이드 썸네일 + 우측 텍스트로 표시
             const html = `
                 <section class="category-block">
                     <h3 class="category-title">⚖️ AI 특화 법률 리포트</h3>
-                    <div class="category-cards">
+                    <div class="legal-list">
                         ${legalReports.map((report, index) => `
-                            <article class="card legal" data-url="${report.url}" data-title="${report.title}" data-index="${index}">
-                                <p class="report-date">📅 ${report.date}</p>
-                                <h2>${report.title}</h2>
-                                <p>${report.description}</p>
-                                <p style="margin-top: 1rem; font-weight: 600; color: var(--primary);">📄 클릭하여 전체 내용 보기 →</p>
-                            </article>
+                            <div class="legal-row" data-url="${report.url}" data-title="${report.title}" role="button" tabindex="0">
+                                <div class="row-thumb">
+                                    <img class="og-thumb" src="${DEFAULT_THUMB}" data-img="${report.imgUrl || ''}" data-url="${report.url}" alt="법률 리포트 썸네일 ${index+1}" />
+                                </div>
+                                <div class="row-body">
+                                    <div class="row-meta">
+                                        <span class="row-date">${report.date}</span>
+                                    </div>
+                                    <h4 class="row-title">${report.title}</h4>
+                                    <p class="row-desc">${report.description}</p>
+                                </div>
+                            </div>
                         `).join('')}
                     </div>
                 </section>
@@ -1033,12 +1070,20 @@
             cardSectionEl.innerHTML = html;
 
             // 카드 클릭 이벤트 추가
-            const legalCards = cardSectionEl.querySelectorAll('.card.legal');
+            const legalCards = cardSectionEl.querySelectorAll('.legal-row');
             legalCards.forEach(card => {
                 card.addEventListener('click', () => {
                     const url = card.dataset.url;
                     const title = card.dataset.title;
                     openIframeModal(url, title);
+                });
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const url = card.dataset.url;
+                        const title = card.dataset.title;
+                        openIframeModal(url, title);
+                    }
                 });
             });
 
@@ -1046,6 +1091,33 @@
                 cardSectionEl.style.transition = "opacity .4s ease";
                 cardSectionEl.style.opacity = 1;
             });
+
+            // 명함형(가로 와이드) 레이아웃 스타일 주입
+            const styleId = 'legal-row-style';
+            if (!document.getElementById(styleId)) {
+                const style = document.createElement('style');
+                style.id = styleId;
+                style.textContent = `
+                    .legal-list { display: grid; gap: 12px; }
+                    .legal-row { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: center; padding: 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-light); transition: border-color .15s, box-shadow .15s, transform .1s; }
+                    body.dark .legal-row { background: var(--card-dark); }
+                    .legal-row:hover { border-color: #9ca3af; box-shadow: 0 6px 16px rgba(0,0,0,.06); transform: translateY(-1px); }
+                    .row-thumb { width: 100%; height: 120px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #f3f4f6; display:flex; align-items:center; justify-content:center; }
+                    .row-thumb .og-thumb { width: 100%; height: 100%; object-fit: cover; object-position: left; display:block; }
+                    .row-body { display:flex; flex-direction: column; gap: 6px; }
+                    .row-meta { display:flex; gap:8px; align-items:center; }
+                    .row-date { font-size: 12px; color: #6b7280; }
+                    .row-title { margin: 0; font-size: 1.02rem; line-height: 1.45; font-weight: 700; }
+                    .row-desc { margin: 0; color: #4b5563; font-size: .95rem; }
+                    body.dark .row-desc { color: #d1d5db; }
+                    @media (max-width: 1024px) { .legal-row { grid-template-columns: 260px 1fr; } .row-thumb { height: 110px; } }
+                    @media (max-width: 640px) { .legal-row { grid-template-columns: 1fr; } .row-thumb { height: 160px; } }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // 이미지 지연 로딩 초기화
+            setupLazyLoadingForImages(cardSectionEl);
 
             // 하단 네비게이션 숨기기
             bottomCategoryNav.style.display = "none";
@@ -1056,18 +1128,18 @@
             { type: 'oped', title: '[기고] TDM(텍스트·데이터 마이닝) 면책, AI 혁신의 고르디우스 매듭을 끊을 결단이 필요하다 - 매일경제', url: 'https://www.mk.co.kr/news/world/11456313', date: '2025-10-31' },
             { type: 'interview', title: '"PC사랑은 문화와 추억의 일부"... 김현철 한국인공지능협회 회장 [명사가 기억하는 PC사랑] - 디지털포스트(PC사랑)', url: 'https://www.ilovepc.co.kr/news/articleView.html?idxno=56114', date: '2025-09-27' },
             { type: 'interview', title: '[특별 인터뷰] 김현철 한국인공지능협회 회장 | 서울신문', url: 'https://www.seoul.co.kr/news/society/2025/09/02/20250902500017', date: '2025-09-03', imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png' },
-            { type: 'oped', title: '본 게임은 ‘에이전트·피지컬 AI’, 반도체·제조 강국 한국에 절호 찬스 온다 - 월간중앙', url: 'https://www.m-joongang.com/news/articleView.html?idxno=401377', date: '2025-07-21' },
-            { type: 'interview', title: '[창간 11주년 인터뷰①] 한국인공지능협회 김현철 회장 "산업(기업)·정부·학계와 국제규범·시장표준 ‘룰-메이커 국가’ 길 열 것"', url: 'https://www.getnews.co.kr/news/articleView.html?idxno=837461', date: '2025-08-26' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
+            { type: 'oped', title: `본 게임은 '에이전트·피지컬 AI'`, url: 'https://www.m-joongang.com/news/articleView.html?idxno=401377', date: '2025-07-21' },
+            { type: 'interview', title: `[창간 11주년 인터뷰①] 한국인공지능협회 김현철 회장 "산업(기업)·정부·학계와 국제규범·시장표준 '룰-메이커 국가' 길 열 것"`, url: 'https://www.getnews.co.kr/news/articleView.html?idxno=837461', date: '2025-08-26' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
             { type: 'oped', title: 'AI PC의 현재, 그리고 기대... 개인용 컴퓨팅의 새로운 지평 - 디지털포스트(PC사랑)', url: 'https://www.ilovepc.co.kr/news/articleView.html?idxno=54618', date: '2025-07-15' },
             { type: 'interview', title: 'AI 독립, "한국의 운명을 스스로 결정하는 힘" [815 기획 인터뷰] - 디지털데일리', url: 'https://www.ddaily.co.kr/page/view/2025081416022046568', date: '2025-08-15' },
-            { type: 'oped', title: "[기고] 인공지능 시대, '구독형 모델' 전환이 언론 산업의 살 길", url: 'https://www.newspim.com/news/view/20250325000588', date: '2025-03-25' },
-            { type: 'interview', title: '이코노미스트 - “온디바이스 AI, 우리 삶에 혁신 가져다줄 것” [이코노 인터뷰]', url: 'https://economist.co.kr/article/view/ecn202402190019', date: '2024-02-26' },
-            { type: 'oped', title: '중앙 정부에 집행권 가진 ‘인공지능부’ 신설하자 - 월간중앙', url: 'https://www.m-joongang.com/news/articleView.html?idxno=400770', date: '2025-02-20' },
-            { type: 'interview', title: "[이슈 인터뷰] 김현철 한국인공지능협회장이 본 ‘챗GPT 시대 대한민국 변화’ - 월간중앙", url: 'https://www.m-joongang.com/news/articleView.html?idxno=337468', date: '2023-02-24' },
+            { type: 'oped', title: `[기고] 인공지능 시대, '구독형 모델' 전환이 언론 산업의 살 길`, url: 'https://www.newspim.com/news/view/20250325000588', date: '2025-03-25' },
+            { type: 'interview', title: '이코노미스트 - "온디바이스 AI, 우리 삶에 혁신 가져다줄 것" [이코노 인터뷰]', url: 'https://economist.co.kr/article/view/ecn202402190019', date: '2024-02-26' },
+            { type: 'oped', title: `중앙 정부에 집행권 가진 '인공지능부' 신설하자 - 월간중앙`, url: 'https://www.m-joongang.com/news/articleView.html?idxno=400770', date: '2025-02-20' },
+            { type: 'interview', title: `[이슈 인터뷰] 김현철 한국인공지능협회장이 본 '챗GPT 시대 대한민국 변화' - 월간중앙`, url: 'https://www.m-joongang.com/news/articleView.html?idxno=337468', date: '2023-02-24' },
             { type: 'oped', title: '[기고] 버티컬 AI로 여는 대한민국 산업의 새로운 기회 - 매일경제', url: 'https://www.mk.co.kr/news/economy/11197960', date: '2024-12-18' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
-            { type: 'interview', title: '[특별한 인터뷰] 한국인공지능협회 김현철 회장 “전 산업에 인공지능 도입하는 ‘산업 지능화’가 협회의 비전 ”', url: 'https://elec4.co.kr/m/article/articleView.asp?idx=30675', date: '2022-10-17', imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png' },
+            { type: 'interview', title: `[특별한 인터뷰] 한국인공지능협회 김현철 회장 "전 산업에 인공지능 도입하는 '산업 지능화'가 협회의 비전"`, url: 'https://elec4.co.kr/m/article/articleView.asp?idx=30675', date: '2022-10-17', imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png' },
             { type: 'oped', title: '[기고] AI 기본법, 정부의 역할을 재정립하자', url: 'https://www.newspim.com/news/view/20241126000646', date: '2024-11-26' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
-            { type: 'interview', title: '［인터뷰］ 이상하게, 스타트업의 향기가 난다. ‘한국인공지능협회’ - 테크월드뉴스', url: 'https://www.epnc.co.kr/news/articleView.html?idxno=93610', date: '2020-01-21' },
+            { type: 'interview', title: `［인터뷰］ 이상하게, 스타트업의 향기가 난다. '한국인공지능협회' - 테크월드뉴스`, url: 'https://www.epnc.co.kr/news/articleView.html?idxno=93610', date: '2020-01-21' },
             { type: 'oped', title: '[기고] AI 시대의 새로운 도전 : 데이터 고갈과 저작권의 딜레마', url: 'https://www.newspim.com/news/view/20241119000770', date: '2024-11-19' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
             { type: 'oped', title: '[기고] AI 스타트업이 무너지면 대한민국의 미래도 무너진다', url: 'https://www.newspim.com/news/view/20241108001070', date: '2024-11-08' , imgUrl: 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png'},
             { type: 'oped', title: '[칼럼] 소버린 AI와 상용 AI의 이원화 시대: 국가 전략자산으로서의 인공지능 관리 체계는? - 인공지능신문', url: 'https://www.aitimes.kr/news/articleView.html?idxno=32633', date: '2024-11-01' },
@@ -1077,6 +1149,18 @@
         const getTypeBadge = (type) => type === 'interview' ? '📣 인터뷰' : '🖊️ 기고/정책';
 
         const DEFAULT_THUMB = 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Newspaper/3D/newspaper_3d.png';
+
+        // Per-category thumbnail fallbacks for AGI timeline images.
+        // Edit these values to point to the images you want for each category.
+        const AGI_CATEGORY_THUMBS = {
+            // example: 'research': 'https://example.com/research-thumb.png',
+            // Use lowercase keys matching the category values from the JSON.
+            '모델 출시' : 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Computer%20disk/3D/computer_disk_3d.png',
+            '비즈니스 및 산업': 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Coin/3D/coin_3d.png',
+            '정책 및 규제': 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Scroll/3D/scroll_3d.png',
+            '연구 및 논문': 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Books/3D/books_3d.png',
+            '문화 및 사회': 'https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Chains/3D/chains_3d.png'
+        };
 
         const fetchOgImage = async (url) => {
             try {
@@ -1099,27 +1183,42 @@
             summarySection.style.display = "none";
             bottomCategoryNav.style.display = "none";
 
-            // 최신순 정렬
+            // 최신순 정렬 후 연도별 그룹화
             const items = [...interviewOpedItems].sort((a, b) => (a.date < b.date ? 1 : -1));
+            const byYear = items.reduce((acc, it) => {
+                const y = (it.date || '').slice(0, 4);
+                (acc[y] = acc[y] || []).push(it);
+                return acc;
+            }, {});
 
             const html = `
                 <section class="category-block">
-                    <h3 class="category-title">📣 인터뷰 · 기고문 타임라인</h3>
-                    <div class="timeline-list">
-                        ${items.map((it, idx) => `
-                            <a class="timeline-item" href="${it.url}" target="_blank" rel="noopener noreferrer">
-                                <div class="thumb-wrap">
-                                    <img class="og-thumb" data-url="${it.url}" data-img="${it.imgUrl || ''}" alt="thumb ${idx}" />
-                                </div>
-                                <div class="content-wrap">
-                                    <div class="meta">
-                                        <span class="badge ${it.type}">${getTypeBadge(it.type)}</span>
-                                        <span class="date">${it.date}</span>
-                                        <span class="source"><img class="fav" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(getHostname(it.url))}&sz=16" alt=""/>${getHostname(it.url)}</span>
+                    <h3 class="category-title">📣 인터뷰 · 기고문</h3>
+                    <div class="timeline-center">
+                        <div class="timeline-line"></div>
+                        ${Object.keys(byYear).sort((a,b)=>b.localeCompare(a)).map(year => `
+                            <div class="timeline-year" data-year="${year}">
+                                <div class="year-badge">${year}</div>
+                            </div>
+                            ${(() => { let lastMonth = null; return byYear[year].map((it, idx) => { const m = (new Date(it.date)).getMonth() + 1; const showMonth = m !== lastMonth; lastMonth = m; return `
+                                <a class="timeline-entry ${idx % 2 === 0 ? 'left' : 'right'}" href="${it.url}" target="_blank" rel="noopener noreferrer">
+                                    <div class="entry-card">
+                                        <div class="entry-thumb">
+                                            <img class="og-thumb" src="${DEFAULT_THUMB}" data-url="${it.url}" data-img="${it.imgUrl || ''}" alt="${year} 항목" />
+                                        </div>
+                                        <div class="entry-body">
+                                            <div class="entry-meta">
+                                                <span class="entry-badge ${it.type}">${getTypeBadge(it.type)}</span>
+                                                <span class="entry-date">${it.date}</span>
+                                                <span class="entry-source"><img class="fav" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(getHostname(it.url))}&sz=16" alt=""/>${getHostname(it.url)}</span>
+                                            </div>
+                                            <h4 class="entry-title">${it.title}</h4>
+                                        </div>
                                     </div>
-                                    <h4 class="title">${it.title}</h4>
-                                </div>
-                            </a>
+                                    <span class="dot"></span>
+                                    ${showMonth ? `<span class=\"month-label\">${m}월</span>` : ``}
+                                </a>
+                            `; }).join(''); })()}
                         `).join('')}
                     </div>
                 </section>
@@ -1128,30 +1227,52 @@
             cardSectionEl.style.opacity = 0;
             cardSectionEl.innerHTML = html;
 
-            // 간단 스타일 (스코프 최소화)
-            const styleId = 'interview-timeline-style';
+            // 중앙 타임라인 스타일 (비즈니스 톤)
+            const styleId = 'interview-timeline-centered';
             if (!document.getElementById(styleId)) {
                 const style = document.createElement('style');
                 style.id = styleId;
                 style.textContent = `
-                    .timeline-list { position: relative; margin-left: 0; }
-                    .timeline-item { position: relative; display: grid; grid-template-columns: 180px 1fr; gap: 18px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; margin: 30px 0; text-decoration: none; color: inherit; background: var(--card-bg); transition: border-color .2s, box-shadow .2s, transform .15s, background-color .2s; }
-                    .timeline-item:hover { border-color: var(--primary); box-shadow: 0 6px 18px rgba(0,0,0,.10); transform: translateY(-1px); }
-                    .timeline-item:nth-child(even) { background: rgb(113 131 204 / 10%); }
-                    body.dark .timeline-item:nth-child(even) { background: rgba(255,255,255,.04); }
-                    .thumb-wrap { width: 180px; height: 100px; overflow: hidden; border-radius: 10px; background: #f2f2f2; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
-                    .og-thumb { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .25s ease; }
-                    .timeline-item:hover .og-thumb { transform: scale(1.02); }
-                    .content-wrap .meta { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
-                    .badge { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); font-weight: 600; }
-                    .badge.interview { background: rgba(255, 196, 0, .18); border-color: rgba(255, 196, 0, .36); }
-                    .badge.oped { background: rgba(57, 158, 245, .18); border-color: rgba(57, 158, 245, .36); }
-                    .date { font-size: 12px; color: var(--muted); }
-                    .source { display:inline-flex; align-items:center; gap:6px; font-size:12px; color: var(--muted); }
-                    .source .fav { width: 14px; height: 14px; border-radius: 3px; }
-                    @media (max-width: 640px) {
-                        .timeline-item { grid-template-columns: 1fr; }
-                        .thumb-wrap { width: 100%; height: 190px; }
+                    :root { --border: #e5e7eb; --card-bg: #fff; --muted: #6b7280; }
+                    body.dark :root { --border: #374151; --card-bg: #1f2937; --muted: #9ca3af; }
+                    .timeline-center { position: relative; padding: 10px 0 10px; }
+                    .timeline-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--border); transform: translateX(-50%); z-index: 0; }
+                    .timeline-year { position: relative; display: flex; justify-content: center; margin: 36px 0 12px; }
+                    .year-badge { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; font-weight: 800; font-size: 18px; letter-spacing: .02em; }
+                    .timeline-entry { position: relative; display: block; width: 50%; padding: 8px 18px; text-decoration: none; color: inherit; z-index: 1; box-sizing: border-box; }
+                    .timeline-entry.left { left: 0; padding-right: 50px; }
+                    .timeline-entry.right { left: 50%; padding-left: 50px; }
+                    .timeline-entry .dot { position: absolute; top: 24px; width: 10px; height: 10px; background: #2563eb; border: 2px solid #fff; border-radius: 50%; transform: translateY(-50%); z-index: 2; }
+                    .timeline-entry.left .dot { right: -6px; }
+                    .timeline-entry.right .dot { left: -6px; }
+                    .timeline-entry .month-label { position: absolute; top: 24px; transform: translateY(-50%); font-size: 12px; color: var(--muted); background: var(--card-bg); padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; z-index: 1; }
+                    .timeline-entry.left .month-label { right: -56px; }
+                    .timeline-entry.right .month-label { left: -56px; }
+                    .entry-card { border: 1px solid var(--border); border-radius: 6px;  display: grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 12px; transition: box-shadow .15s, border-color .15s; }
+                    .timeline-entry.left .entry-card { margin-right: 18px; }
+                    .timeline-entry.right .entry-card { margin-left: 18px; }
+                    .entry-card:hover { border-color: #9ca3af; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+                    .entry-thumb { width: 120px; height: 84px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); background: #f3f4f6; }
+                    .entry-thumb .og-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+                    .entry-body { display:flex; flex-direction: column; gap: 6px; }
+                    .entry-meta { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+                    .entry-badge { font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border); background: #f8fafc; font-weight: 600; color: #374151; }
+                    body.dark .entry-badge { background: #111827; color: #e5e7eb; }
+                    .entry-badge.interview { background: rgba(255, 196, 0, .18); border-color: rgba(255, 196, 0, .36); }
+                    .entry-badge.oped { background: rgba(57, 158, 245, .18); border-color: rgba(57, 158, 245, .36); }
+                    .entry-date, .entry-source { font-size: 12px; color: var(--muted); }
+                    .entry-source { display:inline-flex; align-items:center; gap:6px; }
+                    .entry-source .fav { width: 14px; height: 14px; border-radius: 3px; }
+                    .entry-title { margin: 0; font-size: .98rem; line-height: 1.45; font-weight: 700; }
+                    @media (max-width: 768px) { 
+                        .timeline-line { left: 16px; }
+                        .timeline-entry, .timeline-entry.right, .timeline-entry.left { width: 100%; left: 0; padding-left: 48px; padding-right: 18px; }
+                        .timeline-entry .dot { left: 11px; right: auto; }
+                        /* 월 라벨이 좌/우 전용 규칙보다 우선되도록 명시적으로 오버라이드 */
+                        .timeline-entry .month-label,
+                        .timeline-entry.left .month-label,
+                        .timeline-entry.right .month-label { left: 26px; right: auto; transform: translateY(-50%); font-size: 11px; }
+                        .entry-card { grid-template-columns: 1fr; }
                     }
                 `;
                 document.head.appendChild(style);
@@ -1162,21 +1283,8 @@
                 cardSectionEl.style.opacity = 1;
             });
 
-            // OG/직접 이미지 로딩 (imgUrl 우선 → Microlink → 스크린샷 → 기본)
-            const imgs = cardSectionEl.querySelectorAll('.og-thumb');
-            imgs.forEach(async (img) => {
-                const url = img.getAttribute('data-url');
-                const direct = img.getAttribute('data-img');
-                if (direct) {
-                    img.onerror = () => { img.onerror = null; img.src = DEFAULT_THUMB; };
-                    img.src = direct;
-                    return;
-                }
-                let src = await fetchOgImage(url);
-                if (!src) src = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=640`;
-                img.onerror = () => { img.onerror = null; img.src = DEFAULT_THUMB; };
-                img.src = src || DEFAULT_THUMB;
-            });
+            // 이미지 지연 로딩 초기화
+            setupLazyLoadingForImages(cardSectionEl);
         };
 
         // iframe 모달 열기
@@ -1232,7 +1340,7 @@
             }
 
             // legal 카테고리는 하단 네비게이션 숨김
-            if (category === "legal") {
+            if (category === "legal" || category === "agi") {
                 summarySectionEl.style.display = "none";
                 bottomCategoryNav.style.display = "none";
                 return;
@@ -1376,9 +1484,9 @@
                     }
 
                     return `
-                        <article class="card ${categoryType}">
-                            ${title ? `<h2>${title}</h2>` : ``}
-                            ${content}
+                        <article class="ai-card ${categoryType}">
+                            ${title ? `<h2 class="ai-title">${title}</h2>` : ``}
+                            <div class="ai-content">${content}</div>
                         </article>
                     `;
                 }).join('');
@@ -1451,19 +1559,57 @@
             ];
 
             let html = '';
-            categories.forEach(({ key, type, icon, label }) => {
-                if (category === "all" || category === type) {
-                    const cards = renderCards(row[key], type);
-                    if (cards) {
-                        html += `
-                            <section class="category-block">
-                                <h3 class="category-title">${icon} ${label}</h3>
-                                <div class="category-cards">${cards}</div>
-                            </section>
+            if (category === "all") {
+                // 다이제스트 레이아웃 (카드 제거, 리스트 기반)
+                categories.forEach(({ key, type, icon, label }) => {
+                    const insights = row[key];
+                    if (!insights || insights.length === 0) return;
+                    const items = insights.map(insight => {
+                        let title = null;
+                        let content = insight.trim().replace(/^(?:\p{Extended_Pictographic}[\uFE0F]?\s*)+/u, '');
+                        const match = content.match(/^\*\*(.+?)\*\*:?\s*/);
+                        if (match) { title = match[1].trim(); content = content.replace(match[0], '').trim(); }
+                        if (!title) {
+                            const lines = content.split(/\n+/).map(l=>l.trim()).filter(Boolean);
+                            if (lines.length > 1 && lines[0].length < 40) { title = lines.shift(); content = lines.join('\n').trim(); }
+                        }
+                        const body = content ? content.replace(/\*\*(.+?)\*\*/g, '<b>$1<\/b>').split(/\n+/).map(p=>`<p>${p}<\/p>`).join('') : '';
+                        return `
+                            <div class="digest-item ${type}">
+                                ${title ? `<h4 class=\"digest-title\">${title}<\/h4>` : ''}
+                                <div class="digest-body">${body}<\/div>
+                            <\/div>
                         `;
+                    }).join('');
+
+                    html += `
+                        <section class="digest-section digest-panel" data-cat="${type}">
+                            <div class="digest-header">
+                                <h3 class="digest-title-cat">${label}<\/h3>
+                                <button class="digest-more" data-cat="${type}" aria-label="${label} 더보기">＋<\/button>
+                            <\/div>
+                            <div class="digest-list">${items}<\/div>
+                        <\/section>
+                    `;
+                });
+            } else {
+                categories.forEach(({ key, type, icon, label }) => {
+                    if (category === type) {
+                        const cards = renderCards(row[key], type);
+                        if (cards) {
+                            html += `
+                                <section class="category-block ai-block">
+                                    <div class="ai-block-header">
+                                        <span class="ai-icon">${icon}</span>
+                                        <h3 class="ai-block-title">${label}</h3>
+                                    </div>
+                                    <div class="ai-grid">${cards}</div>
+                                </section>
+                            `;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             cardSectionEl.style.opacity = 0;
             cardSectionEl.innerHTML = html;
@@ -1474,6 +1620,89 @@
 
             // 하단 네비게이션 업데이트
             updateBottomNav(category);
+
+            // 스타일 주입(1회)
+            const styleIdCards = 'ai-newsletter-style';
+            if (!document.getElementById(styleIdCards)) {
+                const style = document.createElement('style');
+                style.id = styleIdCards;
+                style.textContent = `
+                    .ai-block { margin-bottom: 2rem; }
+                    .ai-block-header { display:flex; align-items:center; gap:10px; padding: 10px 12px; border:1px solid var(--border); border-radius: 6px; background: var(--card-light); }
+                    body.dark .ai-block-header { background: var(--card-dark); }
+                    .ai-icon { font-size: 18px; }
+                    .ai-block-title { margin:0; font-size: 1rem; }
+                    .ai-grid { display:grid; gap: 14px; grid-template-columns: 1fr; }
+                    @media (min-width:640px) { .ai-grid { grid-template-columns: repeat(2, 1fr); } }
+                    @media (min-width:1024px) { .ai-grid { grid-template-columns: repeat(3, 1fr); } }
+                    .ai-card { position: relative; border:1px solid var(--border); border-radius: 6px; padding: 14px; background: var(--card-light); box-shadow: 0 2px 8px rgba(0,0,0,.03); transition: box-shadow .15s, transform .1s, border-color .15s; }
+                    body.dark .ai-card { background: var(--card-dark); }
+                    /* 카테고리별 파스텔 배경 */
+ 
+                    body.dark .ai-card.domestic { background: rgba(245,158,11,.12); }
+                    body.dark .ai-card.global { background: rgba(59,130,246,.12); }
+                    body.dark .ai-card.government { background: rgba(16,185,129,.12); }
+                    body.dark .ai-card.corporate { background: rgba(236,72,153,.12); }
+                    .ai-title { margin: .2rem 0 .4rem; font-size: 1rem; }
+                    .ai-content p { margin: .45rem 0; color: #4b5563; font-size: .95rem; }
+                    body.dark .ai-content p { color: #d1d5db; }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // 다이제스트 전용 스타일 (전체 카테고리)
+            const digestStyleId = 'ai-digest-style';
+            if (!document.getElementById(digestStyleId)) {
+                const style = document.createElement('style');
+                style.id = digestStyleId;
+                style.textContent = `
+                    .digest-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+                    @media (min-width: 960px) { .digest-grid { grid-template-columns: 1fr 1fr; } }
+                    .digest-section { margin: 1rem 0; }
+                    .digest-panel { border: 1px solid var(--border); border-radius: 6px; background: var(--card-light); overflow: hidden; }
+                    body.dark .digest-panel { background: var(--card-dark); }
+                    .digest-header { display:flex; align-items:center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+                    /* 카테고리별 파스텔 헤더 */
+                    .digest-panel[data-cat="domestic"] .digest-header { background: #fff7ed; }
+                    .digest-panel[data-cat="global"] .digest-header { background: #eff6ff; }
+                    .digest-panel[data-cat="government"] .digest-header { background: #f0fdf4; }
+                    .digest-panel[data-cat="corporate"] .digest-header { background: #fdf2f8; }
+                    body.dark .digest-panel[data-cat="domestic"] .digest-header { background: rgba(245,158,11,.16); }
+                    body.dark .digest-panel[data-cat="global"] .digest-header { background: rgba(59,130,246,.16); }
+                    body.dark .digest-panel[data-cat="government"] .digest-header { background: rgba(16,185,129,.16); }
+                    body.dark .digest-panel[data-cat="corporate"] .digest-header { background: rgba(236,72,153,.16); }
+                    .digest-title-cat { margin:0; font-size: 1.05rem; font-weight: 800; letter-spacing: .01em; }
+                    .digest-more { border: 1px solid var(--border); background: transparent; color: inherit; border-radius: 4px; padding: 2px 10px; cursor: pointer; font-weight: 700; }
+                    .digest-more:hover { background: var(--bg-light); }
+                    .digest-list { display:block; padding: 6px 12px; }
+                    .digest-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+                    .digest-item:last-child { border-bottom: none; }
+                    .digest-item .digest-title { margin: 0 0 4px; font-size: .98rem; font-weight: 700; }
+                    .digest-item .digest-body p { margin: .35rem 0; color: #4b5563; }
+                    .digest-item .digest-body p::first-letter { font-weight: 800; }
+                    body.dark .digest-item .digest-body p { color: #d1d5db; }
+                    @media (min-width:1024px) { .digest-item .digest-title { font-size: 1.02rem; } }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // 전체 페이지일 때 2열 패널 배치
+            if (category === 'all') {
+                const wrap = document.createElement('div');
+                wrap.className = 'digest-grid';
+                wrap.innerHTML = cardSectionEl.innerHTML;
+                cardSectionEl.innerHTML = '';
+                cardSectionEl.appendChild(wrap);
+                // 더보기 버튼 이벤트: 해당 카테고리로 이동
+                wrap.querySelectorAll('.digest-more').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const cat = btn.getAttribute('data-cat');
+                        switchCategory(cat);
+                    });
+                });
+                // 고정 인디케이터는 사용하지 않음
+            }
         };
 
         const switchCategory = (category) => {
@@ -1496,12 +1725,16 @@
                 renderLegalReports();
             } else if (category === 'interview') {
                 renderInterviewTimeline();
+            } else if (category === 'agi') {
+                renderAgiTimeline();
             } else if (fetchedData) {
                 handleRenderInsights(fetchedData, currentCategory);
             }
 
             // 상단으로 부드럽게 스크롤
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 고정 인디케이터는 사용하지 않음
         };
 
         navBtns.forEach(btn => {
@@ -1591,9 +1824,295 @@
             navigateToDate(newDate);
         });
 
+        // 이미지 지연 로딩: data-img 또는 동적 OG 이미지
+        function setupLazyLoadingForImages(rootEl = document) {
+            const observer = ('IntersectionObserver' in window) ? new IntersectionObserver(async (entries, obs) => {
+                for (const entry of entries) {
+                    if (!entry.isIntersecting) continue;
+                    const img = entry.target;
+                    obs.unobserve(img);
+                    try {
+                        const direct = img.getAttribute('data-img');
+                        const url = img.getAttribute('data-url');
+                        let targetSrc = direct || '';
+
+                        // category-specific fallback if provided
+                        const catKey = (img.getAttribute('data-cat') || '').toString().toLowerCase();
+                        const catFallback = (typeof AGI_CATEGORY_THUMBS !== 'undefined' && AGI_CATEGORY_THUMBS[catKey]) ? AGI_CATEGORY_THUMBS[catKey] : DEFAULT_THUMB;
+
+                        if (!targetSrc && url) {
+                            targetSrc = await fetchOgImage(url) ;
+                        }
+                        img.onerror = () => { img.onerror = null; img.src = catFallback || DEFAULT_THUMB; };
+                        img.src = targetSrc || catFallback || DEFAULT_THUMB;
+                    } catch (e) {
+                        const key = (entry.target.getAttribute('data-cat') || '').toString().toLowerCase();
+                        const fallback = (typeof AGI_CATEGORY_THUMBS !== 'undefined' && AGI_CATEGORY_THUMBS[key]) ? AGI_CATEGORY_THUMBS[key] : DEFAULT_THUMB;
+                        entry.target.src = fallback || DEFAULT_THUMB;
+                    }
+                }
+            }, { rootMargin: '200px 0px', threshold: 0.01 }) : null;
+
+            const imgs = rootEl.querySelectorAll('img[data-img], img.og-thumb[data-url]');
+            imgs.forEach(img => {
+                // 플레이스홀더는 이미 DEFAULT_THUMB로 설정됨(혹은 빈 경우 여기서 설정)
+                if (!img.getAttribute('src')) img.setAttribute('src', DEFAULT_THUMB);
+                if (observer) {
+                    observer.observe(img);
+                } else {
+                    // 폴백: 즉시 로딩
+                    (async () => {
+                        const direct = img.getAttribute('data-img');
+                        const url = img.getAttribute('data-url');
+                        const catKey = (img.getAttribute('data-cat') || '').toString().toLowerCase();
+                        const catFallback = (typeof AGI_CATEGORY_THUMBS !== 'undefined' && AGI_CATEGORY_THUMBS[catKey]) ? AGI_CATEGORY_THUMBS[catKey] : DEFAULT_THUMB;
+                        let src = direct || '';
+                        if (!src && url) src = await fetchOgImage(url) ;
+                        img.onerror = () => { img.onerror = null; img.src = catFallback || DEFAULT_THUMB; };
+                        img.src = src || catFallback || DEFAULT_THUMB;
+                    })();
+                }
+            });
+        }
+
+        // 고정 인디케이터 관련 코드는 제거됨
+
         // 초기 날짜 표시 업데이트
         updateDateDisplay();
+
+        // AGI 타임라인 렌더링
+        async function renderAgiTimeline() {
+            try {
+                const summarySection = document.querySelector(".summary-section");
+                summarySection.style.display = "none";
+                bottomCategoryNav.style.display = "none";
+
+                let items = [];
+                // 로컬/인라인 소스는 사용하지 않고, 지정된 GitHub raw URL만 사용합니다.
+                const remoteUrl = 'https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/agi_timeline.json';
+                try {
+                    console.log('Loading AGI timeline from remote only:', remoteUrl);
+                    const res = await fetch(remoteUrl, { cache: 'no-store' });
+                    if (!res.ok) {
+                        console.error('Remote fetch failed:', res.status, res.statusText);
+                        throw new Error(`HTTP ${res.status} ${res.statusText}`);
+                    }
+                    const text = await res.text();
+                    try {
+                        items = JSON.parse(text);
+                        console.log('Loaded AGI timeline items from remote, count=', (items && items.length) || 0);
+                    } catch (parseErr) {
+                        console.error('Failed to parse JSON from remote AGI timeline:', parseErr);
+                        console.error('Response snippet:', text && text.slice ? text.slice(0,500) : String(text));
+                        throw parseErr;
+                    }
+                } catch (err) {
+                    console.error('Error loading remote agi_timeline.json:', err);
+                    cardSectionEl.innerHTML = `<div class="error">AGI 타임라인을 불러오지 못했습니다. 콘솔을 확인하세요.</div>`;
+                    return;
+                }
+
+                const sorted = items
+                    .filter(it => it && it.date)
+                    .sort((a, b) => (a.date < b.date ? 1 : -1));
+                const byYear = sorted.reduce((acc, it) => {
+                    const y = String(it.date).slice(0, 4);
+                    (acc[y] = acc[y] || []).push(it);
+                    return acc;
+                }, {});
+
+                const getCat = (it) => (it.category || it['category '] || '').toString().trim();
+                const getHost = (url) => { try { return new URL(url).hostname.replace(/^www\./,''); } catch { return ''; } };
+
+                const html = `
+                    <section class="category-block">
+                        <h3 class="category-title">🧠 AGI 타임라인</h3>
+                        <div class="timeline-center">
+                            <div class="timeline-line"></div>
+                            ${Object.keys(byYear).sort((a,b)=>b.localeCompare(a)).map(year => `
+                                <div class="timeline-year" data-year="${year}">
+                                    <div class="year-badge">${year}</div>
+                                </div>
+                                ${(() => { let lastMonth = null; return byYear[year].map((it, idx) => { 
+                                    const m = (new Date(it.date)).getMonth() + 1; 
+                                    const showMonth = m !== lastMonth; lastMonth = m; 
+                                    const host = getHost(it.link);
+                                    const cat = getCat(it);
+                                    return `
+                                        <a class="timeline-entry ${idx % 2 === 0 ? 'left' : 'right'}" href="${it.link}" target="_blank" rel="noopener noreferrer" data-cat="${cat || ''}">
+                                            <div class="entry-card">
+                                                    <div class="entry-thumb">
+                                                    <img class="og-thumb" src="${DEFAULT_THUMB}" data-url="${it.link}" data-cat="${(cat || '').toLowerCase()}" alt="${year} 항목" />
+                                                </div>
+                                                <div class="entry-body">
+                                                    <div class="entry-meta">
+                                                        ${cat ? `<span class="entry-badge">${cat}</span>` : ''}
+                                                        <span class="entry-date">${it.date}</span>
+                                                        ${host ? `<span class="entry-source"><img class="fav" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=16" alt=""/>${host}</span>` : ''}
+                                                    </div>
+                                                    <h4 class="entry-title">${it.title || ''}</h4>
+                                                                ${it.description ? `<p class="entry-desc">${it.description}</p>` : ''}
+                                                                ${it.additional_description ? `<p class="entry-additional">${it.additional_description}</p>` : ''}
+                                                </div>
+                                            </div>
+                                            <span class="dot"></span>
+                                            ${showMonth ? `<span class="month-label">${m}월</span>` : ``}
+                                        </a>
+                                    `; }).join(''); })()}
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+
+                cardSectionEl.style.opacity = 0;
+                // append source credit and a styled previous-history card after the timeline
+                const sourceHtml = `
+                    <div class="agi-footer">
+                        <div class="agi-source">출처: <a href="https://ai-timeline.org" target="_blank" rel="noopener noreferrer">ai-timeline.org</a></div>
+
+                        <section class="agi-previous-card" aria-label="이전 인공지능 역사">
+                            <div class="prev-left">
+                                <div class="prev-title">이전 인공지능 역사도 살펴보기</div>
+                                <div class="prev-desc">AI 역사 전체를 정리한 글에서 더 많은 사건과 배경을 확인하세요.</div>
+                            </div>
+                            <a class="prev-btn" href="https://blog.koraia.org/posts/ai-timeline/" target="_blank" rel="noopener noreferrer">보러 가기</a>
+                        </section>
+                    </div>
+                `;
+                cardSectionEl.innerHTML = html + sourceHtml;
+
+                // --- AGI category filter bar ---
+                (function setupAgiFilters() {
+                    const timelineEl = cardSectionEl.querySelector('.timeline-center');
+                    if (!timelineEl) return;
+
+                    // collect unique categories from entries
+                    const entryEls = Array.from(cardSectionEl.querySelectorAll('.timeline-entry'));
+                    const cats = Array.from(new Set(entryEls.map(e => (e.dataset.cat || '').trim()).filter(Boolean)));
+
+                    // create filter bar element
+                    const bar = document.createElement('div');
+                    bar.className = 'agi-filter-bar';
+                    const makeBtn = (catKey, label) => {
+                        const b = document.createElement('button');
+                        b.type = 'button';
+                        b.className = 'agi-filter-btn';
+                        b.dataset.cat = catKey;
+                        b.textContent = label;
+                        return b;
+                    };
+
+                    // All button
+                    bar.appendChild(makeBtn('all', '전체'));
+                    cats.forEach(c => bar.appendChild(makeBtn(c, c)));
+
+                    // insert bar before the timeline
+                    timelineEl.parentNode.insertBefore(bar, timelineEl);
+
+                    const applyFilter = (catKey) => {
+                        entryEls.forEach(el => {
+                            if (catKey === 'all' || (el.dataset.cat || '') === catKey) {
+                                el.style.display = '';
+                            } else {
+                                el.style.display = 'none';
+                            }
+                        });
+                        // update selected class
+                        bar.querySelectorAll('.agi-filter-btn').forEach(b => b.classList.toggle('selected', b.dataset.cat === catKey));
+                    };
+
+                    // wire up buttons
+                    bar.querySelectorAll('.agi-filter-btn').forEach(btn => {
+                        btn.addEventListener('click', () => applyFilter(btn.dataset.cat));
+                    });
+
+                    // default to 'all'
+                    applyFilter('all');
+                })();
+
+                const styleId = 'agi-timeline-centered';
+                if (!document.getElementById(styleId)) {
+                    const style = document.createElement('style');
+                    style.id = styleId;
+                    style.textContent = `
+                        :root { --border: #e5e7eb; --card-bg: #fff; --muted: #6b7280; }
+                        body.dark :root { --border: #374151; --card-bg: #1f2937; --muted: #9ca3af; }
+                        .timeline-center { position: relative; padding: 10px 0 10px; }
+                        .timeline-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--border); transform: translateX(-50%); z-index: 0; }
+                        .timeline-year { position: relative; display: flex; justify-content: center; margin: 36px 0 12px; }
+                        .year-badge { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; font-weight: 800; font-size: 18px; letter-spacing: .02em; }
+                        .timeline-entry { position: relative; display: block; width: 50%; padding: 8px 18px; text-decoration: none; color: inherit; z-index: 1; box-sizing: border-box; }
+                        .timeline-entry.left { left: 0; padding-right: 50px; }
+                        .timeline-entry.right { left: 50%; padding-left: 50px; }
+                        .timeline-entry .dot { position: absolute; top: 24px; width: 10px; height: 10px; background: #2563eb; border: 2px solid #fff; border-radius: 50%; transform: translateY(-50%); z-index: 2; }
+                        .timeline-entry.left .dot { right: -6px; }
+                        .timeline-entry.right .dot { left: -6px; }
+                        .timeline-entry .month-label { position: absolute; top: 24px; transform: translateY(-50%); font-size: 12px; color: var(--muted); background: var(--card-bg); padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; z-index: 1; }
+                        .timeline-entry.left .month-label { right: -56px; }
+                        .timeline-entry.right .month-label { left: -56px; }
+                        .entry-card { border: 1px solid var(--border); border-radius: 6px;  display: grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 12px; transition: box-shadow .15s, border-color .15s; }
+                        .timeline-entry.left .entry-card { margin-right: 18px; }
+                        .timeline-entry.right .entry-card { margin-left: 18px; }
+                        .entry-card:hover { border-color: #9ca3af; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+                        .entry-thumb { width: 120px; height: 84px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); background: #f3f4f6; }
+                        .entry-thumb .og-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+                        .entry-body { display:flex; flex-direction: column; gap: 6px; }
+                        .entry-meta { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+                        .entry-badge { font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border); background: #f8fafc; font-weight: 600; color: #374151; }
+                        body.dark .entry-badge { background: #111827; color: #e5e7eb; }
+                        .entry-date, .entry-source { font-size: 12px; color: var(--muted); }
+                        .entry-source { display:inline-flex; align-items:center; gap:6px; }
+                        .entry-source .fav { width: 14px; height: 14px; border-radius: 3px; }
+                        .entry-title { margin: 0; font-size: .98rem; line-height: 1.45; font-weight: 700; }
+                        .entry-desc { margin: 0; color: #4b5563; font-size: .92rem; }
+                        body.dark .entry-desc { color: #d1d5db; }
+                        .entry-additional { margin: 6px 0 0; color: #6b7280; font-size: .88rem; }
+                        body.dark .entry-additional { color: #9ca3af; }
+                        .agi-footer { max-width: 920px; margin: 18px auto 6px; padding: 0 12px; box-sizing: border-box; }
+                        .agi-source { text-align: center; margin-bottom: 10px; font-size: 12px; color: #6b7280; }
+                        .agi-source a { color: inherit; text-decoration: underline; }
+                        body.dark .agi-source { color: #9ca3af; }
+
+                        /* 이전 역사 카드 */
+                        .agi-previous-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-light); box-shadow: 0 6px 18px rgba(16,24,40,0.04); }
+                        body.dark .agi-previous-card { background: var(--card-dark); }
+                        .agi-previous-card .prev-left { display:flex; flex-direction: column; gap:6px; }
+                        .prev-title { font-weight: 800; font-size: 14px; color: #111827; }
+                        body.dark .prev-title { color: #e5e7eb; }
+                        .prev-desc { font-size: 13px; color: #6b7280; }
+                        body.dark .prev-desc { color: #9ca3af; }
+                        .prev-btn { display: inline-block; background: #2563eb; color: #fff; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-weight: 700; border: 1px solid rgba(37,99,235,0.12); }
+                        .prev-btn:hover { background: #1f6fe0; }
+
+                        @media (max-width: 640px) {
+                            .agi-previous-card { flex-direction: column; align-items: stretch; text-align: left; }
+                            .prev-btn { width: 100%; text-align: center; }
+                        }
+                        @media (max-width: 768px) { 
+                            .timeline-line { left: 16px; }
+                            .timeline-entry, .timeline-entry.right, .timeline-entry.left { width: 100%; left: 0; padding-left: 48px; padding-right: 18px; }
+                            .timeline-entry .dot { left: 11px; right: auto; }
+                            .timeline-entry .month-label,
+                            .timeline-entry.left .month-label,
+                            .timeline-entry.right .month-label { left: 26px; right: auto; transform: translateY(-50%); font-size: 11px; }
+                            .entry-card { grid-template-columns: 1fr; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                requestAnimationFrame(() => {
+                    cardSectionEl.style.transition = "opacity .4s ease";
+                    cardSectionEl.style.opacity = 1;
+                });
+
+                setupLazyLoadingForImages(cardSectionEl);
+            } catch (e) {
+                cardSectionEl.innerHTML = `<div class="error">AGI 타임라인을 불러오지 못했습니다: ${String(e)}</div>`;
+            }
+        }
     </script>
+
 </body>
 
 
