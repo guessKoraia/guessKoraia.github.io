@@ -931,39 +931,11 @@
                         <td>${fileTypeBadge || '-'}</td>
                         <td>${dateDisplay}</td>
                         <td>${file.size || '-'}</td>
-                        <td><a href="${file.link}" class="download-link" rel="noopener" target="_blank"><i class="fas fa-download"></i> 받기</a></td>
+                        <td><a href="${file.link}" class="download-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> 받기</a></td>
                     `;
 
                     row.querySelector('.filename-cell').appendChild(filenameContent);
                     fileTableBody.appendChild(row);
-                });
-
-                // 다운로드 버튼 클릭 시 로딩 애니메이션 효과 추가 (이벤트 위임)
-                fileTableBody.addEventListener('click', function (event) {
-                    // 클릭된 요소가 '.download-link'인지 확인
-                    const downloadLink = event.target.closest('.download-link');
-
-                    if (downloadLink) {
-                        // 이미 로딩 중이면 다시 실행하지 않음
-                        if (downloadLink.classList.contains('loading')) {
-                            event.preventDefault(); // 기본 동작(링크 이동) 방지
-                            return;
-                        }
-
-                        // 버튼의 원래 내용을 저장
-                        const originalContent = downloadLink.innerHTML;
-
-                        // 'loading' 클래스를 추가하고 내용을 변경
-                        downloadLink.classList.add('loading');
-                        downloadLink.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 처리 중';
-
-                        // 4초 후에 버튼을 원래 상태로 되돌림
-                        // 다운로드 완료 시점을 정확히 알 수 없으므로, UX를 위해 일정 시간 후 복원
-                        setTimeout(() => {
-                            downloadLink.classList.remove('loading');
-                            downloadLink.innerHTML = originalContent;
-                        }, 4000); // 4000ms = 4초
-                    }
                 });
 
 
