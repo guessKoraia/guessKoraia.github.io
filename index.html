@@ -931,7 +931,7 @@
                         <td>${fileTypeBadge || '-'}</td>
                         <td>${dateDisplay}</td>
                         <td>${file.size || '-'}</td>
-                        <td><a href="${file.link}" class="download-link" rel="noopener"><i class="fas fa-download"></i> 받기</a></td>
+                        <td><a href="${file.link}" class="download-link" rel="noopener" target="_blank"><i class="fas fa-download"></i> 받기</a></td>
                     `;
 
                     row.querySelector('.filename-cell').appendChild(filenameContent);
@@ -981,4 +981,5 @@
 </body>
 
 </html>
+
 
