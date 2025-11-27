@@ -830,5 +830,70 @@
       "description": "구글 딥마인드(Google DeepMind)가 전례 없이 다양한 '상호작용이 가능한 환경'을 생성할 수 있는 '범용 월드 모델(general purpose world model)'인 지니 3(Genie 3)를 출시했습니다.",
       "additional_description": "지니 3'는 AI가 콘텐츠를 소비(영상)하는 단계를 넘어, 경험(게임/시뮬레이션)을 창조하는 단계로 들어섰음을 알리는 신호탄입니다. 이는 게임, 교육, 로봇 공학, 자율주행 등 현실과 상호작용하는 모든 산업의 기반을 바꾸게 될 엄청난 기술입니다.",
       "category ": "모델 출시"
-    }
+    },
+    {
+    "date": "2025-08-05",
+    "link": "https://www.anthropic.com/news/claude-opus-4-1",
+    "title": "Claude Opus 4.1",
+    "description": "Anthropic이 플래그십 모델 Claude Opus 4를 개선한 Claude Opus 4.1을 공개했으며, 복잡한 추론·분석·에이전트 작업에서 성능을 강화한 업그레이드 버전입니다.",
+    "additional_description": "Claude Opus 4.1은 Opus 4와 API 호환성을 유지하면서도 장기 추론과 실제 코딩 작업에서 더 깊은 사고를 수행할 수 있도록 설계된 프리미엄 모델로, 기업용 에이전트 활용을 주 타깃으로 합니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-08-07",
+    "link": "https://openai.com/index/introducing-gpt-5/",
+    "title": "GPT‑5",
+    "description": "OpenAI가 GPT‑5를 공개하여 고난이도 추론 모델 계열과 빠른 응답 모델 계열을 하나의 통합 인터페이스로 제공하는 차세대 플래그십 LLM을 출시했습니다.",
+    "additional_description": "GPT‑5는 코드 생성, 수학·과학 문제 해결, 소프트웨어 ‘바이브 코딩’과 같은 에이전트형 작업에 초점을 맞추고 있으며, 이전 세대 대비 환각률을 줄이고 안전성 평가를 대폭 강화한 것이 특징입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-08-21",
+    "link": "https://api-docs.deepseek.com/news/news250821",
+    "title": "DeepSeek‑V3.1",
+    "description": "중국 AI 스타트업 DeepSeek이 하이브리드 추론(Think / Non‑Think) 모드를 지원하는 차세대 모델 DeepSeek‑V3.1을 발표했습니다.",
+    "additional_description": "DeepSeek‑V3.1은 10억 단위가 아닌 수백억 활성 파라미터를 사용하는 효율적인 MoE 구조와 128K 컨텍스트 길이를 갖추어, 에이전트 작업과 다국어 코딩에서 높은 성능을 보여주는 것이 강점입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-09-29",
+    "link": "https://www.anthropic.com/news/claude-sonnet-4-5",
+    "title": "Claude Sonnet 4.5",
+    "description": "Anthropic이 코딩과 컴퓨터 사용, 금융·연구 작업에 최적화된 차세대 프런티어 모델 Claude Sonnet 4.5를 출시했습니다.",
+    "additional_description": "Claude Sonnet 4.5는 장시간(수십 시간)에 걸친 연속 에이전트 작업을 수행할 수 있도록 설계되었고, 보안·프롬프트 인젝션 저항성과 같은 안전성 측면도 크게 개선되었습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-11-12",
+    "link": "https://openai.com/index/gpt-5-1/",
+    "title": "GPT‑5.1",
+    "description": "OpenAI가 GPT‑5의 중간 세대 업그레이드 버전인 GPT‑5.1을 공개하여 ChatGPT의 대화 자연스러움과 추론·개인화 능력을 강화했습니다.",
+    "additional_description": "GPT‑5.1은 빠른 응답을 위한 Instant와 깊은 추론에 집중한 Thinking 두 변종을 제공하며, 작업 난이도에 따라 연산량을 조절하는 적응형 추론 방식을 도입해 속도와 비용 효율을 동시에 추구합니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-11-18",
+    "link": "https://blog.google/products/gemini/gemini-3/",
+    "title": "Gemini 3 Pro",
+    "description": "Google DeepMind가 텍스트·이미지·영상·오디오·코드를 아우르는 멀티모달 기초 모델 Gemini 3 시리즈의 핵심 모델인 Gemini 3 Pro를 출시했습니다.",
+    "additional_description": "Gemini 3 Pro는 고급 도구 호출과 구조적 출력, 코드 실행을 지원하며, 다양한 멀티모달 벤치마크에서 최고 수준의 성능을 달성했다고 발표되었습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-11-19",
+    "link": "https://openai.com/index/gpt-5-1-codex-max/",
+    "title": "GPT‑5.1 Codex‑Max",
+    "description": "OpenAI가 장기 실행 코딩·에이전트 작업에 특화된 GPT‑5.1 계열의 고성능 코드 모델인 Codex‑Max를 GPT‑5.1 라인업의 일부로 공개했습니다.",
+    "additional_description": "GPT‑5.1 Codex‑Max는 복잡한 코드베이스를 다루는 소프트웨어 에이전트와 IDE 통합 시나리오를 겨냥해 설계되었으며, GPT‑5.1의 적응형 추론 기능을 코드 작업에 최적화한 것이 특징으로 소개됩니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-11-25",
+    "link": "https://www.anthropic.com/news/claude-opus-4-5",
+    "title": "Claude Opus 4.5",
+    "description": "Anthropic이 코딩, 에이전트, 컴퓨터 활용, 오피스 업무에 최적화된 자사 최상위 프론티어 모델 Claude Opus 4.5를 공개했습니다.",
+    "additional_description": "Claude Opus 4.5는 이전 Opus 4.1 대비 추론·코딩·복잡한 문제 해결 능력을 크게 개선했으며, 장기 에이전트 작업과 대규모 문서·스프레드시트·슬라이드 작업에서 지속적인 품질을 유지하도록 설계된 것이 특징입니다.",
+    "category": "모델 출시"
+}
+
   ]
