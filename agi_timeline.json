@@ -888,22 +888,21 @@
     "category": "모델 출시"
   },
   {
-    "date": "2025-11-25",
-    "link": "https://www.anthropic.com/news/claude-opus-4-5",
-    "title": "Claude Opus 4.5",
-    "description": "Anthropic이 코딩, 에이전트, 컴퓨터 활용, 오피스 업무에 최적화된 자사 최상위 프론티어 모델 Claude Opus 4.5를 공개했습니다.",
-    "additional_description": "Claude Opus 4.5는 이전 Opus 4.1 대비 추론·코딩·복잡한 문제 해결 능력을 크게 개선했으며, 장기 에이전트 작업과 대규모 문서·스프레드시트·슬라이드 작업에서 지속적인 품질을 유지하도록 설계된 것이 특징입니다.",
-    "category": "모델 출시"
-  },
-    {
   "date": "2025-11-24",
   "link": "https://www.microsoft.com/en-us/research/blog/fara-7b-an-efficient-agentic-model-for-computer-use/",
   "title": "Fara-7B",
   "description": "Microsoft Research가 공개한 Fara-7B는 70억 개 파라미터 규모의 컴퓨터 사용 에이전트(Computer Use Agent) 모델로, 웹 브라우저 화면을 스크린샷으로 인식해 클릭·스크롤·입력과 같은 동작을 직접 수행하도록 설계되었습니다.",
   "additional_description": "Fara-7B는 접근성 트리 없이 픽셀 수준의 시각 정보만으로 웹페이지를 탐색하며, WebVoyager 등 벤치마크에서 동급·상위 모델을 능가하는 성능을 보이면서도 온디바이스 실행이 가능할 만큼 작고 효율적인 것이 특징입니다.",
   "category": "모델 출시"
-}
+  },
+  {
+    "date": "2025-11-25",
+    "link": "https://www.anthropic.com/news/claude-opus-4-5",
+    "title": "Claude Opus 4.5",
+    "description": "Anthropic이 코딩, 에이전트, 컴퓨터 활용, 오피스 업무에 최적화된 자사 최상위 프론티어 모델 Claude Opus 4.5를 공개했습니다.",
+    "additional_description": "Claude Opus 4.5는 이전 Opus 4.1 대비 추론·코딩·복잡한 문제 해결 능력을 크게 개선했으며, 장기 에이전트 작업과 대규모 문서·스프레드시트·슬라이드 작업에서 지속적인 품질을 유지하도록 설계된 것이 특징입니다.",
+    "category": "모델 출시"
+  }
+]
 
-
-  ]
 
