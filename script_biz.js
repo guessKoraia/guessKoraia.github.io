@@ -206,7 +206,7 @@ function updatePagination() {
 
     // 이전 버튼
     paginationHTML += `
-        <button onclick="goToPage(${currentPage - 1})" ${currentPage === 0 ? 'disabled' : ''}>
+        <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 0 ? 'disabled' : ''}>
             <i class="fas fa-chevron-left"></i>
         </button>
     `;
@@ -214,15 +214,15 @@ function updatePagination() {
     if (isMobile) {
         // 모바일: 첫/마지막만 별도 처리, 가운데 최대 3개
         if (startPage > 0) {
-            paginationHTML += `<button onclick="goToPage(0)">1</button>`;
+            paginationHTML += `<button class="page-btn" onclick="goToPage(0)">1</button>`;
             if (startPage > 1) {
-                paginationHTML += `<span>...</span>`;
+                paginationHTML += `<span class="ellipsis">...</span>`;
             }
         }
 
         for (let i = startPage; i <= endPage; i++) {
             paginationHTML += `
-                <button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>
+                <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
                     ${i + 1}
                 </button>
             `;
@@ -230,22 +230,22 @@ function updatePagination() {
 
         if (endPage < totalPages - 1) {
             if (endPage < totalPages - 2) {
-                paginationHTML += `<span>...</span>`;
+                paginationHTML += `<span class="ellipsis">...</span>`;
             }
-            paginationHTML += `<button onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
+            paginationHTML += `<button class="page-btn ${totalPages - 1 === currentPage ? 'active' : ''}" onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
         }
     } else {
         // 데스크톱: 기존 방식 유지
         if (startPage > 0) {
-            paginationHTML += `<button onclick="goToPage(0)">1</button>`;
+            paginationHTML += `<button class="page-btn" onclick="goToPage(0)">1</button>`;
             if (startPage > 1) {
-                paginationHTML += `<span>...</span>`;
+                paginationHTML += `<span class="ellipsis">...</span>`;
             }
         }
 
         for (let i = startPage; i <= endPage; i++) {
             paginationHTML += `
-                <button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>
+                <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
                     ${i + 1}
                 </button>
             `;
@@ -253,15 +253,15 @@ function updatePagination() {
 
         if (endPage < totalPages - 1) {
             if (endPage < totalPages - 2) {
-                paginationHTML += `<span>...</span>`;
+                paginationHTML += `<span class="ellipsis">...</span>`;
             }
-            paginationHTML += `<button onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
+            paginationHTML += `<button class="page-btn ${totalPages - 1 === currentPage ? 'active' : ''}" onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
         }
     }
 
     // 다음 버튼
     paginationHTML += `
-        <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages - 1 ? 'disabled' : ''}>
+        <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages - 1 ? 'disabled' : ''}>
             <i class="fas fa-chevron-right"></i>
         </button>
     `;
