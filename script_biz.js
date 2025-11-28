@@ -45,21 +45,25 @@ function setupEventListeners() {
     });
 
     // 소스 정보 버튼
-    sourceInfoBtn.addEventListener('click', function() {
-        sourceModal.style.display = 'block';
-    });
+    if (sourceInfoBtn && sourceModal) {
+        sourceInfoBtn.addEventListener('click', function() {
+            sourceModal.style.display = 'block';
+        });
+    }
 
     // 모달 닫기 버튼
-    modalClose.addEventListener('click', function() {
-        sourceModal.style.display = 'none';
-    });
-
-    // 모달 외부 클릭시 닫기
-    window.addEventListener('click', function(event) {
-        if (event.target === sourceModal) {
+    if (modalClose && sourceModal) {
+        modalClose.addEventListener('click', function() {
             sourceModal.style.display = 'none';
-        }
-    });
+        });
+
+        // 모달 외부 클릭시 닫기
+        window.addEventListener('click', function(event) {
+            if (event.target === sourceModal) {
+                sourceModal.style.display = 'none';
+            }
+        });
+    }
 
     // 검색 버튼
     if (searchBtn) {
@@ -189,7 +193,8 @@ function updatePagination() {
         return;
     }
 
-    const maxVisiblePages = 5;
+    const isMobile = window.innerWidth <= 768;
+    const maxVisiblePages = isMobile ? 3 : 5;
     let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
 
@@ -206,29 +211,52 @@ function updatePagination() {
         </button>
     `;
 
-    // 첫 페이지
-    if (startPage > 0) {
-        paginationHTML += `<button onclick="goToPage(0)">1</button>`;
-        if (startPage > 1) {
-            paginationHTML += `<span>...</span>`;
+    if (isMobile) {
+        // 모바일: 첫/마지막만 별도 처리, 가운데 최대 3개
+        if (startPage > 0) {
+            paginationHTML += `<button onclick="goToPage(0)">1</button>`;
+            if (startPage > 1) {
+                paginationHTML += `<span>...</span>`;
+            }
         }
-    }
 
-    // 페이지 번호들
-    for (let i = startPage; i <= endPage; i++) {
-        paginationHTML += `
-            <button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>
-                ${i + 1}
-            </button>
-        `;
-    }
-
-    // 마지막 페이지
-    if (endPage < totalPages - 1) {
-        if (endPage < totalPages - 2) {
-            paginationHTML += `<span>...</span>`;
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `
+                <button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>
+                    ${i + 1}
+                </button>
+            `;
         }
-        paginationHTML += `<button onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
+
+        if (endPage < totalPages - 1) {
+            if (endPage < totalPages - 2) {
+                paginationHTML += `<span>...</span>`;
+            }
+            paginationHTML += `<button onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
+        }
+    } else {
+        // 데스크톱: 기존 방식 유지
+        if (startPage > 0) {
+            paginationHTML += `<button onclick="goToPage(0)">1</button>`;
+            if (startPage > 1) {
+                paginationHTML += `<span>...</span>`;
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `
+                <button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>
+                    ${i + 1}
+                </button>
+            `;
+        }
+
+        if (endPage < totalPages - 1) {
+            if (endPage < totalPages - 2) {
+                paginationHTML += `<span>...</span>`;
+            }
+            paginationHTML += `<button onclick="goToPage(${totalPages - 1})">${totalPages}</button>`;
+        }
     }
 
     // 다음 버튼
@@ -246,13 +274,21 @@ function goToPage(page) {
     if (page >= 0 && page < totalPages) {
         currentPage = page;
         loadAnnouncements();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
 }
 
 // 결과 정보 업데이트
 function updateResultInfo() {
-    totalCount.textContent = `총 ${totalElements.toLocaleString()}건`;
-    currentPageSpan.textContent = `페이지 ${currentPage + 1}`;
+    if (totalCount) {
+        totalCount.textContent = totalElements.toLocaleString();
+    }
+    if (currentPageSpan) {
+        currentPageSpan.textContent = (currentPage + 1).toLocaleString();
+    }
 }
 
 // 검색 실행
@@ -293,8 +329,12 @@ function updateSearchState() {
 
 // 로딩 상태 표시/숨김
 function showLoading(show) {
-    loadingSpinner.style.display = show ? 'block' : 'none';
-    announcementsList.style.display = show ? 'none' : 'block';
+    if (loadingSpinner) {
+        loadingSpinner.style.display = show ? 'block' : 'none';
+    }
+    if (announcementsList) {
+        announcementsList.style.display = show ? 'none' : 'block';
+    }
 }
 
 // 에러 메시지 표시
@@ -443,69 +483,13 @@ function generateCSV(data) {
     return csvContent;
 }
 
-// CSS 스타일 추가 (에러 메시지 및 로딩 스타일)
-const additionalStyles = `
-    .no-results, .error-message {
-        text-align: center;
-        padding: 50px 20px;
-        color: #666;
-        background: #f9f9f9;
-        border-radius: 8px;
-        border: 1px solid #e8e8e8;
-    }
-    
-    .no-results i, .error-message i {
-        font-size: 40px;
-        color: #ccc;
-        margin-bottom: 15px;
-    }
-    
-    .no-results h3, .error-message h3 {
-        margin-bottom: 8px;
-        color: #2c3e50;
-        font-size: 18px;
-    }
-    
-    .no-results p, .error-message p {
-        color: #666;
-        font-size: 14px;
-    }
-    
-    .retry-btn {
-        background: #4CAF50;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 13px;
-        margin-top: 15px;
-        transition: all 0.2s ease;
-    }
-    
-    .retry-btn:hover {
-        background: #45a049;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
-    }
-    
-    .pagination span {
-        padding: 8px 12px;
-        color: #666;
-        font-size: 13px;
-    }
-    
-    .announcement-item:nth-child(even) {
-        background: #fafafa;
-    }
-    
-    .announcement-item:hover {
-        background: white;
-    }
-`;
-
-// 스타일 추가
-const styleSheet = document.createElement('style');
-styleSheet.textContent = additionalStyles;
-document.head.appendChild(styleSheet);
+// 화면 크기 변경 시 페이지네이션 재렌더링 (디바운스)
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        if (totalPages > 1) {
+            updatePagination();
+        }
+    }, 250);
+});
