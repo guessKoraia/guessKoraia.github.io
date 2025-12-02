@@ -902,7 +902,16 @@
     "description": "Anthropic이 코딩, 에이전트, 컴퓨터 활용, 오피스 업무에 최적화된 자사 최상위 프론티어 모델 Claude Opus 4.5를 공개했습니다.",
     "additional_description": "Claude Opus 4.5는 이전 Opus 4.1 대비 추론·코딩·복잡한 문제 해결 능력을 크게 개선했으며, 장기 에이전트 작업과 대규모 문서·스프레드시트·슬라이드 작업에서 지속적인 품질을 유지하도록 설계된 것이 특징입니다.",
     "category": "모델 출시"
+  },
+    {
+    "date": "2025-12-01",
+    "link": "https://api-docs.deepseek.com/news/news251201",
+    "title": "DeepSeek-V3.2",
+    "description": "DeepSeek‑V3.2는 6,710억 파라미터 MoE 아키텍처 위에 DeepSeek Sparse Attention(DSA)을 적용해, 긴 문맥에서도 계산 비용을 낮추면서 프론티어급 추론 성능을 목표로 하는 범용 LLM입니다.",
+    "additional_description": "최대 128K 토큰 컨텍스트와 Thinking 모드를 지원해 대화, 코드, 기술 문서 분석, 연구 리포트 작성 같은 장문·복잡 추론 작업에 적합하며, MIT 계열 오픈 라이선스로 공개되어 커스터마이징과 자체 호스팅이 가능한 것이 특징입니다.",
+    "category": "모델 출시"
   }
 ]
+
 
 
