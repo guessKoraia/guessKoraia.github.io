@@ -23,7 +23,7 @@
         "link": "https://drive.google.com/file/d/1gbbfphaPj2bDLkSwx1QSQQCCFWQhvhlK/view"
     },
     {
-        "filename": "인공지능위험사례집",
+        "filename": "인공지능 위험 사례집",
         "type": "pdf",
         "description": "",
         "size": 24.1,
@@ -39,7 +39,7 @@
         "link": "https://drive.google.com/file/d/1OlAJes99vS14t9ZGj2fjeTDV_Y8U4p3H/view"
     },
     {
-        "filename": "NIA_인공지능_전환_추진전략(2025-11-24)",
+        "filename": "NIA 인공지능_전환_추진전략",
         "type": "pdf",
         "description": "",
         "size": 7,
@@ -55,7 +55,7 @@
         "link": "https://drive.google.com/file/d/18DvgIt_XleMfrk8Rg7XdLL_0IAHm2acc"
     },
     {
-        "filename": "삼정 KPMG 글로벌 CEO 설문조사 리포트 20251030",
+        "filename": "삼정 KPMG 글로벌 CEO 설문조사 리포트",
         "type": "pdf",
         "description": "'CEO Outlook'은 전 세계 CEO 1,350명을 대상으로 향후 3년간 기업 및 경제 성장 전망을 조사했습니다.\n올해 결과, CEO들은 'AI를 비롯한 신기술·인재·ESG'를 핵심 과제로 꼽았습니다. 71%가 AI를 최우선 투자 분야로, 67%는 1~3년 내 AI 투자 수익 실현이 가능하다고 답했습니다. 또한 77%는 AI 인재 육성이 조직 성장에 직접적 영향을 미칠 것으로 보며, 치열한 인재 확보 경쟁을 우려했습니다.\nESG 측면에서는 61%가 2030년 넷제로 목표 달성에 자신감을 보였고, 65%는 지속가능성을 경영에 내재화했다고 응답했습니다.\n이번 조사는 11개국 연매출 5억 달러 이상 기업의 CEO를 대상으로, 12개 주요 산업을 아우르며 진행됐습니다.",
         "size": 5.2,
@@ -68,7 +68,7 @@
         "description": "얼마전 딥시크에서 깃허브에 공개한 DeepSeek-OCR은 Contexts Optical Compression이라는 새로운 패러다임을 제시하며, LLM의 초장문맥 처리 한계를 극복하는 혁신적인 접근법을 소개하고 있습니다. 텍스트가 긴 문서를 고해상도 이미지로 변환한 후, 이를 DeepEncoder가 적은 수의 비전 토큰으로 압축하고, MoE 디코더가 원본 텍스트를 복원하는 방법입니다. 이를 통해서 LLM의 토큰 처리량을 획기적으로 줄여 계산 효율성을 높일수 있다고 합니다. 물론, 향후 광학 압축의 일반성 검증, 고압축 환경에서의 정밀도 유지, 그리고 LLM 시스템 통합 등의 과제들이 남아 있지만 , 이 기술은 GPU 자원 절감과 초장기 기억 메커니즘 구현의 문을 열어, 차세대 LLM 아키텍처를 정의할 잠재력을 갖고 있습니다.",
         "size": 7.2,
         "date": "2025-11-02",
-        "link": "https://drive.google.com/file/d/1cHBeZV8HXy58LlklkeWoxAErv8qW9RjG"
+        "link": "https://blog.koraia.org/posts/deepseek_ocr/"
     },
     {
         "filename": "중국 휴머노이드 로봇 현황",
@@ -6022,6 +6022,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
