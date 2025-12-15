@@ -1,5 +1,37 @@
 [
     {
+        "filename": "국가정보원_인공지능위험사례집",
+        "type": "pdf",
+        "description": "국가정보원에서 발간",
+        "size": 24.1,
+        "date": "2025-12-15",
+        "link": "https://drive.google.com/file/d/1JuWWYR2vm-2xa2bnUbKjg4tShzRbfNeR/view"
+    },
+    {
+        "filename": "국가정보원_국가공공기관 AI보안 가이드북",
+        "type": "pdf",
+        "description": "",
+        "size": 19.3,
+        "date": "2025-12-15",
+        "link": "https://drive.google.com/file/d/1DXOlQnzIYwePjcoW-uzgrfmmHl14lKiH/view"
+    },
+    {
+        "filename": "과기부_KISA 인공지능 보안 안내서",
+        "type": "pdf",
+        "description": "",
+        "size": 14.7,
+        "date": "2025-12-15",
+        "link": "https://drive.google.com/file/d/1Ct75MfCfwlKF7loanS96CTs-wsFicKgl/view"
+    },
+    {
+        "filename": "한국고용정보원_신뢰받는 AI 고용서비스 위한 10대 윤리원칙",
+        "type": "pdf",
+        "description": "",
+        "size": 0.3,
+        "date": "2025-12-15",
+        "link": "https://drive.google.com/file/d/1x_BduApymhGl-uEa8zrlMPmhhZMthRVb/view"
+    },
+    {
         "filename": "LLM을 활용한 게임 기획 콘텐츠 제작",
         "type": "pdf",
         "description": "게임 개발 현장은 매일 새로워지고, 기술은 그 변화의 속도를 더욱 빠르게 합니다.이러한 흐름 속에서 본 사업은 경기도 내 게임 개발사가 실제 제작 과정에서 활용 가능한 AI 기술을직접 사용하고, 검증하며, 자신만의 방식으로 정착할 수 있도록 지원하는 것을 목표로 하였습니다.2025년의 지원을 통해 두 개 기업의 프로젝트가 완성되었고, 그 과정에서 축적된 경험과 실무적 지식은다음 게임 개발자들에게 의미 있는 참고가 될 수 있도록 AI 활용 게임 개발 매뉴얼 2종을 대외공개드립니다.",        "size": 8.5,
@@ -6022,6 +6054,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
