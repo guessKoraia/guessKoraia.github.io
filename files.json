@@ -1,9 +1,9 @@
 [
     {
         "filename": "[긴급/중요] React2Shell 취약점 스캐너 검사하기",
-        "type": "pdf",
+        "type": "web",
         "description": "이 스캐너는 Next.js 애플리케이션에서 발견된 React Server Components (RSC) 관련 취약점인 React2Shell을 안전하게 검사합니다.",
-        "size": 24.1,
+        "size": 0,
         "date": "2025-12-15",
         "link": "https://vuln.offen.im/"
     },
@@ -6062,6 +6062,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
