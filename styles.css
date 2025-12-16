@@ -474,6 +474,7 @@ tbody tr:last-child td {
     justify-content: center;
     gap: 8px;
     margin-top: 40px;
+    overflow: hidden;
 }
 
 .page-btn {
