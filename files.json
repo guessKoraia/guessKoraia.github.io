@@ -1,6 +1,14 @@
 [
     {
-        "filename": "[긴급/중요] React2Shell 취약점 스캐너 검사하기",
+        "filename": "국가인공지능전략위원회 - 대한민국 인공지능 행동계획(안) 의견 수렴",
+        "type": "web",
+        "description": "실행·민간협력 중심의 ‘AI 행동계획(안)’ 공개 및 1/4까지 의견 수렴",
+        "size": 0,
+        "date": "2025-12-16",
+        "link": "https://www.aikorea.go.kr/web/board/brdDetail.do?menu_cd=000010&num=136&currentPage=1"
+    },
+    {
+        "filename": "[긴급/보안] React2Shell 취약점 스캐너 검사하기",
         "type": "web",
         "description": "이 스캐너는 Next.js 애플리케이션에서 발견된 React Server Components (RSC) 관련 취약점인 React2Shell을 안전하게 검사합니다.",
         "size": 0,
@@ -6062,6 +6070,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
