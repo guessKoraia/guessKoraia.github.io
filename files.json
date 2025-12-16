@@ -1,6 +1,14 @@
 [
     {
-        "filename": "국가인공지능전략위원회 - 대한민국 인공지능 행동계획(안) 의견 수렴",
+        "filename": "K-문샷 프로젝트 대국민 공모전 」 공고[~26년 1월 15일]",
+        "type": "web",
+        "description": "대한민국의 내일을 바꿀 수 있는 도전적 연구개발(R&D) 아이디어를 찾습니다. 미래 전략기술을 육성하고 다양한 난제를 해결할 수 있는 혁신 과제를 발굴하고자 하오니, 관심 있는 분들의 많은 참여를 부탁드립니다.",
+        "size": 0,
+        "date": "2025-12-16",
+        "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&mId=311&mPid=121&pageIndex=1&bbsSeqNo=100&nttSeqNo=3186356"
+    },
+    {
+        "filename": "국가인공지능전략위원회 - 대한민국 인공지능 행동계획(안) 의견 수렴 [~26년 1월 4일]",
         "type": "web",
         "description": "실행·민간협력 중심의 ‘AI 행동계획(안)’ 공개 및 1/4까지 의견 수렴",
         "size": 0,
@@ -8,7 +16,7 @@
         "link": "https://www.aikorea.go.kr/web/board/brdDetail.do?menu_cd=000010&num=136&currentPage=1"
     },
     {
-        "filename": "[긴급/보안] React2Shell 취약점 스캐너 검사하기",
+        "filename": "[보안] React2Shell 취약점 스캐너 검사하기",
         "type": "web",
         "description": "이 스캐너는 Next.js 애플리케이션에서 발견된 React Server Components (RSC) 관련 취약점인 React2Shell을 안전하게 검사합니다.",
         "size": 0,
@@ -6070,6 +6078,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
