@@ -514,7 +514,7 @@
         const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
                  // 전역 변수
         let currentPage = 1;
@@ -667,7 +667,7 @@
             articlesEl.innerHTML = '';
 
             try {
-                let query = supabase.from('ai_info').select('*', { count: 'exact' });
+                let query = supabaseClient.from('ai_info').select('*', { count: 'exact' });
                 
                 // 검색 모드인 경우 필터 추가
                 if (isSearchMode && currentSearchQuery) {
@@ -695,7 +695,7 @@
                 const endIndex = startIndex + itemsPerPage - 1;
 
                 // 데이터 조회
-                let dataQuery = supabase.from('ai_info').select('*');
+                let dataQuery = supabaseClient.from('ai_info').select('*');
                 
                 if (isSearchMode && currentSearchQuery) {
                     dataQuery = dataQuery.ilike('title', `%${currentSearchQuery}%`);
@@ -935,7 +935,7 @@
                 document.getElementById('total-pages').textContent = totalPages;
 
                 const today = new Date().toISOString().split('T')[0];
-                const { count: todayCount } = await supabase
+                const { count: todayCount } = await supabaseClient
                     .from('ai_info')
                     .select('*', { count: 'exact', head: true })
                     .gte('created_at', today);
