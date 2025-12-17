@@ -910,8 +910,17 @@
     "description": "DeepSeek‑V3.2는 6,710억 파라미터 MoE 아키텍처 위에 DeepSeek Sparse Attention(DSA)을 적용해, 긴 문맥에서도 계산 비용을 낮추면서 프론티어급 추론 성능을 목표로 하는 범용 LLM입니다.",
     "additional_description": "최대 128K 토큰 컨텍스트와 Thinking 모드를 지원해 대화, 코드, 기술 문서 분석, 연구 리포트 작성 같은 장문·복잡 추론 작업에 적합하며, MIT 계열 오픈 라이선스로 공개되어 커스터마이징과 자체 호스팅이 가능한 것이 특징입니다.",
     "category": "모델 출시"
+  },
+    {
+    "date": "2025-12-11",
+    "link": "https://openai.com/ko-KR/index/introducing-gpt-5-2/",
+    "title": "GPT-5.2",
+    "description": "OpenAI는 2025년 12월 11일, 경쟁사들의 프론티어 모델 러시에 대응하는 ‘코드 레드’ 전략의 일환으로 GPT-5.2를 출시했으며, 지식 노동과 전문 업무에 최적화된 차세대 플래그십 모델이라고 소개했습니다.",
+    "additional_description": "GPT-5.2는 Instant, Thinking, Pro 세 가지 변종으로 제공되며, SWE-Bench Pro와 같은 벤치마크에서 Gemini 3 Pro를 상회하는 성능을 달성했다고 알려져 고난도 코딩·에이전트·리서치 사용 사례를 주요 타깃으로 합니다.",
+    "category": "모델 출시"
   }
 ]
+
 
 
 
