@@ -869,7 +869,7 @@
     <script>
         const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const navBtns = document.querySelectorAll(".nav-btn");
         const cardSectionEl = document.getElementById("cardSection");
@@ -1012,7 +1012,7 @@
 
             try {
                 const targetDate = getDateFromUrl();
-                let query = supabase
+                let query = supabaseClient
                     .from('ai_newsletter_daily')
                     .select('*');
 
