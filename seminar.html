@@ -519,7 +519,7 @@
         // Supabase 설정
         const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // 전역 변수
         let currentPage = 1;
@@ -592,7 +592,7 @@
             seminarsEl.innerHTML = '';
 
             try {
-                let query = supabase.from('ampos_seminar').select('*', { count: 'exact' });
+                let query = supabaseClient.from('ampos_seminar').select('*', { count: 'exact' });
                 // 검색 모드인 경우 필터 추가
                 if (isSearchMode && currentSearchQuery) {
                     query = query.or(`seminar_name.ilike.%${currentSearchQuery}%,organizer.ilike.%${currentSearchQuery}%,location.ilike.%${currentSearchQuery}%`);
@@ -608,7 +608,7 @@
                 const endIndex = startIndex + itemsPerPage - 1;
 
                 // 데이터 조회
-                let dataQuery = supabase.from('ampos_seminar').select('*');
+                let dataQuery = supabaseClient.from('ampos_seminar').select('*');
                 if (isSearchMode && currentSearchQuery) {
                     dataQuery = dataQuery.or(`seminar_name.ilike.%${currentSearchQuery}%,organizer.ilike.%${currentSearchQuery}%,location.ilike.%${currentSearchQuery}%`);
                 }
@@ -815,7 +815,7 @@
                 document.getElementById('total-count').textContent = totalItems;
                 document.getElementById('total-pages').textContent = totalPages;
                 const today = new Date().toISOString().split('T')[0];
-                const { count: todayCount } = await supabase
+                const { count: todayCount } = await supabaseClient
                     .from('ampos_seminar')
                     .select('*', { count: 'exact', head: true })
                     .gte('created_at', today);
