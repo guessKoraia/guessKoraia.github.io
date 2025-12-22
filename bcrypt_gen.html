@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Secure Hash Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --gray: #64748b;
+            --bg: #f1f5f9;
+        }
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background-color: var(--bg);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0;
+        }
+        .container {
+            background: white; padding: 2.5rem; border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            width: 100%; max-width: 500px;
+        }
+        h2 { margin: 0; color: #1e293b; text-align: center; font-size: 1.5rem; }
+        p.desc { text-align: center; color: var(--gray); font-size: 0.9rem; margin-bottom: 2rem; }
+
+        .warning {
+            background: #fff1f2; border: 1px solid #fecaca; padding: 1rem;
+            border-radius: 12px; margin-bottom: 1.5rem; font-size: 0.85rem; color: #991b1b;
+        }
+
+        .input-group { margin-bottom: 1.2rem; position: relative; }
+        label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        input {
+            width: 100%; padding: 12px; border: 2px solid #e2e8f0;
+            border-radius: 10px; box-sizing: border-box; font-size: 1rem; transition: 0.2s;
+        }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px #dbeafe; }
+        
+        /* 일치 여부 알림 */
+        .match-msg { font-size: 0.8rem; margin-top: 5px; font-weight: 500; }
+        .is-match { color: var(--success); }
+        .no-match { color: var(--danger); }
+
+        /* 보안 요구사항 리스트 */
+        .rules {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 8px; background: #f8fafc; padding: 12px;
+            border-radius: 10px; margin-bottom: 1.5rem;
+        }
+        .rule { font-size: 0.75rem; color: var(--gray); display: flex; align-items: center; }
+        .rule.done { color: var(--success); font-weight: bold; }
+        .rule::before { content: '✕ '; margin-right: 5px; }
+        .rule.done::before { content: '✓ '; }
+
+        .confirm-check {
+            display: flex; align-items: center; gap: 10px;
+            background: #f8fafc; padding: 12px; border-radius: 10px;
+            margin-bottom: 1.5rem; cursor: pointer; border: 1px solid transparent;
+        }
+        .confirm-check:hover { border-color: #cbd5e1; }
+        .confirm-check input { width: auto; }
+        .confirm-check span { font-size: 0.85rem; color: #334155; line-height: 1.4; }
+
+        button {
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            background: var(--primary); color: white; font-size: 1rem;
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        button:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        .result-area {
+            margin-top: 2rem; display: none; border-top: 2px dashed #e2e8f0; padding-top: 1.5rem;
+        }
+        .hash-display {
+            background: #1e293b; color: #38bdf8; padding: 15px;
+            border-radius: 10px; font-family: monospace; font-size: 0.85rem;
+            word-break: break-all; margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>관리자 패스워드 설정</h2>
+    <p class="desc">보안을 위해 강력한 비밀번호를 입력해 주세요.</p>
+
+    <div class="warning">
+        <strong>⚠️ 경고:</strong> 생성된 해시는 복호화가 불가능합니다. 평문 비밀번호를 분실하면 재설정이 까다로우니 반드시 안전한 곳에 별도 저장하십시오.
+    </div>
+
+    <div class="input-group">
+        <label>비밀번호 입력</label>
+        <input type="password" id="pw" placeholder="최소 8자 이상" oninput="validate()">
+    </div>
+
+    <div class="input-group">
+        <label>비밀번호 확인</label>
+        <input type="password" id="pwConfirm" placeholder="다시 한번 입력" oninput="validate()">
+        <div id="matchMsg" class="match-msg"></div>
+    </div>
+
+    <div class="rules">
+        <div id="rule-len" class="rule">8자 이상</div>
+        <div id="rule-upper" class="rule">대문자 포함</div>
+        <div id="rule-num" class="rule">숫자 포함</div>
+        <div id="rule-special" class="rule">특수문자 포함</div>
+    </div>
+
+    <label class="confirm-check">
+        <input type="checkbox" id="checkRecord" onchange="validate()">
+        <span>비밀번호를 안전한 곳에 기록했음을 확인합니다.</span>
+    </label>
+
+    <button id="genBtn" disabled onclick="generateHash()">BCrypt 해시 생성</button>
+
+    <div id="resultArea" class="result-area">
+        <label>생성된 BCrypt 해시 (DB 저장용)</label>
+        <div class="hash-display" id="hashOutput"></div>
+        <button style="background: var(--gray);" onclick="copyToClipboard()">해시값 복사하기</button>
+    </div>
+</div>
+
+<script>
+    const bcrypt = dcodeIO.bcrypt;
+
+    function validate() {
+        const pw = document.getElementById('pw').value;
+        const pwConfirm = document.getElementById('pwConfirm').value;
+        const checked = document.getElementById('checkRecord').checked;
+        
+        // 1. 규칙 검증
+        const isLen = pw.length >= 8;
+        const isUpper = /[A-Z]/.test(pw);
+        const isNum = /[0-9]/.test(pw);
+        const isSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pw);
+
+        document.getElementById('rule-len').className = 'rule ' + (isLen ? 'done' : '');
+        document.getElementById('rule-upper').className = 'rule ' + (isUpper ? 'done' : '');
+        document.getElementById('rule-num').className = 'rule ' + (isNum ? 'done' : '');
+        document.getElementById('rule-special').className = 'rule ' + (isSpecial ? 'done' : '');
+
+        const rulesOk = isLen && isUpper && isNum && isSpecial;
+
+        // 2. 일치 검증
+        const matchMsg = document.getElementById('matchMsg');
+        let matchOk = false;
+
+        if (pwConfirm.length > 0) {
+            if (pw === pwConfirm) {
+                matchMsg.innerText = '✓ 비밀번호가 일치합니다.';
+                matchMsg.className = 'match-msg is-match';
+                matchOk = true;
+            } else {
+                matchMsg.innerText = '✕ 비밀번호가 일치하지 않습니다.';
+                matchMsg.className = 'match-msg no-match';
+                matchOk = false;
+            }
+        } else {
+            matchMsg.innerText = '';
+        }
+
+        // 3. 버튼 활성화 (모든 규칙 통과 + 일치 + 체크박스 확인)
+        document.getElementById('genBtn').disabled = !(rulesOk && matchOk && checked);
+    }
+
+    function generateHash() {
+        const pw = document.getElementById('pw').value;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(pw, salt);
+
+        document.getElementById('hashOutput').innerText = hash;
+        document.getElementById('resultArea').style.display = 'block';
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('hashOutput').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('클립보드에 복사되었습니다.');
+        });
+    }
+</script>
+
+</body>
+</html>
