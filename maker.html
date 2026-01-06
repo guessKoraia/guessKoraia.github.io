@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KORAIA 통합 디자인 센터 v3.2</title>
+    <title>KORAIA 통합 디자인 센터 v3.3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
     <style>
@@ -29,7 +29,7 @@
 
         .checkbox-group { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 700; color: #444; }
         .icon-selector { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .icon-option { border: 2px solid #eee; border-radius: 8px; padding: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .icon-option { border: 2px solid #eee; border-radius: 8px; padding: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: white; }
         .icon-option svg, .icon-option img { width: 24px; height: 24px; pointer-events: none; }
         .icon-option.active { border-color: var(--primary-color); background: var(--primary-color); }
         .icon-option.active svg { stroke: white !important; }
@@ -45,7 +45,7 @@
             display: flex; flex-direction: column; justify-content: flex-end;
             padding: 60px; box-sizing: border-box; color: white; position: relative;
         }
-        .edm-icon-display { position: absolute; top: 60px; left: 60px; width: 100px; height: 100px; }
+        .edm-icon-display { position: absolute; top: 60px; left: 60px; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
         .edm-icon-display svg, .edm-icon-display img { width: 100%; height: 100%; display: block; filter: brightness(0) invert(1); }
         .edm-title { font-size: 52px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; word-break: keep-all; }
         .edm-desc { font-size: 19px; opacity: 0.8; line-height: 1.7; white-space: pre-wrap; }
@@ -62,10 +62,10 @@
         .sns-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 2; }
         .sns-content { position: relative; z-index: 3; padding: 40px; width: 100%; box-sizing: border-box; }
         
-        /* SNS 로고 위치 수정 */
         .sns-logo-wrapper { position: absolute; z-index: 4; display: flex; align-items: center; justify-content: center; }
         .sns-logo-wrapper svg, .sns-logo-wrapper img { width: 100%; height: auto; display: block; filter: brightness(0) invert(1); }
         
+        /* 위치 클래스 */
         .pos-tl { top: 35px; left: 35px; bottom: auto; right: auto; transform: none; }
         .pos-tr { top: 35px; right: 35px; bottom: auto; left: auto; transform: none; }
         .pos-bl { bottom: 35px; left: 35px; top: auto; right: auto; transform: none; }
@@ -93,7 +93,7 @@
         <div class="controls">
             <h2>📧 EDM 헤더 제작</h2>
             <div class="input-group">
-                <label>전통 로고 및 아이콘 선택 (SNS 공통 적용)</label>
+                <label>아이콘 선택 (SNS 로고와 연동됩니다)</label>
                 <div class="icon-selector" id="common-icon-picker"></div>
             </div>
             <div class="input-group">
@@ -181,36 +181,11 @@
     </div>
 
     <script>
-        // 1. 협회 로고를 Base64 데이터로 미리 준비 (다운로드 누락 방지)
-        // 직접적인 SVG 코드 삽입을 통해 CORS 문제 해결
-        const koraiaLogoSVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10 50L40 20V40H90V60H40V80L10 50Z" fill="white"/></svg>`; 
-        // 참고: 실제 로고 주소는 JS에서 동적으로 데이터 주소로 변환하여 사용합니다.
-        let koraiaBase64 = "";
-
-        // 이미지 주소를 Base64로 변환하는 헬퍼 함수
-        async function toDataURL(url) {
-            try {
-                const response = await fetch(url);
-                const blob = await response.blob();
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(blob);
-                });
-            } catch (e) {
-                console.warn("로고 변환 실패, 기본 URL 사용");
-                return url;
-            }
-        }
-
-        async function init() {
-            koraiaBase64 = await toDataURL('https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/d08aba8f3923f52f2ccd27905355c1610a50c7a4/koraia.svg');
-            renderIcons();
-        }
-
+        // 1. 아이콘 데이터 정의 (SVG 코드를 직접 내장하여 누락 방지)
+        const koraiaLogoUrl = 'https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/d08aba8f3923f52f2ccd27905355c1610a50c7a4/koraia.svg';
+        
         const iconLibrary = {
-            koraia: '', // init에서 채워짐
+            koraia: `<img src="${koraiaLogoUrl}" crossorigin="anonymous">`,
             door: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9M10 12h11m0 0l-4-4m4 4l-4 4"/></svg>',
             lock: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
             bell: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
@@ -221,10 +196,11 @@
             info: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
         };
 
-        function renderIcons() {
+        // 2. 아이콘 선택기 렌더링 함수
+        function initIcons() {
             const picker = document.getElementById('common-icon-picker');
-            picker.innerHTML = '';
-            iconLibrary.koraia = `<img src="${koraiaBase64}" crossorigin="anonymous">`;
+            const edmIcon = document.getElementById('edm-display-icon');
+            const snsIcon = document.getElementById('sns-logo-display');
 
             Object.keys(iconLibrary).forEach((key, i) => {
                 const div = document.createElement('div');
@@ -234,18 +210,20 @@
                     document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('active'));
                     div.classList.add('active');
                     const content = div.innerHTML;
-                    document.getElementById('edm-display-icon').innerHTML = content;
-                    document.getElementById('sns-logo-display').innerHTML = content;
+                    edmIcon.innerHTML = content;
+                    snsIcon.innerHTML = content;
                 };
                 picker.appendChild(div);
+                
+                // 초기값 설정
                 if(i === 0) { 
-                    document.getElementById('edm-display-icon').innerHTML = div.innerHTML; 
-                    document.getElementById('sns-logo-display').innerHTML = div.innerHTML; 
+                    edmIcon.innerHTML = div.innerHTML; 
+                    snsIcon.innerHTML = div.innerHTML; 
                 }
             });
         }
 
-        // 탭 전환
+        // 탭 전환 함수
         function switchTab(id, btn) {
             document.querySelectorAll('.tool-container').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -253,7 +231,7 @@
             btn.classList.add('active');
         }
 
-        // 텍스트 및 옵션 연동
+        // --- 실시간 연동 로직 ---
         document.getElementById('edm-in-title').oninput = (e) => document.getElementById('edm-display-title').innerText = e.target.value;
         document.getElementById('edm-in-desc').oninput = (e) => document.getElementById('edm-display-desc').innerText = e.target.value;
         document.getElementById('edm-in-layout').onchange = (e) => document.getElementById('edm-capture').className = e.target.value === 'middle' ? 'layout-middle' : '';
@@ -291,32 +269,36 @@
             document.getElementById('sns-display-bg').style.display = 'none';
         }
 
-        // 저장 함수 (CORS 및 SVG 렌더링 최적화)
+        // --- 이미지 저장 함수 ---
         async function saveImage(targetId, fileName) {
             const btn = event.target;
-            btn.innerText = "⏳ 생성 중...";
-            
-            const area = document.getElementById(targetId);
-            
-            // html2canvas 옵션 강화
-            const canvas = await html2canvas(area, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: false,
-                backgroundColor: null,
-                logging: false
-            });
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ 이미지 생성 중...";
 
-            const link = document.createElement('a');
-            link.download = `${fileName}_${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            btn.innerText = "💾 저장 완료";
-            setTimeout(() => btn.innerText = "💾 이미지 저장하기", 2000);
+            try {
+                const area = document.getElementById(targetId);
+                const canvas = await html2canvas(area, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                });
+
+                const link = document.createElement('a');
+                link.download = `${fileName}_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                btn.innerText = "💾 저장 완료!";
+            } catch (err) {
+                console.error(err);
+                alert("이미지 저장 중 오류가 발생했습니다.");
+            } finally {
+                setTimeout(() => btn.innerText = originalText, 2000);
+            }
         }
 
-        // 실행
-        init();
+        // 초기화 실행
+        initIcons();
     </script>
 </body>
 </html>
