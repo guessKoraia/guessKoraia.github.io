@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보고서용 데이터 분석 도구</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; background-color: #ffffff; padding: 20px; color: #333; }
+        .no-print { background: #f4f7f9; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #ddd; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        textarea { width: 100%; height: 120px; margin-bottom: 10px; border: 1px solid #ccc; padding: 10px; }
+        
+        .setup-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .column-toggle { background: #eee; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 13px; }
+        .column-toggle.active { background: #007bff; color: white; }
+
+        /* 보고서 출력 스타일 */
+        .report-section { margin-top: 40px; page-break-inside: avoid; }
+        .chart-wrapper { position: relative; height: 400px; width: 100%; margin-bottom: 20px; }
+        h2 { border-left: 6px solid #333; padding-left: 15px; margin-bottom: 20px; font-size: 22px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 50px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        th { background-color: #f9f9f9; font-weight: bold; }
+        
+        .btn { padding: 10px 20px; background: #333; color: white; border: none; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #555; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="no-print">
+        <h1 style="margin-top:0">📋 보고서용 차트 생성기</h1>
+        <p>1. 엑셀 데이터를 아래에 붙여넣으세요. (첫 행은 제목)</p>
+        <textarea id="dataInput" placeholder="이곳에 데이터를 붙여넣으세요..."></textarea>
+        <button class="btn" onclick="parseData()">데이터 분석</button>
+        
+        <div id="filterArea" style="margin-top:20px; display:none;">
+            <p>2. 보고서에 포함할 문항을 선택하고 제목을 수정하세요.</p>
+            <div id="columnSelectors" class="setup-row"></div>
+            <div id="titleEditors" class="setup-row"></div>
+            <button class="btn" style="background:#28a745" onclick="generateReport()">보고서 생성 (차트+표)</button>
+        </div>
+    </div>
+
+    <div id="reportArea">
+        </div>
+</div>
+
+<script>
+    // 플러그인 등록 (차트 위에 숫자 표시)
+    Chart.register(ChartDataLabels);
+
+    let rawRows = [];
+    let headers = [];
+
+    function parseData() {
+        const input = document.getElementById('dataInput').value.trim();
+        if(!input) return;
+
+        const rows = input.split('\n').map(r => r.split('\t'));
+        headers = rows[0];
+        rawRows = rows.slice(1);
+
+        const selectorDiv = document.getElementById('columnSelectors');
+        const editorDiv = document.getElementById('titleEditors');
+        selectorDiv.innerHTML = '';
+        editorDiv.innerHTML = '';
+
+        headers.forEach((h, i) => {
+            // 기본 필터링 (번호, 열1 등은 기본 제외)
+            const isExcluded = h.includes("열") || h.includes("번호") || h.includes("ID");
+            
+            const btn = document.createElement('div');
+            btn.className = `column-toggle ${!isExcluded ? 'active' : ''}`;
+            btn.innerHTML = `<input type="checkbox" id="col_${i}" ${!isExcluded ? 'checked' : ''}> ${h}`;
+            btn.onclick = (e) => {
+                if(e.target.tagName !== 'INPUT') {
+                    const chk = btn.querySelector('input');
+                    chk.checked = !chk.checked;
+                    btn.classList.toggle('active', chk.checked);
+                }
+            };
+            selectorDiv.appendChild(btn);
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `edit_${i}`;
+            input.value = h;
+            input.style.padding = "5px";
+            editorDiv.appendChild(input);
+        });
+
+        document.getElementById('filterArea').style.display = 'block';
+    }
+
+    function generateReport() {
+        const reportArea = document.getElementById('reportArea');
+        reportArea.innerHTML = '';
+
+        headers.forEach((h, i) => {
+            if(!document.getElementById(`col_${i}`).checked) return;
+
+            const displayTitle = document.getElementById(`edit_${i}`).value;
+            const counts = {};
+            rawRows.forEach(row => {
+                if(row[i]) {
+                    const val = row[i].trim();
+                    counts[val] = (counts[val] || 0) + 1;
+                }
+            });
+
+            const labels = Object.keys(counts);
+            const data = Object.values(counts);
+            const total = data.reduce((a, b) => a + b, 0);
+
+            // 섹션 생성
+            const section = document.createElement('div');
+            section.className = 'report-section';
+            
+            const title = document.createElement('h2');
+            title.innerText = displayTitle;
+            section.appendChild(title);
+
+            // 차트 영역
+            const chartWrapper = document.createElement('div');
+            chartWrapper.className = 'chart-wrapper';
+            const canvas = document.createElement('canvas');
+            chartWrapper.appendChild(canvas);
+            section.appendChild(chartWrapper);
+
+            // 표 생성
+            const table = document.createElement('table');
+            let tableHTML = `<tr><th>항목</th><th>응답 수</th><th>비율(%)</th></tr>`;
+            labels.forEach((label, idx) => {
+                const percent = ((data[idx] / total) * 100).toFixed(1);
+                tableHTML += `<tr><td>${label}</td><td>${data[idx]}건</td><td>${percent}%</td></tr>`;
+            });
+            table.innerHTML = tableHTML;
+            section.appendChild(table);
+
+            reportArea.appendChild(section);
+
+            // 차트 그리기
+            new Chart(canvas, {
+                type: labels.length > 5 ? 'bar' : 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false, // 보고서용이므로 애니메이션 제거
+                    plugins: {
+                        legend: { display: labels.length <= 5, position: 'bottom' },
+                        datalabels: { // 숫자 바로 표시 설정
+                            anchor: labels.length > 5 ? 'end' : 'center',
+                            align: labels.length > 5 ? 'top' : 'center',
+                            color: labels.length > 5 ? '#333' : '#fff',
+                            font: { weight: 'bold', size: 14 },
+                            formatter: (value) => {
+                                const pct = ((value / total) * 100).toFixed(1);
+                                return labels.length > 5 ? value : `${value} (${pct}%)`;
+                            }
+                        }
+                    },
+                    scales: labels.length > 5 ? { y: { beginAtZero: true, border: {display: false} } } : {}
+                }
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
