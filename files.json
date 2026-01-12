@@ -80,14 +80,6 @@
         "link": "https://www.aikorea.go.kr/web/board/brdDetail.do?menu_cd=000010&num=136&currentPage=1"
     },
     {
-        "filename": "[보안] React2Shell 취약점 스캐너 검사하기",
-        "type": "web",
-        "description": "이 스캐너는 Next.js 애플리케이션에서 발견된 React Server Components (RSC) 관련 취약점인 React2Shell을 안전하게 검사합니다.",
-        "size": 0,
-        "date": "2025-12-15",
-        "link": "https://vuln.offen.im/"
-    },
-    {
         "filename": "국가정보원_인공지능위험사례집",
         "type": "pdf",
         "description": "국가정보원에서 발간",
@@ -6086,6 +6078,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
