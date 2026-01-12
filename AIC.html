@@ -474,11 +474,12 @@
                     📊 리포트 테마
                 </p>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                    <button onclick="applyTheme('default')">기본</button>
-                    <button onclick="applyTheme('government')">공공·행정</button>
-                    <button onclick="applyTheme('corporate')">대기업</button>
-                    <button onclick="applyTheme('finance')">금융·투자</button>
-                    <button onclick="applyTheme('strategy')">전략기획</button>
+                    <button onclick="applyTheme('default')">기본(추천)</button>
+                    <button onclick="applyTheme('google')">구글(추천)</button>
+                    <button onclick="applyTheme('cocacola')">코카콜라</button>
+                    <button onclick="applyTheme('government')">공문서</button>
+                    <button onclick="applyTheme('defense')">국방</button>
+                    <button onclick="applyTheme('mckinsey')">백악관(추천)</button>
                 </div>
             </div>
         </div>
@@ -526,53 +527,66 @@
                     border: '#cbd5e1'
                 }
             },
+            google: {
+                name: '구글',
+                // 구글 브랜드 컬러: 블루/레드/옐로우/그린
+                palette: ['#4285f4', '#ea4335', '#fbbc04', '#34a853', '#5f6368'],
+                table: {
+                    th: '#202124',     // 구글 다크 그레이
+                    td: '#3c4043',     // 미디엄 그레이
+                    muted: '#5f6368',  // 보조 그레이
+                    border: '#dadce0'  // 라이트 보더
+                }
+            },
+            cocacola: {
+                name: '코카콜라',
+                // 코카콜라 시그니처: 레드 중심, 화이트/블랙 조합
+                palette: ['#f40009', '#000000', '#b9b9b9', '#dc0714', '#8b0000'],
+                table: {
+                    th: '#000000',     // 순수 블랙
+                    td: '#1a1a1a',     // 다크 그레이
+                    muted: '#666666',  // 미디엄 그레이
+                    border: '#cccccc'  // 라이트 보더
+                }
+            },
             government: {
-                name: '공공·행정',
+                name: '공문서',
+                // 공공기관 느낌: 차분한 블루/그레이 (신뢰감)
                 palette: ['#1e3a8a', '#334155', '#475569', '#64748b', '#94a3b8'],
                 table: {
-                    th: '#0f172a',
-                    td: '#1e293b',
-                    muted: '#334155',
-                    border: '#94a3b8'
+                    th: '#0f172a',     // 진한 네이비
+                    td: '#1e293b',     // 다크 슬레이트
+                    muted: '#334155',  // 미디엄 그레이
+                    border: '#94a3b8'  // 차분한 보더
                 }
             },
-            corporate: {
-                name: '대기업(화이트)',
-                // ✅ 저잉크/인쇄 친화: 거의 회색 계열로만
-                palette: ['#e5e7eb', '#d1d5db', '#9ca3af', '#6b7280', '#374151'],
+            defense: {
+                name: '국방',
+                // 군대/국방 톤: 올리브/카키/다크 그린
+                palette: ['#2d3e1f', '#4a5d3a', '#556b2f', '#6b8e23', '#808069'],
                 table: {
-                    th: '#111827',
-                    td: '#111827',
-                    muted: '#374151',
-                    border: '#9ca3af'
+                    th: '#1a1f14',     // 다크 올리브
+                    td: '#2d3e1f',     // 밀리터리 그린
+                    muted: '#4a5d3a',  // 카키 톤
+                    border: '#808069'  // 뮤트 그린
                 }
             },
-            finance: {
-                name: '금융·투자',
-                palette: ['#064e3b', '#065f46', '#047857', '#10b981', '#6ee7b7'],
+            mckinsey: {
+                name: '백악관',
+                // 백악관 톤: 클래식한 네이비/화이트/레드 (미국 국기 컬러 기반)
+                palette: ['#002868', '#bf0a30', '#b9b9b9', '#1c3a6e', '#8b0000'],
                 table: {
-                    th: '#052e16',
-                    td: '#064e3b',
-                    muted: '#065f46',
-                    border: '#10b981'
-                }
-            },
-            strategy: {
-                name: '전략기획(맥킨지 톤)',
-                // 맥킨지 느낌: 차분한 네이비/슬레이트 + 한 가지 포인트(블루)
-                palette: ['#0b1220', '#1f2a44', '#334155', '#64748b', '#2563eb'],
-                table: {
-                    th: '#0b1220',     // 헤더는 진한 네이비(명확)
-                    td: '#111827',     // 본문은 거의 블랙(가독성)
-                    muted: '#475569',  // 보조 텍스트 슬레이트
-                    border: '#cbd5e1'  // 얇고 깔끔한 보더 톤
+                    th: '#002868',     // 네이비 블루 (권위)
+                    td: '#1a1a1a',     // 다크 그레이 (본문)
+                    muted: '#4a4a4a',  // 미디엄 그레이
+                    border: '#c0c0c0'  // 실버 보더
                 }
             }
         };
 
 
         // 현재 테마 (기본값)
-        let currentThemeKey = 'default';
+        let currentThemeKey = 'mckinsey';
         let bizPalette = THEMES[currentThemeKey].palette;
 
 
@@ -583,50 +597,31 @@
             currentThemeKey = themeKey;
             bizPalette = theme.palette;
 
-
-            document.querySelectorAll('.share-pct').forEach(td => {
-                const pct = parseFloat(td.dataset.pct || '0');
-
-                if (currentThemeKey === 'default') {
-                    td.style.color = getBatteryColor(pct);  // 기본 테마는 기존 룰 유지
-                } else if (currentThemeKey === 'corporate') {
-                    td.style.color = '#111827';             // 대기업(화이트)은 잉크 적게, 글자는 진하게
-                } else {
-                    td.style.color = (THEMES[currentThemeKey].table?.td || '#334155');
-                }
-            });
-
-            // bar-fill 색 & share(%) 글자색 테마 반영
+            // ✅ bar-fill 색상 변경
             document.querySelectorAll('.bar-fill').forEach(el => {
                 const pct = parseFloat(el.dataset.pct || '0');
-                // 기본 테마는 기존 로직(getBatteryColor) 유지, 다른 테마는 저잉크/톤다운
+
                 if (currentThemeKey === 'default') {
                     el.style.backgroundColor = getBatteryColor(pct);
-                } else if (currentThemeKey === 'corporate') {
-                    // 대기업(화이트): 잉크 최소(회색 단계)
-                    el.style.backgroundColor =
-                        pct >= 70 ? '#9ca3af' :
-                            pct >= 40 ? '#bdbdbd' :
-                                pct >= 15 ? '#d1d5db' : '#e5e7eb';
                 } else {
-                    // 다른 테마: 팔레트 중간 톤으로 통일(과한 대비 방지)
-                    el.style.backgroundColor = (THEMES[currentThemeKey].palette[2] || '#64748b');
+                    // 다른 테마: 팔레트의 첫 번째 색상 사용
+                    el.style.backgroundColor = theme.palette[0];
                 }
             });
 
+            // ✅ share-pct 글자색 변경
             document.querySelectorAll('td.share-pct').forEach(td => {
                 const pct = parseFloat(td.dataset.pct || '0');
+
                 if (currentThemeKey === 'default') {
-                    td.style.color = getBatteryColor(pct); // 기본은 기존과 동일
-                } else if (currentThemeKey === 'corporate') {
-                    td.style.color = '#111827'; // 대기업 화이트는 글자는 진하게
+                    td.style.color = getBatteryColor(pct);
                 } else {
-                    td.style.color = (THEMES[currentThemeKey].table?.td || '#334155');
+                    // 다른 테마: 테이블 헤더 색상과 동일하게
+                    td.style.color = theme.table.th;
                 }
             });
 
-
-            // 차트
+            // 차트 색상 변경
             Object.values(chartInstances).forEach(chart => {
                 chart.data.datasets[0].backgroundColor = bizPalette;
                 chart.update();
@@ -636,7 +631,6 @@
             document.querySelectorAll('.final-table').forEach(table => {
                 table.querySelectorAll('th').forEach(th => th.style.color = theme.table.th);
 
-                // ✅ 전체 td는 칠하되, share-pct는 제외(테마 전용 색 유지)
                 table.querySelectorAll('td:not(.share-pct)').forEach(td => {
                     td.style.color = theme.table.td;
                 });
@@ -646,7 +640,6 @@
                     b.style.borderColor = theme.table.border;
                 });
             });
-            ;
         }
 
 
@@ -712,11 +705,30 @@
             const rows = input.split('\n').map(r => r.split('\t'));
             const headers = rows[0];
             const dataRows = rows.slice(1);
+
             questions = headers.map((h, i) => {
                 const counts = {};
-                dataRows.forEach(row => { if (row[i]) { const v = row[i].trim(); counts[v] = (counts[v] || 0) + 1; } });
-                return { title: h, data: Object.entries(counts).map(([label, count]) => ({ label, count })) };
+                dataRows.forEach(row => {
+                    if (row[i]) {
+                        const rawValue = row[i].trim();
+
+                        // ✅ 알파벳 패턴(a., b., c. 등)을 기준으로 분리
+                        const splitValues = rawValue
+                            .split(/,\s*(?=[a-z]\.)/)  // ", a." ", b." 등 패턴 앞에서만 분리
+                            .map(v => v.replace(/^[\s\uFEFF\u3000]+|[\s\uFEFF\u3000]+$/g, ''))
+                            .filter(v => v);
+
+                        splitValues.forEach(value => {
+                            counts[value] = (counts[value] || 0) + 1;
+                        });
+                    }
+                });
+                return {
+                    title: h,
+                    data: Object.entries(counts).map(([label, count]) => ({ label, count }))
+                };
             });
+
             document.getElementById('emptyMsg').style.display = 'none';
             document.getElementById('sidebarFooter').style.display = 'block';
             drawSidebarEditors();
