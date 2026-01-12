@@ -1,4 +1,11 @@
-[
+[{
+        "filename": "CES 2026으로 본 미래 산업 트렌드_KPMG",
+        "type": "pdf",
+        "description": "CES 2026은 AI·로봇·자율주행·에너지 혁신을 중심으로 산업 패러다임을 바꾸는 기술과, 스마트홈·핀테크·ESG 같은 확산 기술이 함께 부각된 자리였습니다.",
+        "size": 60.7,
+        "date": "2026-01-12",
+        "link": "https://drive.google.com/file/d/152C65L742YBAVYuNCQwZXcDQ1dvTOlY4/view"
+    },
     {
         "filename": "한국방송통신전파진흥원 딥리서치 업무활용 가이드북",
         "type": "pdf",
@@ -6078,6 +6085,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
