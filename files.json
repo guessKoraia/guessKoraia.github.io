@@ -1,5 +1,13 @@
 [
     {
+        "filename": "한국방송통신전파진흥원 딥리서치 업무활용 가이드북",
+        "type": "pdf",
+        "description": "이 가이드북은 한국방송통신전파진흥원의 업무 효율 증진 및 혁신 선도를 위해 딥리서치(AI 기반 심층 정보 탐색 및 분석)의 개요, 활용법, 효과적인 질문 설계 원칙 및 실제 KCA 업무 적용 사례를 제시하는 안내서입니다.",
+        "size": 6.1,
+        "date": "2026-01-12",
+        "link": "https://drive.google.com/file/d/1e2wlvHFuS9-8qma2XehHUY2ewt6zsAGe/view"
+    },
+    {
         "filename": "국가대표 독자 AI 파운데이션 모델 프로젝트 1차 발표회",
         "type": "기타",
         "description": "25년 8월 선정된 5개 정예 팀들은 세계적으로 파급력 있는 독자 인공지능 기초 모형(AI 파운데이션 모델) 개발에 전력을 다하고 있으며, 이번 행사를 기점으로 그간 개발한 1차 성과물을 선보일 계획이다.\n   *▴네이버클라우드, ▴업스테이지, ▴에스케이텔레콤(SKT), ▴엔씨에이아이(NC AI), ▴엘지경영개발원 AI연구원(LG AI연구원)",
@@ -6078,6 +6086,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
