@@ -7,7 +7,76 @@
     <title>Enterprise Strategy Simulator v13 - Optimized</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <!-- Export libs (추가) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
     <style>
+        /* Pretendard 폰트 로드 */
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+            font-weight: 100;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+            font-weight: 200;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+            font-weight: 300;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+            font-weight: 600;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+            font-weight: 800;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+            font-weight: 900;
+            font-display: swap;
+        }
+
         :root {
             --biz-dark: #0f172a;
             --biz-blue: #2563eb;
@@ -307,6 +376,85 @@
                 filter: grayscale(100%) contrast(1.2);
             }
         }
+
+        /* ===== ZIP Export Loading Overlay (추가) ===== */
+        #zipLoadingOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .zip-loading-card {
+            width: min(420px, 90vw);
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 18px 16px 18px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+            border: 1px solid #e2e8f0;
+        }
+
+        .zip-loading-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .zip-spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            border-top-color: #2563eb;
+            animation: zipspin 0.9s linear infinite;
+            flex: 0 0 auto;
+        }
+
+        @keyframes zipspin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .zip-loading-title {
+            font-weight: 900;
+            color: #0f172a;
+            font-size: 14px;
+        }
+
+        .zip-loading-desc {
+            font-size: 12px;
+            color: #475569;
+            margin: 0 0 10px 0;
+        }
+
+        .zip-progress-wrap {
+            width: 100%;
+            height: 10px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        #zipProgressBar {
+            height: 100%;
+            width: 0%;
+            background: #10b981;
+            transition: width 0.25s ease;
+        }
+
+        #zipProgressText {
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #0f172a;
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -342,6 +490,9 @@
         </div>
         <div class="sidebar-footer" id="sidebarFooter" style="display: none;">
             <button class="btn-main btn-update" onclick="renderReport()">✨ 리포트 즉시 갱신 (내림차순)</button>
+            <button class="btn-main btn-update" style="margin-top:10px; background:#0f172a;"
+                onclick="downloadAllZip()">📦 전체 문항 ZIP 일괄 다운로드</button>
+
         </div>
     </div>
 
@@ -589,7 +740,122 @@
             });
             setupScrollSync();
         }
+
+        // ========= 전체 문항 ZIP 일괄 다운로드 (추가) =========
+        const EXPORT_SCALE = 3; // 고해상도 배율 (2~4 권장)
+
+        function canvasToBlob(canvas) {
+            return new Promise((resolve) => {
+                canvas.toBlob((b) => resolve(b), 'image/png', 1.0);
+            });
+        }
+
+        async function captureDomToBlob(el) {
+            const canvas = await html2canvas(el, {
+                backgroundColor: '#ffffff', // 흰 배경 고정
+                scale: EXPORT_SCALE,        // 고해상도
+                useCORS: true,
+                logging: false,
+                scrollX: 0,
+                scrollY: -window.scrollY
+            });
+            return canvasToBlob(canvas);
+        }
+
+        async function downloadAllZip() {
+            if (!questions || !questions.length) return;
+
+            // 중복 클릭 방지
+            if (window.__zipping) return;
+            window.__zipping = true;
+
+            const overlay = document.getElementById('zipLoadingOverlay');
+            const bar = document.getElementById('zipProgressBar');
+            const text = document.getElementById('zipProgressText');
+
+            if (overlay) overlay.style.display = 'flex';
+            if (bar) bar.style.width = '0%';
+            if (text) text.innerText = '0%';
+
+            try {
+                const zip = new JSZip();
+
+                const totalTasks = questions.length * 3;
+                let done = 0;
+
+                const updateProgress = () => {
+                    const pct = Math.round((done / totalTasks) * 100);
+                    if (bar) bar.style.width = pct + '%';
+                    if (text) text.innerText = `${pct}% (${done}/${totalTasks})`;
+                };
+
+                for (let qIdx = 0; qIdx < questions.length; qIdx++) {
+
+                    // 1) chart image
+                    const chartCanvas = document.getElementById(`canvas_${qIdx}`);
+                    if (chartCanvas) {
+                        const picBlob = await canvasToBlob(chartCanvas);
+                        zip.file(`Q${qIdx + 1}_pic.png`, picBlob);
+                    }
+                    done++; updateProgress();
+                    await new Promise(r => setTimeout(r, 0));
+
+                    // 2) table image
+                    const section = document.getElementById(`report_section_${qIdx}`);
+                    const table = section ? section.querySelector('table.final-table') : null;
+                    if (table) {
+                        const tableBlob = await captureDomToBlob(table);
+                        zip.file(`Q${qIdx + 1}_table.png`, tableBlob);
+                    }
+                    done++; updateProgress();
+                    await new Promise(r => setTimeout(r, 0));
+
+                    // 3) total image
+                    if (section) {
+                        const totalBlob = await captureDomToBlob(section);
+                        zip.file(`Q${qIdx + 1}_total.png`, totalBlob);
+                    }
+                    done++; updateProgress();
+                    await new Promise(r => setTimeout(r, 0));
+                }
+
+                // ZIP 압축 단계 반영
+                const blob = await zip.generateAsync({ type: 'blob' }, (meta) => {
+                    const pct = Math.max(
+                        Math.round((done / totalTasks) * 90),
+                        Math.round(meta.percent)
+                    );
+                    if (bar) bar.style.width = pct + '%';
+                    if (text) text.innerText = `${pct}% (압축 중…)`;
+                });
+
+                saveAs(blob, 'All_Questions_Export.zip');
+
+            } catch (e) {
+                console.error(e);
+                alert('ZIP 생성 중 오류가 발생했습니다.');
+            } finally {
+                if (overlay) overlay.style.display = 'none';
+                window.__zipping = false;
+            }
+        }
+
+
     </script>
+    <!-- ZIP 로딩 오버레이 (추가) -->
+    <div id="zipLoadingOverlay">
+        <div class="zip-loading-card">
+            <div class="zip-loading-top">
+                <div class="zip-spinner"></div>
+                <div class="zip-loading-title">ZIP 생성 중…</div>
+            </div>
+            <p class="zip-loading-desc">이미지를 고해상도로 캡처하고 압축하는 중입니다.</p>
+            <div class="zip-progress-wrap">
+                <div id="zipProgressBar"></div>
+            </div>
+            <div id="zipProgressText">0%</div>
+        </div>
+    </div>
 
 </body>
 
