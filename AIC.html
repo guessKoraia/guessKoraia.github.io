@@ -1,182 +1,432 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Strategy Simulator v13</title>
+    <title>Enterprise Strategy Simulator v13 - Optimized</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
-        :root { 
-            --biz-dark: #0f172a; 
-            --biz-blue: #2563eb; 
-            --biz-bg: #f8fafc; 
-            --border: #e2e8f0; 
-            --accent: #10b981; 
+        :root {
+            --biz-dark: #0f172a;
+            --biz-blue: #2563eb;
+            --biz-bg: #f8fafc;
+            --border: #e2e8f0;
+            --accent: #10b981;
             --red: #ef4444;
-            --report-width: 850px; /* 기본 너비 */
+            --report-width: 850px;
         }
-        body { font-family: 'Pretendard', -apple-system, sans-serif; background-color: var(--biz-bg); margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* [왼쪽] 클린 리포트 영역 - 캡처용 */
-        #reportArea { flex: 1; overflow-y: auto; padding: 80px 20px; scroll-behavior: smooth; background: white; }
-        .report-section { 
-            max-width: var(--report-width); 
-            margin: 0 auto 150px auto; 
-            padding-bottom: 80px; 
-            border-bottom: 2px solid #f8fafc; 
-            scroll-margin-top: 100px; 
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: var(--biz-bg);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #reportArea {
+            flex: 1;
+            overflow-y: auto;
+            padding: 80px 20px;
+            scroll-behavior: smooth;
+            background: white;
+        }
+
+        .report-section {
+            max-width: var(--report-width);
+            margin: 0 auto 150px auto;
+            padding-bottom: 80px;
+            border-bottom: 2px solid #f8fafc;
+            scroll-margin-top: 100px;
             transition: max-width 0.3s ease;
         }
-        .report-title { font-size: 32px; font-weight: 800; color: var(--biz-dark); margin-bottom: 50px; text-align: center; word-break: keep-all; }
-        .chart-box { height: 480px; margin-bottom: 60px; }
-        
-        .final-table { width: 100%; border-collapse: collapse; }
-        .final-table th { background: var(--biz-dark); color: white; padding: 18px; font-size: 14px; text-align: left; }
-        .final-table td { padding: 22px 18px; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
-        .rank-badge { display: inline-block; width: 24px; height: 24px; background: #f1f5f9; border-radius: 50%; text-align: center; font-size: 12px; line-height: 24px; margin-right: 12px; color: #475569; font-weight: bold; }
-        
-        /* 표 게이지 */
-        .bar-container { height: 12px; width: 140px; background: #eff2f5; border-radius: 6px; display: inline-block; margin-left: 15px; vertical-align: middle; overflow: hidden; border: 1px solid #e2e8f0; }
-        .bar-fill { height: 100%; border-radius: 6px; transition: width 0.5s ease-in-out; }
 
-        /* [오른쪽] 사이드바 */
-        #sidebar { width: 460px; background: #fff; border-left: 1px solid var(--border); box-shadow: -10px 0 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; z-index: 100; position: relative; }
-        .sidebar-header { padding: 25px; background: var(--biz-dark); color: white; flex-shrink: 0; }
-        .sidebar-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
-        .sidebar-content { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 120px; scroll-behavior: smooth; }
-        .sidebar-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 25px; background: white; border-top: 1px solid var(--border); box-shadow: 0 -15px 30px rgba(0,0,0,0.08); z-index: 110; }
+        .report-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--biz-dark);
+            margin-bottom: 50px;
+            text-align: left;
+            word-break: keep-all;
+        }
 
-        /* 너비 조절 슬라이더 */
-        .size-control { background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .size-control label { display: block; font-size: 12px; font-weight: bold; color: var(--biz-blue); margin-bottom: 8px; }
-        .size-control input { width: 100%; cursor: pointer; }
-        .size-val { text-align: right; font-size: 11px; color: #64748b; margin-top: 5px; }
+        .chart-box {
+            height: 480px;
+            margin-bottom: 60px;
+        }
 
-        .btn-row { display: flex; gap: 8px; margin-bottom: 15px; }
-        textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 12px; margin-bottom: 10px; }
+        .final-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-top: 2px solid #334155;
+        }
 
-        .editor-card { background: #f8fafc; border: 2px solid transparent; border-radius: 14px; padding: 20px; margin-bottom: 25px; transition: 0.3s; scroll-margin-top: 25px; }
-        .editor-card.active-focus { border-color: var(--biz-blue); background: #fff; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.08); }
-        .editor-card h4 { margin: 0 0 15px 0; font-size: 13px; color: var(--biz-blue); display: flex; justify-content: space-between; align-items: center; }
-        
-        .btn-jump { font-size: 11px; padding: 6px 12px; cursor: pointer; background: var(--biz-blue); color: white; border: none; border-radius: 6px; font-weight: bold; }
-        .edit-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .input-val { width: 80px; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 700; text-align: center; }
-        .pct-display { font-size: 14px; font-weight: 800; color: var(--biz-blue); text-align: right; width: 60px; }
+        .final-table th {
+            background: #f8fafc;
+            color: #1e293b !important;
+            padding: 15px 18px;
+            font-size: 14px;
+            text-align: left;
+            border-bottom: 1px solid #cbd5e1;
+        }
 
-        .btn-main { padding: 12px; border: none; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.2s; }
-        .btn-analyze { background: var(--biz-blue); color: white; flex: 3; }
-        .btn-reset { background: #f1f5f9; color: var(--red); flex: 1; border: 1px solid #e2e8f0; }
-        .btn-reset:hover { background: #fee2e2; }
-        .btn-update { background: var(--accent); color: white; width: 100%; padding: 18px; font-size: 15px; box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2); }
+        .final-table td {
+            padding: 18px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 15px;
+            color: #334155;
+        }
 
-        @media print { #sidebar { display: none; } #reportArea { width: 100%; padding: 0; } }
+        .rank-badge {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 12px;
+            line-height: 24px;
+            margin-right: 12px;
+            color: #475569;
+            font-weight: bold;
+        }
+
+        .bar-container {
+            height: 8px;
+            width: 120px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        #sidebar {
+            width: 460px;
+            background: #fff;
+            border-left: 1px solid var(--border);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            position: relative;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            background: var(--biz-dark);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            padding-bottom: 120px;
+            scroll-behavior: smooth;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            background: white;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -15px 30px rgba(0, 0, 0, 0.08);
+            z-index: 110;
+        }
+
+        .size-control {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .size-control label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--biz-blue);
+            margin-bottom: 8px;
+        }
+
+        .size-control input {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .size-val {
+            text-align: right;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .editor-card {
+            background: #f8fafc;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+            transition: 0.3s;
+            scroll-margin-top: 25px;
+        }
+
+        .editor-card.active-focus {
+            border-color: var(--biz-blue);
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.08);
+        }
+
+        .editor-card h4 {
+            margin: 0 0 15px 0;
+            font-size: 13px;
+            color: var(--biz-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-jump {
+            font-size: 11px;
+            padding: 6px 12px;
+            cursor: pointer;
+            background: var(--biz-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .edit-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .input-val {
+            width: 80px;
+            padding: 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .pct-display {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--biz-blue);
+            text-align: right;
+            width: 60px;
+        }
+
+        .btn-main {
+            padding: 12px;
+            border: none;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .btn-analyze {
+            background: var(--biz-blue);
+            color: white;
+            flex: 3;
+        }
+
+        .btn-reset {
+            background: #f1f5f9;
+            color: var(--red);
+            flex: 1;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-reset:hover {
+            background: #fee2e2;
+        }
+
+        .btn-update {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            font-size: 15px;
+            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        @media print {
+            #sidebar {
+                display: none !important;
+            }
+
+            #reportArea {
+                width: 100%;
+                padding: 0;
+            }
+
+            canvas {
+                filter: grayscale(100%) contrast(1.2);
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div id="reportArea">
-    <div style="text-align: center; color: #cbd5e1; margin-top: 35vh;" id="emptyMsg">
-        <h1 style="font-weight: 200;">데이터를 입력하고 시뮬레이션을 시작하세요.</h1>
-    </div>
-</div>
-
-<div id="sidebar">
-    <div class="sidebar-header"><h2>🛠 데이터 시뮬레이션 & 편집</h2></div>
-    <div class="sidebar-content">
-        <div class="size-control">
-            <label>리포트 가로 폭(Max-Width) 조절</label>
-            <input type="range" id="widthSlider" min="600" max="1200" step="10" value="850" oninput="adjustWidth(this.value)">
-            <div class="size-val"><span id="widthLabel">850</span>px</div>
+    <div id="reportArea">
+        <div style="text-align: center; color: #cbd5e1; margin-top: 35vh;" id="emptyMsg">
+            <h1 style="font-weight: 200;">데이터를 입력하고 시뮬레이션을 시작하세요.</h1>
         </div>
+    </div>
 
-        <div style="margin-bottom:20px;">
-            <p style="font-size: 11px; color: #64748b; margin-bottom: 5px;">엑셀 데이터 붙여넣기 (자동 저장됨):</p>
-            <textarea id="dataInput" oninput="saveToStorage()" placeholder="엑셀 데이터 붙여넣기..."></textarea>
-            <div class="btn-row">
-                <button class="btn-main btn-analyze" onclick="initDashboard()">분석 시작 & 에디터 로드</button>
-                <button class="btn-main btn-reset" onclick="resetAll()">초기화</button>
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h2>🛠 데이터 시뮬레이션 & 편집</h2>
+        </div>
+        <div class="sidebar-content">
+            <div class="size-control">
+                <label>리포트 가로 폭(Max-Width) 조절</label>
+                <input type="range" id="widthSlider" min="600" max="1200" step="10" value="850"
+                    oninput="adjustWidth(this.value)">
+                <div class="size-val"><span id="widthLabel">850</span>px</div>
             </div>
+
+            <div style="margin-bottom:20px;">
+                <p style="font-size: 11px; color: #64748b; margin-bottom: 5px;">엑셀 데이터 붙여넣기 (자동 저장됨):</p>
+                <textarea id="dataInput" oninput="saveToStorage()" placeholder="엑셀 데이터 붙여넣기..."></textarea>
+                <div class="btn-row">
+                    <button class="btn-main btn-analyze" onclick="initDashboard()">분석 시작 & 에디터 로드</button>
+                    <button class="btn-main btn-reset" onclick="resetAll()">초기화</button>
+                </div>
+            </div>
+            <div id="editorList"></div>
         </div>
-        <div id="editorList"></div>
+        <div class="sidebar-footer" id="sidebarFooter" style="display: none;">
+            <button class="btn-main btn-update" onclick="renderReport()">✨ 리포트 즉시 갱신 (내림차순)</button>
+        </div>
     </div>
-    <div class="sidebar-footer" id="sidebarFooter" style="display: none;">
-        <button class="btn-main btn-update" onclick="renderReport()">✨ 리포트 즉시 갱신 (내림차순)</button>
-    </div>
-</div>
 
-<script>
-    Chart.register(ChartDataLabels);
-    let questions = [];
-    let chartInstances = {};
-    let isAutoScrolling = false;
-    const bizPalette = ['#0f172a', '#2563eb', '#475569', '#94a3b8', '#cbd5e1', '#e2e8f0'];
+    <script>
+        Chart.register(ChartDataLabels);
+        let questions = [];
+        let chartInstances = {};
+        let isAutoScrolling = false;
+        // 인쇄 친화적인 비즈니스 팔레트
+        const bizPalette = ['#2563eb', '#64748b', '#10b981', '#f59e0b', '#ef4444', '#6366f1', '#8b5cf6', '#94a3b8'];
 
-    window.onload = function() {
-        const savedData = localStorage.getItem('excelData');
-        const savedWidth = localStorage.getItem('reportWidth');
-        if (savedData) document.getElementById('dataInput').value = savedData;
-        if (savedWidth) {
-            document.getElementById('widthSlider').value = savedWidth;
-            adjustWidth(savedWidth);
+        window.onload = function () {
+            const savedData = localStorage.getItem('excelData');
+            const savedWidth = localStorage.getItem('reportWidth');
+            if (savedData) document.getElementById('dataInput').value = savedData;
+            if (savedWidth) {
+                document.getElementById('widthSlider').value = savedWidth;
+                adjustWidth(savedWidth);
+            }
         }
-    }
 
-    function adjustWidth(val) {
-        document.documentElement.style.setProperty('--report-width', val + 'px');
-        document.getElementById('widthLabel').innerText = val;
-        localStorage.setItem('reportWidth', val);
-    }
-
-    function saveToStorage() {
-        const data = document.getElementById('dataInput').value;
-        localStorage.setItem('excelData', data);
-    }
-
-    function resetAll() {
-        if(confirm("모든 데이터와 편집 내용이 삭제됩니다. 초기화할까요?")) {
-            localStorage.removeItem('excelData');
-            location.reload();
+        // [추가] 배경색에 따른 텍스트 가독성 확보를 위한 색상 계산 함수
+        function getContrastColor(hex) {
+            if (!hex) return '#000000';
+            const r = parseInt(hex.substring(1, 3), 16);
+            const g = parseInt(hex.substring(3, 5), 16);
+            const b = parseInt(hex.substring(5, 7), 16);
+            const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+            return (yiq >= 145) ? '#1e293b' : '#ffffff';
         }
-    }
 
-    function getBatteryColor(pct) {
-        if (pct >= 70) return '#10b981';
-        if (pct >= 40) return '#3b82f6';
-        if (pct >= 15) return '#f59e0b';
-        return '#ef4444';
-    }
+        function adjustWidth(val) {
+            document.documentElement.style.setProperty('--report-width', val + 'px');
+            document.getElementById('widthLabel').innerText = val;
+            localStorage.setItem('reportWidth', val);
+        }
 
-    function initDashboard() {
-        const input = document.getElementById('dataInput').value.trim();
-        if(!input) return;
-        saveToStorage();
+        function saveToStorage() {
+            const data = document.getElementById('dataInput').value;
+            localStorage.setItem('excelData', data);
+        }
 
-        const rows = input.split('\n').map(r => r.split('\t'));
-        const headers = rows[0];
-        const dataRows = rows.slice(1);
-        questions = headers.map((h, i) => {
-            const counts = {};
-            dataRows.forEach(row => { if(row[i]) { const v = row[i].trim(); counts[v] = (counts[v] || 0) + 1; } });
-            return { title: h, data: Object.entries(counts).map(([label, count]) => ({ label, count })) };
-        });
-        document.getElementById('emptyMsg').style.display = 'none';
-        document.getElementById('sidebarFooter').style.display = 'block';
-        drawSidebarEditors();
-        renderReport();
-        setupScrollSync();
-    }
+        function resetAll() {
+            if (confirm("모든 데이터와 편집 내용이 삭제됩니다. 초기화할까요?")) {
+                localStorage.removeItem('excelData');
+                location.reload();
+            }
+        }
 
-    function drawSidebarEditors() {
-        const list = document.getElementById('editorList');
-        list.innerHTML = '';
-        questions.forEach((q, qIdx) => {
-            const total = q.data.reduce((acc, cur) => acc + cur.count, 0);
-            const card = document.createElement('div');
-            card.className = 'editor-card';
-            card.id = `sidebar_card_${qIdx}`;
-            card.innerHTML = `
+        function getBatteryColor(pct) {
+            if (pct >= 70) return '#10b981';
+            if (pct >= 40) return '#3b82f6';
+            if (pct >= 15) return '#f59e0b';
+            return '#ef4444';
+        }
+
+        function initDashboard() {
+            const input = document.getElementById('dataInput').value.trim();
+            if (!input) return;
+            saveToStorage();
+
+            const rows = input.split('\n').map(r => r.split('\t'));
+            const headers = rows[0];
+            const dataRows = rows.slice(1);
+            questions = headers.map((h, i) => {
+                const counts = {};
+                dataRows.forEach(row => { if (row[i]) { const v = row[i].trim(); counts[v] = (counts[v] || 0) + 1; } });
+                return { title: h, data: Object.entries(counts).map(([label, count]) => ({ label, count })) };
+            });
+            document.getElementById('emptyMsg').style.display = 'none';
+            document.getElementById('sidebarFooter').style.display = 'block';
+            drawSidebarEditors();
+            renderReport();
+            setupScrollSync();
+        }
+
+        function drawSidebarEditors() {
+            const list = document.getElementById('editorList');
+            list.innerHTML = '';
+            questions.forEach((q, qIdx) => {
+                const total = q.data.reduce((acc, cur) => acc + cur.count, 0);
+                const card = document.createElement('div');
+                card.className = 'editor-card';
+                card.id = `sidebar_card_${qIdx}`;
+                card.innerHTML = `
                 <h4><span>Question ${qIdx + 1}</span><button class="btn-jump" onclick="scrollToReport(${qIdx})">보기 ↓</button></h4>
                 <div style="margin-bottom:12px;"><input type="text" style="width:100%; padding:8px; font-weight:bold; border:1px solid #ddd; border-radius:6px;" value="${q.title}" oninput="questions[${qIdx}].title=this.value"></div>
                 <table class="edit-table">${q.data.map((item, iIdx) => {
@@ -185,82 +435,162 @@
                         <td><input type="number" class="input-val" id="val_${qIdx}_${iIdx}" value="${item.count}" oninput="syncCount(${qIdx}, ${iIdx}, this.value)"></td>
                         <td class="pct-display" id="pct_text_${qIdx}_${iIdx}">${p}%</td></tr>`;
                 }).join('')}</table>`;
-            list.appendChild(card);
-        });
-    }
-
-    function syncCount(qIdx, iIdx, val) {
-        questions[qIdx].data[iIdx].count = parseFloat(val) || 0;
-        const total = questions[qIdx].data.reduce((acc, cur) => acc + cur.count, 0);
-        questions[qIdx].data.forEach((item, idx) => {
-            const p = total > 0 ? ((item.count / total) * 100).toFixed(1) : 0;
-            const pctText = document.getElementById(`pct_text_${qIdx}_${idx}`);
-            if(pctText) pctText.innerText = p + '%';
-        });
-    }
-
-    function scrollToReport(idx) {
-        isAutoScrolling = true;
-        const el = document.getElementById(`report_section_${idx}`);
-        if(el) { el.scrollIntoView({ behavior: 'smooth' }); highlightCard(idx); }
-        setTimeout(() => { isAutoScrolling = false; }, 1000);
-    }
-
-    function setupScrollSync() {
-        const reportArea = document.getElementById('reportArea');
-        const observer = new IntersectionObserver((entries) => {
-            if (isAutoScrolling) return;
-            entries.forEach(entry => { if (entry.isIntersecting) highlightCard(entry.target.dataset.qidx); });
-        }, { root: reportArea, threshold: 0.6 });
-        document.querySelectorAll('.report-section').forEach(section => observer.observe(section));
-    }
-
-    function highlightCard(idx) {
-        document.querySelectorAll('.editor-card').forEach(c => c.classList.remove('active-focus'));
-        const card = document.getElementById(`sidebar_card_${idx}`);
-        if (card) { card.classList.add('active-focus'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
-    }
-
-    function renderReport() {
-        const area = document.getElementById('reportArea');
-        area.innerHTML = '';
-        Object.values(chartInstances).forEach(c => c.destroy());
-
-        questions.forEach((q, qIdx) => {
-            const sortedData = [...q.data].sort((a, b) => b.count - a.count);
-            const total = sortedData.reduce((acc, cur) => acc + cur.count, 0);
-            const section = document.createElement('div');
-            section.className = 'report-section';
-            section.id = `report_section_${qIdx}`;
-            section.dataset.qidx = qIdx;
-            
-            section.innerHTML = `
-                <h2 class="report-title">${q.title}</h2>
-                <div class="chart-box"><canvas id="canvas_${qIdx}"></canvas></div>
-                <table class="final-table">
-                    <thead><tr><th width="80">Rank</th><th>Category</th><th width="140">Value(N)</th><th width="180">Share(%)</th></tr></thead>
-                    <tbody>${sortedData.map((item, idx) => {
-                        const pct = (item.count / total * 100);
-                        return `<tr>
-                            <td><span class="rank-badge">${idx+1}</span></td>
-                            <td><b>${item.label}</b><div class="bar-container"><div class="bar-fill" style="width:${pct}%; background-color:${getBatteryColor(pct)};"></div></div></td>
-                            <td>${item.count.toLocaleString()}</td>
-                            <td style="color:${getBatteryColor(pct)}; font-weight:800;">${pct.toFixed(1)}%</td>
-                        </tr>`;
-                    }).join('')}</tbody>
-                </table>`;
-            area.appendChild(section);
-
-            const ctx = document.getElementById(`canvas_${qIdx}`).getContext('2d');
-            chartInstances[qIdx] = new Chart(ctx, {
-                type: sortedData.length <= 6 ? 'doughnut' : 'bar',
-                data: { labels: sortedData.map(d => d.label), datasets: [{ data: sortedData.map(d => d.count), backgroundColor: bizPalette, borderWidth: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, cutout: '74%', plugins: { legend: { position: 'bottom', labels: { padding: 40, font: { size: 14, weight: '600' } } }, datalabels: { color: sortedData.length <= 6 ? '#fff' : '#1e293b', font: { weight: 'bold', size: 18 }, formatter: (v) => v > 0 ? ((v/total)*100).toFixed(1) + '%' : '' } } }
+                list.appendChild(card);
             });
-        });
-        setupScrollSync();
-    }
-</script>
+        }
+
+        function syncCount(qIdx, iIdx, val) {
+            questions[qIdx].data[iIdx].count = parseFloat(val) || 0;
+            const total = questions[qIdx].data.reduce((acc, cur) => acc + cur.count, 0);
+            questions[qIdx].data.forEach((item, idx) => {
+                const p = total > 0 ? ((item.count / total) * 100).toFixed(1) : 0;
+                const pctText = document.getElementById(`pct_text_${qIdx}_${idx}`);
+                if (pctText) pctText.innerText = p + '%';
+            });
+        }
+
+        function scrollToReport(idx) {
+            isAutoScrolling = true;
+            const el = document.getElementById(`report_section_${idx}`);
+            if (el) { el.scrollIntoView({ behavior: 'smooth' }); highlightCard(idx); }
+            setTimeout(() => { isAutoScrolling = false; }, 1000);
+        }
+
+        function setupScrollSync() {
+            const reportArea = document.getElementById('reportArea');
+            const observer = new IntersectionObserver((entries) => {
+                if (isAutoScrolling) return;
+                entries.forEach(entry => { if (entry.isIntersecting) highlightCard(entry.target.dataset.qidx); });
+            }, { root: reportArea, threshold: 0.6 });
+            document.querySelectorAll('.report-section').forEach(section => observer.observe(section));
+        }
+
+        function highlightCard(idx) {
+            document.querySelectorAll('.editor-card').forEach(c => c.classList.remove('active-focus'));
+            const card = document.getElementById(`sidebar_card_${idx}`);
+            if (card) { card.classList.add('active-focus'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+        }
+
+        function renderReport() {
+            const area = document.getElementById('reportArea');
+            area.innerHTML = '';
+            Object.values(chartInstances).forEach(c => c.destroy());
+
+            questions.forEach((q, qIdx) => {
+                const sortedData = [...q.data].sort((a, b) => b.count - a.count);
+                const total = sortedData.reduce((acc, cur) => acc + cur.count, 0);
+                const isDoughnut = sortedData.length <= 6;
+
+                // [핵심 해결 1] 라벨 노출 개수 제한 로직
+                let labelLimit = sortedData.length;
+                if (sortedData.length === 5) labelLimit = 3;
+                else if (sortedData.length === 3) labelLimit = 2;
+                else if (sortedData.length > 5) labelLimit = 5;
+
+                const section = document.createElement('div');
+                section.className = 'report-section';
+                section.id = `report_section_${qIdx}`;
+                section.dataset.qidx = qIdx;
+
+                section.innerHTML = `
+            <h2 class="report-title">${q.title}</h2>
+            <div class="chart-box"><canvas id="canvas_${qIdx}"></canvas></div>
+            <table class="final-table">
+                <thead><tr><th width="80">Rank</th><th>Category</th><th width="140">Value(N)</th><th width="180">Share(%)</th></tr></thead>
+                <tbody>${sortedData.map((item, idx) => {
+                    const pct = (item.count / total * 100);
+                    return `<tr>
+                        <td><span class="rank-badge">${idx + 1}</span></td>
+                        <td><b>${item.label}</b><div class="bar-container"><div class="bar-fill" style="width:${pct}%; background-color:${getBatteryColor(pct)};"></div></div></td>
+                        <td>${item.count.toLocaleString()}</td>
+                        <td style="color:${getBatteryColor(pct)}; font-weight:800;">${pct.toFixed(1)}%</td>
+                    </tr>`;
+                }).join('')}</tbody>
+            </table>`;
+                area.appendChild(section);
+
+                const ctx = document.getElementById(`canvas_${qIdx}`).getContext('2d');
+
+                chartInstances[qIdx] = new Chart(ctx, {
+                    type: isDoughnut ? 'doughnut' : 'bar',
+                    data: {
+                        labels: sortedData.map(d => d.label),
+                        datasets: [{
+                            label: '응답 수',
+                            data: sortedData.map(d => d.count),
+                            backgroundColor: bizPalette,
+                            borderWidth: 1,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        // 도넛 두께 유지
+                        cutout: isDoughnut ? '55%' : '0%',
+                        layout: {
+                            // [수정] 범례가 많아질 것을 대비해 상하 여백을 조금 줄여 공간 확보
+                            padding: isDoughnut
+                                ? { top: 40, bottom: 20, left: 60, right: 60 }
+                                : { top: 60, bottom: 20 }
+                        },
+                        plugins: {
+                            legend: {
+                                display: isDoughnut,
+                                position: 'bottom',
+                                labels: {
+                                    // [핵심] 범례 텍스트 크기 축소 (기존 14 -> 11)
+                                    font: { size: 13, weight: '500' },
+                                    // [핵심] 범례 아이콘(색상 박스) 크기 축소 (기존 12 -> 8)
+                                    boxWidth: 10,
+                                    boxHeight: 10,
+                                    // [핵심] 범례 항목 간의 간격 축소 (기존 30~40 -> 15)
+                                    padding: 15,
+                                    color: '#475569'
+                                }
+                            },
+                            datalabels: {
+                                clip: false,
+                                anchor: (context) => {
+                                    const pct = context.dataset.data[context.dataIndex] / total;
+                                    if (pct >= 1.0) return 'center'; // 100% 중앙
+                                    if (!isDoughnut) return 'end';
+                                    return (context.dataIndex === 0 || pct < 0.1) ? 'end' : 'center';
+                                },
+                                align: (context) => {
+                                    const pct = context.dataset.data[context.dataIndex] / total;
+                                    if (pct >= 1.0) return 'center';
+                                    if (!isDoughnut) return 'top';
+                                    return (context.dataIndex === 0 || pct < 0.1) ? 'end' : 'center';
+                                },
+                                color: (context) => {
+                                    const pct = context.dataset.data[context.dataIndex] / total;
+                                    if (!isDoughnut) return '#1e293b';
+                                    if (pct >= 1.0 || context.dataIndex === 0 || pct < 0.1) return '#1e40af';
+                                    return getContrastColor(context.dataset.backgroundColor[context.dataIndex]);
+                                },
+                                formatter: (v, context) => {
+                                    const pctText = ((v / total) * 100).toFixed(1) + '%';
+                                    if (isDoughnut && (context.dataIndex === 0 || v / total >= 1.0)) {
+                                        return context.chart.data.labels[context.dataIndex] + '\n' + pctText;
+                                    }
+                                    return pctText;
+                                },
+                                textAlign: 'center',
+                                font: { weight: 'bold', size: 13 }
+                            }
+                        },
+                        scales: !isDoughnut ? {
+                            y: { beginAtZero: true, suggestedMax: Math.max(...sortedData.map(d => d.count)) * 1.2 },
+                            x: { grid: { display: false } }
+                        } : {}
+                    }
+                });
+            });
+            setupScrollSync();
+        }
+    </script>
 
 </body>
+
 </html>
