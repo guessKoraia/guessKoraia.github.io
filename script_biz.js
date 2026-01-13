@@ -22,17 +22,36 @@ const searchBtn = document.getElementById('searchBtn');
 const clearBtn = document.getElementById('clearBtn');
 const searchState = document.getElementById('searchState');
 
-// API 기본 URL
-// 목록 페이지네이션 전용 (키워드 없을 때)
-const API_PAGING_URL = 'https://startups.koraia.org:5555/items/biz/paging';
-// 검색 전용 (Spring Boot 제공 @GetMapping("/items/biz/search"))
-const API_SEARCH_URL = 'https://startups.koraia.org:5555/items/biz/search';
+// Supabase 설정
+const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
+const SUPABASE_TABLE = 'business_announcements';
+
+// Supabase 클라이언트 초기화
+let supabaseClient = null;
+
+// Supabase 클라이언트 초기화 함수
+function initSupabase() {
+    if (typeof supabase === 'undefined' && typeof window.supabase === 'undefined') {
+        console.error('Supabase 클라이언트가 로드되지 않았습니다.');
+        return null;
+    }
+    const supabaseLib = supabase || window.supabase;
+    return supabaseLib.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
 // 향후 organization / dateRange 확장 대비 변수 (지금은 UI 없음)
 let currentOrganization = '';
 let currentDateRange = '';
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
+    // Supabase 클라이언트 초기화
+    supabaseClient = initSupabase();
+    if (!supabaseClient) {
+        showErrorMessage('Supabase 클라이언트를 초기화할 수 없습니다. 페이지를 새로고침해주세요.');
+        return;
+    }
     loadAnnouncements();
     setupEventListeners();
 });
@@ -103,45 +122,77 @@ function setupEventListeners() {
     }
 }
 
-// API에서 공고 데이터 로드
+// Supabase에서 공고 데이터 로드
 async function loadAnnouncements() {
     showLoading(true);
     
     try {
-        const params = new URLSearchParams({ page: currentPage, size: currentSize });
-        let endpoint = API_PAGING_URL;
-        if (currentKeyword) {
-            endpoint = API_SEARCH_URL;
-            params.append('keyword', currentKeyword);
-        }
-        if (currentOrganization) params.append('organization', currentOrganization);
-        if (currentDateRange) params.append('dateRange', currentDateRange);
-
-        let response = await fetch(`${endpoint}?${params.toString()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+        if (!supabaseClient) {
+            supabaseClient = initSupabase();
+            if (!supabaseClient) {
+                throw new Error('Supabase 클라이언트를 초기화할 수 없습니다.');
             }
-        });
-
-        // 검색 엔드포인트가 아직 서버에 반영되지 않은 경우(404 등) fallback
-        if (!response.ok && currentKeyword && response.status === 404) {
-            endpoint = API_PAGING_URL;
-            response = await fetch(`${endpoint}?${params.toString()}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
         }
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // 최대 1,000개까지만 조회 가능하도록 제한 (최근 등록일 기준)
+        const MAX_RESULTS = 1000;
+        
+        // Supabase 쿼리 빌더 시작
+        let query = supabaseClient
+            .from(SUPABASE_TABLE)
+            .select('*', { count: 'exact' });
+
+        // 검색 키워드가 있으면 필터링
+        if (currentKeyword) {
+            query = query.or(`사업명.ilike.%${currentKeyword}%,사이트명.ilike.%${currentKeyword}%,소관부처지자체.ilike.%${currentKeyword}%,사업수행기관.ilike.%${currentKeyword}%`);
         }
 
-        const data = await response.json();
-        currentData = data.content || [];
-        totalElements = data.totalElements || 0;
-        totalPages = data.totalPages || 0;
-        currentPage = data.page || 0;
+        // 정렬: 생성일 기준 내림차순 (최신순) - 최근 등록된 순서대로
+        query = query.order('생성일', { ascending: false });
+
+        // 페이지네이션 적용 (최근 등록일 기준 최대 1,000개까지만)
+        const from = currentPage * currentSize;
+        const to = Math.min(from + currentSize - 1, MAX_RESULTS - 1);
+        
+        // from이 to보다 크거나 같으면 빈 결과 반환
+        if (from > to || from >= MAX_RESULTS) {
+            currentData = [];
+            totalElements = 0;
+            totalPages = 0;
+            displayAnnouncements();
+            updatePagination();
+            updateResultInfo();
+            return;
+        }
+
+        query = query.range(from, to);
+        const { data, error, count } = await query;
+
+        if (error) {
+            throw new Error(`Supabase 오류: ${error.message}`);
+        }
+
+        // 데이터 변환 (기존 형식에 맞춤)
+        currentData = (data || []).map(item => ({
+            id: item.id,
+            biz: item.사업수행기관 || item.소관부처지자체 || '',
+            bizName: item.사업명 || '',
+            url: item.url || '',
+            date: item.생성일 || item.마감일 || ''
+        }));
+
+        // 최대 1,000개까지만 조회 가능하도록 제한
+        const actualCount = count || 0;
+        totalElements = Math.min(actualCount, MAX_RESULTS);
+        totalPages = Math.ceil(totalElements / currentSize);
+        
+        // 현재 페이지가 제한 범위를 넘어가면 조정
+        if (currentPage >= totalPages && totalPages > 0) {
+            currentPage = totalPages - 1;
+        }
+        if (currentPage < 0) {
+            currentPage = 0;
+        }
 
         displayAnnouncements();
         updatePagination();
@@ -153,6 +204,27 @@ async function loadAnnouncements() {
     } finally {
         showLoading(false);
     }
+}
+
+// 읽은 공고 ID 가져오기
+function getReadAnnouncements() {
+    const readIds = localStorage.getItem('readAnnouncements');
+    return readIds ? JSON.parse(readIds) : [];
+}
+
+// 공고를 읽음 처리
+function markAsRead(announcementId) {
+    const readIds = getReadAnnouncements();
+    if (!readIds.includes(announcementId)) {
+        readIds.push(announcementId);
+        localStorage.setItem('readAnnouncements', JSON.stringify(readIds));
+    }
+}
+
+// 공고가 읽음 처리되었는지 확인
+function isRead(announcementId) {
+    const readIds = getReadAnnouncements();
+    return readIds.includes(announcementId);
 }
 
 // 공고 목록 표시
@@ -174,16 +246,44 @@ function displayAnnouncements() {
         const isToday = label === '오늘';
         const todayBadge = isToday ? '<span class="today-badge"></span>' : '';
         const number = startNumber - idx;
+        const read = isRead(item.id);
+        const readBadge = read ? '<span class="read-badge">읽음</span>' : '';
+        const readClass = read ? 'read' : '';
+        
         return `
             <div class="board-row ${isToday ? 'today' : ''}">
                 <div class="board-col-number">${number}</div>
                 <div class="board-col-org">${escapeHtml(item.biz)}</div>
-                <div class="board-col-title"><a href="${item.url}" target="_blank">${escapeHtml(item.bizName)} ${todayBadge}</a></div>
+                <div class="board-col-title ${readClass}">
+                    <a href="${item.url}" target="_blank" data-id="${item.id}">
+                        ${escapeHtml(item.bizName)} ${todayBadge} ${readBadge}
+                    </a>
+                </div>
                 <div class="board-col-date ${isToday ? 'today' : ''}">${label}</div>
             </div>`;
     }).join('');
 
     announcementsList.innerHTML = announcementsHTML;
+    
+    // 링크 클릭 이벤트 리스너 추가
+    const links = announcementsList.querySelectorAll('.board-col-title a');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const announcementId = parseInt(this.getAttribute('data-id'));
+            if (announcementId && !isRead(announcementId)) {
+                markAsRead(announcementId);
+                // 클릭한 링크의 부모 요소에 read 클래스 추가
+                this.parentElement.classList.add('read');
+                // 읽음 뱃지가 없으면 추가
+                if (!this.querySelector('.read-badge')) {
+                    const readBadge = document.createElement('span');
+                    readBadge.className = 'read-badge';
+                    readBadge.textContent = '읽음';
+                    this.appendChild(readBadge);
+                }
+            }
+        });
+    });
 }
 
 // 페이지네이션 업데이트
@@ -284,7 +384,17 @@ function goToPage(page) {
 // 결과 정보 업데이트
 function updateResultInfo() {
     if (totalCount) {
-        totalCount.textContent = totalElements.toLocaleString();
+        const MAX_RESULTS = 1000;
+        const displayCount = Math.min(totalElements, MAX_RESULTS);
+        totalCount.textContent = displayCount.toLocaleString();
+        
+        // 1,000개를 초과하는 경우 안내 표시
+        if (totalElements > MAX_RESULTS) {
+            totalCount.textContent += ' (최대 1,000개)';
+            totalCount.style.color = '#d25116';
+        } else {
+            totalCount.style.color = '';
+        }
     }
     if (currentPageSpan) {
         currentPageSpan.textContent = (currentPage + 1).toLocaleString();
@@ -383,59 +493,74 @@ function formatDate(dateString) {
     }
 }
 
-// 엑셀 다운로드 함수 (10페이지 분량)
+// 엑셀 다운로드 함수 (최대 1,000개)
 async function downloadExcel() {
     try {
         excelDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 다운로드 중...';
         excelDownloadBtn.disabled = true;
 
-        const allData = [];
-        const maxPages = 10;
-        const itemsPerPage = 20;
+        if (!supabaseClient) {
+            supabaseClient = initSupabase();
+            if (!supabaseClient) {
+                throw new Error('Supabase 클라이언트를 초기화할 수 없습니다.');
+            }
+        }
 
+        const allData = [];
+        const MAX_RESULTS = 1000;
+        const itemsPerPage = 20;
+        const maxPages = Math.ceil(MAX_RESULTS / itemsPerPage); // 최대 50페이지 (1,000개)
 
         for (let page = 0; page < maxPages; page++) {
             const progress = Math.round(((page + 1) / maxPages) * 100);
             excelDownloadBtn.innerHTML = `<i class=\"fas fa-spinner fa-spin\"></i> 다운로드 중... ${progress}%`;
-            const params = new URLSearchParams({ page: page, size: itemsPerPage });
-            let endpoint = API_PAGING_URL;
-            if (currentKeyword) {
-                endpoint = API_SEARCH_URL;
-                params.append('keyword', currentKeyword);
-            }
-            if (currentOrganization) params.append('organization', currentOrganization);
-            if (currentDateRange) params.append('dateRange', currentDateRange);
 
             try {
-                let response = await fetch(`${endpoint}?${params.toString()}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok && currentKeyword && response.status === 404) {
-                    // fallback
-                    endpoint = API_PAGING_URL;
-                    response = await fetch(`${endpoint}?${params.toString()}`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
+                // Supabase 쿼리 빌더 시작
+                let query = supabaseClient
+                    .from(SUPABASE_TABLE)
+                    .select('*');
+
+                // 검색 키워드가 있으면 필터링
+                if (currentKeyword) {
+                    query = query.or(`사업명.ilike.%${currentKeyword}%,사이트명.ilike.%${currentKeyword}%,소관부처지자체.ilike.%${currentKeyword}%,사업수행기관.ilike.%${currentKeyword}%`);
                 }
-                if (response.ok) {
-                    const data = await response.json();
-                    const pageData = data.content || [];
-                    if (pageData.length > 0) {
-                        allData.push(...pageData);
-                    } else {
-                        break;
-                    }
-                    if (page >= (data.totalPages - 1)) {
+
+                // 정렬: 생성일 기준 내림차순 (최신순)
+                query = query.order('생성일', { ascending: false });
+
+                // 페이지네이션 적용
+                const from = page * itemsPerPage;
+                const to = from + itemsPerPage - 1;
+                query = query.range(from, to);
+
+                const { data, error } = await query;
+
+                if (error) {
+                    console.error('페이지 데이터 로드 오류:', error);
+                    break;
+                }
+
+                const pageData = data || [];
+                if (pageData.length > 0) {
+                    // 데이터 변환
+                    const transformedData = pageData.map(item => ({
+                        biz: item.사업수행기관 || item.소관부처지자체 || '',
+                        bizName: item.사업명 || '',
+                        url: item.url || '',
+                        date: item.생성일 || item.마감일 || ''
+                    }));
+                    allData.push(...transformedData);
+                    
+                    // 최대 1,000개까지만 다운로드
+                    if (allData.length >= MAX_RESULTS) {
                         break;
                     }
                 } else {
                     break;
                 }
             } catch (pageError) {
+                console.error('페이지 처리 오류:', pageError);
                 break;
             }
         }

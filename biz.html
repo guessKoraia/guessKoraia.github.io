@@ -189,6 +189,14 @@
             color: var(--accent-primary);
         }
 
+        .board-col-title.read a {
+            color: #999;
+        }
+
+        .board-col-title.read a:hover {
+            color: #777;
+        }
+
         .board-col-number {
             text-align: center;
             font-size: 0.8rem;
@@ -233,6 +241,21 @@
 
         .today-badge:before {
             content: 'N';
+        }
+
+        .read-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #6c757d;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            letter-spacing: .5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         @media (max-width: 860px) {
@@ -410,12 +433,102 @@
             text-decoration: underline;
         }
 
+        /* 회원사 혜택 안내 */
+        .member-benefit-notice {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .notice-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .notice-content i {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .notice-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notice-text strong {
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .benefit-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .benefit-text strong {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .contact-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .contact-link:hover {
+            color: #1558b5;
+            text-decoration: underline;
+        }
+
+        .contact-link i {
+            font-size: 0.8rem;
+        }
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .header-actions {
                 flex-direction: column;
                 align-items: stretch;
+            }
+
+            .member-benefit-notice {
+                padding: 15px;
+                margin: 20px 0;
+            }
+
+            .notice-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .notice-content i {
+                align-self: flex-start;
+            }
+
+            .benefit-text {
+                font-size: 0.85rem;
+            }
+
+            .contact-link {
+                display: block;
+                margin-left: 0;
+                margin-top: 8px;
             }
         }
     </style>
@@ -438,7 +551,7 @@
 
     <main class="container">
         <section class="hero-section">
-            <h1 class="hero-title">최신 사업공고(26년 리뉴얼 수정중)</h1>
+            <h1 class="hero-title">최신 사업공고</h1>
             <p class="hero-subtitle">정부 및 기업의 AI 관련 사업공고를 검색하고 확인할 수 있습니다.</p>
 
             <div class="search-wrapper">
@@ -458,6 +571,20 @@
                 </button>
             </div>
         </section>
+
+        <!-- 회원사 혜택 안내 -->
+        <div class="member-benefit-notice">
+            <div class="notice-content">
+                <i class="fas fa-info-circle"></i>
+                <div class="notice-text">
+                    <strong>무료 이용자는 최대 1,000개까지만 조회 가능합니다.</strong>
+                    <span class="benefit-text">
+                        <strong>한국인공지능협회 회원사</strong>라면 무제한 열람 및 통합 사업공고를 확인하실 수 있습니다.
+                        <a href="https://www.koraia.org/default/mp2/sub1.php?sub=01" target="_blank" class="contact-link">회원사 가입하기 <i class="fas fa-arrow-right"></i></a>
+                    </span>
+                </div>
+            </div>
+        </div>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -527,7 +654,7 @@
             </div>
             <div class="footer-bottom">
                 <div class="footer-copyright">
-                    © 2025 (사)한국인공지능협회. All rights reserved.
+                    © 2026 (사)한국인공지능협회. All rights reserved.
                 </div>
                 <div class="footer-links">
                     <!-- <a href="#">개인정보처리방침</a> -->
@@ -717,6 +844,8 @@
         </div>
     </div>
 
+    <!-- Supabase JavaScript 클라이언트 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script_biz.js"></script>
     <script>
         // 스크롤 버튼 표시/숨김 처리
