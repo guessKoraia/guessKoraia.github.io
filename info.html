@@ -538,37 +538,31 @@
         }
 
         function formatDateKST(dateString) {
+            // 1. dateString에 '+09'가 있으므로, new Date()는 이를 자동으로 인식하여 로컬 시간으로 변환합니다.
             const date = new Date(dateString);
             const now = new Date();
-
-            // KST(로컬 시간) 기준으로 시간 부분을 제외한 날짜 객체를 생성합니다.
-            // 이렇게 하면 날짜(YYYY-MM-DD)만을 기준으로 정확하게 비교할 수 있습니다.
+        
+            // 2. '날짜'만 비교하기 위해 연, 월, 일을 추출하여 새로운 객체 생성
+            // (시, 분, 초의 차이 때문에 '오늘'이 '어제'로 인식되는 것을 방지)
             const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-            // 두 날짜 간의 차이를 일(day) 단위로 계산합니다.
-            const diff = Math.floor((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
-
-            if (diff === 0) return '오늘';
-            if (diff === 1) return '어제';
-            if (diff > 0 && diff < 7) return `${diff}일 전`;
-            if (diff < 0) {
-                const futureDiff = Math.abs(diff);
+        
+            // 3. 두 날짜의 차이를 밀리초 단위로 구한 뒤 '일(day)' 단위로 환산
+            const diffTime = nowOnly - dateOnly;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+            if (diffDays === 0) return '오늘';
+            if (diffDays === 1) return '어제';
+            if (diffDays > 1 && diffDays < 7) return `${diffDays}일 전`;
+            
+            if (diffDays < 0) {
+                const futureDiff = Math.abs(diffDays);
                 if (futureDiff === 1) return '내일';
                 return `${futureDiff}일 후`;
             }
-
-            // (선택 사항) 7일 이상 차이 나는 경우, 날짜를 직접 표시
-            if (diff >= 7) {
-                return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-            }
-
-            // 날짜 포맷팅 부분은 원래대로 로컬 기준으로 보여주는 것이 자연스러울 수 있습니다.
-            return date.toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
+        
+            // 4. 7일 이상 차이 나면 날짜 그대로 표시
+            return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
         }
 
         function truncateTitle(title, maxLength = 120) {
