@@ -134,8 +134,8 @@ async function loadAnnouncements() {
             }
         }
 
-        // 최대 100개까지만 조회 가능하도록 제한 (최근 등록일 기준)
-        const MAX_RESULTS = 100;
+        // 최대 1000개까지만 조회 가능하도록 제한 (최근 등록일 기준)
+        const MAX_RESULTS = 1000;
         
         // Supabase 쿼리 빌더 시작
         let query = supabaseClient
@@ -384,7 +384,7 @@ function goToPage(page) {
 // 결과 정보 업데이트
 function updateResultInfo() {
     if (totalCount) {
-        const MAX_RESULTS = 100;
+        const MAX_RESULTS = 1000;
         const displayCount = Math.min(totalElements, MAX_RESULTS);
         totalCount.textContent = displayCount.toLocaleString();
         
@@ -507,7 +507,7 @@ async function downloadExcel() {
         }
 
         const allData = [];
-        const MAX_RESULTS = 100;
+        const MAX_RESULTS = 1000;
         const itemsPerPage = 20;
         const maxPages = Math.ceil(MAX_RESULTS / itemsPerPage); // 최대 50페이지 (1,000개)
 
