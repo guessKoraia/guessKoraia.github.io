@@ -394,6 +394,27 @@
                 font-size: 0.8rem;
             }
         }
+
+        /* 읽은 기사 스타일 */
+        .article-item.visited {
+            background-color: #f8f9fa !important; /* 배경을 더 연하게 */
+        }
+        
+        .article-item.visited .article-title {
+            color: #888888 !important; /* 제목을 회색으로 */
+        }
+        
+        .read-badge {
+            background: #e9ecef;
+            color: #6c757d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 8px;
+            display: inline-block;
+            border: 1px solid #dee2e6;
+        }
     </style>
 </head>
 <body>
@@ -510,6 +531,22 @@
     </button>
 
     <script>
+
+        // 읽은 기사 ID 목록 가져오기
+        function getReadArticles() {
+            const read = localStorage.getItem('read_articles');
+            return read ? JSON.parse(read) : [];
+        }
+        
+        // 읽은 기사로 저장하기
+        function markAsRead(id) {
+            let read = getReadArticles();
+            if (!read.includes(id)) {
+                read.push(id);
+                localStorage.setItem('read_articles', JSON.stringify(read));
+            }
+        }
+        
         // Supabase 설정
         const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
@@ -730,29 +767,37 @@
 
                 articlesContainer.style.display = 'block';
                 
+                // loadArticles 함수의 ai_info.map 부분 수정
                 articlesEl.innerHTML = ai_info.map((article, index) => {
-                    // 필터링된 결과에서의 순번 계산 (최신순 정렬이므로 큰 번호부터)
-                    // 예: 행사 50개 → 1페이지: 50,49,48...41 / 2페이지: 40,39,38...31
                     const itemNumber = totalItems - startIndex - index;
                     const highlightedTitle = highlightSearchTerm(article.title, currentSearchQuery);
                     const truncatedTitle = truncateTitle(highlightedTitle, 120);
+                    
+                    // 읽음 여부 확인 (ID 기준)
+                    const readList = getReadArticles();
+                    const isRead = readList.includes(article.id); // Supabase 테이블에 'id' 컬럼이 있다고 가정
+                    
+                    const readBadge = isRead ? '<span class="read-badge">읽음</span>' : '';
+                    const visitedClass = isRead ? 'visited' : '';
+                
                     const eventLabel = isEventArticle(article.url) ? '<span class="event-label">행사</span>' : '';
                     const reportLabel = isReportArticle(article.url) ? '<span class="report-label">보고서</span>' : '';
                     const labels = eventLabel + reportLabel;
                     const faviconUrl = getFaviconUrl(article.url);
                     
+                    // onclick="markAsRead('${article.id}')" 추가하여 클릭 시 읽음 처리
                     return `
-                        <div class="article-item">
+                        <div class="article-item ${visitedClass}" id="item-${article.id}">
                             <div class="article-number">${itemNumber}</div>
                             <div class="article-content">
-                                <a href="${article.url}" target="_blank" class="article-title">
+                                <a href="${article.url}" target="_blank" class="article-title" onclick="markAsRead('${article.id}')">
                                     <img class="fav" src="${faviconUrl}" alt="" onerror="this.style.display='none'">
-                                    ${labels} ${truncatedTitle}
+                                    ${labels} ${readBadge} ${truncatedTitle}
                                 </a>
                             </div>
                             <div class="article-date">${formatDateKST(article.created_at)}</div>
                             <div class="article-link">
-                                <a href="${article.url}" target="_blank" class="read-btn">읽기</a>
+                                <a href="${article.url}" target="_blank" class="read-btn" onclick="markAsRead('${article.id}')">읽기</a>
                             </div>
                         </div>
                     `;
@@ -927,13 +972,16 @@
             try {
                 document.getElementById('total-count').textContent = totalItems;
                 document.getElementById('total-pages').textContent = totalPages;
-
-                const today = new Date().toISOString().split('T')[0];
+        
+                // 한국 시간 기준 '오늘 00:00:00' 구하기
+                const now = new Date();
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
                 const { count: todayCount } = await supabaseClient
                     .from('ai_info')
                     .select('*', { count: 'exact', head: true })
-                    .gte('created_at', today);
-
+                    .gte('created_at', todayStart.toISOString()); // ISO 형식으로 쿼리
+        
                 document.getElementById('today-count').textContent = todayCount || 0;
 
             } catch (error) {
