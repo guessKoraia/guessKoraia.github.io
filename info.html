@@ -448,6 +448,9 @@
                 <button class="filter-btn" onclick="toggleEventFilter()" id="event-filter-btn"><i class="fas fa-calendar-alt"></i> 행사</button>
                 <button class="filter-btn report-filter-btn" onclick="toggleReportFilter()" id="report-filter-btn"><i class="fas fa-file-alt"></i> 보고서</button>
                 <button class="refresh-btn" onclick="loadArticles()"><i class="fas fa-sync-alt"></i> 새로고침</button>
+                <button class="refresh-btn" onclick="localStorage.removeItem('read_articles'); location.reload();">
+    <i class="fas fa-trash"></i> 기록 삭제
+</button>
             </div>
         </section>
 
