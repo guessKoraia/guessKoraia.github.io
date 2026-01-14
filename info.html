@@ -215,23 +215,37 @@
             text-align: center;
         }
 
+        /* 기본 '읽기' 버튼 (안 읽은 상태: 연한 파스텔톤) */
         .read-btn {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
+            background: #e7f1ff; /* 아주 연한 파스텔 파랑 */
+            color: #0066ff;
+            border: 1px solid #cce0ff;
             text-decoration: none;
-            padding: 6px 12px;
+            padding: 6px 16px;
             border-radius: 4px;
             font-size: 0.8rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.2s ease;
             display: inline-block;
         }
-
+        
         .read-btn:hover {
-            border-color: var(--accent-primary);
+            background: #0066ff;
             color: #ffffff;
-            background: var(--accent-primary);
+            border-color: #0066ff;
+        }
+        
+        /* 읽은 상태의 버튼 (현재 액센트 컬러로 채움) */
+        .article-item.visited .read-btn {
+            background: #0066ff !important; /* 액센트 컬러 */
+            color: #ffffff !important;
+            border-color: #0066ff !important;
+            opacity: 0.8; /* 읽은 것은 약간 불투명하게 처리하여 구분 가능 */
+        }
+        
+        /* 읽은 줄 전체 배경색 (더 연하게 조정) */
+        .article-item.visited {
+            background-color: #fcfcfc !important;
         }
 
         /* Search Results */
@@ -395,13 +409,9 @@
             }
         }
 
-        /* 읽은 기사 스타일 */
-        .article-item.visited {
-            background-color: #f8f9fa !important; /* 배경을 더 연하게 */
-        }
         
         .article-item.visited .article-title {
-            color: #888888 !important; /* 제목을 회색으로 */
+            color: #888888; /* 제목을 회색으로 */
         }
         
         .read-badge {
@@ -552,19 +562,18 @@
                 localStorage.setItem('read_articles', JSON.stringify(read));
             }
         
-            // 화면 업데이트
+            // 화면 즉시 업데이트
             const itemEl = document.getElementById(`item-${id}`);
             if (itemEl) {
-                itemEl.classList.add('visited'); // 회색 처리
+                // 1. 전체 줄에 visited 클래스 추가 (글자색, 버튼색 변경 트리거)
+                itemEl.classList.add('visited'); 
                 
+                // 2. 제목 끝에 [읽음] 라벨 추가
                 const titleEl = itemEl.querySelector('.article-title');
-                // 라벨이 이미 없다면 끝에 추가
                 if (titleEl && !titleEl.querySelector('.read-badge')) {
                     const badge = document.createElement('span');
                     badge.className = 'read-badge';
                     badge.innerText = '읽음';
-                    
-                    // appendChild를 사용하여 요소의 가장 마지막에 삽입
                     titleEl.appendChild(badge); 
                 }
             }
