@@ -455,6 +455,7 @@
 
             <div class="search-controls">
                 <button class="clear-search-btn" onclick="clearSearch()" style="display: none;" id="clear-search-btn">검색 초기화</button>
+                <button class="filter-btn" onclick="localStorage.removeItem('read_articles'); location.reload();"><i class="fas fa-trash"></i>읽은 기록 삭제</button>
                 <button class="filter-btn" onclick="toggleEventFilter()" id="event-filter-btn"><i class="fas fa-calendar-alt"></i> 행사</button>
                 <button class="filter-btn report-filter-btn" onclick="toggleReportFilter()" id="report-filter-btn"><i class="fas fa-file-alt"></i> 보고서</button>
                 <button class="refresh-btn" onclick="downloadReadArticles()" style="background-color: #28a745; color: white; border-color: #28a745;">
