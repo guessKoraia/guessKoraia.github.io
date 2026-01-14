@@ -812,7 +812,6 @@
                         <div class="article-item ${visitedClass}" id="item-${article.id}">
                             <div class="article-number">${itemNumber}</div>
                             <div class="article-content">
-                                // loadArticles 내 map 함수 리턴 부분 (라벨을 제목 뒤 ${truncatedTitle} 뒤로 이동)
                                 <a href="${article.url}" target="_blank" class="article-title" onclick="markAsRead('${article.id}')">
                                     <img class="fav" src="${faviconUrl}" alt="" onerror="this.style.display='none'">
                                     ${labels} ${truncatedTitle} ${readBadge} </a>
