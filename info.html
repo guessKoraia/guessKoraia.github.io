@@ -539,11 +539,31 @@
         }
         
         // 읽은 기사로 저장하기
+        // 읽은 기사로 저장하기 + 즉시 화면 반영
         function markAsRead(id) {
             let read = getReadArticles();
-            if (!read.includes(id)) {
-                read.push(id);
+            // ID를 문자열로 통일하여 저장 (비교 오류 방지)
+            const stringId = String(id);
+            
+            if (!read.includes(stringId)) {
+                read.push(stringId);
                 localStorage.setItem('read_articles', JSON.stringify(read));
+            }
+        
+            // [추가] 즉시 화면 업데이트
+            const itemEl = document.getElementById(`item-${id}`);
+            if (itemEl) {
+                itemEl.classList.add('visited'); // 회색 처리
+                
+                // 라벨이 이미 없다면 추가
+                const titleEl = itemEl.querySelector('.article-title');
+                if (titleEl && !titleEl.querySelector('.read-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'read-badge';
+                    badge.innerText = '읽음';
+                    // 파비콘(img)이나 라벨(span) 다음에 삽입하기 위해 제목 텍스트 앞에 넣음
+                    titleEl.insertBefore(badge, titleEl.childNodes[titleEl.childNodes.length - 1]);
+                }
             }
         }
         
@@ -767,15 +787,15 @@
 
                 articlesContainer.style.display = 'block';
                 
-                // loadArticles 함수의 ai_info.map 부분 수정
+                // loadArticles 함수의 ai_info.map 내부 수정
                 articlesEl.innerHTML = ai_info.map((article, index) => {
                     const itemNumber = totalItems - startIndex - index;
                     const highlightedTitle = highlightSearchTerm(article.title, currentSearchQuery);
                     const truncatedTitle = truncateTitle(highlightedTitle, 120);
                     
-                    // 읽음 여부 확인 (ID 기준)
-                    const readList = getReadArticles();
-                    const isRead = readList.includes(article.id); // Supabase 테이블에 'id' 컬럼이 있다고 가정
+                    // 읽음 여부 확인 (문자열로 변환하여 비교)
+                    const readList = getReadArticles().map(String);
+                    const isRead = readList.includes(String(article.id)); 
                     
                     const readBadge = isRead ? '<span class="read-badge">읽음</span>' : '';
                     const visitedClass = isRead ? 'visited' : '';
@@ -785,7 +805,6 @@
                     const labels = eventLabel + reportLabel;
                     const faviconUrl = getFaviconUrl(article.url);
                     
-                    // onclick="markAsRead('${article.id}')" 추가하여 클릭 시 읽음 처리
                     return `
                         <div class="article-item ${visitedClass}" id="item-${article.id}">
                             <div class="article-number">${itemNumber}</div>
