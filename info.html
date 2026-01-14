@@ -411,9 +411,10 @@
             border-radius: 4px;
             font-size: 0.7rem;
             font-weight: 600;
-            margin-left: 8px;
+            margin-left: 8px; /* 제목 텍스트와 라벨 사이의 간격 */
             display: inline-block;
             border: 1px solid #dee2e6;
+            vertical-align: middle; /* 텍스트와 높이 맞춤 */
         }
     </style>
 </head>
@@ -541,11 +542,9 @@
             return read ? JSON.parse(read) : [];
         }
         
-        // 읽은 기사로 저장하기
         // 읽은 기사로 저장하기 + 즉시 화면 반영
         function markAsRead(id) {
             let read = getReadArticles();
-            // ID를 문자열로 통일하여 저장 (비교 오류 방지)
             const stringId = String(id);
             
             if (!read.includes(stringId)) {
@@ -553,19 +552,20 @@
                 localStorage.setItem('read_articles', JSON.stringify(read));
             }
         
-            // [추가] 즉시 화면 업데이트
+            // 화면 업데이트
             const itemEl = document.getElementById(`item-${id}`);
             if (itemEl) {
                 itemEl.classList.add('visited'); // 회색 처리
                 
-                // 라벨이 이미 없다면 추가
                 const titleEl = itemEl.querySelector('.article-title');
+                // 라벨이 이미 없다면 끝에 추가
                 if (titleEl && !titleEl.querySelector('.read-badge')) {
                     const badge = document.createElement('span');
                     badge.className = 'read-badge';
                     badge.innerText = '읽음';
-                    // 파비콘(img)이나 라벨(span) 다음에 삽입하기 위해 제목 텍스트 앞에 넣음
-                    titleEl.insertBefore(badge, titleEl.childNodes[titleEl.childNodes.length - 1]);
+                    
+                    // appendChild를 사용하여 요소의 가장 마지막에 삽입
+                    titleEl.appendChild(badge); 
                 }
             }
         }
@@ -812,10 +812,10 @@
                         <div class="article-item ${visitedClass}" id="item-${article.id}">
                             <div class="article-number">${itemNumber}</div>
                             <div class="article-content">
+                                // loadArticles 내 map 함수 리턴 부분 (라벨을 제목 뒤 ${truncatedTitle} 뒤로 이동)
                                 <a href="${article.url}" target="_blank" class="article-title" onclick="markAsRead('${article.id}')">
                                     <img class="fav" src="${faviconUrl}" alt="" onerror="this.style.display='none'">
-                                    ${labels} ${readBadge} ${truncatedTitle}
-                                </a>
+                                    ${labels} ${truncatedTitle} ${readBadge} </a>
                             </div>
                             <div class="article-date">${formatDateKST(article.created_at)}</div>
                             <div class="article-link">
