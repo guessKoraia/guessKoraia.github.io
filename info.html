@@ -457,10 +457,10 @@
                 <button class="clear-search-btn" onclick="clearSearch()" style="display: none;" id="clear-search-btn">검색 초기화</button>
                 <button class="filter-btn" onclick="toggleEventFilter()" id="event-filter-btn"><i class="fas fa-calendar-alt"></i> 행사</button>
                 <button class="filter-btn report-filter-btn" onclick="toggleReportFilter()" id="report-filter-btn"><i class="fas fa-file-alt"></i> 보고서</button>
+                <button class="refresh-btn" onclick="downloadReadArticles()" style="background-color: #28a745; color: white; border-color: #28a745;">
+                    <i class="fas fa-file-download"></i> 읽은 목록 저장
+                </button>
                 <button class="refresh-btn" onclick="loadArticles()"><i class="fas fa-sync-alt"></i> 새로고침</button>
-                <button class="refresh-btn" onclick="localStorage.removeItem('read_articles'); location.reload();">
-    <i class="fas fa-trash"></i> 기록 삭제
-</button>
             </div>
         </section>
 
@@ -530,7 +530,7 @@
             </div>
             <div class="footer-bottom">
                 <div class="footer-copyright">
-                    © 2025 (사)한국인공지능협회. All rights reserved.
+                    © 2026 (사)한국인공지능협회. All rights reserved.
                 </div>
                 <div class="footer-links">
                     <!-- <a href="#">개인정보처리방침</a> -->
@@ -1067,6 +1067,51 @@
 
         // 초기 로드
         window.addEventListener('load', () => loadArticles(1));
+
+        async function downloadReadArticles() {
+        const readIds = getReadArticles().map(String); // 읽은 기사 ID 목록 (문자열)
+    
+        if (readIds.length === 0) {
+            alert("읽은 기사가 없습니다.");
+            return;
+        }
+    
+        // 1. Supabase에서 읽은 ID들에 해당하는 데이터만 가져오기
+        // (현재 페이지 데이터만 뽑는 것보다 전체 DB에서 내가 읽은 걸 다 뽑는 게 정확합니다)
+        const { data: readData, error } = await supabaseClient
+            .from('ai_info')
+            .select('title, url, created_at')
+            .in('id', readIds);
+    
+        if (error || !readData) {
+            alert("데이터를 가져오는 중 오류가 발생했습니다.");
+            return;
+        }
+    
+        // 2. CSV 데이터 생성 (엑셀에서 한글이 깨지지 않도록 BOM 추가)
+        let csvContent = "\uFEFF"; // 한글 깨짐 방지용 BOM
+        csvContent += "날짜,제목,링크\n"; // 헤더
+    
+        readData.forEach(row => {
+            const date = new Date(row.created_at).toLocaleDateString('ko-KR');
+            // 쉼표(,)가 제목에 있을 경우를 대비해 큰따옴표로 감싸줌
+            csvContent += `"${date}","${row.title.replace(/"/g, '""')}","${row.url}"\n`;
+        });
+    
+        // 3. 파일 다운로드 트리거
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        const today = new Date().toISOString().split('T')[0];
+        link.setAttribute("href", url);
+        link.setAttribute("download", `AI_News_Read_List_${today}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+            
     </script>
 </body>
 
