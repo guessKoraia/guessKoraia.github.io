@@ -123,6 +123,7 @@ function setupEventListeners() {
 }
 
 // Supabase에서 공고 데이터 로드
+// Supabase에서 공고 데이터 로드
 async function loadAnnouncements() {
     showLoading(true);
     
@@ -134,27 +135,23 @@ async function loadAnnouncements() {
             }
         }
 
-        // 최대 1000개까지만 조회 가능하도록 제한 (최근 등록일 기준)
         const MAX_RESULTS = 1000;
         
-        // Supabase 쿼리 빌더 시작
         let query = supabaseClient
             .from(SUPABASE_TABLE)
             .select('*', { count: 'exact' });
 
-        // 검색 키워드가 있으면 필터링
+        // [변경] 검색 키워드 필터를 영문 컬럼명으로 수정
         if (currentKeyword) {
-            query = query.or(`사업명.ilike.%${currentKeyword}%,사이트명.ilike.%${currentKeyword}%,소관부처지자체.ilike.%${currentKeyword}%,사업수행기관.ilike.%${currentKeyword}%`);
+            query = query.or(`business_name.ilike.%${currentKeyword}%,site_name.ilike.%${currentKeyword}%,responsible_organization.ilike.%${currentKeyword}%,executing_organization.ilike.%${currentKeyword}%`);
         }
 
-        // 정렬: 생성일 기준 내림차순 (최신순) - 최근 등록된 순서대로
-        query = query.order('생성일', { ascending: false });
+        // [변경] 정렬 기준을 '생성일' -> 'created_at'으로 수정
+        query = query.order('created_at', { ascending: false });
 
-        // 페이지네이션 적용 (최근 등록일 기준 최대 1,000개까지만)
         const from = currentPage * currentSize;
         const to = Math.min(from + currentSize - 1, MAX_RESULTS - 1);
         
-        // from이 to보다 크거나 같으면 빈 결과 반환
         if (from > to || from >= MAX_RESULTS) {
             currentData = [];
             totalElements = 0;
@@ -172,25 +169,23 @@ async function loadAnnouncements() {
             throw new Error(`Supabase 오류: ${error.message}`);
         }
 
-        // 데이터 변환 (기존 형식에 맞춤)
+        // [변경] 데이터 변환 시 영문 컬럼명으로부터 매핑
         currentData = (data || []).map(item => ({
             id: item.id,
-            siteName: item.사이트명 || '',
-            ministry: item.소관부처지자체 || '',
-            agency: item.사업수행기관 || '',
-            bizName: item.사업명 || '',
+            siteName: item.site_name || '',
+            ministry: item.responsible_organization || '',
+            agency: item.executing_organization || '',
+            bizName: item.business_name || '',
             url: item.url || '',
-            startDate: item.신청일 || '',
-            endDate: item.마감일 || '',
-            createdDate: item.생성일 || ''
+            startDate: item.application_date || '',
+            endDate: item.deadline_date || '',
+            createdDate: item.created_at || '' // '생성일' -> 'created_at'
         }));
 
-        // 최대 1,000개까지만 조회 가능하도록 제한
         const actualCount = count || 0;
         totalElements = Math.min(actualCount, MAX_RESULTS);
         totalPages = Math.ceil(totalElements / currentSize);
         
-        // 현재 페이지가 제한 범위를 넘어가면 조정
         if (currentPage >= totalPages && totalPages > 0) {
             currentPage = totalPages - 1;
         }
@@ -562,27 +557,25 @@ async function downloadExcel() {
         const allData = [];
         const MAX_RESULTS = 1000;
         const itemsPerPage = 20;
-        const maxPages = Math.ceil(MAX_RESULTS / itemsPerPage); // 최대 50페이지 (1,000개)
+        const maxPages = Math.ceil(MAX_RESULTS / itemsPerPage);
 
         for (let page = 0; page < maxPages; page++) {
             const progress = Math.round(((page + 1) / maxPages) * 100);
-            excelDownloadBtn.innerHTML = `<i class=\"fas fa-spinner fa-spin\"></i> 다운로드 중... ${progress}%`;
+            excelDownloadBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> 다운로드 중... ${progress}%`;
 
             try {
-                // Supabase 쿼리 빌더 시작
                 let query = supabaseClient
                     .from(SUPABASE_TABLE)
                     .select('*');
 
-                // 검색 키워드가 있으면 필터링
+                // [변경] 영문 컬럼명으로 수정
                 if (currentKeyword) {
-                    query = query.or(`사업명.ilike.%${currentKeyword}%,사이트명.ilike.%${currentKeyword}%,소관부처지자체.ilike.%${currentKeyword}%,사업수행기관.ilike.%${currentKeyword}%`);
+                    query = query.or(`business_name.ilike.%${currentKeyword}%,site_name.ilike.%${currentKeyword}%,responsible_organization.ilike.%${currentKeyword}%,executing_organization.ilike.%${currentKeyword}%`);
                 }
 
-                // 정렬: 생성일 기준 내림차순 (최신순)
-                query = query.order('생성일', { ascending: false });
+                // [변경] 생성일 -> created_at
+                query = query.order('created_at', { ascending: false });
 
-                // 페이지네이션 적용
                 const from = page * itemsPerPage;
                 const to = from + itemsPerPage - 1;
                 query = query.range(from, to);
@@ -596,20 +589,19 @@ async function downloadExcel() {
 
                 const pageData = data || [];
                 if (pageData.length > 0) {
-                    // 데이터 변환
+                    // [변경] 데이터 변환 매핑 수정
                     const transformedData = pageData.map(item => ({
-                        siteName: item.사이트명 || '',
-                        ministry: item.소관부처지자체 || '',
-                        agency: item.사업수행기관 || '',
-                        bizName: item.사업명 || '',
+                        siteName: item.site_name || '',
+                        ministry: item.responsible_organization || '',
+                        agency: item.executing_organization || '',
+                        bizName: item.business_name || '',
                         url: item.url || '',
-                        startDate: item.신청일 || '',
-                        endDate: item.마감일 || '',
-                        createdDate: item.생성일 || ''
+                        startDate: item.application_date || '',
+                        endDate: item.deadline_date || '',
+                        createdDate: item.created_at || ''
                     }));
                     allData.push(...transformedData);
                     
-                    // 최대 1,000개까지만 다운로드
                     if (allData.length >= MAX_RESULTS) {
                         break;
                     }
