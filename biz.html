@@ -139,9 +139,9 @@
 
         .board-header, .board-row {
             display: grid;
-            grid-template-columns: 70px 170px 1fr 110px;
+            grid-template-columns: 60px 140px 1fr 100px 100px 100px;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .board-header {
@@ -224,6 +224,53 @@
             font-weight: 600;
         }
 
+        .board-col-date.expired {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .board-col-date.deadline-soon {
+            color: #e67e22;
+            font-weight: 600;
+        }
+
+        .board-col-agency {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .board-col-ministry {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .deadline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+
+        .deadline-badge.d-day {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .deadline-badge.d-soon {
+            background: #f39c12;
+            color: #fff;
+        }
+
         .today-badge {
             display: inline-flex;
             align-items: center;
@@ -258,11 +305,20 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        @media (max-width: 1200px) {
+            .board-header, .board-row {
+                grid-template-columns: 50px 120px 1fr 90px 90px;
+            }
+            .board-col-agency {
+                display: none;
+            }
+        }
+
         @media (max-width: 860px) {
             .board-header, .board-row {
-                grid-template-columns: 60px 1fr 100px;
+                grid-template-columns: 50px 1fr 90px 90px;
             }
-            .board-col-org {
+            .board-col-ministry {
                 display: none;
             }
         }
@@ -272,11 +328,21 @@
                 display: none;
             }
             .board-row {
-                grid-template-columns: 50px 1fr;
-                row-gap: 6px;
+                grid-template-columns: 1fr;
+                row-gap: 8px;
+                padding: 16px;
+            }
+            .board-col-number {
+                display: none;
             }
             .board-col-date {
-                justify-self: end;
+                justify-self: start;
+            }
+            .board-row-mobile-dates {
+                display: flex;
+                gap: 12px;
+                font-size: 0.75rem;
+                color: var(--text-secondary);
             }
         }
 
@@ -612,9 +678,11 @@
             <div class="board-wrapper">
                 <div class="board-header">
                     <div class="board-col-number">번호</div>
-                    <div class="board-col-org">기관</div>
-                    <div class="board-col-title">공고명</div>
-                    <div class="board-col-date">등록일</div>
+                    <div class="board-col-ministry">소관부처</div>
+                    <div class="board-col-title">사업명</div>
+                    <div class="board-col-date">신청일</div>
+                    <div class="board-col-date">마감일</div>
+                    <div class="board-col-agency">수행기관</div>
                 </div>
                 <div id="announcementsList" class="board-body">
                     <!-- 동적 rows -->

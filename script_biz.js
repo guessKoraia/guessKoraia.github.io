@@ -175,10 +175,14 @@ async function loadAnnouncements() {
         // 데이터 변환 (기존 형식에 맞춤)
         currentData = (data || []).map(item => ({
             id: item.id,
-            biz: item.사업수행기관 || item.소관부처지자체 || '',
+            siteName: item.사이트명 || '',
+            ministry: item.소관부처지자체 || '',
+            agency: item.사업수행기관 || '',
             bizName: item.사업명 || '',
             url: item.url || '',
-            date: item.생성일 || item.마감일 || ''
+            startDate: item.신청일 || '',
+            endDate: item.마감일 || '',
+            createdDate: item.생성일 || ''
         }));
 
         // 최대 1,000개까지만 조회 가능하도록 제한
@@ -241,25 +245,58 @@ function displayAnnouncements() {
     }
 
     const startNumber = totalElements - (currentPage * currentSize);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const announcementsHTML = currentData.map((item, idx) => {
-        const label = formatDate(item.date);
-        const isToday = label === '오늘';
-        const todayBadge = isToday ? '<span class="today-badge"></span>' : '';
         const number = startNumber - idx;
         const read = isRead(item.id);
         const readBadge = read ? '<span class="read-badge">읽음</span>' : '';
         const readClass = read ? 'read' : '';
         
+        // 신청일 포맷
+        const startDateStr = item.startDate ? formatDateSimple(item.startDate) : '-';
+        
+        // 마감일 처리
+        let endDateStr = '-';
+        let endDateClass = '';
+        let deadlineBadge = '';
+        
+        if (item.endDate) {
+            const endDate = new Date(item.endDate);
+            endDate.setHours(0, 0, 0, 0);
+            const diffDays = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+            
+            endDateStr = formatDateSimple(item.endDate);
+            
+            if (diffDays < 0) {
+                endDateClass = 'expired';
+            } else if (diffDays === 0) {
+                endDateClass = 'today';
+                deadlineBadge = '<span class="deadline-badge d-day">D-Day</span>';
+            } else if (diffDays <= 7) {
+                endDateClass = 'deadline-soon';
+                deadlineBadge = `<span class="deadline-badge d-soon">D-${diffDays}</span>`;
+            }
+        }
+
+        // 오늘 등록된 공고인지 확인
+        const createdLabel = formatDate(item.createdDate);
+        const isNewToday = createdLabel === '오늘';
+        const todayBadge = isNewToday ? '<span class="today-badge"></span>' : '';
+        
         return `
-            <div class="board-row ${isToday ? 'today' : ''}">
+            <div class="board-row">
                 <div class="board-col-number">${number}</div>
-                <div class="board-col-org">${escapeHtml(item.biz)}</div>
+                <div class="board-col-ministry" title="${escapeHtml(item.ministry)}">${escapeHtml(item.ministry) || '-'}</div>
                 <div class="board-col-title ${readClass}">
                     <a href="${item.url}" target="_blank" data-id="${item.id}">
                         ${escapeHtml(item.bizName)} ${todayBadge} ${readBadge}
                     </a>
                 </div>
-                <div class="board-col-date ${isToday ? 'today' : ''}">${label}</div>
+                <div class="board-col-date">${startDateStr}</div>
+                <div class="board-col-date ${endDateClass}">${endDateStr} ${deadlineBadge}</div>
+                <div class="board-col-agency" title="${escapeHtml(item.agency)}">${escapeHtml(item.agency) || '-'}</div>
             </div>`;
     }).join('');
 
@@ -469,7 +506,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// 날짜 포맷팅 함수
+// 날짜 포맷팅 함수 (상대적 표시: 오늘, 어제, n일 전)
 function formatDate(dateString) {
     if (!dateString) return '';
     
@@ -491,6 +528,22 @@ function formatDate(dateString) {
             day: '2-digit'
         });
     }
+}
+
+// 날짜 포맷팅 함수 (간단한 날짜 형식: 올해는 MM.DD, 다른 연도는 YYYY.MM.DD)
+function formatDateSimple(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    // 올해면 연도 생략
+    if (year === now.getFullYear()) {
+        return `${month}.${day}`;
+    }
+    return `${year}.${month}.${day}`;
 }
 
 // 엑셀 다운로드 함수 (최대 1,000개)
@@ -545,10 +598,14 @@ async function downloadExcel() {
                 if (pageData.length > 0) {
                     // 데이터 변환
                     const transformedData = pageData.map(item => ({
-                        biz: item.사업수행기관 || item.소관부처지자체 || '',
+                        siteName: item.사이트명 || '',
+                        ministry: item.소관부처지자체 || '',
+                        agency: item.사업수행기관 || '',
                         bizName: item.사업명 || '',
                         url: item.url || '',
-                        date: item.생성일 || item.마감일 || ''
+                        startDate: item.신청일 || '',
+                        endDate: item.마감일 || '',
+                        createdDate: item.생성일 || ''
                     }));
                     allData.push(...transformedData);
                     
@@ -591,18 +648,21 @@ async function downloadExcel() {
 
 // CSV 데이터 생성 함수
 function generateCSV(data) {
-    const headers = ['번호', '기관명', '공고명', 'URL', '날짜'];
+    const headers = ['번호', '사이트명', '소관부처/지자체', '사업명', '신청일', '마감일', '수행기관', 'URL'];
     const rows = data.map((item, index) => [
         index + 1,
-        item.biz || '',
+        item.siteName || '',
+        item.ministry || '',
         item.bizName || '',
-        item.url || '',
-        item.date || ''
+        item.startDate || '',
+        item.endDate || '',
+        item.agency || '',
+        item.url || ''
     ]);
 
     const csvContent = [
         headers.join(','),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+        ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
     ].join('\n');
 
     return csvContent;
