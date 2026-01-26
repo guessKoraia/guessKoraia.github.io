@@ -16,6 +16,8 @@
             background: #f3f3f3;
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -181,7 +183,7 @@
             font-size: 14px;
             transition: border-color 0.2s ease;
             background: white;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         .form-group input:focus,
@@ -265,6 +267,7 @@
             color: #1f1f1f;
             flex: 1;
             line-height: 1.4;
+            word-break: break-word;
         }
 
         .card-actions {
@@ -278,19 +281,33 @@
         }
 
         .card-url {
-            color: #667eea;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            color: #0078d4;
+            font-size: 0.875em;
+            margin-bottom: 12px;
             word-break: break-all;
+            padding: 0;
+        }
+
+        .card-url a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+
+        .card-url a:hover {
+            text-decoration: underline;
         }
 
         .card-content {
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             max-height: 100px;
             overflow-y: auto;
-            font-size: 0.9em;
-            line-height: 1.6;
+            font-size: 0.875em;
+            line-height: 1.5;
+            padding: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .prompt-section {
@@ -531,7 +548,7 @@
 
 ## 작성 가이드라인:
 - Meta Tags: 일반적인 검색 노출뿐만 아니라 SNS(카카오톡, 페이스북, 링크드인) 공유 시 클릭률(CTR)을 높일 수 있는 매력적인 Description을 포함할 것.
-- JSON-LD: 단순 기관 정보를 넘어 NGO 타입을 적용하고, knowsAbout(전문 분야), sameAs(신뢰도 연결) 등의 속성을 사용하여 협회의 권위성(Authority)을 강조할 것. <script type="application/ld+json">...</script> 형식으로 작성할 것.
+- JSON-LD: 단순 기관 정보를 넘어 NGO 타입을 적용하고, knowsAbout(전문 분야), sameAs(신뢰도 연결) 등의 속성을 사용하여 협회의 권위성(Authority)을 강조할 것.
 - GEO 최적화: AI가 협회의 위치와 성격을 명확히 군집화할 수 있도록 지역 정보(address)와 연락처 정보를 표준 규격에 맞춰 정밀하게 구성할 것. 
 - Title 구조: <title>{콘텐츠_주제} | 한국인공지능협회</title> 형식을 준수하여 검색 사용자에게 페이지의 명확한 가치를 전달할 것.
 
@@ -659,8 +676,8 @@ ${card.pageContent}`;
                             <button class="btn btn-danger" onclick="deleteCard('${card.id}')">삭제</button>
                         </div>
                     </div>
-                    <div class="card-url">${escapeHtml(card.pageUrl)}</div>
-                    <div class="card-content">${escapeHtml(card.pageContent.substring(0, 200))}${card.pageContent.length > 200 ? '...' : ''}</div>
+                    <div class="card-url"><a href="${escapeHtml(card.pageUrl || '')}" target="_blank" rel="noopener noreferrer">${escapeHtml(card.pageUrl || '')}</a></div>
+                    <div class="card-content">${escapeHtml((card.pageContent || '').substring(0, 200))}${(card.pageContent || '').length > 200 ? '...' : ''}</div>
                     
                     <div class="prompt-section">
                         <button class="btn btn-primary" onclick="showPromptModal('${card.id}')" style="width: 100%; margin-bottom: 12px;">
@@ -748,8 +765,11 @@ ${card.pageContent}`;
 
         // HTML 이스케이프
         function escapeHtml(text) {
+            if (text == null || text === undefined) {
+                return '';
+            }
             const div = document.createElement('div');
-            div.textContent = text;
+            div.textContent = String(text);
             return div.innerHTML;
         }
 
