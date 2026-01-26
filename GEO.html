@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO/GEO 카드 관리 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f3f3f3;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: left;
+            color: #1f1f1f;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        .header h1 {
+            font-size: 2.25em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #0078d4;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            font-size: 1em;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-actions .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            transition: background-color 0.2s ease;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-primary {
+            background: #0078d4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #106ebe;
+        }
+
+        .btn-primary:active {
+            background: #005a9e;
+        }
+
+        .btn-secondary {
+            background: #0078d4;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #106ebe;
+        }
+
+        .btn-danger {
+            background: #d13438;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c02b2f;
+        }
+
+        .btn-danger:active {
+            background: #a4262c;
+        }
+
+        .btn-save-all {
+            background: #0078d4;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 8px;
+        }
+
+        .btn-save-all:hover {
+            background: #106ebe;
+        }
+
+        .btn-save-all:active {
+            background: #005a9e;
+        }
+
+        .card-form {
+            background: white;
+            padding: 24px;
+            border-radius: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            margin-bottom: 24px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .card-form h2 {
+            color: #1f1f1f;
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #c1c1c1;
+            border-radius: 2px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+            background: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+
+        .form-group input:hover,
+        .form-group textarea:hover,
+        .form-group select:hover {
+            border-color: #666;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+
+        .title-group {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .title-group .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .title-separator {
+            font-size: 1.25em;
+            color: #666;
+            font-weight: 400;
+            padding-bottom: 8px;
+            line-height: 1;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            transition: box-shadow 0.2s ease;
+            border: 1px solid #e1e1e1;
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .card-title {
+            font-size: 1.125em;
+            font-weight: 600;
+            color: #1f1f1f;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-actions .btn {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .card-url {
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .card-content {
+            color: #666;
+            margin-bottom: 15px;
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .prompt-section {
+            background: #fafafa;
+            padding: 16px;
+            border-radius: 0;
+            margin-top: 16px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .prompt-text {
+            background: #fafafa;
+            color: #1f1f1f;
+            padding: 12px;
+            border-radius: 0;
+            border: 1px solid #e1e1e1;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.8125em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .prompt-text::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .prompt-text::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .prompt-text::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+        }
+
+        .prompt-text::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        .result-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e1e1e1;
+        }
+
+        .result-section textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 8px 12px;
+            border: 1px solid #c1c1c1;
+            border-radius: 2px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.8125em;
+            margin-bottom: 12px;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+
+        .result-section textarea:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+
+        .result-section textarea:hover {
+            border-color: #666;
+        }
+
+        .result-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1f1f1f;
+            font-size: 0.875em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 24px;
+            border-radius: 0;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.16), 0 4px 8px rgba(0,0,0,0.23);
+            border: 1px solid #e1e1e1;
+        }
+
+        .modal-content h2 {
+            color: #1f1f1f;
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #666;
+            float: right;
+            font-size: 24px;
+            font-weight: 400;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+        }
+
+        .close:hover {
+            color: #1f1f1f;
+            background: #f3f3f3;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 48px;
+            font-size: 1em;
+            background: white;
+            border: 1px solid #e1e1e1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-success {
+            background: #107c10;
+            color: white;
+        }
+
+        .badge-info {
+            background: #0078d4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div>
+                    <h1>SEO/GEO 카드 관리 시스템</h1>
+                    <p>페이지별 SEO 최적화 프롬프트 생성 및 관리</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="exportCards()">내보내기</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">가져오기</button>
+                    <input type="file" id="fileInput" accept=".json" onchange="importCards(event)">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-form">
+            <h2>새 카드 생성하기</h2>
+            <form id="cardForm">
+                <div class="form-group">
+                    <label for="pageUrl">페이지 링크 *</label>
+                    <input type="url" id="pageUrl" placeholder="https://www.koraia.org/default/mp1/sub1.php?sub=01" required>
+                </div>
+                <div class="form-group">
+                    <label>페이지 정보 제목 *</label>
+                    <div class="title-group">
+                        <div class="form-group">
+                            <select id="pageCategory" required>
+                                <option value="">상위 카테고리 선택</option>
+                                <option value="협회소개">협회소개</option>
+                                <option value="협회참여">협회참여</option>
+                                <option value="주요사업">주요사업</option>
+                                <option value="홍보자료">홍보자료</option>
+                                <option value="알림마당">알림마당</option>
+                            </select>
+                        </div>
+                        <span class="title-separator">-</span>
+                        <div class="form-group">
+                            <input type="text" id="pageSubCategory" placeholder="하위 카테고리 (예: 조직안내)" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pageContent">페이지 내용 *</label>
+                    <textarea id="pageContent" placeholder="해당 페이지의 컨텐츠 내용을 복사해서 붙여넣기 하세요" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">카드 생성하기</button>
+            </form>
+        </div>
+
+        <div id="cardsContainer" class="cards-container">
+            <!-- 카드들이 여기에 동적으로 추가됩니다 -->
+        </div>
+
+        <div id="emptyState" class="empty-state hidden">
+            <p>아직 생성된 카드가 없습니다. 위의 폼을 사용하여 새 카드를 생성해보세요!</p>
+        </div>
+    </div>
+
+    <!-- 프롬프트 모달 -->
+    <div id="promptModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePromptModal()">&times;</span>
+            <h2>생성된 프롬프트</h2>
+            <div class="prompt-section">
+                <div class="prompt-text" id="promptText"></div>
+                <button class="btn btn-primary" onclick="copyPrompt()">프롬프트 복사하기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GEO,SEO최적화.md 파일 내용
+        const geoSepTemplate = `## 시스템 역할
+- 너는 웹 SEO, GEO(Generative Engine Optimization) 전문가이자 시니어 마크업 엔지니어다.
+
+## 요청 사항
+- 아래 제공된 '한국인공지능협회'의 정보를 바탕으로, 2026년 검색 엔진 알고리즘(E-E-A-T)과 생성형 AI(Perplexity, Gemini, ChatGPT) 검색 결과에 최적화된 1) Meta Tags와 2) JSON-LD 구조화 데이터를 작성해줘.
+
+## 작성 가이드라인:
+- Meta Tags: 일반적인 검색 노출뿐만 아니라 SNS(카카오톡, 페이스북, 링크드인) 공유 시 클릭률(CTR)을 높일 수 있는 매력적인 Description을 포함할 것.
+- JSON-LD: 단순 기관 정보를 넘어 NGO 타입을 적용하고, knowsAbout(전문 분야), sameAs(신뢰도 연결) 등의 속성을 사용하여 협회의 권위성(Authority)을 강조할 것.
+- GEO 최적화: AI가 협회의 위치와 성격을 명확히 군집화할 수 있도록 지역 정보(address)와 연락처 정보를 표준 규격에 맞춰 정밀하게 구성할 것. 
+- Title 구조: <title>{콘텐츠_주제} | 한국인공지능협회</title> 형식을 준수하여 검색 사용자에게 페이지의 명확한 가치를 전달할 것.
+
+## 기본 데이터:
+- 기관명: 한국인공지능협회 (KORAIA)
+- 공식 URL: https://koraia.org
+- 로고: https://koraia.org/base/img/default/img/logo_basic.png
+- 대표 이미지(OG Image): https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg
+- 연락처: +82-2-713-4800 
+- Fax: +82-2-6971-8901
+- Email: info@koraia.org
+- 주소: 서울특별시 마포구 백범로 88 경총회관 3층
+- postalCode: 04100
+- 좌표: 37.5479018 126.9410754
+- taxID: 436-82-00239
+logo_square_url: "https://koraia.org/base/img/_des/mp1/logo_square_url.png",
+logo_wide_url: "https://koraia.org/base/img/_des/mp1/logo_wide_url.png",
+sameAs: [
+    "https://www.facebook.com/koraiaorg/",
+    "https://www.instagram.com/koraia_org/",
+    "https://www.linkedin.com/in/koraia/",
+    "https://www.youtube.com/channel/UClmlU0giEZJauHuiA0Yf2yw",
+    "https://blog.koraia.org/"
+]
+mapLast = {
+        "조직도": "조직도 안내",
+        "조직안내": "조직 안내",
+        "인사말": "인사말",
+        "연혁": "연혁",
+        "오시는길": "오시는 길",
+        "공지사항": "공지사항",
+        "보도자료": "보도자료",
+        "자료실": "자료실",
+        "FAQ": "자주 묻는 질문",
+        "자주 묻는 질문": "자주 묻는 질문",
+        "인증": "인증 안내",
+        "인증유형": "인증 유형 안내",
+        "인증유형 소개": "인증 유형 안내",
+        "신청": "신청 안내",
+        "국제인공지능대전": "국제인공지능대전(AI EXPO KOREA) 소개",
+        "AI EXPO KOREA": "국제인공지능대전(AI EXPO KOREA) 소개",
+      };
+      
+## 지시사항: 아래 내용을 바탕으로 SEO/GEO 최적화 마크업을 생성해줘.`;
+
+        // localStorage 키
+        const STORAGE_KEY = 'seoGeoCards';
+
+        // 카드 데이터 관리
+        let cards = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        let currentPromptCardId = null;
+
+        // 페이지 로드 시 카드 렌더링
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCards();
+        });
+
+        // 폼 제출 처리
+        document.getElementById('cardForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const pageUrl = document.getElementById('pageUrl').value;
+            const pageCategory = document.getElementById('pageCategory').value;
+            const pageSubCategory = document.getElementById('pageSubCategory').value;
+            const pageContent = document.getElementById('pageContent').value;
+
+            // 페이지 제목 조합: '상위카테고리 - 하위카테고리'
+            const pageTitle = `${pageCategory} - ${pageSubCategory}`;
+
+            const card = {
+                id: Date.now().toString(),
+                pageUrl,
+                pageTitle,
+                pageCategory,
+                pageSubCategory,
+                pageContent,
+                headTag: '',
+                jsonLd: '',
+                createdAt: new Date().toISOString()
+            };
+
+            cards.push(card);
+            saveCards();
+            renderCards();
+
+            // 폼 초기화
+            document.getElementById('cardForm').reset();
+
+            // 프롬프트 모달 표시
+            showPromptModal(card.id);
+        });
+
+        // 프롬프트 생성 함수
+        function generatePrompt(card) {
+            return `${geoSepTemplate}
+
+---
+
+## 페이지 정보:
+- 페이지 URL: ${card.pageUrl}
+- 페이지 제목: ${card.pageTitle}
+
+## 페이지 내용:
+${card.pageContent}`;
+        }
+
+        // 카드 렌더링
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (cards.length === 0) {
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            container.innerHTML = cards.map(card => `
+                <div class="card" data-id="${card.id}">
+                    <div class="card-header">
+                        <div class="card-title">${escapeHtml(card.pageTitle)}</div>
+                        <div class="card-actions">
+                            <button class="btn btn-danger" onclick="deleteCard('${card.id}')">삭제</button>
+                        </div>
+                    </div>
+                    <div class="card-url">${escapeHtml(card.pageUrl)}</div>
+                    <div class="card-content">${escapeHtml(card.pageContent.substring(0, 200))}${card.pageContent.length > 200 ? '...' : ''}</div>
+                    
+                    <div class="prompt-section">
+                        <button class="btn btn-primary" onclick="showPromptModal('${card.id}')" style="width: 100%; margin-bottom: 12px;">
+                            프롬프트 보기/복사하기
+                        </button>
+                        ${card.headTag || card.jsonLd ? '<span class="badge badge-success">저장됨</span>' : ''}
+                    </div>
+
+                    <div class="result-section">
+                        <label>Head 태그 (Meta Tags):</label>
+                        <textarea id="headTag_${card.id}" placeholder="AI 응답에서 받은 head 태그를 붙여넣으세요">${escapeHtml(card.headTag)}</textarea>
+
+                        <label>Script JSON-LD:</label>
+                        <textarea id="jsonLd_${card.id}" placeholder="AI 응답에서 받은 JSON-LD 스크립트를 붙여넣으세요">${escapeHtml(card.jsonLd)}</textarea>
+                        
+                        <button class="btn btn-save-all" onclick="saveAll('${card.id}')">모두 저장하기</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 프롬프트 모달 표시
+        function showPromptModal(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            currentPromptCardId = cardId;
+            const promptText = generatePrompt(card);
+            document.getElementById('promptText').textContent = promptText;
+            document.getElementById('promptModal').style.display = 'block';
+        }
+
+        // 프롬프트 모달 닫기
+        function closePromptModal() {
+            document.getElementById('promptModal').style.display = 'none';
+            currentPromptCardId = null;
+        }
+
+        // 프롬프트 복사
+        function copyPrompt() {
+            const promptText = document.getElementById('promptText').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert('프롬프트가 클립보드에 복사되었습니다!');
+            }).catch(err => {
+                console.error('복사 실패:', err);
+                // 폴백: 텍스트 선택 후 복사
+                const textArea = document.createElement('textarea');
+                textArea.value = promptText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('프롬프트가 클립보드에 복사되었습니다!');
+            });
+        }
+
+        // 모두 저장 (Head 태그 + JSON-LD)
+        function saveAll(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            const headTag = document.getElementById(`headTag_${cardId}`).value;
+            const jsonLd = document.getElementById(`jsonLd_${cardId}`).value;
+            
+            card.headTag = headTag;
+            card.jsonLd = jsonLd;
+            saveCards();
+            renderCards();
+            alert('Head 태그와 JSON-LD가 모두 저장되었습니다!');
+        }
+
+        // 카드 삭제
+        function deleteCard(cardId) {
+            if (!confirm('정말 이 카드를 삭제하시겠습니까?')) return;
+
+            cards = cards.filter(c => c.id !== cardId);
+            saveCards();
+            renderCards();
+        }
+
+        // 카드 저장
+        function saveCards() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+        }
+
+        // HTML 이스케이프
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 카드 내보내기 (JSON 파일로 다운로드)
+        function exportCards() {
+            if (cards.length === 0) {
+                alert('내보낼 카드가 없습니다.');
+                return;
+            }
+
+            const dataStr = JSON.stringify(cards, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `seo-geo-cards-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert(`${cards.length}개의 카드가 내보내졌습니다.`);
+        }
+
+        // 카드 가져오기 (JSON 파일 읽기)
+        function importCards(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedCards = JSON.parse(e.target.result);
+                    
+                    if (!Array.isArray(importedCards)) {
+                        alert('잘못된 파일 형식입니다. JSON 배열 형식이어야 합니다.');
+                        return;
+                    }
+
+                    if (importedCards.length === 0) {
+                        alert('가져올 카드가 없습니다.');
+                        return;
+                    }
+
+                    // 기존 카드 ID 목록
+                    const existingIds = new Set(cards.map(c => c.id));
+                    
+                    // 중복되지 않는 카드만 필터링
+                    const newCards = importedCards.filter(card => !existingIds.has(card.id));
+                    const duplicateCount = importedCards.length - newCards.length;
+
+                    if (newCards.length === 0) {
+                        alert(`모든 카드가 이미 존재합니다. (중복: ${duplicateCount}개)`);
+                        return;
+                    }
+
+                    // 새 카드 추가
+                    cards = [...cards, ...newCards];
+                    saveCards();
+                    renderCards();
+
+                    let message = `${newCards.length}개의 카드가 추가되었습니다.`;
+                    if (duplicateCount > 0) {
+                        message += `\n(중복으로 제외된 카드: ${duplicateCount}개)`;
+                    }
+                    alert(message);
+
+                    // 파일 입력 초기화
+                    event.target.value = '';
+                } catch (error) {
+                    console.error('파일 읽기 오류:', error);
+                    alert('파일을 읽는 중 오류가 발생했습니다. 올바른 JSON 형식인지 확인해주세요.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('promptModal');
+            if (event.target == modal) {
+                closePromptModal();
+            }
+        }
+    </script>
+</body>
+</html>
