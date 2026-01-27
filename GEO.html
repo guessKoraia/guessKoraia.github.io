@@ -235,7 +235,11 @@
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 16px;
+            gap: 20px;
+        }
+
+        .review-mode .cards-container {
+            gap: 24px;
         }
 
         .card {
@@ -465,6 +469,328 @@
             background: #0078d4;
             color: white;
         }
+
+        /* 검토 모드 스타일 */
+        .review-mode .card-form {
+            display: none;
+        }
+
+        .review-card {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:not(.card-approved):not(.card-editing) {
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%) !important;
+            border-left: 5px solid #0078d4;
+        }
+
+        .review-card:not(.card-approved):not(.card-editing) .review-field-label {
+            color: #0078d4;
+        }
+
+        .review-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .review-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-weight: 600;
+        }
+
+        .review-icon:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        .review-icon:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .review-icon-approve {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .review-icon-approve:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+        }
+
+        .review-icon-edit {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+
+        .review-icon-edit:hover {
+            background: linear-gradient(135deg, #ee5a6f 0%, #dc4c5f 100%);
+        }
+
+        .card-approved {
+            background: linear-gradient(135deg, #f1f8f4 0%, #e8f5e9 100%) !important;
+            border-left: 5px solid #4caf50;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+        }
+
+        .card-approved .review-field-label {
+            color: #2e7d32;
+        }
+
+        .card-approved .review-field-value {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .card-editing {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffebee 100%) !important;
+            border-left: 5px solid #ff6b6b;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+        }
+
+        .card-editing .review-field-label {
+            color: #c62828;
+        }
+
+        .card-editing .review-field-value {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .review-content {
+            margin-top: 50px;
+        }
+
+        .review-field {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .review-field:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateX(4px);
+        }
+
+        .review-field-label {
+            font-weight: 700;
+            color: #1f1f1f;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            display: block;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        .review-field-value {
+            color: #424242;
+            line-height: 1.7;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .review-field-value:hover {
+            border-color: rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .review-field-value.json-ld {
+            font-family: 'Consolas', 'Courier New', 'Monaco', monospace;
+            font-size: 13px;
+            background: rgba(248, 249, 250, 0.9);
+            color: #2d3748;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .review-field-value.json-ld:hover {
+            background: rgba(248, 249, 250, 1);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .review-field-value.head-tag {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: rgba(240, 247, 255, 0.9);
+            color: #1e3a5f;
+            border: 1px solid rgba(0, 120, 212, 0.15);
+        }
+
+        .review-field-value.head-tag:hover {
+            background: rgba(240, 247, 255, 1);
+            border-color: rgba(0, 120, 212, 0.25);
+        }
+
+        /* Meta 태그 색상 강조 */
+        .meta-key {
+            color: #0066cc;
+            font-weight: 700;
+            font-size: 0.95em;
+        }
+
+        .meta-value {
+            color: #1a1a1a;
+            font-weight: 400;
+        }
+
+        .meta-link {
+            color: #0066cc;
+            text-decoration: none;
+            border-bottom: 1px dotted #0066cc;
+        }
+
+        .meta-link:hover {
+            color: #0052a3;
+            border-bottom: 1px solid #0052a3;
+        }
+
+        /* JSON 색상 강조 */
+        .json-key {
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        .json-string {
+            color: #008000;
+            font-weight: 400;
+        }
+
+        .json-number {
+            color: #ff6600;
+            font-weight: 500;
+        }
+
+        .json-boolean {
+            color: #800080;
+            font-weight: 600;
+        }
+
+        .json-null {
+            color: #808080;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .json-bracket {
+            color: #333333;
+            font-weight: 600;
+        }
+
+        .json-comma {
+            color: #666666;
+        }
+
+        .json-separator {
+            text-align: center;
+            color: #999999;
+            font-weight: 600;
+            margin: 8px 0;
+            padding: 4px 0;
+        }
+
+        .json-link {
+            color: #008000;
+            text-decoration: none;
+            border-bottom: 1px dotted #008000;
+        }
+
+        .json-link:hover {
+            color: #006600;
+            border-bottom: 1px solid #006600;
+        }
+
+        .review-field-value.editable {
+            background: white;
+            border: 2px solid #ff6b6b;
+            border-radius: 6px;
+            padding: 14px 16px;
+            min-height: 80px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        .review-field-value.editable:focus {
+            outline: none;
+            border-color: #ee5a6f;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
+            background: #fff;
+        }
+
+        .review-save-btn {
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+        }
+
+        .review-save-btn:hover {
+            background: linear-gradient(135deg, #106ebe 0%, #005a9e 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 120, 212, 0.4);
+        }
+
+        .review-save-btn:active {
+            transform: translateY(0);
+        }
+
+        #reviewBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #reviewBtn:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .review-mode #reviewBtn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+        }
+
+        .review-mode #reviewBtn:hover {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            box-shadow: 0 6px 16px rgba(245, 87, 108, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -476,6 +802,7 @@
                     <p>페이지별 SEO 최적화 프롬프트 생성 및 관리</p>
                 </div>
                 <div class="header-actions">
+                    <button class="btn btn-danger" id="reviewBtn" onclick="toggleReviewMode()">검토하기</button>
                     <button class="btn btn-secondary" onclick="exportCards()">내보내기</button>
                     <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">가져오기</button>
                     <input type="file" id="fileInput" accept=".json" onchange="importCards(event)">
@@ -600,6 +927,7 @@ mapLast = {
         // 카드 데이터 관리
         let cards = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         let currentPromptCardId = null;
+        let isReviewMode = false;
 
         // 페이지 로드 시 카드 렌더링
         document.addEventListener('DOMContentLoaded', () => {
@@ -654,6 +982,248 @@ mapLast = {
 ${card.pageContent}`;
         }
 
+        // 검토 모드 토글
+        function toggleReviewMode() {
+            isReviewMode = !isReviewMode;
+            const reviewBtn = document.getElementById('reviewBtn');
+            const container = document.body;
+            
+            if (isReviewMode) {
+                container.classList.add('review-mode');
+                reviewBtn.textContent = '생성하기';
+            } else {
+                container.classList.remove('review-mode');
+                reviewBtn.textContent = '검토하기';
+            }
+            
+            renderCards();
+        }
+
+        // 카드 승인
+        function approveCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+            
+            card.reviewStatus = 'approved';
+            card.reviewEditing = false;
+            saveCards();
+            renderCards();
+        }
+
+        // URL인지 확인하는 함수
+        function isUrl(str) {
+            try {
+                const url = new URL(str);
+                return url.protocol === 'http:' || url.protocol === 'https:';
+            } catch {
+                return false;
+            }
+        }
+
+        // Head 태그에서 텍스트만 추출하고 색상 강조
+        function extractHeadTagText(headTagHtml) {
+            if (!headTagHtml) return '';
+            
+            const lines = [];
+            const htmlLines = headTagHtml.split('\n');
+            
+            htmlLines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+                
+                // title 태그 추출
+                const titleMatch = trimmed.match(/<title[^>]*>(.*?)<\/title>/i);
+                if (titleMatch) {
+                    const value = escapeHtml(titleMatch[1]);
+                    lines.push(`<span class="meta-key">제목</span>: <span class="meta-value">${value}</span>`);
+                    return;
+                }
+                
+                // meta 태그 추출 (name 속성)
+                const metaNameMatch = trimmed.match(/<meta[^>]+name=["']([^"']+)["'][^>]+content=["']([^"']+)["'][^>]*>/i);
+                if (metaNameMatch) {
+                    const key = escapeHtml(metaNameMatch[1]);
+                    const value = escapeHtml(metaNameMatch[2]);
+                    const valueHtml = isUrl(value) ? `<a href="${value}" target="_blank" rel="noopener noreferrer" class="meta-link">${value}</a>` : value;
+                    lines.push(`<span class="meta-key">${key}</span>: <span class="meta-value">${valueHtml}</span>`);
+                    return;
+                }
+                
+                // meta 태그 추출 (property 속성)
+                const metaPropertyMatch = trimmed.match(/<meta[^>]+property=["']([^"']+)["'][^>]+content=["']([^"']+)["'][^>]*>/i);
+                if (metaPropertyMatch) {
+                    const key = escapeHtml(metaPropertyMatch[1]);
+                    const value = escapeHtml(metaPropertyMatch[2]);
+                    const valueHtml = isUrl(value) ? `<a href="${value}" target="_blank" rel="noopener noreferrer" class="meta-link">${value}</a>` : value;
+                    lines.push(`<span class="meta-key">${key}</span>: <span class="meta-value">${valueHtml}</span>`);
+                    return;
+                }
+                
+                // link 태그 추출
+                const linkMatch = trimmed.match(/<link[^>]+rel=["']([^"']+)["'][^>]+href=["']([^"']+)["'][^>]*>/i);
+                if (linkMatch) {
+                    const key = escapeHtml(linkMatch[1]);
+                    const value = escapeHtml(linkMatch[2]);
+                    const valueHtml = `<a href="${value}" target="_blank" rel="noopener noreferrer" class="meta-link">${value}</a>`;
+                    lines.push(`<span class="meta-key">${key}</span>: <span class="meta-value">${valueHtml}</span>`);
+                    return;
+                }
+            });
+            
+            return lines.join('<br>');
+        }
+
+        // JSON-LD에서 스크립트 태그 제거하고 JSON만 추출하고 색상 강조
+        function extractJsonLdText(jsonLdHtml) {
+            if (!jsonLdHtml) return '';
+            
+            const jsonObjects = [];
+            
+            // script 태그에서 JSON 추출
+            const scriptMatches = jsonLdHtml.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
+            
+            if (scriptMatches && scriptMatches.length > 0) {
+                scriptMatches.forEach(script => {
+                    const jsonMatch = script.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+                    if (jsonMatch && jsonMatch[1]) {
+                        try {
+                            const jsonObj = JSON.parse(jsonMatch[1].trim());
+                            jsonObjects.push(formatJsonWithColors(jsonObj, 0));
+                        } catch (e) {
+                            // JSON 파싱 실패 시 원본 텍스트 사용
+                            jsonObjects.push(escapeHtml(jsonMatch[1].trim()));
+                        }
+                    }
+                });
+            } else {
+                // script 태그가 없는 경우 직접 파싱 시도
+                const cleanedText = jsonLdHtml.replace(/<script[^>]*>/gi, '').replace(/<\/script>/gi, '').trim();
+                if (cleanedText) {
+                    try {
+                        const jsonObj = JSON.parse(cleanedText);
+                        jsonObjects.push(formatJsonWithColors(jsonObj, 0));
+                    } catch (e) {
+                        jsonObjects.push(escapeHtml(cleanedText));
+                    }
+                }
+            }
+            
+            return jsonObjects.join('<br><br><div class="json-separator">---</div><br><br>');
+        }
+
+        // JSON을 색상 강조된 HTML로 포맷팅
+        function formatJsonWithColors(obj, indent) {
+            const indentStr = '&nbsp;&nbsp;'.repeat(indent);
+            let result = '';
+            
+            if (Array.isArray(obj)) {
+                if (obj.length === 0) {
+                    result += '<span class="json-bracket">[</span><span class="json-bracket">]</span>';
+                } else {
+                    result += '<span class="json-bracket">[</span><br>';
+                    obj.forEach((item, index) => {
+                        result += indentStr + '&nbsp;&nbsp;';
+                        if (typeof item === 'object' && item !== null) {
+                            result += formatJsonWithColors(item, indent + 1);
+                        } else {
+                            result += formatJsonValue(item);
+                        }
+                        if (index < obj.length - 1) {
+                            result += '<span class="json-comma">,</span>';
+                        }
+                        result += '<br>';
+                    });
+                    result += indentStr + '<span class="json-bracket">]</span>';
+                }
+            } else if (obj !== null && typeof obj === 'object') {
+                const keys = Object.keys(obj);
+                if (keys.length === 0) {
+                    result += '<span class="json-bracket">{</span><span class="json-bracket">}</span>';
+                } else {
+                    result += '<span class="json-bracket">{</span><br>';
+                    keys.forEach((key, index) => {
+                        result += indentStr + '&nbsp;&nbsp;';
+                        result += `<span class="json-key">"${escapeHtml(key)}"</span>: `;
+                        const value = obj[key];
+                        if (typeof value === 'object' && value !== null) {
+                            result += formatJsonWithColors(value, indent + 1);
+                        } else {
+                            result += formatJsonValue(value);
+                        }
+                        if (index < keys.length - 1) {
+                            result += '<span class="json-comma">,</span>';
+                        }
+                        result += '<br>';
+                    });
+                    result += indentStr + '<span class="json-bracket">}</span>';
+                }
+            } else {
+                result += formatJsonValue(obj);
+            }
+            
+            return result;
+        }
+
+        // JSON 값 포맷팅
+        function formatJsonValue(value) {
+            if (value === null) {
+                return '<span class="json-null">null</span>';
+            } else if (typeof value === 'string') {
+                const escapedValue = escapeHtml(value);
+                if (isUrl(value)) {
+                    return `<span class="json-string">"<a href="${value}" target="_blank" rel="noopener noreferrer" class="json-link">${escapedValue}</a>"</span>`;
+                }
+                return `<span class="json-string">"${escapedValue}"</span>`;
+            } else if (typeof value === 'number') {
+                return `<span class="json-number">${value}</span>`;
+            } else if (typeof value === 'boolean') {
+                return `<span class="json-boolean">${value}</span>`;
+            } else {
+                return `<span class="json-value">${escapeHtml(String(value))}</span>`;
+            }
+        }
+
+        // 카드 수정 모드 토글
+        function toggleEditCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+            
+            if (card.reviewEditing) {
+                // 수정 모드 종료 및 저장
+                card.reviewStatus = 'needs_review';
+                card.reviewEditing = false;
+                // 수정된 내용 저장
+                const titleEl = document.getElementById(`review_title_${cardId}`);
+                const urlEl = document.getElementById(`review_url_${cardId}`);
+                const contentEl = document.getElementById(`review_content_${cardId}`);
+                const headTagEl = document.getElementById(`review_headTag_${cardId}`);
+                const jsonLdEl = document.getElementById(`review_jsonLd_${cardId}`);
+                
+                if (titleEl && titleEl.tagName === 'INPUT') {
+                    card.pageTitle = titleEl.value;
+                }
+                if (urlEl && urlEl.tagName === 'INPUT') {
+                    card.pageUrl = urlEl.value;
+                }
+                if (contentEl && contentEl.tagName === 'TEXTAREA') {
+                    card.pageContent = contentEl.value;
+                }
+                if (headTagEl && headTagEl.tagName === 'TEXTAREA') {
+                    card.headTag = headTagEl.value;
+                }
+                if (jsonLdEl && jsonLdEl.tagName === 'TEXTAREA') {
+                    card.jsonLd = jsonLdEl.value;
+                }
+            } else {
+                // 수정 모드 시작
+                card.reviewStatus = 'editing';
+                card.reviewEditing = true;
+            }
+            
+            saveCards();
+            renderCards();
+        }
+
         // 카드 렌더링
         function renderCards() {
             const container = document.getElementById('cardsContainer');
@@ -668,35 +1238,102 @@ ${card.pageContent}`;
             container.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            container.innerHTML = cards.map(card => `
-                <div class="card" data-id="${card.id}">
-                    <div class="card-header">
-                        <div class="card-title">${escapeHtml(card.pageTitle)}</div>
-                        <div class="card-actions">
-                            <button class="btn btn-danger" onclick="deleteCard('${card.id}')">삭제</button>
+            if (isReviewMode) {
+                // 검토 모드 렌더링
+                container.innerHTML = cards.map(card => {
+                    const isApproved = card.reviewStatus === 'approved';
+                    const isEditing = card.reviewEditing === true;
+                    const cardClass = isApproved ? 'card-approved' : (isEditing ? 'card-editing' : '');
+                    
+                    return `
+                        <div class="card review-card ${cardClass}" data-id="${card.id}">
+                            <div class="review-actions">
+                                <button class="review-icon review-icon-approve" onclick="approveCard('${card.id}')" title="승인">
+                                    ✓
+                                </button>
+                                <button class="review-icon review-icon-edit" onclick="toggleEditCard('${card.id}')" title="${isEditing ? '저장' : '수정'}">
+                                    ${isEditing ? '✓' : '✎'}
+                                </button>
+                            </div>
+                            <div class="review-content">
+                                <div class="review-field">
+                                    <span class="review-field-label">페이지 제목:</span>
+                                    ${isEditing ? 
+                                        `<input type="text" id="review_title_${card.id}" class="review-field-value editable" value="${escapeHtml(card.pageTitle)}">` :
+                                        `<div class="review-field-value">${escapeHtml(card.pageTitle)}</div>`
+                                    }
+                                </div>
+                                <div class="review-field">
+                                    <span class="review-field-label">페이지 URL:</span>
+                                    ${isEditing ? 
+                                        `<input type="url" id="review_url_${card.id}" class="review-field-value editable" value="${escapeHtml(card.pageUrl || '')}">` :
+                                        `<div class="review-field-value"><a href="${escapeHtml(card.pageUrl || '')}" target="_blank" rel="noopener noreferrer">${escapeHtml(card.pageUrl || '')}</a></div>`
+                                    }
+                                </div>
+                                <div class="review-field">
+                                    <span class="review-field-label">페이지 내용:</span>
+                                    ${isEditing ? 
+                                        `<textarea id="review_content_${card.id}" class="review-field-value editable">${escapeHtml(card.pageContent || '')}</textarea>` :
+                                        `<div class="review-field-value">${escapeHtml(card.pageContent || '')}</div>`
+                                    }
+                                </div>
+                                ${card.headTag ? `
+                                <div class="review-field">
+                                    <span class="review-field-label">Head 태그 (Meta Tags):</span>
+                                    ${isEditing ? 
+                                        `<textarea id="review_headTag_${card.id}" class="review-field-value editable">${escapeHtml(card.headTag)}</textarea>` :
+                                        `<div class="review-field-value head-tag">${extractHeadTagText(card.headTag)}</div>`
+                                    }
+                                </div>
+                                ` : ''}
+                                ${card.jsonLd ? `
+                                <div class="review-field">
+                                    <span class="review-field-label">Script JSON-LD:</span>
+                                    ${isEditing ? 
+                                        `<textarea id="review_jsonLd_${card.id}" class="review-field-value editable">${escapeHtml(card.jsonLd)}</textarea>` :
+                                        `<div class="review-field-value json-ld">${extractJsonLdText(card.jsonLd)}</div>`
+                                    }
+                                </div>
+                                ` : ''}
+                                ${isEditing ? `
+                                    <button class="review-save-btn" onclick="toggleEditCard('${card.id}')">수정 내용 저장</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // 일반 모드 렌더링
+                container.innerHTML = cards.map(card => `
+                    <div class="card" data-id="${card.id}">
+                        <div class="card-header">
+                            <div class="card-title">${escapeHtml(card.pageTitle)}</div>
+                            <div class="card-actions">
+                                <button class="btn btn-danger" onclick="deleteCard('${card.id}')">삭제</button>
+                            </div>
+                        </div>
+                        <div class="card-url"><a href="${escapeHtml(card.pageUrl || '')}" target="_blank" rel="noopener noreferrer">${escapeHtml(card.pageUrl || '')}</a></div>
+                        <div class="card-content">${escapeHtml((card.pageContent || '').substring(0, 200))}${(card.pageContent || '').length > 200 ? '...' : ''}</div>
+                        
+                        <div class="prompt-section">
+                            <button class="btn btn-primary" onclick="showPromptModal('${card.id}')" style="width: 100%; margin-bottom: 12px;">
+                                프롬프트 보기/복사하기
+                            </button>
+                            ${card.headTag || card.jsonLd ? '<span class="badge badge-success">저장됨</span>' : ''}
+                        </div>
+
+                        <div class="result-section">
+                            <label>Head 태그 (Meta Tags):</label>
+                            <textarea id="headTag_${card.id}" placeholder="AI 응답에서 받은 head 태그를 붙여넣으세요">${escapeHtml(card.headTag || '')}</textarea>
+
+                            <label>Script JSON-LD:</label>
+                            <textarea id="jsonLd_${card.id}" placeholder="AI 응답에서 받은 JSON-LD 스크립트를 붙여넣으세요">${escapeHtml(card.jsonLd || '')}</textarea>
+                            
+                            <button class="btn btn-save-all" onclick="saveAll('${card.id}')">모두 저장하기</button>
                         </div>
                     </div>
-                    <div class="card-url"><a href="${escapeHtml(card.pageUrl || '')}" target="_blank" rel="noopener noreferrer">${escapeHtml(card.pageUrl || '')}</a></div>
-                    <div class="card-content">${escapeHtml((card.pageContent || '').substring(0, 200))}${(card.pageContent || '').length > 200 ? '...' : ''}</div>
-                    
-                    <div class="prompt-section">
-                        <button class="btn btn-primary" onclick="showPromptModal('${card.id}')" style="width: 100%; margin-bottom: 12px;">
-                            프롬프트 보기/복사하기
-                        </button>
-                        ${card.headTag || card.jsonLd ? '<span class="badge badge-success">저장됨</span>' : ''}
-                    </div>
-
-                    <div class="result-section">
-                        <label>Head 태그 (Meta Tags):</label>
-                        <textarea id="headTag_${card.id}" placeholder="AI 응답에서 받은 head 태그를 붙여넣으세요">${escapeHtml(card.headTag)}</textarea>
-
-                        <label>Script JSON-LD:</label>
-                        <textarea id="jsonLd_${card.id}" placeholder="AI 응답에서 받은 JSON-LD 스크립트를 붙여넣으세요">${escapeHtml(card.jsonLd)}</textarea>
-                        
-                        <button class="btn btn-save-all" onclick="saveAll('${card.id}')">모두 저장하기</button>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
         }
 
         // 프롬프트 모달 표시
