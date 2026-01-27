@@ -957,7 +957,7 @@ mapLast = {
                 createdAt: new Date().toISOString()
             };
 
-            cards.push(card);
+            cards.unshift(card);
             saveCards();
             renderCards();
 
