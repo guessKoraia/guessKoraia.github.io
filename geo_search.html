@@ -1,0 +1,1298 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Meta Tags Editor (Simple)</title>
+
+    <!-- Pretendard -->
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css"
+    />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      }
+      textarea {
+        resize: vertical;
+      }
+    </style>
+  </head>
+
+  <body class="h-full bg-neutral-50 text-neutral-900">
+    <div class="h-full flex">
+      <!-- LEFT: Depth Menu -->
+      <aside class="flex-[3] border-r bg-white">
+        <div class="p-4 border-b">
+          <div class="text-sm font-semibold">메뉴</div>
+        </div>
+        <nav id="menuList" class="p-2 overflow-auto h-[calc(100%-57px)]"></nav>
+      </aside>
+
+      <!-- RIGHT -->
+      <main class="flex-[7] overflow-auto">
+        <div class="p-6">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1 id="pageTitle" class="text-lg font-semibold">-</h1>
+              <div id="pageBreadcrumb" class="text-xs text-neutral-500 mt-1">-</div>
+            </div>
+
+            <button
+              id="btnExport"
+              class="shrink-0 px-3 py-2 text-sm border rounded-md bg-white hover:bg-neutral-50"
+              type="button"
+            >
+              JSON 내보내기
+            </button>
+          </div>
+
+          <div class="mt-6 grid gap-6">
+            <!-- Links -->
+            <section class="bg-white border rounded-lg">
+              <div class="px-4 py-3 border-b bg-blue-100">
+                <div class="text-sm font-semibold">Links</div>
+              </div>
+              <div id="linksPanel" class="p-4 grid gap-4"></div>
+            </section>
+
+            <!-- Metas -->
+            <section class="bg-white border rounded-lg">
+              <div class="px-4 py-3 border-b bg-blue-100">
+                <div class="text-sm font-semibold">Meta Tags</div>
+              </div>
+              <div id="metasPanel" class="p-4 grid gap-4"></div>
+            </section>
+
+            <!-- Preview -->
+            <section class="bg-white border rounded-lg">
+              <div class="px-4 py-3 border-b bg-blue-100">
+                <div class="text-sm font-semibold">미리보기</div>
+              </div>
+              <div class="p-4">
+                <pre
+                  id="previewBox"
+                  class="text-xs leading-5 bg-neutral-50 border rounded-md p-3 overflow-auto"
+                ></pre>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // =========================
+      // Data
+      // =========================
+      /*
+      const PAGES = [
+        {
+          title: "소개 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "소개 | 한국인공지능협회" },
+            {
+              name: "description",
+              content:
+                "대한민국 인공지능 생태계를 선도하는 한국인공지능협회(KORAIA). 1,000여 기업과 함께 AI 민주화와 산업지능화의 기준을 세웁니다. 비전, 미션 및 주요 사업 안내.",
+            },
+            {
+              name: "keywords",
+              content:
+                "한국인공지능협회, KORAIA, AI 생태계, 산업지능화, AI인증, 인공지능교육, 과학기술정보통신부 비영리법인",
+            },
+
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "소개 - 협회소개 | 한국인공지능협회" },
+            {
+              property: "og:description",
+              content:
+                "시선은 미래를 향하고, 행동은 미래를 앞당깁니다. 인공지능 시대의 문명 기준, KORAIA가 만들어가는 AI 민주화 비전을 확인하세요.",
+            },
+            {
+              property: "og:image",
+              content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg",
+            },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub1.php?sub=01" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "협회소개 - 소개 | 한국인공지능협회" },
+            {
+              name: "twitter:description",
+              content:
+                "1,000여 전문 기업과 23,000명의 전문가가 함께하는 대한민국 대표 AI 거버넌스, 한국인공지능협회의 미션과 비전을 소개합니다.",
+            },
+            {
+              name: "twitter:image",
+              content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg",
+            },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub1.php?sub=01" }],
+          menus: [{ name: "협회소개" }, { name: "협회소개" }],
+        },
+        {
+          title: "인사말 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "인사말 | 한국인공지능협회" },
+            {
+              name: "description",
+              content:
+                "대한민국 AI 생태계를 선도하는 한국인공지능협회(KORAIA). 1,000여 기업과 10만 종사자가 함께하는 인공지능 민주화와 미래 산업의 기준을 제시합니다.",
+            },
+            {
+              name: "keywords",
+              content:
+                "한국인공지능협회, KORAIA, 김현철 회장, 인공지능 생태계, AI EXPO KOREA, AI 인증, 체인저스, AI 정책, 지능화 사회",
+            },
+            { name: "robots", content: "index, follow" },
+            { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub2.php?sub=02" },
+            {
+              property: "og:title",
+              content: "인사말 | 한국인공지능협회 - 인류 사회의 문제를 AI로 해결하는 체인저스",
+            },
+            {
+              property: "og:description",
+              content:
+                "인공지능은 기술을 넘어선 시대정신입니다. 1,000여 개의 AI 기업을 대변하는 KORAIA가 문명의 기준을 만드는 최선두에 서겠습니다.",
+            },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp1/sub2.php?sub=02" },
+            { property: "twitter:title", content: "인사말 | 한국인공지능협회" },
+            {
+              property: "twitter:description",
+              content:
+                "인공지능 시대의 거버넌스를 구축하고 전 산업의 지능화를 선도하는 한국인공지능협회의 비전을 확인하세요.",
+            },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub2.php?sub=02" }],
+          menus: [{ name: "협회소개" }, { name: "인사말" }],
+        },
+        {
+          title: "조직도 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "조직안내 | 한국인공지능협회" },
+            {
+              name: "description",
+              content:
+                "대한민국 AI 산업 생태계를 선도하는 한국인공지능협회(KORAIA)의 조직 체계를 소개합니다. 정책 지원, 산업 융합, 인재 양성 및 AI 인증을 아우르는 전문 부서별 역할을 확인하세요.",
+            },
+            {
+              name: "keywords",
+              content:
+                "한국인공지능협회, KORAIA, AI 조직도, 인공지능 정책, AI 자격증, AI 산업융합, 국제인공지능대전, AI 인증",
+            },
+            { name: "author", content: "한국인공지능협회" },
+
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub3.php?sub=03" },
+            { property: "og:title", content: "대한민국 AI 혁신의 중심, 한국인공지능협회 조직도" },
+            {
+              property: "og:description",
+              content:
+                "정책부터 인증까지, AI 산업의 미래를 설계하는 KORAIA의 핵심 조직 정보를 공개합니다. 글로벌 네트워크와 기업 협력의 허브를 확인하세요.",
+            },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp1/sub3.php?sub=03" },
+            { property: "twitter:title", content: "조직안내 | 한국인공지능협회" },
+            {
+              property: "twitter:description",
+              content:
+                "AI 전문 인재 양성 및 기술 네트워크 구축의 리더, 한국인공지능협회의 체계적인 조직 구성을 소개합니다.",
+            },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub3.php?sub=03" }],
+          menus: [{ name: "협회소개" }, { name: "조직안내" }, { name: "조직도" }],
+        },
+      ];
+      */
+
+      const PAGES = [
+        {
+          title: "소개 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "소개 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 인공지능 생태계를 선도하는 한국인공지능협회(KORAIA). 1,000여 기업과 함께 AI 민주화와 산업지능화의 기준을 세웁니다. 비전, 미션 및 주요 사업 안내." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 생태계, 산업지능화, AI인증, 인공지능교육, 과학기술정보통신부 비영리법인" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "소개 - 협회소개 | 한국인공지능협회" },
+            { property: "og:description", content: "시선은 미래를 향하고, 행동은 미래를 앞당깁니다. 인공지능 시대의 문명 기준, KORAIA가 만들어가는 AI 민주화 비전을 확인하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub1.php?sub=01" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "협회소개 - 소개 | 한국인공지능협회" },
+            { name: "twitter:description", content: "1,000여 전문 기업과 23,000명의 전문가가 함께하는 대한민국 대표 AI 거버넌스, 한국인공지능협회의 미션과 비전을 소개합니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub1.php?sub=01" }],
+          menus: [{ name: "협회소개" }, { name: "소개" }],
+        },
+        {
+          title: "인사말 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "인사말 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 생태계를 선도하는 한국인공지능협회(KORAIA). 1,000여 기업과 10만 종사자가 함께하는 인공지능 민주화와 미래 산업의 기준을 제시합니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, 김현철 회장, 인공지능 생태계, AI EXPO KOREA, AI 인증, 체인저스, AI 정책, 지능화 사회" },
+            { name: "robots", content: "index, follow" },
+            { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub2.php?sub=02" },
+            { property: "og:title", content: "인사말 | 한국인공지능협회 - 인류 사회의 문제를 AI로 해결하는 체인저스" },
+            { property: "og:description", content: "인공지능은 기술을 넘어선 시대정신입니다. 1,000여 개의 AI 기업을 대변하는 KORAIA가 문명의 기준을 만드는 최선두에 서겠습니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp1/sub2.php?sub=02" },
+            { property: "twitter:title", content: "인사말 | 한국인공지능협회" },
+            { property: "twitter:description", content: "인공지능 시대의 거버넌스를 구축하고 전 산업의 지능화를 선도하는 한국인공지능협회의 비전을 확인하세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub2.php?sub=02" }],
+          menus: [{ name: "협회소개" }, { name: "인사말" }],
+        },
+        {
+          title: "조직도 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "조직안내 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 산업 생태계를 선도하는 한국인공지능협회(KORAIA)의 조직 체계를 소개합니다. 정책 지원, 산업 융합, 인재 양성 및 AI 인증을 아우르는 전문 부서별 역할을 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 조직도, 인공지능 정책, AI 자격증, AI 산업융합, 국제인공지능대전, AI 인증" },
+            { name: "author", content: "한국인공지능협회" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub3.php?sub=03" },
+            { property: "og:title", content: "대한민국 AI 혁신의 중심, 한국인공지능협회 조직도" },
+            { property: "og:description", content: "정책부터 인증까지, AI 산업의 미래를 설계하는 KORAIA의 핵심 조직 정보를 공개합니다. 글로벌 네트워크와 기업 협력의 허브를 확인하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp1/sub3.php?sub=03" },
+            { property: "twitter:title", content: "조직안내 | 한국인공지능협회" },
+            { property: "twitter:description", content: "AI 전문 인재 양성 및 기술 네트워크 구축의 리더, 한국인공지능협회의 체계적인 조직 구성을 소개합니다." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub3.php?sub=03" }],
+          menus: [{ name: "협회소개" }, { name: "조직안내" }, { name: "조직도" }],
+        },
+        {
+          title: "연혁 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "연혁 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 생태계를 리딩하는 한국인공지능협회의 발자취. 2025년 국회 포럼, 글로벌 AI 협력, AX 실증사업 등 인공지능 강국을 향한 KORAIA의 혁신 기록을 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 연혁, 인공지능 정책, AX 실증사업, CAIO, 국제인공지능대전, AI EXPO KOREA, AI 거버넌스" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub4.php?sub=04" },
+            { property: "og:title", content: "대한민국 AI의 역사, 한국인공지능협회 연혁" },
+            { property: "og:description", content: "2025년 AX(AI 전환) 시대의 주역! 글로벌 협력과 정책 제언을 통해 성장하는 KORAIA의 주요 성과와 파트너십 연혁을 공개합니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp1/sub4.php?sub=04" },
+            { property: "twitter:title", content: "연혁 | 한국인공지능협회" },
+            { property: "twitter:description", content: "국가 AI 전략의 핵심 파트너, 한국인공지능협회의 2025년 주요 활동 및 글로벌 MOU 현황을 살펴보세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          menus: [{ name: "협회소개" }, { name: "연혁" }],
+        },
+        {
+          title: "CI - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "CI | 한국인공지능협회" },
+            { name: "description", content: "4차 산업혁명의 지능화 물결을 선도하는 (사)한국인공지능협회(KORAIA)의 CI를 소개합니다. 신뢰와 협력의 가치를 담은 심볼마크와 AI 생태계의 비전을 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, 인공지능 CI, AI 로고, 산업 지능화, AI 생태계, NGO, 인공지능 인증" },
+            { name: "author", content: "한국인공지능협회" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub5.php?sub=05" },
+            { property: "og:title", content: "세상을 바꾸는 AI 지능화의 시작, KORAIA CI" },
+            { property: "og:description", content: "신뢰(Trust)와 연대를 상징하는 한국인공지능협회의 정체성. 더 나은 세상을 만드는 스타트업 정신을 CI에 담았습니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "CI | 한국인공지능협회" },
+            { name: "twitter:description", content: "인간과 시대를 포용하는 AI 지능화의 버튼, KORAIA CI를 소개합니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          menus: [{ name: "협회소개" }, { name: "CI" }],
+        },
+        {
+          title: "오시는길 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 AI 산업의 허브, 한국인공지능협회(KORAIA) 방문을 환영합니다. 6호선 대흥역 4번 출구 도보 1분 거리, 경총회관 3층에 위치한 사무국 오시는 길과 대중교통 이용 방법을 상세히 안내해 드립니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI협회, 인공지능인증, 대흥역 인공지능협회, 경총회관 오시는길, AI EXPO KOREA" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "오시는길 | 한국인공지능협회" },
+            { property: "og:description", content: "미래를 선도하는 AI 네트워크, 한국인공지능협회 사무국 방문 안내입니다. 대흥역 4번 출구 바로 앞! 지금 위치를 확인해 보세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub6.php?sub=06" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "오시는길 | 한국인공지능협회" },
+            { name: "twitter:description", content: "6호선 대흥역 도보 1분! 한국인공지능협회 사무국 오시는 길 상세 안내입니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub6.php?sub=06" }],
+          menus: [{ name: "협회소개" }, { name: "오시는길" }],
+        },
+        {
+          title: "부서별 직무소개 - 협회소개 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "조직안내 - 부서별 직무소개 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 생태계를 선도하는 한국인공지능협회(KORAIA)의 조직 체계를 소개합니다. AI 정책 수립, 자격 인증, 국제인공지능대전 주최 및 글로벌 네트워크 구축을 통한 부서별 핵심 직무를 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 조직도, 인공지능 정책, AI 교육, AI 인증, 국제인공지능대전, AI EXPO KOREA, AI 거버넌스, AI 인재 양성" },
+            { name: "robots", content: "index, follow" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp1/sub7.php?sub=07" },
+            { property: "og:title", content: "조직안내: 대한민국 AI 산업의 컨트롤 타워 | 한국인공지능협회" },
+            { property: "og:description", content: "AI 정책부터 실무 인재 양성까지, 한국인공지능협회의 전문 부서별 직무와 비전을 소개합니다. 지금 협회와 함께 AI 미래를 설계하십시오." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp1/sub7.php?sub=07" },
+            { property: "twitter:title", content: "조직안내 - 부서별 직무소개 | 한국인공지능협회" },
+            { property: "twitter:description", content: "AI 산업 발전을 위한 정책 연구, 표준화, 인증 제도를 운영하는 한국인공지능협회의 전문 조직 정보를 제공합니다." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          menus: [{ name: "협회소개" }, { name: "조직안내" }, { name: "부서별 직무소개" }],
+        },
+        {
+    title: "주요업무 - 협회소개 | 한국인공지능협회",
+    metas: [
+      { name: "description", content: "대한민국 AI 산업 생태계를 리딩하는 한국인공지능협회(KORAIA)의 주요 사업을 소개합니다. AI EXPO 개최, 기업 지원 컨소시엄, 인재 육성 및 국가 AI 정책 활동을 통해 글로벌 인공지능 표준을 제시합니다." },
+      { name: "keywords", content: "한국인공지능협회, KORAIA, AI EXPO KOREA, 인공지능 인증, AI 자격제도, 인공지능 정책, AI 기업지원" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "주요업무 및 조직안내 | 한국인공지능협회" },
+      { property: "og:description", content: "AI 기업의 성장 파트너! 엑스포, 인재 양성, 인증제도까지 한국인공지능협회가 함께합니다." },
+      { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+      { property: "og:url", content: "https://koraia.org/default/mp1/sub8.php?sub=08" },
+      { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AI 생태계의 중심, 한국인공지능협회 주요업무" },
+      { name: "twitter:description", content: "정보공유부터 정책 발의까지, 대한민국 AI 산업의 권위 있는 파트너십을 확인하세요." },
+      { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+      { name: "geo.region", content: "KR-11" },
+      { name: "geo.placename", content: "Seoul" },
+      { name: "geo.position", content: "37.547902;126.941075" },
+      { name: "ICBM", content: "37.547902, 126.941075" },
+    ],
+    links: [{ rel: "canonical", href: "https://koraia.org/default/mp1/sub8.php?sub=08" }],
+    menus: [{ name: "협회소개" }, { name: "조직안내" }, { name: "주요업무" }],
+  },
+        {
+          title: "회원가입 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "2026년 310조 원 규모의 AI 산업 혁신, 한국인공지능협회와 함께 비즈니스 수익으로 전환하십시오. 2,000여 개 기업 네트워크, AI EXPO 참여 및 투자 매칭 등 등급별 차별화된 27가지 핵심 혜택을 제공합니다." },
+            { name: "keywords", content: "한국인공지능협회, AI 회원가입, 인공지능 기업 지원, AI 비즈니스 네트워크, AI EXPO KOREA, CAIO 교육, AI 투자유치" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub1.php?sub=01" },
+            { property: "og:title", content: "AI 기업의 성장 파트너 | 한국인공지능협회 회원가입" },
+            { property: "og:description", content: "단순한 가입을 넘어 비즈니스 성공으로. 정보 공유부터 자금 조달, AI EXPO 우선권까지 대한민국 최대 AI 생태계의 주인공이 되십시오." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "한국인공지능협회 - 2026 AI 산업의 중심" },
+            { name: "twitter:description", content: "혁신이 이익으로 환원되는 곳. 한국인공지능협회 프리미엄 멤버십으로 310조 원의 AI 경제 효과를 선점하세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub1.php?sub=01" }],
+          menus: [{ name: "협회참여" }, { name: "회원가입" }],
+        },
+        {
+          title: "기부금 캠페인 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 AI 생태계의 완성, 한국인공지능협회와 함께하세요. 여러분의 후원은 AI 기업 성장과 산업 발전을 위한 소중한 동력이 됩니다. 2025-2026 기부금 캠페인 안내." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 기부금, 인공지능 발전기금, 비영리법인, AI EXPO KOREA, AI 생태계 후원" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "협회참여 - 기부금 캠페인 | 한국인공지능협회" },
+            { property: "og:description", content: "Member + Growth + AI + Industry. 대한민국 AI 산업의 내일을 만드는 기부금 캠페인에 동참해 주세요." },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub11.php" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "협회참여 - 기부금 캠페인 | 한국인공지능협회" },
+            { name: "twitter:description", content: "대한민국 인공지능 산업 발전의 중심, KORAIA의 기부 캠페인을 확인하세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub11.php" }],
+          menus: [{ name: "협회참여" }, { name: "기부금 캠페인" }],
+        },
+        {
+          title: "전문위원 신청 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "협회참여 - 전문위원 신청 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 생태계를 이끌어갈 (사)한국인공지능협회 전문위원을 모집합니다. 국내외 AI 박사 및 전문가를 대상으로 정책 자문, 기업 컨설팅, 입법 참여 기회를 제공합니다. 지금 바로 권위 있는 AI 전문가 그룹에 합류하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 전문가, 전문위원 신청, 인공지능 자문, AI 컨설팅, AI 정책, AI 박사 모집, 인공지능 인재매칭" },
+            { name: "author", content: "한국인공지능협회 (KORAIA)" },
+            { name: "robots", content: "index, follow" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub12.php" },
+            { property: "og:title", content: "AI의 미래를 설계하는 전문가의 길, 한국인공지능협회 전문위원 모집" },
+            { property: "og:description", content: "인공지능 각 분야의 최고 전문가를 모십니다. 정책 회의 참여부터 기업 지원까지, 당신의 전문성이 AI 강국 코리아를 만듭니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp2/sub12.php" },
+            { property: "twitter:title", content: "협회참여 - 전문위원 신청 | 한국인공지능협회" },
+            { property: "twitter:description", content: "대한민국 대표 AI 네트워크, (사)한국인공지능협회 전문위원으로 위촉되어 정책 및 산업 혁신에 참여하세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          menus: [{ name: "협회참여" }, { name: "전문위원 신청" }],
+        },
+        {
+          title: "협력사 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 AI 생태계의 중심, 한국인공지능협회(KORAIA)의 글로벌 파트너십 네트워크를 확인하세요. 정부기관, 주요 대학, 아마존·MS 등 빅테크 기업과 함께 인공지능 산업의 미래를 선도합니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 협력사, 인공지능 파트너십, 산학협력, AI EXPO KOREA, 인공지능 인증, AI 생태계" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "협력사 - 협회참여 | 한국인공지능협회" },
+            { property: "og:description", content: "지자체부터 글로벌 기업까지! KORAIA와 함께하는 100여 개 혁신 파트너사를 소개합니다. 협력을 통해 완성되는 AI 비즈니스의 가치를 경험하세요." },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub2.php?sub=02" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "협력사 - 협회참여 | 한국인공지능협회" },
+            { name: "twitter:description", content: "대한민국을 대표하는 AI 네트워크, 한국인공지능협회 파트너십 안내입니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub2.php?sub=02" }],
+          menus: [{ name: "협회참여" }, { name: "협력사" }],
+        },
+        {
+          title: "회원사 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 최대 규모인 1,000여 개의 AI 전문 기업이 함께하는 한국인공지능협회 회원사 네트워크입니다. 생성형 AI, 로보틱스, 헬스케어 등 산업별 리딩 기업 정보를 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 기업 리스트, 인공지능 회원사, 생성형AI, AI 생태계, AI 비즈니스 네트워크" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "대한민국 AI 산업을 이끄는 1,000개 회원사 | 한국인공지능협회" },
+            { property: "og:description", content: "지금 바로 국내 최대 AI 비즈니스 생태계를 확인하세요. 업종별 최신 AI 트렌드를 선도하는 회원사 네트워크를 공개합니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub4.php?sub=04" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "회원사 | 한국인공지능협회" },
+            { name: "twitter:description", content: "대한민국 AI 산업의 중심, 1,000여 개의 회원사와 함께 성장하는 KORAIA 네트워크." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub4.php?sub=04" }],
+          menus: [{ name: "협회참여" }, { name: "회원사" }],
+        },
+        {
+          title: "인증사 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "2026년 현재 224개 이상의 인공지능 전문 기업이 한국인공지능협회의 '산업지능화 인증(AI+X)'을 통해 기술력을 검증받았습니다. KT, 핀텔 등 국내 유수 AI 기업의 인증 현황을 확인하세요." },
+            { name: "keywords", content: "산업지능화 인증, AI+X Certificate, 인공지능 기업 인증, 한국인공지능협회, AI 인증사, 인공지능 전문기업 리스트" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "인증사 현황 (AI+X Certificate) | 한국인공지능협회" },
+            { property: "og:description", content: "대한민국 AI 산업의 표준, 224개 기업이 선택한 산업지능화 인증사 리스트를 공개합니다. 검증된 AI 파트너를 지금 만나보세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub5.php?sub=05" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "인증사 현황 (AI+X Certificate) | 한국인공지능협회" },
+            { name: "twitter:description", content: "224건의 AI+X 인증 발급 완료. 대한민국 인공지능 생태계를 선도하는 인증사들의 기술력을 확인하세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub5.php?sub=05" }],
+          menus: [{ name: "협회참여" }, { name: "인증사" }],
+        },
+        {
+          title: "공인교육기관 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 AI 생태계를 이끄는 한국인공지능협회(KORAIA)의 공인교육기관을 확인하세요. 혁신적인 AI 인재 양성을 위해 검증된 교육 파트너들과 함께 미래를 설계합니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 교육기관, 인공지능 자격증, AI 인재 양성, 공인교육기관, 데이터에듀, 크라우드웍스" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+            { property: "og:type", content: "website" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:title", content: "협회참여 - 공인교육기관 | AI 미래를 여는 파트너" },
+            { property: "og:description", content: "미래 AI 산업을 선도할 공인교육기관 리스트를 확인하고 파트너십을 맺으세요. 신뢰할 수 있는 전문가 네트워크가 여러분을 기다립니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub6.php?sub=06" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "협회참여 - 공인교육기관 | 한국인공지능협회" },
+            { name: "twitter:description", content: "정부 기관 및 기업과 협력하는 AI 인재 양성 허브, 한국인공지능협회의 검증된 교육 파트너를 소개합니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub6.php?sub=06" }],
+          menus: [{ name: "협회참여" }, { name: "공인교육기관" }],
+        },
+        {
+          title: "해외투자처 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "해외투자처 | 한국인공지능협회" },
+            { name: "description", content: "KORAIA와 함께 글로벌 AI 시장으로 도약하세요. 스위스, 체코, 캐나다 등 글로벌 투자 네트워크를 통해 국내 AI 기업의 해외 진출 및 투자 유치를 전폭적으로 지원합니다." },
+            { name: "keywords", content: "한국인공지능협회, AI 투자유치, 해외투자처, AI 해외진출, 글로벌 투자 프로그램, Switzerland Global Enterprise, LegalForce, 체코투자청, 캐나다투자청" },
+            { name: "author", content: "한국인공지능협회 (KORAIA)" },
+            { name: "robots", content: "index, follow" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub7.php?sub=07" },
+            { property: "og:title", content: "글로벌 AI 비즈니스의 교두보, 해외투자 네트워크 | 한국인공지능협회" },
+            { property: "og:description", content: "대한민국 AI 기업의 글로벌 성장을 지원하는 협회 전담 투자 프로그램 안내. 스위스, 캐나다 등 주요국 투자청과의 협력을 확인하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp2/sub7.php?sub=07" },
+            { property: "twitter:title", content: "해외투자처 | 한국인공지능협회" },
+            { property: "twitter:description", content: "AI 전문 기업의 해외 자금 조달 및 글로벌 파트너십 구축. 지금 한국인공지능협회와 상담하세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          menus: [{ name: "협회참여" }, { name: "해외투자처" }],
+        },
+        {
+          title: "회원사 복지몰 - 협회참여 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "한국인공지능협회(KORAIA) 유료 회원사만을 위한 독점 혜택! 삼성전자 패밀리몰 제휴를 통해 AI 기업 임직원들에게 차별화된 복지 쇼핑 경험을 제공합니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, 삼성전자 복지몰, AI 기업 혜택, 인공지능 협회 회원가입, 삼성전자 패밀리몰, 기업 복지" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "회원사 복지몰(삼성전자) | 한국인공지능협회" },
+            { property: "og:description", content: "지금 바로 삼성전자 임직원가 혜택을 누리세요. 프리미엄/이사/부회장사 회원 전용 복지몰 이용 안내." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp2/sub8.php?sub=08" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "KORAIA 회원사 전용 삼성전자 복지몰 혜택" },
+            { name: "twitter:description", content: "한국인공지능협회 유료 회원사를 위한 특별한 복지. 삼성전자 제휴몰 이용 방법을 확인하세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp2/sub8.php?sub=08" }],
+          menus: [{ name: "협회참여" }, { name: "회원사 복지몰" }],
+        },
+        {
+          title: "주요사업 - Korea AI Startups | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 AI 생태계의 핵심 가이드, 'Korea AI Startups' 편람을 확인하세요. 2017년부터 축적된 국내 우수 인공지능 기업의 기술력과 제품 정보를 정부 기관 및 글로벌 투자자에게 제공하는 공신력 있는 자료입니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 스타트업, Korea AI Startups, 인공지능 기업 편람, AI 생태계, 인공지능 투자" },
+            { property: "og:type", content: "website" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:title", content: "Korea AI Startups 편람 - 대한민국 AI 산업의 지도" },
+            { property: "og:description", content: "정부 및 글로벌 바이어가 주목하는 국내 AI 강소기업 총망라. 5회차를 맞이한 'Korea AI Startups'의 최신 PDF와 기업 정보를 지금 확인하십시오." },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub1.php?sub=01" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "Korea AI Startups | 한국인공지능협회" },
+            { name: "twitter:description", content: "대한민국 AI 강소기업의 글로벌 진출을 돕는 'Korea AI Startups' 편람 발간 사업 안내입니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp3/sub1.php?sub=01" }],
+          menus: [{ name: "주요사업" }, { name: "생태계진흥" }, { name: "Korea AI Startups" }],
+        },
+        {
+          title: "국제인공지능대전(AI EXPO KOREA) 소개 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 최대 규모의 AI 산업 전시회, AI EXPO KOREA. 2026년 5월 6일 개최되는 최신 인공지능 트렌드와 글로벌 네트워킹의 현장, 한국인공지능협회와 함께 미래를 선점하세요." },
+            { name: "keywords", content: "국제인공지능대전, AI EXPO KOREA, 한국인공지능협회, KORAIA, 인공지능전시회, AI컨퍼런스, 2026 AI EXPO, 인공지능바우처" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "국제인공지능대전(AI EXPO KOREA) | 한국인공지능협회" },
+            { property: "og:description", content: "2026. 05. 06(수) - 08(금) 개최! AI 산업의 현재와 미래를 잇는 No.1 비즈니스 플랫폼, AI EXPO KOREA의 역대 성과와 차기 일정을 확인하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub2.php?sub=02" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "국제인공지능대전(AI EXPO KOREA) | KORAIA" },
+            { name: "twitter:description", content: "대한민국 AI 산업의 정점, 국제인공지능대전 안내. 한국인공지능협회가 주관하는 글로벌 AI 비즈니스 장에 여러분을 초대합니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp3/sub2.php?sub=02" }],
+          menus: [{ name: "주요사업" }, { name: "생태계진흥" }, { name: "국제인공지능대전" }],
+        },
+        {
+          title: "해외진출지원 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "한국인공지능협회(KORAIA)는 국내 AI 기업의 글로벌 경쟁력 강화를 위해 AI EXPO TOKYO, Big Data & AI World 등 세계적인 전시회 참가 및 해외 판로 개척을 지원합니다. 인공지능 산업의 세계화를 선도하는 협회의 비즈니스 파트너십을 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 해외진출, 글로벌 AI 전시회, AI EXPO TOKYO, Big Data AI World, 인공지능 수출지원, AI 비즈니스" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "글로벌 AI 시장의 관문 - 해외진출지원 | 한국인공지능협회" },
+            { property: "og:description", content: "대한민국 AI 산업의 세계화! AI EXPO TOKYO부터 글로벌 네트워킹까지, 한국인공지능협회가 우리 기업의 해외 성공을 가이드합니다." },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub3.php?sub=03" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "해외진출지원 | 한국인공지능협회" },
+            { name: "twitter:description", content: "AI EXPO TOKYO 등 주요 국제 전시회 참가를 통한 글로벌 판로 개척. 한국인공지능협회가 함께합니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp3/sub3.php?sub=03" }],
+          menus: [{ name: "주요사업" }, { name: "생태계진흥" }, { name: "해외진출지원" }],
+        },
+        {
+          title: "협회참여 - 경진대회 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "협회참여 - 경진대회 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 생태계를 혁신하는 한국인공지능협회의 경진대회 및 IR 매칭 현황입니다. 전문기업 투자매칭, D-Tech 공모전 등 AI 산업 지능화를 선도하는 다양한 기회와 성과를 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, AI 경진대회, 인공지능 IR대회, D-Tech 공모전, 산업지능화, AI 스타트업 투자, KORAIA" },
+            { name: "author", content: "한국인공지능협회" },
+            { name: "robots", content: "index, follow" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub4.php?sub=04" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:title", content: "AI 미래를 여는 경진대회 | 한국인공지능협회" },
+            { property: "og:description", content: "인공지능 전문기업 투자매칭 IR부터 산업지능화 경진대회까지, 협회가 주도하는 AI 혁신 프로젝트의 기록을 공개합니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "협회참여 - 경진대회 | 한국인공지능협회" },
+            { name: "twitter:description", content: "AI 기술력 검증과 투자 유치의 장. 한국인공지능협회의 다양한 경진대회 성과를 확인하고 파트너십을 구축하세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          menus: [{ name: "주요사업" }, { name: "기업지원" }, { name: "경진대회" }],
+        },
+        {
+          title: "주요사업 - AI Technology Award | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "주요사업 - AI Technology Award | 한국인공지능협회" },
+            { name: "description", content: "전문 심사위원단이 선정한 국내 유망 AI 기업의 기술력과 사업성을 확인하세요. 수상 기업에게는 비즈니스 매칭 및 성장 지원 혜택을 제공하며, 대한민국 인공지능 산업의 미래를 이끕니다." },
+            { name: "keywords", content: "한국인공지능협회, AI Technology Award, AI 시상식, 인공지능 유망기업, AI 기술인증, AI 비즈니스 매칭, KORAIA" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub5.php?sub=05" },
+            { property: "og:title", content: "AI Technology Award: 혁신을 선도하는 AI 기업 발굴 | 한국인공지능협회" },
+            { property: "og:description", content: "기술력과 성장 가능성을 인정받은 AI 유망기업 리스트. 수상 기업의 공동 성장을 지원하는 한국인공지능협회의 핵심 사업입니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp3/sub5.php?sub=05" },
+            { property: "twitter:title", content: "AI Technology Award | 한국인공지능협회" },
+            { property: "twitter:description", content: "전문 기술심사위원단이 선정한 국내 최고의 AI 기업들을 만나보세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          menus: [{ name: "주요사업" }, { name: "기업지원" }, { name: "AI Technology Award" }],
+        },
+        {
+          title: "주요사업 - AI Investment Award | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "글로벌 AI 생태계를 선도하는 한국인공지능협회의 'AI Investment Award'. 전문 투자심사단의 엄격한 평가를 통해 선정된 유망 AI 기업들과 스타트업 성장 지원 프로그램을 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, AI Investment Award, 인공지능 투자, AI 스타트업, AI 기업 시상식, KORAIA, AI EXPO KOREA" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "AI Investment Award | 한국인공지능협회" },
+            { property: "og:description", content: "국내 유망 AI 기업의 등용문! 투자 가능성과 글로벌 성장성을 인정받은 수상 기업을 공개합니다." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub6.php?sub=06" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "주요사업 - AI Investment Award | 한국인공지능협회" },
+            { name: "twitter:description", content: "전문 심사위원이 선정한 투자 유망 AI 스타트업 리스트. 기업 성장을 위한 전폭적인 지원 혜택을 확인하세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp3/sub6.php?sub=06" }],
+          menus: [{ name: "주요사업" }, { name: "기업지원" }, { name: "AI Investment Award" }],
+        },
+        {
+          title: "정책활동 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "정책활동 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 산업의 미래를 설계하는 한국인공지능협회(KORAIA)의 정책 활동입니다. AI 기본법 제정 지원, TDM 면책 정책, AI 예산 전략 등 인공지능 강국 도약을 위한 핵심 제언을 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, AI 정책, 인공지능 기본법, AI 거버넌스, TDM 면책, AI 산업 육성, KORAIA, AI 예산" },
+            { name: "author", content: "한국인공지능협회" },
+            { name: "robots", content: "index, follow" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp3/sub7.php?sub=07" },
+            { property: "og:title", content: "정책활동 | 한국인공지능협회" },
+            { property: "og:description", content: "대한민국 AI 영토 확장을 위한 정책의 중심! AI 기본법부터 실전 예산 전략까지, 협회의 전문적인 정책 행보를 지금 확인하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "정책활동 | 한국인공지능협회" },
+            { name: "twitter:description", content: "AI 기본법 및 인공지능 산업 발전을 위한 KORAIA의 정책 활동 리포트입니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          menus: [{ name: "주요사업" }, { name: "정책활동" }],
+        },
+        {
+          title: "뉴스레터 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "뉴스레터 | 한국인공지능협회" },
+            { name: "description", content: "대한민국 AI 산업의 핵심 동향을 한눈에! 한국인공지능협회(KORAIA)가 발행하는 최신 AI 뉴스레터, 산업 리포트, 협회 주요 소식을 지금 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 뉴스레터, 인공지능 동향, AI 정책, 국제인공지능대전, AI 리포트, 생성형AI 소식" },
+            { name: "author", content: "한국인공지능협회" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp4/sub1.php?sub=01" },
+            { property: "og:title", content: "인공지능 산업의 인사이트, KORAIA 뉴스레터" },
+            { property: "og:description", content: "매달 발행되는 인공지능 트렌드 가이드. 한국인공지능협회의 전문 지식과 네트워크가 담긴 뉴스레터로 앞서가세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp4/sub1.php?sub=01" },
+            { property: "twitter:title", content: "뉴스레터 | 한국인공지능협회" },
+            { property: "twitter:description", content: "AI 산업 리더들을 위한 필독서. 한국인공지능협회의 뉴스레터 아카이브를 제공합니다." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "robots", content: "index, follow" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp4/sub1.php?sub=01" }],
+          menus: [{ name: "홍보자료" }, { name: "뉴스레터" }],
+        },
+        {
+          title: "이달의 회원사 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 AI 산업의 혁신을 이끄는 기업들을 소개합니다. 한국인공지능협회(KORAIA)가 엄선한 '이달의 회원사'를 통해 최신 AI 기술 트렌드와 산업 생태계의 주인공들을 만나보세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, 이달의 회원사, AI 기업, 인공지능 스타트업, AI 인증, AI EXPO KOREA, 생성형 AI 트렌드" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "이달의 회원사 | 한국인공지능협회" },
+            { property: "og:description", content: "2026년 AI 혁신의 중심, 한국인공지능협회 선정 이달의 기업 리스트를 확인하고 네트워크 기회를 선점하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:url", content: "https://koraia.org/default/mp4/sub3.php?sub=03" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "이달의 회원사 | 한국인공지능협회" },
+            { name: "twitter:description", content: "대한민국 대표 AI 거버넌스, 한국인공지능협회가 보증하는 우수 AI 회원사 정보를 공개합니다." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.5479018;126.9410754" },
+            { name: "ICBM", content: "37.5479018, 126.9410754" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp4/sub3.php?sub=03" }],
+          menus: [{ name: "홍보자료" }, { name: "이달의 회원사" }],
+        },
+        {
+          title: "홍보자료 - 전문위원 특별기고 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "초거대 AI 및 챗GPT 시대의 비즈니스 혁신 전략! KAIST, 연세대 등 국내 최고 전문가들이 전하는 생성형 AI 대응 전략과 산업별 깊이 있는 인사이트를 한국인공지능협회에서 확인하세요." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, AI 전문가 칼럼, 초거대 AI, 챗GPT 전략, 생성형 AI 비즈니스, AI 의료 헬스케어, 최재식 교수, 임일 교수" },
+            { property: "og:type", content: "article" },
+            { property: "og:title", content: "전문위원 특별기고 | 한국인공지능협회" },
+            { property: "og:description", content: "GPT 시대를 관통하는 최고 전문가들의 AI 대응 전략. 비즈니스 혁신과 미래 기술 트렌드에 대한 정교한 통찰력을 공유합니다." },
+            { property: "og:url", content: "https://koraia.org/default/mp4/sub4.php?sub=04" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "전문위원 특별기고 | 한국인공지능협회" },
+            { name: "twitter:description", content: "초거대 AI 시대, 무엇을 어떻게 물어야 하는가? 한국인공지능협회 전문위원들이 제시하는 AI 산업의 미래와 실천적 전략." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp4/sub4.php?sub=04" }],
+          menus: [{ name: "홍보자료" }, { name: "기획ㆍ칼럼" }, { name: "전문위원 특별기고" }],
+        },
+        {
+          title: "AI 타임라인 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "AI 타임라인 | 한국인공지능협회" },
+            { name: "description", content: "2015년 협회 설립부터 2026년 GPT-5.2 출시까지, 인공지능(AI)과 AGI의 핵심 이정표를 한눈에 확인하세요. 한국인공지능협회가 제공하는 공신력 있는 AI 산업 발전사입니다." },
+            { name: "keywords", content: "AI 타임라인, AGI 역사, GPT-5, 인공지능 발전사, 인공지능 정책, AI 모델 출시, 한국인공지능협회, KORAIA" },
+            { name: "robots", content: "index, follow" },
+            { name: "language", content: "Korean" },
+            { name: "author", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp4/sub6.php?sub=06" },
+            { property: "og:title", content: "AI 타임라인: 인공지능의 과거와 현재, 그리고 미래 | 한국인공지능협회" },
+            { property: "og:description", content: "🧠 GPT-5.2부터 AlphaGo까지, 인류의 지능을 바꾼 결정적 순간들. 협회가 선별한 글로벌 AI 타임라인을 지금 경험하세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회 (KORAIA)" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp4/sub6.php?sub=06" },
+            { property: "twitter:title", content: "AI 타임라인 | 한국인공지능협회" },
+            { property: "twitter:description", content: "AGI 시대를 향한 글로벌 기술 트렌드와 산업 변화를 타임라인으로 확인하세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+          ],
+          menus: [{ name: "홍보자료" }, { name: "AI 타임라인" }],
+        },
+        {
+          title: "보도자료 및 주요소식 | 한국인공지능협회(KORAIA)",
+          metas: [
+            { name: "description", content: "대한민국 AI 생태계를 선도하는 한국인공지능협회(KORAIA)의 최신 보도자료와 정책 동향을 확인하세요. AI 국가 전략, 산업 실무 교육, 국제인공지능대전(AI EXPO) 소식 등 가장 앞서가는 AI 정보를 제공합니다." },
+            { name: "keywords", content: "한국인공지능협회, KORAIA, 인공지능 뉴스, AI 보도자료, AI EXPO KOREA, 인공지능 인증, AI 국가 전략, 이세돌 AI, AI 교육" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "한국인공지능협회 소식 - 대한민국 AI 혁신의 중심" },
+            { property: "og:description", content: "정부 AI 예산 10조 시대, 한국인공지능협회가 전하는 최신 AI 산업 리포트와 보도자료를 지금 확인해 보세요." },
+            { property: "og:url", content: "https://koraia.org/default/mp5/sub1.php?sub=01" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "보도자료 및 주요소식 | 한국인공지능협회" },
+            { name: "twitter:description", content: "AI 전문 기관 KORAIA가 제공하는 산업 동향과 공공 정책 뉴스. 생성형 AI 시대의 비즈니스 인사이트를 만나보세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "robots", content: "index, follow" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp5/sub1.php?sub=01" }],
+          menus: [{ name: "알림마당" }, { name: "협회소식" }, { name: "협회소식" }],
+        },
+        {
+          title: "투자정보 | 한국인공지능협회",
+          metas: [
+            { name: "title", content: "투자정보 | 한국인공지능협회" },
+            { name: "description", content: "한국인공지능협회(KORAIA)의 맞춤형 투자 프로그램을 만나보세요. AI 스타트업의 성장 단계별 IR 컨설팅부터 국내외 VC 네트워크 연결까지, 귀사의 산업 지능화 여정에 가장 강력한 파트너가 되어드립니다." },
+            { name: "keywords", content: "한국인공지능협회, AI 투자, 인공지능 스타트업 지원, IR 컨설팅, VC 매칭, 산업지능화, KORAIA, AI EXPO KOREA" },
+            { name: "author", content: "한국인공지능협회" },
+            { name: "robots", content: "index, follow" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: "https://koraia.org/default/mp5/sub10.php?sub=10" },
+            { property: "og:title", content: "성공적인 AI 비즈니스를 위한 투자 파트너 | 한국인공지능협회" },
+            { property: "og:description", content: "유망 AI 기업과 투자처를 잇는 교두보. KORAIA 투자 프로그램을 통해 글로벌 스케일업의 기회를 잡으세요." },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "twitter:card", content: "summary_large_image" },
+            { property: "twitter:url", content: "https://koraia.org/default/mp5/sub10.php?sub=10" },
+            { property: "twitter:title", content: "투자정보 | 한국인공지능협회" },
+            { property: "twitter:description", content: "AI 기업의 성장 단계별 컨설팅 및 투자 유치 지원 서비스를 확인하세요." },
+            { property: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          menus: [{ name: "알림마당" }, { name: "투자정보" }, { name: "대한민국" }],
+        },
+        {
+          title: "자료실 | 한국인공지능협회",
+          metas: [
+            { name: "description", content: "대한민국 인공지능 생태계를 선도하는 한국인공지능협회(KORAIA)의 공식 자료실입니다. 최신 AI 전문 보고서, 스타트업 리포트, 기술 동향 등 비즈니스와 연구를 위한 핵심 자료를 만나보세요." },
+            { name: "keywords", content: "한국인공지능협회, AI 보고서, 인공지능 통계, AI 트렌드 리포트, KORAIA, AI 스타트업 리포트, 인공지능 인재매칭" },
+            { property: "og:type", content: "website" },
+            { property: "og:title", content: "AI 산업의 핵심 인사이트, KORAIA 자료실" },
+            { property: "og:description", content: "AI 전문가들이 선별한 고품질 리포트와 협회 공식 자료를 확인하세요. 미래를 설계하는 인공지능 지식 창고입니다." },
+            { property: "og:url", content: "https://koraia.org/default/mp5/sub3.php?sub=03" },
+            { property: "og:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { property: "og:site_name", content: "한국인공지능협회" },
+            { property: "og:locale", content: "ko_KR" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: "자료실 | 한국인공지능협회 (KORAIA)" },
+            { name: "twitter:description", content: "국내외 AI 산업 동향과 전문 보고서를 한눈에! 한국인공지능협회 자료실에서 최고의 인사이트를 얻으세요." },
+            { name: "twitter:image", content: "https://www.koraia.org/default/img/_des/mp1/mp1_sub1_img4.jpg" },
+            { name: "geo.region", content: "KR-11" },
+            { name: "geo.placename", content: "Seoul" },
+            { name: "geo.position", content: "37.547902;126.941075" },
+            { name: "ICBM", content: "37.547902, 126.941075" },
+          ],
+          links: [{ rel: "canonical", href: "https://koraia.org/default/mp5/sub3.php?sub=03" }],
+          menus: [{ name: "알림마당" }, { name: "자료실" }],
+        },
+      ]
+
+      // =========================
+      // Helpers
+      // =========================
+      const $ = (id) => document.getElementById(id);
+
+      const escapeHtml = (s) =>
+        String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+
+      const metaKey = (m) => m.name || m.property || "(unknown)";
+      const metaKind = (m) => (m.name ? "name" : m.property ? "property" : "unknown");
+
+      // "트위터 공유 이미지 URL (name: twitter:image)" 형태
+      const metaLabel = (key, kind) => {
+        const map = {
+          title: "브라우저/검색 제목",
+          description: "검색 설명(요약)",
+          keywords: "키워드",
+          robots: "검색 엔진 규칙",
+          viewport: "뷰포트 설정",
+          author: "작성자/기관",
+
+          "og:type": "OG 타입",
+          "og:title": "SNS 공유 제목",
+          "og:description": "SNS 공유 설명",
+          "og:image": "SNS 공유 이미지 URL",
+          "og:url": "공유될 대표 URL",
+          "og:site_name": "사이트 이름",
+          "og:locale": "언어/지역",
+          "og:image:width": "공유 이미지 너비(px)",
+          "og:image:height": "공유 이미지 높이(px)",
+
+          "twitter:card": "트위터 카드 타입",
+          "twitter:url": "트위터 공유 URL",
+          "twitter:title": "트위터 공유 제목",
+          "twitter:description": "트위터 공유 설명",
+          "twitter:image": "트위터 공유 이미지 URL",
+
+          "geo.region": "지역 코드",
+          "geo.placename": "도시명",
+          "geo.position": "좌표(위도;경도)",
+          ICBM: "좌표(위도,경도)",
+        };
+        const title = map[key] || "메타 태그";
+        return `${title} (${kind}: ${key})`;
+      };
+
+      const metaToHtmlLine = (m) => {
+        if (m.name) return `<meta name="${escapeHtml(m.name)}" content="${escapeHtml(m.content)}" />`;
+        if (m.property)
+          return `<meta property="${escapeHtml(m.property)}" content="${escapeHtml(m.content)}" />`;
+        return "";
+      };
+
+      const linkToHtmlLine = (l) =>
+        `<link rel="${escapeHtml(l.rel)}" href="${escapeHtml(l.href)}" />`;
+
+      function isImageUrl(key) {
+        return key === "og:image" || key === "twitter:image";
+      }
+
+      function buildTree(pages) {
+        const tree = new Map();
+        pages.forEach((p, idx) => {
+          const parent = p.menus?.[0]?.name || "기타";
+          const child = p.menus?.[p.menus.length - 1]?.name || p.title;
+          const breadcrumb = (p.menus || []).map((m) => m.name).join(" / ");
+          if (!tree.has(parent)) tree.set(parent, []);
+          tree.get(parent).push({ pageIndex: idx, childName: child, breadcrumb });
+        });
+        for (const [k, list] of tree.entries()) list.sort((a, b) => a.pageIndex - b.pageIndex);
+        return tree;
+      }
+
+      // =========================
+      // State
+      // =========================
+      let currentIndex = 0;
+      const openGroups = {};
+
+      // =========================
+      // Render Menu (depth + toggle)
+      // =========================
+      function renderMenu() {
+        const wrap = $("menuList");
+        wrap.innerHTML = "";
+
+        const tree = buildTree(PAGES);
+
+        for (const [parent, children] of tree.entries()) {
+          if (openGroups[parent] === undefined) openGroups[parent] = true;
+
+          const group = document.createElement("div");
+          group.className = "mb-2 border rounded-md bg-blue-50";
+
+          const header = document.createElement("button");
+          header.type = "button";
+          header.className =
+            "w-full flex items-center justify-between px-3 py-6 text-left hover:bg-neutral-50 rounded-md";
+          header.innerHTML = `
+            <div class="text-sm font-semibold">${escapeHtml(parent)}</div>
+            <div class="text-xs text-neutral-500">${openGroups[parent] ? "▾" : "▸"}</div>
+          `;
+          header.addEventListener("click", () => {
+            openGroups[parent] = !openGroups[parent];
+            renderMenu();
+          });
+
+          group.appendChild(header);
+
+          if (openGroups[parent]) {
+            const list = document.createElement("div");
+            list.className = "px-2 pb-2";
+
+            children.forEach((c) => {
+              const isActive = c.pageIndex === currentIndex;
+
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className =
+                "w-full text-left px-3 py-2 rounded-md border mb-2 hover:bg-neutral-50 " +
+                (isActive ? "border-neutral-900 bg-neutral-50" : "border-neutral-200 bg-white");
+
+              btn.innerHTML = `
+                <div class="text-sm font-medium">${escapeHtml(c.childName)}</div>
+                <div class="text-xs text-neutral-500 mt-1">${escapeHtml(c.breadcrumb)}</div>
+              `;
+
+              btn.addEventListener("click", () => {
+                currentIndex = c.pageIndex;
+                renderMenu();
+                renderRight();
+              });
+
+              list.appendChild(btn);
+            });
+
+            group.appendChild(list);
+          }
+
+          wrap.appendChild(group);
+        }
+      }
+
+      // =========================
+      // Render Right
+      // =========================
+      function renderRight() {
+        const page = PAGES[currentIndex];
+
+        $("pageTitle").textContent = page.title;
+        $("pageBreadcrumb").textContent = (page.menus || []).map((m) => m.name).join(" / ");
+
+        // Links
+        const linksPanel = $("linksPanel");
+        linksPanel.innerHTML = "";
+        (page.links || []).forEach((l, i) => {
+          const row = document.createElement("div");
+          row.className = "grid gap-2";
+          row.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="text-sm font-semibold">대표 URL (rel: ${escapeHtml(l.rel)})</div>
+                <div class="text-xs text-neutral-500">canonical 등</div>
+              </div>
+              <span class="text-xs px-2 py-1 border rounded bg-neutral-50">link</span>
+            </div>
+            <label class="grid gap-1">
+              <span class="text-xs text-neutral-500">href</span>
+              <input
+                data-kind="link"
+                data-index="${i}"
+                class="w-full border rounded-md px-3 py-2 text-sm"
+                value="${escapeHtml(l.href)}"
+              />
+            </label>
+          `;
+          linksPanel.appendChild(row);
+        });
+
+        linksPanel.querySelectorAll("input[data-kind='link']").forEach((el) => {
+          el.addEventListener("input", (e) => {
+            const idx = Number(e.target.dataset.index);
+            PAGES[currentIndex].links[idx].href = e.target.value;
+            renderPreview();
+          });
+        });
+
+        // Metas
+        const metasPanel = $("metasPanel");
+        metasPanel.innerHTML = "";
+        (page.metas || []).forEach((m, i) => {
+          const key = metaKey(m);
+          const kind = metaKind(m);
+          const isImg = isImageUrl(key);
+
+          const row = document.createElement("div");
+          row.className = "grid gap-3 p-3 border rounded-md bg-white";
+          row.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="text-base font-semibold">${escapeHtml(metaLabel(key, kind))}</div>
+              </div>
+              <span class="text-xs px-2 py-1 border rounded bg-neutral-50">meta</span>
+            </div>
+
+            <label class="grid gap-1">
+              <span class="text-xs text-neutral-500">content</span>
+              <textarea
+                data-kind="meta"
+                data-index="${i}"
+                rows="2"
+                class="w-full border rounded-md px-3 py-2 text-sm leading-5"
+              >${escapeHtml(m.content)}</textarea>
+            </label>
+
+            ${
+              isImg
+                ? `
+              <div class="grid gap-2">
+                <div class="text-xs text-neutral-500">이미지 미리보기</div>
+                <div class="border rounded-md bg-neutral-50 p-2">
+                  <img
+                    data-kind="img"
+                    data-index="${i}"
+                    alt="${escapeHtml(key)}"
+                    src="${escapeHtml(m.content)}"
+                    class="max-w-full h-auto rounded"
+                    referrerpolicy="no-referrer"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                    style="width: 600px"
+                  />
+                  <div class="text-xs text-neutral-500" style="display:none;">
+                    이미지를 불러올 수 없습니다. (URL 확인 필요)
+                  </div>
+                </div>
+              </div>
+            `
+                : ""
+            }
+          `;
+          metasPanel.appendChild(row);
+        });
+
+        metasPanel.querySelectorAll("textarea[data-kind='meta']").forEach((el) => {
+          el.addEventListener("input", (e) => {
+            const idx = Number(e.target.dataset.index);
+            const next = e.target.value;
+
+            PAGES[currentIndex].metas[idx].content = next;
+
+            const key = metaKey(PAGES[currentIndex].metas[idx]);
+            if (isImageUrl(key)) {
+              const img = metasPanel.querySelector(`img[data-kind="img"][data-index="${idx}"]`);
+              if (img) {
+                img.style.display = "";
+                const msg = img.nextElementSibling;
+                if (msg) msg.style.display = "none";
+                img.src = next;
+              }
+            }
+
+            renderPreview();
+          });
+        });
+
+        renderPreview();
+      }
+
+      // =========================
+      // Preview
+      // =========================
+      function renderPreview() {
+        const page = PAGES[currentIndex];
+        const lines = [];
+
+        (page.links || []).forEach((l) => lines.push(linkToHtmlLine(l)));
+        (page.metas || []).forEach((m) => {
+          const line = metaToHtmlLine(m);
+          if (line) lines.push(line);
+        });
+
+        $("previewBox").textContent = lines.join("\n");
+      }
+
+      // =========================
+      // Export
+      // =========================
+      $("btnExport").addEventListener("click", async () => {
+        const json = JSON.stringify(PAGES, null, 2);
+        try {
+          await navigator.clipboard.writeText(json);
+          $("btnExport").textContent = "복사됨";
+          setTimeout(() => ($("btnExport").textContent = "JSON 내보내기"), 900);
+        } catch {
+          alert("클립보드 복사 실패. 콘솔에서 확인하세요.");
+          console.log(json);
+        }
+      });
+
+      // =========================
+      // Init
+      // =========================
+      const currentParent = PAGES[currentIndex]?.menus?.[0]?.name;
+      if (currentParent) openGroups[currentParent] = true;
+
+      renderMenu();
+      renderRight();
+    </script>
+  </body>
+</html>
