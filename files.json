@@ -1,5 +1,45 @@
 [
     {
+        "filename": "1._260126_인공지능_투명성_확보_가이드라인",
+        "type": "pdf",
+        "description": "AI기본법 시행 및 하위법령 공개(1.22.~)",
+        "size": 1.6,
+        "date": "2026-02-03",
+        "link": "https://drive.google.com/file/d/1HpSEIiUWwAKaXNvM9QdI5jezuXIXy6PQ/view"
+    },
+    {
+        "filename": "2._260122_인공지능_안전성_확보_가이드라인",
+        "type": "pdf",
+        "description": "AI기본법 시행 및 하위법령 공개(1.22.~)",
+        "size": 3.7,
+        "date": "2026-02-03",
+        "link": "https://drive.google.com/file/d/1kTth6oJUDbZKVWKA2Oma-QsNc-ZWytMY/view"
+    },
+    {
+        "filename": "3._260129_고영향_인공지능_판단_가이드라인_최종_v.3",
+        "type": "pdf",
+        "description": "AI기본법 시행 및 하위법령 공개(1.22.~)",
+        "size": 86.1,
+        "date": "2026-02-03",
+        "link": "https://drive.google.com/file/d/1A0V9kE_CZ1kGojBq8j2i_dGyTPpWfH5F/view"
+    },
+    {
+        "filename": "4._260122_고영향_인공지능_사업자_책무_가이드라인-1",
+        "type": "pdf",
+        "description": "AI기본법 시행 및 하위법령 공개(1.22.~)",
+        "size": 6.6,
+        "date": "2026-02-03",
+        "link": "https://drive.google.com/file/d/1a1KVBlq7CeWBbo-mbCjSkWeUE2BsPex3/view"
+    },
+    {
+        "filename": "5._260122_인공지능_영향평가_가이드라인",
+        "type": "pdf",
+        "description": "AI기본법 시행 및 하위법령 공개(1.22.~)",
+        "size": 0.4,
+        "date": "2026-02-03",
+        "link": "https://drive.google.com/file/d/1typGA78r6KAp03LgYOHxSTvFtizitOdz/view"
+    },
+    {
         "filename": "AI 파운데이션 모델 중심 인공지능 연구 동향의 변화",
         "type": "pdf",
         "description": "최근 인공지능(AI)의 발전은 연구 관행 전반에 중요한 변화를 드러내고 있다. 연구자들은 더 이상 각 도메인에 특화된 모델을 개별적으로 개발하기보다는, 강한 일반화 성능과 창발적 역량을 갖춘 공유 기반 모델(foundation models)을 구축하는 방향으로 이동하고 있다. 본 연구는 이러한 전환이 가져온 변화들을 종합적으로 고찰하고, 그 개념적 배경을 정리하며, 이를 활용하기 위한 두 가지 주요 접근법을 소개한다. 또한 구조적 한계와 이에 대한 제안된 해결책을 제시하고, 그 결과로 나타난 학습, 데이터, 평가 패러다임의 변화를 논의한다. 단순히 기술적 진보를 나열하는 데 그치지 않고, 그 이면의 동기와 함의를 강조함으로써, 파운데이션 모델이 연구 생태계를 어떻게 재편하고 향후 인공지능의 발전 방향에 어떤 시사점을 제공하는지를 조명한다.\n",
@@ -6118,6 +6158,7 @@
         "link": "https://drive.google.com/file/d/1wqXu_OiCHkZ8LdgrVdQiCshqvVtyxx8E"
     }
 ]
+
 
 
 
