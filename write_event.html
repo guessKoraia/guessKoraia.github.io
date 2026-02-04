@@ -98,7 +98,7 @@
 <!--                <button id="btnExport" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">HTML 내보내기</button>-->
                 <button id="btnExportZip" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">ZIP 내보내기</button>
                 <button id="btnPreview" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">미리보기 및 제출</button>
-                <button id="btnEditComplete" class="rounded-full bg-blue-600 text-white px-3 py-1.5 text-sm font-bold transition hover:bg-blue-700 hidden">수정완료</button>
+                <button id="btnEditComplete" class="rounded-full bg-blue-600 text-white px-3 py-1.5 text-sm font-bold transition hover:bg-blue-700 hidden">미리보기 및 수정완료</button>
             </div>
         </div>
     </div>
@@ -155,37 +155,6 @@
     </button>
 
     <div class="mx-auto max-w-4xl">
-        <div class="mt-4 p-4 bg-slate-100" style="margin-top: 60px;">
-            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-                <div>
-                    <div class="mb-1 text-xs font-extrabold text-slate-600">제목</div>
-                    <input id="metaTitle" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="[행사명]: [핵심주제/타겟]를 위한 [행사성격] (개최 안내/후기)" />
-                </div>
-                <div>
-                    <div class="mb-1 text-xs font-extrabold text-slate-600">작성자</div>
-                    <input id="metaAuthor" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="홍길동" />
-                </div>
-                <div>
-                    <div class="mb-1 text-xs font-extrabold text-slate-600">행사 일자</div>
-                    <input id="metaDate" type="date" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="2026-02-02" />
-                </div>
-                <div>
-                    <div class="mb-1 text-xs font-extrabold text-slate-600">장소</div>
-                    <input id="metaPlace" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="코엑스 A홀" />
-                </div>
-            </div>
-            <div class="mt-3">
-                <div class="mb-1 text-xs font-extrabold text-slate-600">썸네일 <span class="font-normal text-slate-400">(16:9 비율)</span></div>
-                <div class="flex items-center gap-3 flex-wrap">
-                    <input id="thumbnailInput" type="file" accept="image/*" class="text-sm" />
-                    <button type="button" id="thumbnailClear" class="border border-slate-200 px-3 py-1.5 text-sm font-bold hover:bg-slate-100">제거</button>
-                    <div id="thumbnailPreviewWrap" class="hidden">
-                        <img id="thumbnailPreview" src="" alt="썸네일 미리보기" class="max-h-24 rounded border border-slate-200 object-cover" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="mt-4">
             <div class="relative">
                 <div id="editorWrap">
@@ -205,6 +174,36 @@
                 </div>
             </div>
             <div class="max-h-[75vh] overflow-auto p-4">
+                <div class="mb-6 p-4 bg-slate-100 rounded">
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <div>
+                            <div class="mb-1 text-xs font-extrabold text-slate-600">제목</div>
+                            <input id="metaTitle" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="[행사명]: [핵심주제/타겟]를 위한 [행사성격] (개최 안내/후기)" />
+                        </div>
+                        <div>
+                            <div class="mb-1 text-xs font-extrabold text-slate-600">작성자</div>
+                            <input id="metaAuthor" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="홍길동" />
+                        </div>
+                        <div>
+                            <div class="mb-1 text-xs font-extrabold text-slate-600">행사 일자</div>
+                            <input id="metaDate" type="date" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="2026-02-02" />
+                        </div>
+                        <div>
+                            <div class="mb-1 text-xs font-extrabold text-slate-600">장소</div>
+                            <input id="metaPlace" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="코엑스 A홀" />
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="mb-1 text-xs font-extrabold text-slate-600">썸네일 <span class="font-normal text-slate-400">(16:9 비율)</span></div>
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <input id="thumbnailInput" type="file" accept="image/*" class="text-sm" />
+                            <button type="button" id="thumbnailClear" class="border border-slate-200 px-3 py-2 text-sm font-bold hover:bg-slate-100">제거</button>
+                            <div id="thumbnailPreviewWrap" class="hidden">
+                                <img id="thumbnailPreview" src="" alt="썸네일 미리보기" class="max-h-24 rounded border border-slate-200 object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="previewThumbnailWrap" class="hidden mb-4">
                     <img id="previewThumbnailImg" src="" alt="썸네일" class="w-full max-h-48 object-cover rounded border border-slate-200" />
                 </div>
@@ -1036,6 +1035,20 @@
     const closeModal = () => $("previewModal").classList.remove("show");
 
     const previewAndOpenModal = async () => {
+        // 수정 모드일 때는 메타데이터를 모달 필드에 채움
+        if (editingId) {
+            let post = null;
+            if (typeof supabaseGetPostById === "function") post = await supabaseGetPostById(editingId);
+            if (!post) post = await idbGet(STORE_POSTS, editingId);
+            if (post) {
+                $("metaTitle").value = post.title || "";
+                $("metaAuthor").value = post.authorName || "";
+                $("metaDate").value = post.date || "";
+                $("metaPlace").value = post.place || "";
+                // 썸네일은 이미 로드되어 있음
+            }
+        }
+
         const err = validateMeta();
         if (err) return alert(err);
 
@@ -1062,73 +1075,112 @@
     };
 
     const submitFromModal = async () => {
-        const ok = confirm("제출하시겠습니까?");
+        const ok = confirm(editingId ? "수정하시겠습니까?" : "제출하시겠습니까?");
         if (!ok) return;
 
         const err = validateMeta();
         if (err) return alert(err);
 
-        // 중복 제출 방지: 이미 제출된 상태인지 확인
-        const existing = await idbGet(STORE_POSTS, editingId);
-        if (existing && existing.status === "submitted") {
-            alert("이미 제출된 글입니다.");
-            return;
+        // 중복 제출 방지: 이미 제출된 상태인지 확인 (새 제출일 때만)
+        if (!editingId) {
+            const existing = await idbGet(STORE_POSTS, editingId);
+            if (existing && existing.status === "submitted") {
+                alert("이미 제출된 글입니다.");
+                return;
+            }
         }
 
-        setLoading(true, "제출 중", "이미지 업로드 및 저장을 처리하고 있습니다.");
+        setLoading(true, editingId ? "수정 중" : "제출 중", editingId ? "수정 사항을 저장하고 있습니다." : "이미지 업로드 및 저장을 처리하고 있습니다.");
 
         try {
-            const post = collectPost("submitted");
-
-            const finalHtml = await replaceEditorImagesWithImgbbUrls(post.editorHtml);
-
-            let thumbnailUrl = post.thumbnailUrl || null;
-            if (post.thumbnailDataUrl && !thumbnailUrl) {
-                try {
-                    const blob = await (await fetch(post.thumbnailDataUrl)).blob();
-                    thumbnailUrl = await uploadBlobToImgbb(blob, "thumbnail-" + (post.id || "draft").slice(0, 8) + ".jpg");
-                } catch (e) {
-                    console.warn("썸네일 업로드 실패:", e);
+            if (editingId) {
+                // 수정 모드
+                let post = null;
+                if (typeof supabaseGetPostById === "function") post = await supabaseGetPostById(editingId);
+                if (!post) post = await idbGet(STORE_POSTS, editingId);
+                const history = Array.isArray(post?.approvalHistory) ? post.approvalHistory : [];
+                const lastHistory = history.length > 0 ? history[history.length - 1] : null;
+                const isRejectedAtStage0 = post && (post.approvalStage ?? 0) === 0 && !!(lastHistory && lastHistory.rejected === true);
+                if (isRejectedAtStage0) {
+                    const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+                    const newHistory = history.slice();
+                    newHistory.push({
+                        step: 0,
+                        step_name: step0 ? step0.name : "기획 및 초안 작성",
+                        approver_name: (post && post.authorName) ? post.authorName + " 재제출" : "재제출",
+                        approved_at: new Date().toISOString()
+                    });
+                    await savePost("submitted", { approvalStage: 1, approvalHistory: newHistory });
+                    if (typeof supabaseInvokeSlackApproval === "function") {
+                        supabaseInvokeSlackApproval({
+                            title: post && post.title,
+                            authorName: post && post.authorName,
+                            stage: 1,
+                            stepName: "1차 검수 및 표준화",
+                            postId: post && post.id,
+                            eventType: "submit"
+                        }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+                    }
+                    alert("재제출되었습니다. 1차 검수 단계로 진행됩니다.");
+                } else {
+                    await savePost("submitted");
+                    alert("수정이 완료되었습니다.");
                 }
-            }
+                location.href = "review.html";
+            } else {
+                // 새 제출 모드
+                const post = collectPost("submitted");
 
-            const now = new Date().toISOString();
-            const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
-            const payload = {
-                id: post.id,
-                type: "event",
-                status: "submitted",
-                title: post.title,
-                authorName: post.authorName,
-                date: post.date,
-                place: post.place,
-                editorHtml: finalHtml,
-                updatedAt: now,
-                approvalStage: 1,
-                approvalHistory: [{ step: 0, step_name: step0 ? step0.name : "기획 및 초안 작성", approver_name: post.authorName || "", approved_at: now }],
-            };
-            if (thumbnailUrl) payload.thumbnailUrl = thumbnailUrl;
-            if (typeof supabaseUpsertPost === "function" && window._canWrite) {
-                await supabaseUpsertPost(payload);
+                const finalHtml = await replaceEditorImagesWithImgbbUrls(post.editorHtml);
+
+                let thumbnailUrl = post.thumbnailUrl || null;
+                if (post.thumbnailDataUrl && !thumbnailUrl) {
+                    try {
+                        const blob = await (await fetch(post.thumbnailDataUrl)).blob();
+                        thumbnailUrl = await uploadBlobToImgbb(blob, "thumbnail-" + (post.id || "draft").slice(0, 8) + ".jpg");
+                    } catch (e) {
+                        console.warn("썸네일 업로드 실패:", e);
+                    }
+                }
+
+                const now = new Date().toISOString();
+                const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+                const payload = {
+                    id: post.id,
+                    type: "event",
+                    status: "submitted",
+                    title: post.title,
+                    authorName: post.authorName,
+                    date: post.date,
+                    place: post.place,
+                    editorHtml: finalHtml,
+                    updatedAt: now,
+                    approvalStage: 1,
+                    approvalHistory: [{ step: 0, step_name: step0 ? step0.name : "기획 및 초안 작성", approver_name: post.authorName || "", approved_at: now }],
+                };
+                if (thumbnailUrl) payload.thumbnailUrl = thumbnailUrl;
+                if (typeof supabaseUpsertPost === "function" && window._canWrite) {
+                    await supabaseUpsertPost(payload);
+                }
+                _thumbnailUrl = thumbnailUrl || _thumbnailUrl;
+                _thumbnailDataUrl = null;
+                await savePost("submitted");
+                if (typeof supabaseInvokeSlackApproval === "function") {
+                    supabaseInvokeSlackApproval({
+                        title: payload.title,
+                        authorName: payload.authorName,
+                        stage: 1,
+                        stepName: "1차 검수 및 표준화",
+                        postId: payload.id,
+                        eventType: "submit"
+                    }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+                }
+                alert("제출이 완료되었습니다.");
+                closeModal();
             }
-            _thumbnailUrl = thumbnailUrl || _thumbnailUrl;
-            _thumbnailDataUrl = null;
-            await savePost("submitted");
-            if (typeof supabaseInvokeSlackApproval === "function") {
-                supabaseInvokeSlackApproval({
-                    title: payload.title,
-                    authorName: payload.authorName,
-                    stage: 1,
-                    stepName: "1차 검수 및 표준화",
-                    postId: payload.id,
-                    eventType: "submit"
-                }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
-            }
-            alert("제출이 완료되었습니다.");
-            closeModal();
         } catch (e) {
             console.error(e);
-            alert("제출 중 오류가 발생했습니다.");
+            alert(editingId ? "수정 중 오류가 발생했습니다." : "제출 중 오류가 발생했습니다.");
         } finally {
             setLoading(false);
         }
@@ -1663,47 +1715,8 @@
         }
 
         // 수정완료 버튼 이벤트
-        $("btnEditComplete").addEventListener("click", async () => {
-            setLoading(true, "저장 중", "수정 사항을 저장하고 있습니다.");
-            try {
-                let post = null;
-                if (typeof supabaseGetPostById === "function") post = await supabaseGetPostById(editingId);
-                if (!post) post = await idbGet(STORE_POSTS, editingId);
-                const history = Array.isArray(post?.approvalHistory) ? post.approvalHistory : [];
-                const lastHistory = history.length > 0 ? history[history.length - 1] : null;
-                const isRejectedAtStage0 = post && (post.approvalStage ?? 0) === 0 && !!(lastHistory && lastHistory.rejected === true);
-                if (isRejectedAtStage0) {
-                    const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
-                    const newHistory = history.slice();
-                    newHistory.push({
-                        step: 0,
-                        step_name: step0 ? step0.name : "기획 및 초안 작성",
-                        approver_name: (post && post.authorName) ? post.authorName + " 재제출" : "재제출",
-                        approved_at: new Date().toISOString()
-                    });
-                    await savePost("submitted", { approvalStage: 1, approvalHistory: newHistory });
-                    if (typeof supabaseInvokeSlackApproval === "function") {
-                        supabaseInvokeSlackApproval({
-                            title: post && post.title,
-                            authorName: post && post.authorName,
-                            stage: 1,
-                            stepName: "1차 검수 및 표준화",
-                            postId: post && post.id,
-                            eventType: "submit"
-                        }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
-                    }
-                    alert("재제출되었습니다. 1차 검수 단계로 진행됩니다.");
-                } else {
-                    await savePost("submitted");
-                    alert("수정이 완료되었습니다.");
-                }
-                location.href = "review.html";
-            } catch (e) {
-                console.error(e);
-                alert("저장 중 오류가 발생했습니다.");
-            } finally {
-                setLoading(false);
-            }
+        $("btnEditComplete").addEventListener("click", () => {
+            openModal();
         });
 
         // 포스트 로드 및 UI 설정 (에디터 init보다 먼저 실행하여 빠르게 UI 표시)
