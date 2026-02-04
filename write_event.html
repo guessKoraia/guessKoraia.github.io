@@ -247,55 +247,18 @@
     let _postLoaded = false; // 포스트가 이미 로드되었는지 플래그
 
     const TEMPLATE_EVENT = `
-<h2>핵심 요약</h2>
-<p>- 일시/장소: [YYYY년 MM월 DD일], [장소명]</p>
-<p>- 핵심 주제: [AI 기본법 대응 / 제조 혁신 / 예산 분석] 등 [구체적 목적]</p>
-<p>- 참석 대상: [AI 도입 희망 기업 / 공공기관 / 경영진] 등</p>
-
 <h2>행사 개요</h2>
 <table style="width:100%; table-layout:fixed;">
-  <colgroup>
-    <col style="width:160px;" />
-    <col />
-  </colgroup>
   <tbody>
-    <tr><th>행사명</th><td>2026 기업 경영 원-포인트 세미나</td></tr>
-    <tr><th>일시</th><td>2026.01.29(목) ~ 01.30(금) 14:00~17:00</td></tr>
-    <tr><th>장소</th><td>인천 미추홀타워 3층 비즈니스라운지</td></tr>
-    <tr><th>주최/주관</th><td>인천광역시, 인천테크노파크, 한국인공지능협회</td></tr>
-    <tr><th>참가비</th><td>무료 / 유료 (금액)</td></tr>
-    <tr><th>신청 링크</th><td>https://</td></tr>
+    <tr><th>구분</th><th>상세내용</th></tr>
+    <tr><td>행사명</td><td></td></tr>
+    <tr><td>일시</td><td></td></tr>
+    <tr><td>장소</td><td></td></tr>
+    <tr><td>주최/주관</td><td></td></tr>
+    <tr><td>참가비</td><td></td></tr>
+    <tr><td>신청링크</td><td></td></tr>
   </tbody>
 </table>
-
-<h2>상세소개 (Q&A)</h2>
-<p><b>Q1. 이번 세미나는 어떤 목적(배경)으로 개최되나요?</b><br />[답변] 2026년 [AI 기본법 시행/도시 AI 예산 확정]에 따라, 기업들이 [선제적 대응 전략/신규 사업 기회]를 모색할 수 있도록 기획되었습니다.<br/> 특히 [고위험 AI 기준/7대 부처 예산] 등 핵심 정보를 심층 분석합니다.</p>
-<p><b>Q2. 어떤 분들이 참석하면 좋은가요?</b><br />[답변] [중소·중견기업 CEO], [법무/규제 대응팀], [AI 도입 실무자] 등 [해당 주제]에 관심 있는 분들에게 최적화되어 있습니다.</p>
-<p><b>Q3. 주요 프로그램과 연사는 누구인가요?</b><br />[답변] [법무법인 대륜 변호사], [플래티어 연구소장] 등 현장 전문가들이 [규제 환경 변화], [산업 현장 적용 사례] 등을 발표합니다. (하단 프로그램 표 참조)</p>
-
-<h2>프로그램 세부 일정</h2>
-<table style="width:100%; table-layout:fixed;">
-  <colgroup>
-    <col style="width:160px;" />
-    <col />
-  </colgroup>
-  <thead>
-    <tr><th>시간</th><th>세션/내용</th><th>연사</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>09:00</td><td>개회식</td><td></td></tr>
-  </tbody>
-</table>
-
-<h2>핵심 인사이트</h2>
-<p>- [세션 1 요약] 2026년 정부 AI 예산은 전년 대비 OO% 증가한 O조 원 규모로, 특히 [도시 관제/안전] 분야에 집중될 전망입니다.</p>
-<p>- [세션 2 요약] AI 기본법 대응을 위해 기업은 [투명성 보고서]와 [책임 관리자 지정]을 최우선으로 준비해야 합니다.</p>
-
-<h2>마무리 및 연결</h2>
-<p>[협회 코멘트] 한국인공지능협회는 [주제]와 관련하여 회원사의 경쟁력 강화를 위해 지속적인 [교육/세미나]를 제공하겠습니다.</p>
-<br/>
-<p>관련 자료 다운로드: [발표자료집 PDF 링크] (회원사 전용 등 권한 설정)</p>
-<p>문의: [담당 부서/이메일]</p>
   `.trim();
 
     const $ = (id) => document.getElementById(id);
@@ -1142,7 +1105,7 @@
             branding: false,
             statusbar: false,
             plugins: "lists link image table align code autoresize",
-            toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | link | attachImage | code | removeformat",
+            toolbar: "undo redo | blocks | blockquote | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | link | attachImage | code | removeformat",
             block_formats: "본문=p; 제목 1=h1; 제목 2=h2; 제목 3=h3; 제목 4=h4; 제목 5=h5",
             content_style:
                 '@font-face{font-family:"Pretendard";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2") format("woff2");font-weight:100;font-display:swap;}' +
@@ -1173,9 +1136,9 @@
                 '.blockquote-type6:before{background-color:#2563eb;content:"";mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 14.5922V21L0.5 7.5C2.5 2 9.5 0 14 0C9.5 5 10 8.09224 10 14.5922Z\' fill=\'%233478FF\'/%3E%3C/svg%3E%0A");-webkit-mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 14.5922V21L0.5 7.5C2.5 2 9.5 0 14 0C9.5 5 10 8.09224 10 14.5922Z\' fill=\'%233478FF\'/%3E%3C/svg%3E%0A");-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;width:14px;height:21px;display:block;position:absolute;top:0;right:0;transition:background .15s ease-in-out,border-color .15s ease-in-out;pointer-events:none;}' +
                 'table{margin-bottom:30px;width:100%;text-align:left;color:#3f3f3f;border-collapse:collapse;border:1px solid #e8e8e8;}' +
                 'table tr:nth-child(odd):not(:first-child){background-color:#f7f7f7;}' +
-                'table tr:first-child{background-color:#dbeafe; font-weight:700;}' +
+                'table tr:first-child{font-weight:700;}' +
                 'table th,table td{padding:10px 15px;}' +
-                'table th{background-color:#f0f0f0;border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
+                'table th{border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
                 'table td{border:1px solid #e8e8e8;}' +
                 'img{max-width:100%; height:auto; border-radius:4px;}' +
                 'a{color:#2563eb; text-decoration:none;} a:hover{text-decoration:underline;}' +

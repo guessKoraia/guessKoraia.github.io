@@ -245,53 +245,18 @@
     let _postLoaded = false; // 포스트가 이미 로드되었는지 플래그
 
     const TEMPLATE_VISIT = `
-<h2>핵심 요약</h2>
-<p>- 방문 일자: [YYYY년 MM월 DD일]</p>
-<p>- 방문 기업: [기업명] (대표: OOO)</p>
-<p>- 핵심 내용: [기업명]은 [핵심 기술]을 통해 [해결하려는 문제]를 혁신하는 기업으로, 이번 방문을 통해 [구체적 성과/협력 방안]을 확인했습니다.</p>
-
 <h2>기업 프로필</h2>
 <table style="width:100%; table-layout:fixed;">
-  <colgroup>
-    <col style="width:160px;" />
-    <col />
-  </colgroup>
   <tbody>
-    <tr><th>기업명</th><td>주식회사 OOO</td></tr>
-    <tr><th>대표자</th><td>OOO 대표</td></tr>
-    <tr><th>설립일</th><td>YYYY.MM.DD</td></tr>
-    <tr><th>핵심 기술</th><td>비전 AI, LLM 파인튜닝, 스마트 팩토리 등</td></tr>
-    <tr><th>주요 제품/서비스</th><td>제품명 1, 제품명 2</td></tr>
+    <tr><th>구분</th><th>상세내용</th></tr>
+    <tr><td>기업명</td><td></td></tr>
+    <tr><td>대표자</td><td></td></tr>
+    <tr><td>설립일</td><td></td></tr>
+    <tr><td>핵심 기술</td><td></td></tr>
+    <tr><td>주요 제품</td><td></td></tr>
   </tbody>
 </table>
-
-<h2>인터뷰 및 기술 소개 (Q&A)</h2>
-<p>
-    <b>Q1. [기업명]은 어떤 문제를 해결하는 AI 기업인가요?</b>
-    <br />[답변] 우리는 [어떤 산업]의 [어떤 비효율]을 [어떤 기술]로 해결합니다.
-</p>
-<p>
-    <b>Q2. 핵심 솔루션 '[제품명]'의 차별점은 무엇인가요?</b>
-    <br />[답변] 기존 방식 대비 [수치적 성과, 예: 비용 30% 절감] 효과가 있으며, 특히 [독자적 알고리즘]을 적용해 정확도를 높였습니다.
-</p>
-<p>
-    <b>Q3. 앞으로의 계획과 협회와의 시너지는 무엇인가요?</b>
-    <br />[답변] 내년 [해외 진출/신제품 출시]를 앞두고 있으며, 협회의 [AI EXPO/인증 사업]을 통해 판로를 개척하고자 합니다.
-</p>
-
-<h2>현장 스케치</h2>
-<p>[이미지 설명(ALT) 예시]</p>
-<p>- [사진 1] 기업 입구 및 로고 (설명: [기업명] 본사 전경)</p>
-<p>- [사진 2] 기술 시연 모습 (설명: [제품명]의 실시간 데이터 분석 시연 장면)</p>
-<p>- [사진 3] 임직원 단체 사진 (설명: 한국인공지능협회 방문단과 [기업명] 임직원 기념 촬영)</p>
-
-<h2>마무리 및 연결</h2>
-<p>[한 줄 평] "[기업명]은 [특정 강점]을 바탕으로 [해당 분야]의 글로벌 리더로 성장할 잠재력이 충분합니다."</p>
-<br/>
-<p>관련 링크: https://</p>
-<p>문의: 회원교류팀 (이메일/전화번호)</p>
-
-`.trim();
+  `.trim();
 
     const $ = (id) => document.getElementById(id);
 
@@ -1034,7 +999,7 @@
             branding: false,
             statusbar: false,
             plugins: "lists link image table align code autoresize",
-            toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | link | attachImage | code | removeformat",
+            toolbar: "undo redo | blocks | blockquote | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | link | attachImage | code | removeformat",
             block_formats: "본문=p; 제목 1=h1; 제목 2=h2; 제목 3=h3; 제목 4=h4; 제목 5=h5",
             content_style:
                 '@font-face{font-family:"Pretendard";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2") format("woff2");font-weight:100;font-display:swap;}' +
@@ -1065,9 +1030,9 @@
                 '.blockquote-type6:before{background-color:#2563eb;content:"";mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 14.5922V21L0.5 7.5C2.5 2 9.5 0 14 0C9.5 5 10 8.09224 10 14.5922Z\' fill=\'%233478FF\'/%3E%3C/svg%3E%0A");-webkit-mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 14.5922V21L0.5 7.5C2.5 2 9.5 0 14 0C9.5 5 10 8.09224 10 14.5922Z\' fill=\'%233478FF\'/%3E%3C/svg%3E%0A");-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;width:14px;height:21px;display:block;position:absolute;top:0;right:0;transition:background .15s ease-in-out,border-color .15s ease-in-out;pointer-events:none;}' +
                 'table{margin-bottom:30px;width:100%;text-align:left;color:#3f3f3f;border-collapse:collapse;border:1px solid #e8e8e8;}' +
                 'table tr:nth-child(odd):not(:first-child){background-color:#f7f7f7;}' +
-                'table tr:first-child{background-color:#dbeafe; font-weight:700;}' +
+                'table tr:first-child{font-weight:700;}' +
                 'table th,table td{padding:10px 15px;}' +
-                'table th{background-color:#f0f0f0;border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
+                'table th{border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
                 'table td{border:1px solid #e8e8e8;}' +
                 'img{max-width:100%; height:auto; border-radius:4px;}' +
                 'a{color:#2563eb; text-decoration:none;} a:hover{text-decoration:underline;}' +
