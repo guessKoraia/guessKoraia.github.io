@@ -1134,7 +1134,7 @@
             setup: (ed) => {
                 ed.ui.registry.addButton("attachImage", { text: "🖼️ 이미지", onAction: () => document.getElementById("imageInput")?.click() });
                 ed.ui.registry.addButton("qaTemplate", { text: "Q&A", onAction: () => {
-                    const html = '<div class="qa-item"><span class="qa-label qa-q">Q1</span> <strong>질문?</strong><br /><span class="qa-label qa-a">A</span> <span class="qa-answer">[답변] 답변 내용</span></div>';
+                    const html = '<div class="qa-item"><span class="qa-label qa-q">Q1</span> <br /><span class="qa-label qa-a">A</span> <span class="qa-answer">[답변] 답변 내용</span></div>';
                     ed.insertContent(html);
                 } });
                 ed.on("init", async () => {
