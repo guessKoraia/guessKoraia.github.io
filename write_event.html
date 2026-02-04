@@ -98,7 +98,7 @@
 <!--                <button id="btnExport" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">HTML 내보내기</button>-->
                 <button id="btnExportZip" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">ZIP 내보내기</button>
                 <button id="btnPreview" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">미리보기 및 제출</button>
-                <button id="btnEditComplete" class="rounded-full bg-blue-600 text-white px-3 py-1.5 text-sm font-bold transition hover:bg-blue-700 hidden">미리보기 및 수정완료</button>
+                <button id="btnEditComplete" class="rounded-full bg-blue-600 text-white px-3 py-1.5 text-sm font-bold transition hover:bg-blue-700 hidden">수정완료</button>
             </div>
         </div>
     </div>
@@ -1049,9 +1049,6 @@
             }
         }
 
-        const err = validateMeta();
-        if (err) return alert(err);
-
         const post = collectPost("draft");
         post.editorHtml = normalizeEditorHtmlForSave(post.editorHtml);
 
@@ -1189,7 +1186,7 @@
     const initEditor = async () => {
         await tinymce.init({
             selector: "#editor",
-            height: 600,
+            height: 800,
             menubar: false,
             branding: false,
             statusbar: false,
