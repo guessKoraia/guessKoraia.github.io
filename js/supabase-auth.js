@@ -315,58 +315,36 @@
 
     /** imgbb API 키 조회 (public.imgbb 테이블의 api 컬럼, 1건) */
     window.supabaseGetImgbbApiKey = function () {
-        var client = getClient();
         var url = window.SUPABASE_URL;
         var anonKey = window.SUPABASE_ANON_KEY;
 
-        // 1) Supabase-js 경로 (권장): 자동으로 apikey/Authorization 헤더 처리
-        if (client) {
-            return client.from("imgbb").select("api").limit(1).maybeSingle()
-                .then(function (r) {
-                    if (r && r.error) return Promise.reject(r.error);
-                    return (r && r.data && r.data.api) || null;
-                })
-                .catch(function () {
-                    // 2) fallback: REST 직접 호출 (apikey 누락 방지)
-                    // - RLS가 authenticated-only이면, 가능하면 세션 access_token을 Authorization에 사용
-                    return client.auth.getSession().then(function (s) {
-                        var token = s && s.data && s.data.session && s.data.session.access_token;
-                        if (!url || !anonKey) return null;
-                        if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) return null;
-                        // 헤더(apikey) 외에 쿼리(apikey=)도 함께 붙여 호환성 확보
-                        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1&apikey=" + encodeURIComponent(anonKey);
-                        return fetch(restUrl, {
-                            headers: {
-                                apikey: anonKey,
-                                Authorization: "Bearer " + (token || anonKey)
-                            }
-                        }).then(function (res) {
-                            return res.json().then(function (json) {
-                                if (!res.ok) return Promise.reject(json);
-                                if (Array.isArray(json)) return (json[0] && json[0].api) || null;
-                                return (json && json.api) || null;
-                            });
-                        });
-                    }).catch(function () { return null; });
-                });
-        }
-
-        // Supabase-js 클라이언트가 없으면 REST fallback만 시도
         if (!url || !anonKey) return Promise.resolve(null);
         if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) return Promise.resolve(null);
-        // 헤더(apikey) 외에 쿼리(apikey=)도 함께 붙여 호환성 확보
-        var restUrl2 = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1&apikey=" + encodeURIComponent(anonKey);
-        return fetch(restUrl2, {
-            headers: {
-                apikey: anonKey,
-                Authorization: "Bearer " + anonKey
-            }
-        }).then(function (res) {
-            return res.json().then(function (json) {
-                if (!res.ok) return Promise.reject(json);
-                if (Array.isArray(json)) return (json[0] && json[0].api) || null;
-                return (json && json.api) || null;
-            });
-        }).catch(function () { return null; });
+
+        // 항상 REST로 조회: 네트워크 URL에 apikey 쿼리가 보이게 함
+        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1&apikey=" + encodeURIComponent(anonKey);
+        var doFetch = function (token) {
+            return fetch(restUrl, {
+                headers: {
+                    apikey: anonKey,
+                    Authorization: "Bearer " + (token || anonKey)
+                }
+            }).then(function (res) {
+                return res.json().then(function (json) {
+                    if (!res.ok) return Promise.reject(json);
+                    if (Array.isArray(json)) return (json[0] && json[0].api) || null;
+                    return (json && json.api) || null;
+                });
+            }).catch(function () { return null; });
+        };
+
+        // RLS가 authenticated-only인 경우를 위해 가능하면 세션 토큰 사용
+        var client = getClient();
+        if (client && client.auth && typeof client.auth.getSession === "function") {
+            return client.auth.getSession()
+                .then(function (s) { return doFetch(s && s.data && s.data.session && s.data.session.access_token); })
+                .catch(function () { return doFetch(null); });
+        }
+        return doFetch(null);
     };
 })();
