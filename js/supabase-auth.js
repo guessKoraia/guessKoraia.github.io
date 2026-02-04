@@ -321,30 +321,55 @@
         if (!url || !anonKey) return Promise.resolve(null);
         if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) return Promise.resolve(null);
 
-        // 항상 REST로 조회: 네트워크 URL에 apikey 쿼리가 보이게 함
-        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1&apikey=" + encodeURIComponent(anonKey);
+        // 1) supabase-js로 우선 조회 (세션/RLS 대응)
+        var client = getClient();
+        var tryClientFirst = function () {
+            if (!client || !client.from) return Promise.resolve(null);
+            var q = (typeof client.schema === "function") ? client.schema("public").from("imgbb") : client.from("imgbb");
+            // 테이블에 여러 건이 있을 수 있으니 created_at 최신 1건 사용
+            return q
+                .select("api,created_at")
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle()
+                .then(function (r) {
+                    if (r && r.data && r.data.api) return r.data.api;
+                    return null;
+                })
+                .catch(function () { return null; });
+        };
+
+        // 2) REST 폴백 (응답이 JSON이 아닐 수도 있어 방어적으로 파싱)
+        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api,created_at&order=created_at.desc&limit=1";
         var doFetch = function (token) {
             return fetch(restUrl, {
                 headers: {
                     apikey: anonKey,
-                    Authorization: "Bearer " + (token || anonKey)
+                    Authorization: "Bearer " + (token || anonKey),
+                    Accept: "application/json"
                 }
-            }).then(function (res) {
-                return res.json().then(function (json) {
-                    if (!res.ok) return Promise.reject(json);
-                    if (Array.isArray(json)) return (json[0] && json[0].api) || null;
-                    return (json && json.api) || null;
-                });
-            }).catch(function () { return null; });
+            })
+                .then(function (res) {
+                    return res.text().then(function (txt) {
+                        var json = null;
+                        try { json = txt ? JSON.parse(txt) : null; } catch (_) { json = null; }
+                        if (!res.ok) return Promise.reject(json || { status: res.status, body: txt });
+                        if (Array.isArray(json)) return (json[0] && json[0].api) || null;
+                        return (json && json.api) || null;
+                    });
+                })
+                .catch(function () { return null; });
         };
 
         // RLS가 authenticated-only인 경우를 위해 가능하면 세션 토큰 사용
-        var client = getClient();
-        if (client && client.auth && typeof client.auth.getSession === "function") {
-            return client.auth.getSession()
-                .then(function (s) { return doFetch(s && s.data && s.data.session && s.data.session.access_token); })
-                .catch(function () { return doFetch(null); });
-        }
-        return doFetch(null);
+        return tryClientFirst().then(function (key) {
+            if (key) return key;
+            if (client && client.auth && typeof client.auth.getSession === "function") {
+                return client.auth.getSession()
+                    .then(function (s) { return doFetch(s && s.data && s.data.session && s.data.session.access_token); })
+                    .catch(function () { return doFetch(null); });
+            }
+            return doFetch(null);
+        });
     };
 })();
