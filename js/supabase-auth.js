@@ -333,7 +333,8 @@
                         var token = s && s.data && s.data.session && s.data.session.access_token;
                         if (!url || !anonKey) return null;
                         if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) return null;
-                        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1";
+                        // 헤더(apikey) 외에 쿼리(apikey=)도 함께 붙여 호환성 확보
+                        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1&apikey=" + encodeURIComponent(anonKey);
                         return fetch(restUrl, {
                             headers: {
                                 apikey: anonKey,
@@ -353,7 +354,8 @@
         // Supabase-js 클라이언트가 없으면 REST fallback만 시도
         if (!url || !anonKey) return Promise.resolve(null);
         if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) return Promise.resolve(null);
-        var restUrl2 = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1";
+        // 헤더(apikey) 외에 쿼리(apikey=)도 함께 붙여 호환성 확보
+        var restUrl2 = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&limit=1&apikey=" + encodeURIComponent(anonKey);
         return fetch(restUrl2, {
             headers: {
                 apikey: anonKey,
