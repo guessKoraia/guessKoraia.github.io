@@ -981,6 +981,12 @@
             const imageId = Number(img.getAttribute("data-image-id"));
             if (!imageId || Number.isNaN(imageId)) continue;
 
+            // 이미 imgbb에 업로드된 이미지는 스킵
+            const currentSrc = img.getAttribute("src") || "";
+            if (currentSrc.includes("i.ibb.co") || currentSrc.includes("ibb.co")) {
+                continue;
+            }
+
             const record = await idbGet(STORE_IMAGES, imageId);
             if (!record?.blob) continue;
 

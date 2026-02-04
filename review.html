@@ -350,17 +350,24 @@
         wrapper.innerHTML = post.editorHtml || "";
 
         const imgs = Array.from(wrapper.querySelectorAll("img[data-image-id]"));
-        const imgStore = db ? txStore(STORE_IMAGES, "readonly") : null;
 
         for (const img of imgs) {
-            if (!imgStore) continue;
+            if (!db) continue;
             const id = Number(img.getAttribute("data-image-id"));
             if (!id || Number.isNaN(id)) continue;
 
+            // 각 이미지마다 새 트랜잭션 생성
             const record = await new Promise((resolve) => {
-                const req = imgStore.get(id);
-                req.onsuccess = () => resolve(req.result);
-                req.onerror = () => resolve(null);
+                try {
+                    const tx = db.transaction(STORE_IMAGES, "readonly");
+                    const store = tx.objectStore(STORE_IMAGES);
+                    const req = store.get(id);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => resolve(null);
+                } catch (e) {
+                    console.warn("idbGet error:", e);
+                    resolve(null);
+                }
             });
 
             if (!record?.blob) continue;
