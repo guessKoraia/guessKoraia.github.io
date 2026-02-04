@@ -1068,7 +1068,7 @@
                 'table tr:nth-child(odd):not(:first-child){background-color:#f7f7f7;}' +
                 'table td:first-child{background-color:transparent !important;}' +
                 'table th,table td{padding:10px 15px;}' +
-                'table th{background-color:#dbeafe; font-weight:600; border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
+                'table th{background-color:#f3f4f6; font-weight:600; border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
                 'table td{border:1px solid #e8e8e8;}' +
                 'img{max-width:100%; height:auto; border-radius:4px;}' +
                 'a{color:#2563eb; text-decoration:none;} a:hover{text-decoration:underline;}' +
@@ -1085,7 +1085,7 @@
             setup: (ed) => {
                 ed.ui.registry.addButton("attachImage", { text: "🖼️ 이미지", onAction: () => document.getElementById("imageInput")?.click() });
                 ed.ui.registry.addButton("qaTemplate", { text: "Q&A", onAction: () => {
-                    const html = '<p class="qa-item"><span class="qa-label qa-q">Q</span> <strong>Q1. 질문?</strong><br /><span class="qa-label qa-a">A</span> <span class="qa-answer">[답변] 답변 내용</span></p>';
+                    const html = '<p class="qa-item"><span class="qa-label qa-q">Q1</span> <strong>질문?</strong><br /><span class="qa-label qa-a">A</span> <span class="qa-answer">[답변] 답변 내용</span></p>';
                     ed.insertContent(html);
                 } });
                 ed.on("init", async () => {
