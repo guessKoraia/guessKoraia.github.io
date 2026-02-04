@@ -257,12 +257,12 @@
     <col />
   </colgroup>
   <tbody>
-    <tr><th>구분</th><td>상세내용</td></tr>
-    <tr><th>기업명</th><td></td></tr>
-    <tr><th>대표자</th><td></td></tr>
-    <tr><th>설립일</th><td></td></tr>
-    <tr><th>핵심 기술</th><td></td></tr>
-    <tr><th>주요 제품</th><td></td></tr>
+    <tr><th>구분</th><th>상세내용</th></tr>
+    <tr><td>기업명</td><td></td></tr>
+    <tr><td>대표자</td><td></td></tr>
+    <tr><td>설립일</td><td></td></tr>
+    <tr><td>핵심 기술</td><td></td></tr>
+    <tr><td>주요 제품</td><td></td></tr>
   </tbody>
 </table>
 
@@ -1035,7 +1035,7 @@
             branding: false,
             statusbar: false,
             plugins: "lists link image table align code autoresize",
-            toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | blockquote | link | attachImage | code | removeformat",
+            toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | blockquote | qaTemplate | link | attachImage | code | removeformat",
             block_formats: "본문=p; 제목 1=h1; 제목 2=h2; 제목 3=h3; 제목 4=h4; 제목 5=h5",
             content_style:
                 '@font-face{font-family:"Pretendard";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2") format("woff2");font-weight:100;font-display:swap;}' +
@@ -1059,8 +1059,7 @@
                 'u{text-decoration:underline;}' +
                 'ul,ol{margin:10px 0; padding-left:20px;}' +
                 'li{margin:5px 0;}' +
-                'blockquote{background-color:#fef08a; border:none; border-radius:4px; padding:16px; margin:16px 0; box-shadow:2px 2px 4px rgba(0,0,0,0.1); font-style:italic; color:#92400e; position:relative;}' +
-                'blockquote:before{content:""; position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.05) 100%); border-radius:4px; pointer-events:none;}' +
+                'blockquote{background-color:#ffffff; border:1px solid #000000; border-left:4px solid #000000; padding:16px 20px; margin:20px 0; font-style:normal; color:#000000; box-shadow:0 2px 4px rgba(0,0,0,0.1);}' +
                 '.blockquote-type5{width:-moz-fit-content;width:fit-content;min-width:48px;max-width:min(520px,100%-28px);margin-left:0;margin-right:auto;padding:10px 16px;border-radius:24px;background-color:#f3f4f6;color:#374151;}' +
                 '.blockquote-type5:before{background-color:#f3f4f6;content:"";mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'currentColor\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M3.99998 14.5922V21L13.5 7.5C11.5 2 4.5 0 0 0C4.5 5 3.99998 8.09224 3.99998 14.5922Z\' fill=\'currentColor\'/%3E%3C/svg%3E%0A");-webkit-mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'currentColor\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M3.99998 14.5922V21L13.5 7.5C11.5 2 4.5 0 0 0C4.5 5 3.99998 8.09224 3.99998 14.5922Z\' fill=\'currentColor\'/%3E%3C/svg%3E%0A");-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;width:14px;height:21px;display:block;position:absolute;top:0;left:0;transition:background .15s ease-in-out,border-color .15s ease-in-out;pointer-events:none;}' +
                 '.blockquote-type6{width:-moz-fit-content;width:fit-content;min-width:48px;max-width:min(520px,100%-28px);margin-left:auto;margin-right:0;padding:10px 16px;border-radius:24px;background-color:#2563eb;color:#ffffff;}' +
@@ -1069,7 +1068,7 @@
                 'table tr:nth-child(odd):not(:first-child){background-color:#f7f7f7;}' +
                 'table td:first-child{background-color:transparent !important;}' +
                 'table th,table td{padding:10px 15px;}' +
-                'table th{background-color:#f0f0f0;border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
+                'table th{font-weight:600; border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
                 'table td{border:1px solid #e8e8e8;}' +
                 'img{max-width:100%; height:auto; border-radius:4px;}' +
                 'a{color:#2563eb; text-decoration:none;} a:hover{text-decoration:underline;}' +
@@ -1077,9 +1076,15 @@
                 '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before{color:#9ca3af; font-style:italic;}' +
                 'p[style*="text-align: center"]{text-align:center;}' +
                 'p[style*="text-align: right"]{text-align:right;}' +
-                'p[style*="text-align: justify"]{text-align:justify;}',
+                'p[style*="text-align: justify"]{text-align:justify;}' +
+                '.qa-item strong{color:#3b82f6; font-weight:700;}' +
+                '.qa-item .qa-answer{color:#374151;}',
             setup: (ed) => {
                 ed.ui.registry.addButton("attachImage", { text: "🖼️ 이미지", onAction: () => document.getElementById("imageInput")?.click() });
+                ed.ui.registry.addButton("qaTemplate", { text: "Q&A", onAction: () => {
+                    const html = '<p class="qa-item"><strong>Q1. 질문?</strong><br /><span class="qa-answer">[답변] 답변 내용</span></p>';
+                    ed.insertContent(html);
+                } });
                 ed.on("init", async () => {
                     ed.setContent(TEMPLATE_VISIT);
                     // 글 불러오기 (이미지 없이 빠르게)
