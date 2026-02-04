@@ -487,6 +487,8 @@
                 img.setAttribute("src", "");
             }
         });
+        // HWP 붙여넣기 데이터 제거 (DB 부하 방지)
+        wrapper.querySelectorAll("#hwpEditorBoardContent, .hwp_editor_board_content").forEach(el => el.remove());
         return wrapper.innerHTML;
     };
 
@@ -1134,11 +1136,12 @@
     const initEditor = async () => {
         await tinymce.init({
             selector: "#editor",
-            height: 1200,
+            min_height: 600,
+            max_height: 2000,
             menubar: false,
             branding: false,
             statusbar: false,
-            plugins: "lists link image table align code",
+            plugins: "lists link image table align code autoresize",
             toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | link | attachImage | code | removeformat",
             block_formats: "본문=p; 제목 1=h1; 제목 2=h2; 제목 3=h3; 제목 4=h4; 제목 5=h5",
             content_style:
@@ -1169,7 +1172,8 @@
                 '.blockquote-type6{width:-moz-fit-content;width:fit-content;min-width:48px;max-width:min(520px,100%-28px);margin-left:auto;margin-right:0;padding:10px 16px;border-radius:24px;background-color:#2563eb;color:#ffffff;}' +
                 '.blockquote-type6:before{background-color:#2563eb;content:"";mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 14.5922V21L0.5 7.5C2.5 2 9.5 0 14 0C9.5 5 10 8.09224 10 14.5922Z\' fill=\'%233478FF\'/%3E%3C/svg%3E%0A");-webkit-mask-image:url("data:image/svg+xml,%3Csvg width=\'14\' height=\'21\' viewBox=\'0 0 14 21\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 14.5922V21L0.5 7.5C2.5 2 9.5 0 14 0C9.5 5 10 8.09224 10 14.5922Z\' fill=\'%233478FF\'/%3E%3C/svg%3E%0A");-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;width:14px;height:21px;display:block;position:absolute;top:0;right:0;transition:background .15s ease-in-out,border-color .15s ease-in-out;pointer-events:none;}' +
                 'table{margin-bottom:30px;width:100%;text-align:left;color:#3f3f3f;border-collapse:collapse;border:1px solid #e8e8e8;}' +
-                'table tr:nth-child(even){background-color:#f7f7f7;}' +
+                'table tr:nth-child(odd):not(:first-child){background-color:#f7f7f7;}' +
+                'table tr:first-child{background-color:#dbeafe; font-weight:700;}' +
                 'table th,table td{padding:10px 15px;}' +
                 'table th{background-color:#f0f0f0;border:1px solid #dedede;border-bottom-color:#c9c9c9;}' +
                 'table td{border:1px solid #e8e8e8;}' +
