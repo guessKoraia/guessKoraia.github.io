@@ -1071,7 +1071,7 @@
                 '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before{color:#9ca3af; font-style:italic;}' +
                 'p[style*="text-align: center"]{text-align:center;}' +
                 'p[style*="text-align: right"]{text-align:right;}' +
-                'p[style*="text-align: justify"]{text-align:justify;}'
+                'p[style*="text-align: justify"]{text-align:justify;}',
             setup: (ed) => {
                 ed.ui.registry.addButton("attachImage", { text: "🖼️ 이미지", onAction: () => document.getElementById("imageInput")?.click() });
                 ed.on("init", async () => {
