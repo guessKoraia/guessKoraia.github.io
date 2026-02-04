@@ -70,13 +70,6 @@
             max-width: 100%;
             height: auto;
         }
-        .tox .tox-editor-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 
@@ -1036,12 +1029,11 @@
     const initEditor = async () => {
         await tinymce.init({
             selector: "#editor",
-            min_height: 600,
-            max_height: 2000,
+            height: 600,
             menubar: false,
             branding: false,
             statusbar: false,
-            plugins: "lists link image table align code autoresize",
+            plugins: "lists link image table align code",
             toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | table | blockquote | qaTemplate | link | attachImage | code | removeformat",
             block_formats: "본문=p; 제목 1=h1; 제목 2=h2; 제목 3=h3; 제목 4=h4; 제목 5=h5",
             content_style:
