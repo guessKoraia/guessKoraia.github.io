@@ -318,30 +318,48 @@
         var url = window.SUPABASE_URL;
         var anonKey = window.SUPABASE_ANON_KEY;
 
-        if (!url || !anonKey) return Promise.resolve(null);
-        if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) return Promise.resolve(null);
+        if (!url || !anonKey) {
+            console.warn("[imgbb] SUPABASE_URL 또는 SUPABASE_ANON_KEY가 설정되지 않음");
+            return Promise.resolve(null);
+        }
+        if (String(url).indexOf("__") !== -1 || String(anonKey).indexOf("__") !== -1) {
+            console.warn("[imgbb] Supabase 설정이 플레이스홀더 상태입니다");
+            return Promise.resolve(null);
+        }
 
         // 1) supabase-js로 우선 조회 (세션/RLS 대응)
         var client = getClient();
         var tryClientFirst = function () {
-            if (!client || !client.from) return Promise.resolve(null);
-            var q = (typeof client.schema === "function") ? client.schema("public").from("imgbb") : client.from("imgbb");
+            if (!client || !client.from) {
+                console.log("[imgbb] supabase client 없음, REST 폴백 사용");
+                return Promise.resolve(null);
+            }
             // 테이블에 여러 건이 있을 수 있으니 created_at 최신 1건 사용
-            return q
-                .select("api,created_at")
+            return client.from("imgbb")
+                .select("api")
                 .order("created_at", { ascending: false })
                 .limit(1)
-                .maybeSingle()
                 .then(function (r) {
-                    if (r && r.data && r.data.api) return r.data.api;
+                    console.log("[imgbb] supabase-js 조회 결과:", r);
+                    if (r.error) {
+                        console.warn("[imgbb] supabase-js 에러:", r.error);
+                        return null;
+                    }
+                    if (r.data && Array.isArray(r.data) && r.data.length > 0 && r.data[0].api) {
+                        return r.data[0].api;
+                    }
                     return null;
                 })
-                .catch(function () { return null; });
+                .catch(function (e) {
+                    console.warn("[imgbb] supabase-js 예외:", e);
+                    return null;
+                });
         };
 
         // 2) REST 폴백 (응답이 JSON이 아닐 수도 있어 방어적으로 파싱)
-        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api,created_at&order=created_at.desc&limit=1";
+        var restUrl = String(url).replace(/\/+$/, "") + "/rest/v1/imgbb?select=api&order=created_at.desc&limit=1";
         var doFetch = function (token) {
+            console.log("[imgbb] REST 폴백 시도:", restUrl);
             return fetch(restUrl, {
                 headers: {
                     apikey: anonKey,
@@ -351,22 +369,36 @@
             })
                 .then(function (res) {
                     return res.text().then(function (txt) {
+                        console.log("[imgbb] REST 응답:", res.status, txt);
                         var json = null;
                         try { json = txt ? JSON.parse(txt) : null; } catch (_) { json = null; }
-                        if (!res.ok) return Promise.reject(json || { status: res.status, body: txt });
-                        if (Array.isArray(json)) return (json[0] && json[0].api) || null;
+                        if (!res.ok) {
+                            console.warn("[imgbb] REST 에러:", res.status, json || txt);
+                            return null;
+                        }
+                        if (Array.isArray(json) && json.length > 0) return json[0].api || null;
                         return (json && json.api) || null;
                     });
                 })
-                .catch(function () { return null; });
+                .catch(function (e) {
+                    console.warn("[imgbb] REST 예외:", e);
+                    return null;
+                });
         };
 
         // RLS가 authenticated-only인 경우를 위해 가능하면 세션 토큰 사용
         return tryClientFirst().then(function (key) {
-            if (key) return key;
+            if (key) {
+                console.log("[imgbb] supabase-js로 API 키 획득 성공");
+                return key;
+            }
+            console.log("[imgbb] supabase-js 실패, REST 폴백 시도");
             if (client && client.auth && typeof client.auth.getSession === "function") {
                 return client.auth.getSession()
-                    .then(function (s) { return doFetch(s && s.data && s.data.session && s.data.session.access_token); })
+                    .then(function (s) {
+                        var token = s && s.data && s.data.session && s.data.session.access_token;
+                        return doFetch(token);
+                    })
                     .catch(function () { return doFetch(null); });
             }
             return doFetch(null);

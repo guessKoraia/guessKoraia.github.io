@@ -330,14 +330,23 @@
             };
         });
 
-    const idbGet = (storeName, key) =>
-        new Promise((resolve) => {
-            const tx = db.transaction(storeName, "readonly");
-            const store = tx.objectStore(storeName);
-            const req = store.get(key);
-            req.onsuccess = () => resolve(req.result ?? null);
-            req.onerror = () => resolve(null);
+    const idbGet = async (storeName, key) => {
+        if (!db || db.name !== DB_NAME) {
+            try { db = await openDB(); } catch (_) { return null; }
+        }
+        return new Promise((resolve) => {
+            try {
+                const tx = db.transaction(storeName, "readonly");
+                const store = tx.objectStore(storeName);
+                const req = store.get(key);
+                req.onsuccess = () => resolve(req.result ?? null);
+                req.onerror = () => resolve(null);
+            } catch (e) {
+                console.warn("idbGet error:", e);
+                resolve(null);
+            }
         });
+    };
 
     const idbPut = (storeName, value) =>
         new Promise((resolve, reject) => {
@@ -366,15 +375,24 @@
             req.onerror = () => resolve(true);
         });
 
-    const idbGetAllByIndex = (storeName, indexName, indexValue) =>
-        new Promise((resolve) => {
-            const tx = db.transaction(storeName, "readonly");
-            const store = tx.objectStore(storeName);
-            const idx = store.index(indexName);
-            const req = idx.getAll(indexValue);
-            req.onsuccess = () => resolve(req.result ?? []);
-            req.onerror = () => resolve([]);
+    const idbGetAllByIndex = async (storeName, indexName, indexValue) => {
+        if (!db || db.name !== DB_NAME) {
+            try { db = await openDB(); } catch (_) { return []; }
+        }
+        return new Promise((resolve) => {
+            try {
+                const tx = db.transaction(storeName, "readonly");
+                const store = tx.objectStore(storeName);
+                const idx = store.index(indexName);
+                const req = idx.getAll(indexValue);
+                req.onsuccess = () => resolve(req.result ?? []);
+                req.onerror = () => resolve([]);
+            } catch (e) {
+                console.warn("idbGetAllByIndex error:", e);
+                resolve([]);
+            }
         });
+    };
 
     const blobToDataURL = (blob) =>
         new Promise((resolve) => {
@@ -1254,38 +1272,46 @@
 
         // 수정완료 버튼 이벤트
         $("btnEditComplete").addEventListener("click", async () => {
-            let post = null;
-            if (typeof supabaseGetPostById === "function") post = await supabaseGetPostById(editingId);
-            if (!post) post = await idbGet(STORE_POSTS, editingId);
-            const history = Array.isArray(post?.approvalHistory) ? post.approvalHistory : [];
-            const lastHistory = history.length > 0 ? history[history.length - 1] : null;
-            const isRejectedAtStage0 = post && (post.approvalStage ?? 0) === 0 && !!(lastHistory && lastHistory.rejected === true);
-            if (isRejectedAtStage0) {
-                const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
-                const newHistory = history.slice();
-                newHistory.push({
-                    step: 0,
-                    step_name: step0 ? step0.name : "기획 및 초안 작성",
-                    approver_name: (post && post.authorName) ? post.authorName + " 재제출" : "재제출",
-                    approved_at: new Date().toISOString()
-                });
-                await savePost("submitted", { approvalStage: 1, approvalHistory: newHistory });
-                if (typeof supabaseInvokeSlackApproval === "function") {
-                    supabaseInvokeSlackApproval({
-                        title: post && post.title,
-                        authorName: post && post.authorName,
-                        stage: 1,
-                        stepName: "1차 검수 및 표준화",
-                        postId: post && post.id,
-                        eventType: "submit"
-                    }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+            setLoading(true, "저장 중", "수정 사항을 저장하고 있습니다.");
+            try {
+                let post = null;
+                if (typeof supabaseGetPostById === "function") post = await supabaseGetPostById(editingId);
+                if (!post) post = await idbGet(STORE_POSTS, editingId);
+                const history = Array.isArray(post?.approvalHistory) ? post.approvalHistory : [];
+                const lastHistory = history.length > 0 ? history[history.length - 1] : null;
+                const isRejectedAtStage0 = post && (post.approvalStage ?? 0) === 0 && !!(lastHistory && lastHistory.rejected === true);
+                if (isRejectedAtStage0) {
+                    const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+                    const newHistory = history.slice();
+                    newHistory.push({
+                        step: 0,
+                        step_name: step0 ? step0.name : "기획 및 초안 작성",
+                        approver_name: (post && post.authorName) ? post.authorName + " 재제출" : "재제출",
+                        approved_at: new Date().toISOString()
+                    });
+                    await savePost("submitted", { approvalStage: 1, approvalHistory: newHistory });
+                    if (typeof supabaseInvokeSlackApproval === "function") {
+                        supabaseInvokeSlackApproval({
+                            title: post && post.title,
+                            authorName: post && post.authorName,
+                            stage: 1,
+                            stepName: "1차 검수 및 표준화",
+                            postId: post && post.id,
+                            eventType: "submit"
+                        }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+                    }
+                    alert("재제출되었습니다. 1차 검수 단계로 진행됩니다.");
+                } else {
+                    await savePost("submitted");
+                    alert("수정이 완료되었습니다.");
                 }
-                alert("재제출되었습니다. 1차 검수 단계로 진행됩니다.");
-            } else {
-                await savePost("submitted");
-                alert("수정이 완료되었습니다.");
+                location.href = "review.html";
+            } catch (e) {
+                console.error(e);
+                alert("저장 중 오류가 발생했습니다.");
+            } finally {
+                setLoading(false);
             }
-            location.href = "review.html";
         });
 
         // 포스트 로드 및 UI 설정
