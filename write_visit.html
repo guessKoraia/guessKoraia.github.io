@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원사 탐방 글쓰기 | 한국인공지능협회</title>
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendardvariable.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.3/tinymce.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/approval-workflow.js"></script>
+    <script src="js/supabase-auth.js"></script>
+
+    <style>
+        html,
+        body {
+            font-family: Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif;
+        }
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 50;
+        }
+        .modal-backdrop.show {
+            display: flex;
+        }
+        .preview-body :where(h1) {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 12px 0;
+        }
+        .preview-body :where(h2) {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 18px 0 10px 0;
+        }
+        .preview-body :where(p) {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+        .preview-body :where(table) {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            table-layout: fixed;
+        }
+        .preview-body :where(th, td) {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            vertical-align: top;
+            font-size: 14px;
+        }
+        .preview-body :where(th) {
+            background: #f9fafb;
+            font-weight: 800;
+            text-align: left;
+            width: 160px;
+        }
+        .preview-body :where(img) {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-slate-900 overflow-hidden">
+<header class="sticky top-0 z-50 bg-white/70 border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-center justify-between py-2 border-b border-slate-200 bg-white">
+            <a href="sns.html" class="flex items-center gap-2 text-2xl font-bold tracking-tight hover:opacity-90">
+                <img width="25" src="data:image/svg+xml,%3c?xml%20version=%271.0%27%20encoding=%27UTF-8%27?%3e%3csvg%20id=%27_%EB%A0%88%EC%9D%B4%EC%96%B4_1%27%20data-name=%27%EB%A0%88%EC%9D%B4%EC%96%B4%201%27%20xmlns=%27http://www.w3.org/2000/svg%27%20xmlns:xlink=%27http://www.w3.org/1999/xlink%27%20viewBox=%270%200%20191.98%20192.9%27%3e%3cdefs%3e%3cstyle%3e%20.cls-1%20{%20fill:%20%2337bac8;%20}%20.cls-2%20{%20fill:%20%238cd600;%20}%20.cls-3%20{%20fill:%20%232e4068;%20}%20.cls-4%20{%20fill:%20%231d2a5f;%20}%20.cls-5%20{%20fill:%20%23e55126;%20}%20.cls-6%20{%20fill:%20url(%23linear-gradient);%20}%20%3c/style%3e%3clinearGradient%20id=%27linear-gradient%27%20x1=%2771.9%27%20y1=%27150.47%27%20x2=%2786.41%27%20y2=%2784.39%27%20gradientUnits=%27userSpaceOnUse%27%3e%3cstop%20offset=%270%27%20stop-color=%27%2337bac8%27/%3e%3cstop%20offset=%27.5%27%20stop-color=%27%231f2b63%27/%3e%3c/linearGradient%3e%3c/defs%3e%3cpath%20class=%27cls-3%27%20d=%27M86.33,67.73s0,0-.02,0h.02Z%27/%3e%3cpath%20class=%27cls-3%27%20d=%27M70.43,80.68l.03-.12s-.02.08-.03.12Z%27/%3e%3cpath%20class=%27cls-6%27%20d=%27M70.43,80.68l-13.98,66.13c4.92,3.91,10.32,7.03,15.99,9.31.8.31,1.42.56,2.19.84,3.88,1.4,7.9,2.42,11.97,3.04l12.5-60.28s-29.57-14.51-28.67-19.04Z%27/%3e%3cpath%20class=%27cls-3%27%20d=%27M70.53,80.21l-.07.34c.02-.12.06-.22.09-.34h-.02Z%27/%3e%3cpolygon%20class=%27cls-3%27%20points=%2787.62%2085.56%2087.61%2085.41%2087.46%2085.37%2087.62%2085.56%27/%3e%3cpath%20class=%27cls-3%27%20d=%27M86.21,67.73h0s.07,0,.1,0h-.1Z%27/%3e%3cg%3e%3cpath%20class=%27cls-5%27%20d=%27M55.94,46.52c.33-.27.65-.55.94-.85-.62.54-.94.85-.94.85Z%27/%3e%3cpath%20class=%27cls-4%27%20d=%27M191.42,79.57c-2.75-15.59-9.38-30.72-20.06-43.88-6.68-1.87-13.03-3.37-19.07-4.52-60.75-11.69-89.99,9.9-95.41,14.52-.3.29-.61.58-.94.85,27.57-22.37,68.08-18.16,90.46,9.41,3.01,3.7,5.52,7.64,7.57,11.74l-67.64.06h-.02s-.07,0-.1.01c-3.57,0-7.16,1.16-10.15,3.59-2.9,2.35-4.74,5.51-5.51,8.89-.03.12-.07.22-.09.34l-.03.12c-.89,4.53.15,9.41,3.28,13.27,2.81,3.46,6.76,5.45,10.87,5.86,1.37.13,90.57.13,90.57.13h.66s.69,0,.69,0h0c.62-.04,1.23-.09,1.87-.18,8.24-1.31,14.02-8.64,13.57-16.8-.16-1.13-.34-2.25-.54-3.38Z%27/%3e%3c/g%3e%3cpath%20class=%27cls-2%27%20d=%27M35.68,21.56c-2.21,5.6-4.02,11.01-5.48,16.24-17.44,62.39,15.27,98,15.27,98l.19.05c-21.37-27.54-16.93-67.25,10.28-89.33,0,0,.32-.31.94-.85,5.42-4.61,34.66-26.21,95.41-14.52,6.04,1.16,12.39,2.65,19.07,4.52C137.79-5.68,77.04-12.01,35.68,21.56Z%27/%3e%3cg%3e%3cpath%20class=%27cls-1%27%20d=%27M30.2,37.8c1.46-5.23,3.27-10.65,5.48-16.24C-5.69,55.13-12.01,115.88,21.56,157.24c6.05,2.11,11.88,3.8,17.48,5.13,40.09,9.54,68.71.56,84.28-7.29l-.11-.13c-11.61,5.32-24.37,6.95-36.62,5.05-4.07-.62-8.09-1.64-11.97-3.04-.77-.28-1.39-.53-2.19-.84-5.68-2.28-11.07-5.4-15.99-9.31-3.59-2.86-6.92-6.13-9.92-9.83-.3-.37-.58-.76-.87-1.13l-.19-.05S12.75,100.19,30.2,37.8Z%27/%3e%3cpath%20class=%27cls-4%27%20d=%27M159.6,148.74l-11.4-14.05-8.85-10.91c-5.6-6.9-15.73-7.95-22.62-2.35-6.89,5.59-7.95,15.72-2.35,22.62l8.85,10.91.11.13c-15.57,7.85-44.19,16.83-84.28,7.29-5.6-1.33-11.43-3.02-17.48-5.13,10.68,13.15,24.11,22.75,38.79,28.66,1.14.45,2.28.9,3.42,1.3,25.9,9.3,55.25,7.32,80.13-6.76,4.61-2.62,9.08-5.63,13.34-9.08,6.89-5.59,7.94-15.72,2.35-22.62Z%27/%3e%3c/g%3e%3c/svg%3e" alt="" />
+                <h1>지식자산 관리 툴</h1>
+            </a>
+            <div class="flex items-center gap-2">
+                <a class="px-3 py-2 text-sm font-bold hover:text-blue-900 transition-all duration-200" href="review.html">검토 목록</a>
+                <span id="authWrap" class="flex items-center gap-2">
+                    <button type="button" id="btnLogin" class="px-3 py-2 text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50">로그인</button>
+                    <span id="userEmail" class="text-sm font-bold text-slate-600 hidden"></span>
+                    <button type="button" id="btnLogout" class="px-3 py-2 text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50 hidden">로그아웃</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 py-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+                <button id="btnNew" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">새 글</button>
+                <button id="btnSave" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">임시저장</button>
+                <!--                <button id="btnExport" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">HTML 내보내기</button>-->
+                <button id="btnExportZip" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">ZIP 내보내기</button>
+                <button id="btnPreview" class="rounded-full bg-white px-3 py-1.5 text-sm font-bold transition hover:bg-slate-100 hover:border-slate-400 hover:text-slate-800">미리보기 및 제출</button>
+                <button id="btnEditComplete" class="rounded-full bg-blue-600 text-white px-3 py-1.5 text-sm font-bold transition hover:bg-blue-700 hidden">수정완료</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="pageScroll" class="h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden">
+    <!-- 상태 안내 배너 (fixed) -->
+    <div id="statusBanner" class="hidden fixed bottom-0 left-0 right-0 z-40 px-4 py-3 text-center text-sm font-bold shadow-md border-t border-slate-200"></div>
+    
+    <div class="fixed w-72 bottom-4 right-5 mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+        <div class="mb-2 font-semibold flex items-center gap-2">
+            <span class="text-amber-600">⚠</span>
+            꼭 지켜야 할 사항
+        </div>
+
+        <ol class="list-decimal pl-5 space-y-1 leading-relaxed">
+            <li>
+                <span class="font-medium">명칭통일 할 것</span>
+                <span class="text-amber-700">(ex. 협회명과 기업명을 약칭과 정식명칭 혼용해서 쓰지말 것)</span>
+            </li>
+            <li>
+                협회 내 페이지로 링크를 걸어줄 것
+                <span class="text-amber-700">(내부 백링크 강화)</span>
+            </li>
+        </ol>
+    </div>
+
+    <aside
+            id="attachPanel"
+            class="fixed right-0 top-[100px] w-[300px] translate-x-[360px] border-l border-slate-200 bg-white overflow-y-auto transition-transform duration-200 z-50"
+            style="height: calc(100vh - 100px);"
+    >
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+            <div class="text-sm font-extrabold">이미지 설명 관리</div>
+            <button id="btnToggleAttach" class="border border-slate-200 px-3 py-2 text-sm font-bold bg-white">✖️</button>
+        </div>
+
+        <div class="p-4 bg-slate-50">
+            <div class="flex items-center justify-between gap-2">
+                <div id="statusLine" class="text-xs font-bold text-slate-600 truncate">draft</div>
+                <div class="flex items-center gap-2">
+                    <input id="imageInput" type="file" accept="image/*" multiple class="hidden" />
+                </div>
+            </div>
+
+            <div id="attachEmpty" class="mt-4 text-sm font-bold text-slate-500 hidden">본문에 이미지를 첨부해 주세요.</div>
+            <div id="attachGrid" class="mt-4 space-y-3 overflow-auto pr-1"></div>
+        </div>
+    </aside>
+
+    <button id="btnAttachHandle" class="hidden fixed right-4 top-[116px] z-50 border border-slate-200 px-3 py-2 text-sm font-bold bg-white">
+        이미지 설명 관리 🖼️
+    </button>
+
+    <div class="mx-auto max-w-4xl">
+        <div class="mt-4 p-4 bg-slate-100" style="margin-top: 60px;">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <div>
+                    <div class="mb-1 text-xs font-extrabold text-slate-600">제목</div>
+                    <input id="metaTitle" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="[행사명]: [핵심주제/타겟]를 위한 [행사성격] (개최 안내/후기)" />
+                </div>
+                <div>
+                    <div class="mb-1 text-xs font-extrabold text-slate-600">작성자</div>
+                    <input id="metaAuthor" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="홍길동" />
+                </div>
+                <div>
+                    <div class="mb-1 text-xs font-extrabold text-slate-600">행사 일자</div>
+                    <input id="metaDate" type="date" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="2026-02-02" />
+                </div>
+                <div>
+                    <div class="mb-1 text-xs font-extrabold text-slate-600">장소</div>
+                    <input id="metaPlace" class="w-full border border-slate-200 p-3 text-sm outline-none" placeholder="코엑스 A홀" />
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="mb-1 text-xs font-extrabold text-slate-600">썸네일 <span class="font-normal text-slate-400">(16:9 비율)</span></div>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <input id="thumbnailInput" type="file" accept="image/*" class="text-sm" />
+                    <button type="button" id="thumbnailClear" class="border border-slate-200 px-3 py-1.5 text-sm font-bold hover:bg-slate-100">제거</button>
+                    <div id="thumbnailPreviewWrap" class="hidden">
+                        <img id="thumbnailPreview" src="" alt="썸네일 미리보기" class="max-h-24 rounded border border-slate-200 object-cover" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="relative">
+                <div id="editorWrap" class="relative">
+                    <textarea id="editor"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="previewModal" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="w-full max-w-5xl border border-slate-200 bg-white">
+            <div class="flex items-center justify-between border-b border-slate-200 p-4">
+                <div class="text-sm font-extrabold">미리보기</div>
+                <div class="flex items-center gap-2">
+                    <button id="btnModalSubmit" class="border border-slate-200 px-3 py-2 text-sm font-bold">제출하기</button>
+                    <button id="btnModalClose" class="border border-slate-200 px-3 py-2 text-sm font-bold">닫기</button>
+                </div>
+            </div>
+            <div class="max-h-[75vh] overflow-auto p-4">
+                <div id="previewThumbnailWrap" class="hidden mb-4">
+                    <img id="previewThumbnailImg" src="" alt="썸네일" class="w-full max-h-48 object-cover rounded border border-slate-200" />
+                </div>
+                <div id="previewContent" class="preview-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="modal-backdrop" aria-hidden="true">
+        <div class="w-full max-w-sm border border-slate-200 bg-white p-6 text-center">
+            <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+            <div id="loadingTitle" class="mt-4 text-sm font-extrabold">제출 중</div>
+            <div id="loadingDesc" class="mt-1 text-xs font-bold text-slate-500">이미지 업로드 및 저장을 처리하고 있습니다.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const APP_TITLE = "지식자산 관리 툴 | 한국인공지능협회";
+
+    let _imgbbApiKey = null;
+    const getImgbbApiKey = async () => {
+        if (_imgbbApiKey) return _imgbbApiKey;
+        if (typeof supabaseGetImgbbApiKey === "function") {
+            _imgbbApiKey = await supabaseGetImgbbApiKey();
+        }
+        return _imgbbApiKey || null;
+    };
+
+    const DB_NAME = "KoraiaKnowledgeDB";
+    const DB_VERSION = 1;
+
+    const STORE_POSTS = "posts";
+    const STORE_IMAGES = "images";
+
+    let _thumbnailDataUrl = null;
+    let _thumbnailUrl = null;
+
+    const TEMPLATE_VISIT = `
+<h2>핵심 요약</h2>
+<p>- 방문 일자: [YYYY년 MM월 DD일]</p>
+<p>- 방문 기업: [기업명] (대표: OOO)</p>
+<p>- 핵심 내용: [기업명]은 [핵심 기술]을 통해 [해결하려는 문제]를 혁신하는 기업으로, 이번 방문을 통해 [구체적 성과/협력 방안]을 확인했습니다.</p>
+
+<h2>기업 프로필</h2>
+<table style="width:100%; table-layout:fixed;">
+  <colgroup>
+    <col style="width:160px;" />
+    <col />
+  </colgroup>
+  <tbody>
+    <tr><th>기업명</th><td>주식회사 OOO</td></tr>
+    <tr><th>대표자</th><td>OOO 대표</td></tr>
+    <tr><th>설립일</th><td>YYYY.MM.DD</td></tr>
+    <tr><th>핵심 기술</th><td>비전 AI, LLM 파인튜닝, 스마트 팩토리 등</td></tr>
+    <tr><th>주요 제품/서비스</th><td>제품명 1, 제품명 2</td></tr>
+  </tbody>
+</table>
+
+<h2>인터뷰 및 기술 소개 (Q&A)</h2>
+<p>
+    <b>Q1. [기업명]은 어떤 문제를 해결하는 AI 기업인가요?</b>
+    <br />[답변] 우리는 [어떤 산업]의 [어떤 비효율]을 [어떤 기술]로 해결합니다.
+</p>
+<p>
+    <b>Q2. 핵심 솔루션 '[제품명]'의 차별점은 무엇인가요?</b>
+    <br />[답변] 기존 방식 대비 [수치적 성과, 예: 비용 30% 절감] 효과가 있으며, 특히 [독자적 알고리즘]을 적용해 정확도를 높였습니다.
+</p>
+<p>
+    <b>Q3. 앞으로의 계획과 협회와의 시너지는 무엇인가요?</b>
+    <br />[답변] 내년 [해외 진출/신제품 출시]를 앞두고 있으며, 협회의 [AI EXPO/인증 사업]을 통해 판로를 개척하고자 합니다.
+</p>
+
+<h2>현장 스케치</h2>
+<p>[이미지 설명(ALT) 예시]</p>
+<p>- [사진 1] 기업 입구 및 로고 (설명: [기업명] 본사 전경)</p>
+<p>- [사진 2] 기술 시연 모습 (설명: [제품명]의 실시간 데이터 분석 시연 장면)</p>
+<p>- [사진 3] 임직원 단체 사진 (설명: 한국인공지능협회 방문단과 [기업명] 임직원 기념 촬영)</p>
+
+<h2>마무리 및 연결</h2>
+<p>[한 줄 평] "[기업명]은 [특정 강점]을 바탕으로 [해당 분야]의 글로벌 리더로 성장할 잠재력이 충분합니다."</p>
+<br/>
+<p>관련 링크: https://</p>
+<p>문의: 회원교류팀 (이메일/전화번호)</p>
+
+`.trim();
+
+    const $ = (id) => document.getElementById(id);
+
+    const url = new URL(location.href);
+    const postIdParam = url.searchParams.get("id");
+    const isEditMode = !!postIdParam;
+
+    const uuid = () =>
+        crypto?.randomUUID?.() ??
+        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+            const r = (Math.random() * 16) | 0;
+            const v = c === "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+        });
+
+    const nowISO = () => new Date().toISOString();
+
+    let db;
+    let editingId = postIdParam || uuid();
+
+    const openDB = () =>
+        new Promise((resolve, reject) => {
+            const req = indexedDB.open(DB_NAME, DB_VERSION);
+            req.onerror = () => reject(req.error);
+            req.onsuccess = () => resolve(req.result);
+            req.onupgradeneeded = (ev) => {
+                const d = ev.target.result;
+                if (!d.objectStoreNames.contains(STORE_POSTS)) d.createObjectStore(STORE_POSTS, { keyPath: "id" });
+                if (!d.objectStoreNames.contains(STORE_IMAGES)) {
+                    const s = d.createObjectStore(STORE_IMAGES, { keyPath: "id", autoIncrement: true });
+                    s.createIndex("postId", "postId", { unique: false });
+                }
+            };
+        });
+
+    const idbGet = (storeName, key) =>
+        new Promise((resolve) => {
+            const tx = db.transaction(storeName, "readonly");
+            const store = tx.objectStore(storeName);
+            const req = store.get(key);
+            req.onsuccess = () => resolve(req.result ?? null);
+            req.onerror = () => resolve(null);
+        });
+
+    const idbPut = (storeName, value) =>
+        new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            const req = store.put(value);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+
+    const idbAdd = (storeName, value) =>
+        new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            const req = store.add(value);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+
+    const idbDelete = (storeName, key) =>
+        new Promise((resolve) => {
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            const req = store.delete(key);
+            req.onsuccess = () => resolve(true);
+            req.onerror = () => resolve(true);
+        });
+
+    const idbGetAllByIndex = (storeName, indexName, indexValue) =>
+        new Promise((resolve) => {
+            const tx = db.transaction(storeName, "readonly");
+            const store = tx.objectStore(storeName);
+            const idx = store.index(indexName);
+            const req = idx.getAll(indexValue);
+            req.onsuccess = () => resolve(req.result ?? []);
+            req.onerror = () => resolve([]);
+        });
+
+    const blobToDataURL = (blob) =>
+        new Promise((resolve) => {
+            const r = new FileReader();
+            r.onloadend = () => resolve(r.result);
+            r.readAsDataURL(blob);
+        });
+
+    const escapeHtml = (s) =>
+        String(s ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    const validateMeta = () => {
+        const title = $("metaTitle").value.trim();
+        const author = $("metaAuthor").value.trim();
+        const date = $("metaDate").value.trim();
+        const place = $("metaPlace").value.trim();
+        if (!title) return "제목을 입력해 주세요.";
+        if (!author) return "작성자를 입력해 주세요.";
+        if (!date) return "방문 일자를 입력해 주세요.";
+        if (!place) return "장소를 입력해 주세요.";
+        return null;
+    };
+
+    const collectPost = (statusOverride) => {
+        const ed = tinymce.get("editor");
+        const html = ed ? ed.getContent({ format: "html" }) : "";
+        const post = {
+            id: editingId,
+            type: "visit",
+            status: statusOverride || "draft",
+            title: $("metaTitle").value.trim(),
+            authorName: $("metaAuthor").value.trim(),
+            date: $("metaDate").value.trim(),
+            place: $("metaPlace").value.trim(),
+            editorHtml: html,
+            updatedAt: nowISO(),
+        };
+        if (_thumbnailUrl) post.thumbnailUrl = _thumbnailUrl;
+        if (_thumbnailDataUrl) post.thumbnailDataUrl = _thumbnailDataUrl;
+        return post;
+    };
+
+    const normalizeEditorHtmlForSave = (html) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html || "";
+        wrapper.querySelectorAll("img[data-image-id]").forEach((img) => img.setAttribute("src", ""));
+        return wrapper.innerHTML;
+    };
+
+    const resolveEditorImagesToObjectURLs = async () => {
+        const ed = tinymce.get("editor");
+        if (!ed) return;
+
+        const imgs = Array.from(ed.getBody().querySelectorAll("img[data-image-id]"));
+        for (const img of imgs) {
+            const id = Number(img.getAttribute("data-image-id"));
+            if (!id || Number.isNaN(id)) continue;
+
+            const record = await idbGet(STORE_IMAGES, id);
+            if (!record?.blob) continue;
+
+            img.setAttribute("src", URL.createObjectURL(record.blob));
+
+            const currentAlt = (img.getAttribute("alt") || "").trim();
+            if (!currentAlt && record.alt) img.setAttribute("alt", record.alt);
+        }
+    };
+
+    const savePost = async (status, options) => {
+        const err = validateMeta();
+        if (err) return alert(err);
+
+        const post = collectPost(status);
+        const existing = await idbGet(STORE_POSTS, post.id);
+        const createdAt = existing?.createdAt || nowISO();
+        
+        // 임시저장시에도 이미지를 imgbb에 업로드
+        let editorHtml = normalizeEditorHtmlForSave(post.editorHtml);
+        try {
+            editorHtml = await replaceEditorImagesWithImgbbUrls(editorHtml);
+        } catch (e) {
+            console.warn("이미지 업로드 실패 (계속 저장):", e);
+        }
+        
+        const toSave = { ...post, editorHtml, createdAt };
+        if (options && options.approvalStage != null) toSave.approvalStage = options.approvalStage;
+        if (options && options.approvalHistory) toSave.approvalHistory = options.approvalHistory;
+
+        // 썸네일이 선택만 되고 아직 URL이 없으면(imgbb 미업로드) 여기서 업로드 후 DB에 저장
+        if (toSave.thumbnailDataUrl && !toSave.thumbnailUrl) {
+            try {
+                const blob = await (await fetch(toSave.thumbnailDataUrl)).blob();
+                toSave.thumbnailUrl = await uploadBlobToImgbb(blob, "thumbnail-" + (toSave.id || "draft").slice(0, 8) + ".jpg");
+                _thumbnailUrl = toSave.thumbnailUrl;
+                _thumbnailDataUrl = null;
+            } catch (e) {
+                console.warn("썸네일 업로드 실패 (계속 저장):", e);
+            }
+        }
+
+        await idbPut(STORE_POSTS, toSave);
+        if (typeof supabaseUpsertPost === "function" && window._canWrite) {
+            try {
+                const supabasePayload = { ...toSave, editorHtml };
+                if (toSave.thumbnailDataUrl) delete supabasePayload.thumbnailDataUrl;
+                if (toSave.thumbnailUrl) supabasePayload.thumbnailUrl = toSave.thumbnailUrl;
+                await supabaseUpsertPost(supabasePayload);
+            } catch (e) {
+                console.warn("Supabase 임시저장 반영 실패:", e);
+            }
+        }
+        $("statusLine").textContent = `${status} · ${post.id.slice(0, 8)}`;
+        history.replaceState(null, "", `write_visit.html?id=${encodeURIComponent(post.id)}`);
+    };
+
+    const loadPostIfExists = async () => {
+        // 결재 단계/상태는 서버 기준으로 사용하기 위해 Supabase 우선 조회
+        let post = null;
+        if (editingId && typeof supabaseGetPostById === "function") {
+            const fromSupabase = await supabaseGetPostById(editingId);
+            if (fromSupabase) post = fromSupabase;
+        }
+        if (!post) post = await idbGet(STORE_POSTS, editingId);
+        if (!post) {
+            $("statusLine").textContent = `draft · ${editingId.slice(0, 8)}`;
+            return null;
+        }
+        $("metaTitle").value = post.title || "";
+        $("metaAuthor").value = post.authorName || "";
+        $("metaDate").value = post.date || "";
+        $("metaPlace").value = post.place || "";
+        $("statusLine").textContent = `${post.status} · ${post.id.slice(0, 8)}`;
+        const ed = tinymce.get("editor");
+        if (ed) ed.setContent(post.editorHtml || TEMPLATE_VISIT);
+        _thumbnailUrl = post.thumbnailUrl || null;
+        _thumbnailDataUrl = post.thumbnailDataUrl || null;
+        setThumbnailPreview(_thumbnailUrl || _thumbnailDataUrl || null);
+        return post;
+    };
+
+    const setThumbnailPreview = (src) => {
+        const wrap = $("thumbnailPreviewWrap");
+        const img = $("thumbnailPreview");
+        if (!wrap || !img) return;
+        if (src) {
+            img.src = src;
+            wrap.classList.remove("hidden");
+        } else {
+            img.removeAttribute("src");
+            wrap.classList.add("hidden");
+        }
+    };
+
+    const listImagesByPost = async () => {
+        return await idbGetAllByIndex(STORE_IMAGES, "postId", editingId);
+    };
+
+    const insertImageIntoEditor = (imageId, objectUrl, alt) => {
+        const ed = tinymce.get("editor");
+        if (!ed) return;
+
+        const html = `<img data-image-id="${imageId}" src="${escapeHtml(objectUrl)}" alt="${escapeHtml(alt || "")}" />`;
+        ed.insertContent(html);
+    };
+
+    const addImages = async (files) => {
+        if (!files || files.length === 0) return;
+
+        for (const f of files) {
+            if (!f.type.startsWith("image/")) continue;
+
+            const defaultAlt = (f.name || "image").replace(/\.[^/.]+$/, "");
+            const id = await idbAdd(STORE_IMAGES, {
+                postId: editingId,
+                fileName: f.name,
+                size: f.size,
+                type: f.type,
+                alt: defaultAlt,
+                blob: f,
+                createdAt: nowISO(),
+            });
+
+            insertImageIntoEditor(id, URL.createObjectURL(f), defaultAlt);
+        }
+
+        await renderAttachmentGrid();
+    };
+
+    const deleteImageEverywhere = async (imageId) => {
+        const ok = confirm("이미지를 삭제하시겠습니까?");
+        if (!ok) return;
+
+        await idbDelete(STORE_IMAGES, imageId);
+
+        const ed = tinymce.get("editor");
+        if (ed) ed.getBody().querySelectorAll(`img[data-image-id="${imageId}"]`).forEach((n) => n.remove());
+
+        await renderAttachmentGrid();
+    };
+
+    const updateAlt = async (imageId, alt) => {
+        const existing = await idbGet(STORE_IMAGES, imageId);
+        if (!existing) return;
+
+        await idbPut(STORE_IMAGES, { ...existing, alt: String(alt || "") });
+
+        const ed = tinymce.get("editor");
+        if (ed) ed.getBody().querySelectorAll(`img[data-image-id="${imageId}"]`).forEach((img) => img.setAttribute("alt", String(alt || "")));
+    };
+
+    const renderAttachmentGrid = async () => {
+        const grid = $("attachGrid");
+        const empty = $("attachEmpty");
+        const items = await listImagesByPost();
+
+        grid.innerHTML = "";
+        if (items.length === 0) {
+            empty.classList.remove("hidden");
+            return;
+        }
+        empty.classList.add("hidden");
+
+        items.forEach((it) => {
+            const url = URL.createObjectURL(it.blob);
+            const wrap = document.createElement("div");
+            wrap.className = "border border-slate-200 p-3 bg-white";
+
+            wrap.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-xs font-extrabold text-slate-600 truncate">${escapeHtml(it.fileName || "image")}</div>
+            <div class="mt-1 text-[11px] font-bold text-slate-500">${Math.round((it.size || 0) / 1024)} KB</div>
+          </div>
+          <button data-del="1" class="border border-slate-200 px-2 py-1 text-xs font-extrabold">X</button>
+        </div>
+        <div class="mt-3 border border-slate-200">
+          <img src="${url}" alt="${escapeHtml(it.alt || "")}" class="block w-full object-cover" />
+        </div>
+        <div class="mt-3">
+        <div class="flex gap-2 justify-between items-center">
+          <div class="text-xs font-extrabold text-slate-600">이미지 설명</div>
+            <button data-apply="1" class="text-xs font-semibold border px-1.5 py-1 text-blue-600">적용하기️</button>
+        </div>
+          <input data-alt="1" class="mt-2 w-full border border-slate-200 py-1.5 px-2 text-xs outline-none" value="${escapeHtml(it.alt || "")}" />
+        </div>
+      `;
+
+            wrap.querySelector('button[data-del="1"]').addEventListener("click", () => deleteImageEverywhere(it.id));
+
+            const altInput = wrap.querySelector('input[data-alt="1"]');
+            wrap.querySelector('button[data-apply="1"]').addEventListener("click", async () => {
+                await updateAlt(it.id, altInput.value);
+                alert("이미지 설명(ALT)이 적용되었습니다.");
+            });
+
+            grid.appendChild(wrap);
+        });
+    };
+
+    const buildExportHtmlWithEmbeddedImages = async (post, forPreview) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = post.editorHtml || "";
+
+        const imgs = Array.from(wrapper.querySelectorAll("img[data-image-id]"));
+        for (const img of imgs) {
+            const id = Number(img.getAttribute("data-image-id"));
+            if (!id || Number.isNaN(id)) continue;
+
+            const record = await idbGet(STORE_IMAGES, id);
+            if (!record?.blob) continue;
+
+            img.setAttribute("src", await blobToDataURL(record.blob));
+
+            const alt = (img.getAttribute("alt") || "").trim() || (record.alt || "");
+            if (alt) img.setAttribute("alt", alt);
+        }
+
+        const title = escapeHtml(post.title || APP_TITLE);
+        const bodyHtml = wrapper.innerHTML;
+        const endBody = "</" + "body>";
+        const endTag = "</" + "html>";
+        const doc = (
+            "<!doctype html>\n<html lang=\"ko\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>" + title + "</title>\n  <style>\n    body{font-family:Pretendard, Pretendard Variable, system-ui, -apple-system, Segoe UI, Roboto, \"Noto Sans KR\", Arial, sans-serif; margin:0; padding:28px; color:#111827;}\n    p{line-height:1.7; margin:10px 0;}\n    table{width:100%; border-collapse:collapse; margin:10px 0; table-layout:fixed;}\n    th,td{border:1px solid #e5e7eb; padding:10px; vertical-align:top; font-size:14px;}\n    th{background:#f9fafb; font-weight:800; text-align:left; width:160px;}\n    img{max-width:100%; height:auto;}\n    a{color:#2563eb;}\n  </style>\n</head>\n<body>\n  " + bodyHtml + "\n" + endBody + "\n" + endTag
+        ).trim();
+
+        if (!forPreview) return doc;
+        return { doc, bodyOnly: bodyHtml };
+    };
+
+    const downloadTextFile = (filename, content) => {
+        const blob = new Blob([content], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    };
+
+    const sanitizeFileName = (name) =>
+        String(name || "")
+            .replace(/[\/:*?"<>|]/g, "_")
+            .replace(/\s+/g, " ")
+            .trim();
+
+    const extFrom = (fileName, mime) => {
+        const n = String(fileName || "");
+        const m = n.match(/\.([a-zA-Z0-9]+)$/);
+        if (m) return m[1].toLowerCase();
+        const t = String(mime || "").toLowerCase();
+        if (t.includes("png")) return "png";
+        if (t.includes("jpeg") || t.includes("jpg")) return "jpg";
+        if (t.includes("webp")) return "webp";
+        if (t.includes("gif")) return "gif";
+        return "bin";
+    };
+
+    const downloadBlob = (filename, blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    };
+
+    const buildExportHtmlWithRelativeImages = async (post, images) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = post.editorHtml || "";
+
+        const idToFile = new Map();
+        images.forEach((it) => idToFile.set(Number(it.id), it));
+
+        const imgs = Array.from(wrapper.querySelectorAll("img[data-image-id]"));
+        imgs.forEach((img) => {
+            const id = Number(img.getAttribute("data-image-id"));
+            if (!id || Number.isNaN(id)) return;
+
+            const record = idToFile.get(id);
+            if (!record) return;
+
+            const alt = (img.getAttribute("alt") || "").trim() || (record.alt || "");
+            if (alt) img.setAttribute("alt", alt);
+            img.setAttribute("src", `images/${record._exportName}`);
+        });
+
+        const title = escapeHtml(post.title || APP_TITLE);
+        const bodyHtml = wrapper.innerHTML;
+        const endBody = "</" + "body>";
+        const endTag = "</" + "html>";
+        return (
+            "<!doctype html>\n<html lang=\"ko\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>" + title + "</title>\n  <style>\n    body{font-family:Pretendard, Pretendard Variable, system-ui, -apple-system, Segoe UI, Roboto, \"Noto Sans KR\", Arial, sans-serif; margin:0; padding:28px; color:#111827;}\n    p{line-height:1.7; margin:10px 0;}\n    table{width:100%; border-collapse:collapse; margin:10px 0; table-layout:fixed;}\n    th,td{border:1px solid #e5e7eb; padding:10px; vertical-align:top; font-size:14px;}\n    th{background:#f9fafb; font-weight:800; text-align:left; width:160px;}\n    img{max-width:100%; height:auto;}\n    a{color:#2563eb;}\n  </style>\n</head>\n<body>\n  " + bodyHtml + "\n" + endBody + "\n" + endTag
+        ).trim();
+    };
+
+    const exportZip = async () => {
+        const err = validateMeta();
+        if (err) return alert(err);
+        if (typeof JSZip === "undefined") return alert("ZIP 모듈(JSZip)을 불러오지 못했습니다.");
+
+        const post = collectPost("draft");
+        post.editorHtml = normalizeEditorHtmlForSave(post.editorHtml);
+
+        const rawName = sanitizeFileName(post.title || "export");
+        const safeName = (rawName || "export").slice(0, 60);
+
+        const images = await listImagesByPost();
+
+        const used = new Set();
+        images.forEach((it) => {
+            const base = sanitizeFileName((it.fileName || `image-${it.id}`).replace(/\.[^/.]+$/, "")) || `image-${it.id}`;
+            const ext = extFrom(it.fileName, it.type);
+            let name = `${base}.${ext}`;
+            if (used.has(name)) name = `${base}-${it.id}.${ext}`;
+            used.add(name);
+            it._exportName = name;
+        });
+
+        const htmlDoc = await buildExportHtmlWithRelativeImages(post, images);
+
+        const zip = new JSZip();
+        zip.file(`${safeName}.html`, htmlDoc);
+
+        const imgFolder = zip.folder("images");
+        images.forEach((it) => {
+            if (!it.blob) return;
+            imgFolder.file(it._exportName, it.blob);
+        });
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        downloadBlob(`${safeName}.zip`, zipBlob);
+    };
+
+    const openModal = () => $("previewModal").classList.add("show");
+
+    const closeModal = () => $("previewModal").classList.remove("show");
+
+    const previewAndOpenModal = async () => {
+        const err = validateMeta();
+        if (err) return alert(err);
+
+        const post = collectPost("draft");
+        post.editorHtml = normalizeEditorHtmlForSave(post.editorHtml);
+
+        const thumbSrc = post.thumbnailUrl || post.thumbnailDataUrl || null;
+        const thumbWrap = $("previewThumbnailWrap");
+        const thumbImg = $("previewThumbnailImg");
+        if (thumbWrap && thumbImg) {
+            if (thumbSrc) {
+                thumbImg.src = thumbSrc;
+                thumbWrap.classList.remove("hidden");
+            } else {
+                thumbImg.removeAttribute("src");
+                thumbWrap.classList.add("hidden");
+            }
+        }
+
+        const { bodyOnly } = await buildExportHtmlWithEmbeddedImages(post, true);
+        $("previewContent").innerHTML = bodyOnly;
+
+        openModal();
+    };
+
+    const submitFromModal = async () => {
+        const ok = confirm("제출하시겠습니까?");
+        if (!ok) return;
+
+        const err = validateMeta();
+        if (err) return alert(err);
+
+        setLoading(true, "제출 중", "이미지 업로드 및 저장을 처리하고 있습니다.");
+
+        try {
+            const post = collectPost("submitted");
+
+            const finalHtml = await replaceEditorImagesWithImgbbUrls(post.editorHtml);
+
+            let thumbnailUrl = post.thumbnailUrl || null;
+            if (post.thumbnailDataUrl && !thumbnailUrl) {
+                try {
+                    const blob = await (await fetch(post.thumbnailDataUrl)).blob();
+                    thumbnailUrl = await uploadBlobToImgbb(blob, "thumbnail-" + (post.id || "draft").slice(0, 8) + ".jpg");
+                } catch (e) {
+                    console.warn("썸네일 업로드 실패:", e);
+                }
+            }
+
+            const now = new Date().toISOString();
+            const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+            const payload = {
+                id: post.id,
+                type: "visit",
+                status: "submitted",
+                title: post.title,
+                authorName: post.authorName,
+                date: post.date,
+                place: post.place,
+                editorHtml: finalHtml,
+                updatedAt: now,
+                approvalStage: 1,
+                approvalHistory: [{ step: 0, step_name: step0 ? step0.name : "기획 및 초안 작성", approver_name: post.authorName || "", approved_at: now }],
+            };
+            if (thumbnailUrl) payload.thumbnailUrl = thumbnailUrl;
+            if (typeof supabaseUpsertPost === "function" && window._canWrite) {
+                await supabaseUpsertPost(payload);
+            }
+            _thumbnailUrl = thumbnailUrl || _thumbnailUrl;
+            _thumbnailDataUrl = null;
+            await savePost("submitted");
+            if (typeof supabaseInvokeSlackApproval === "function") {
+                supabaseInvokeSlackApproval({
+                    title: payload.title,
+                    authorName: payload.authorName,
+                    stage: 1,
+                    stepName: "1차 검수 및 표준화",
+                    postId: payload.id,
+                    eventType: "submit"
+                }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+            }
+            alert("제출이 완료되었습니다.");
+            closeModal();
+        } catch (e) {
+            console.error(e);
+            alert("제출 중 오류가 발생했습니다.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const initEditor = async () => {
+        await tinymce.init({
+            selector: "#editor",
+            height: 1200,
+            menubar: false,
+            branding: false,
+            statusbar: false,
+            plugins: "lists link image table",
+            toolbar: "undo redo | blocks | bold italic underline | bullist numlist | table | link | attachImage | removeformat",
+            block_formats: "본문=p; 제목 1=h1; 제목 2=h2; 제목 3=h3",
+            content_style:
+                'body{font-family:Pretendard, Pretendard Variable, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif; font-size:14px; line-height:1.7;}' +
+                'table{width:100%; table-layout:fixed; border-collapse:collapse;}' +
+                'th,td{border:1px solid #e5e7eb; padding:10px; vertical-align:top; font-size:14px;}' +
+                'th{background:#f9fafb; font-weight:800; text-align:left; width:160px;}' +
+                'img{max-width:100%; height:auto;}',
+            setup: (ed) => {
+                ed.ui.registry.addButton("attachImage", { text: "🖼️ 이미지", onAction: () => document.getElementById("imageInput")?.click() });
+                ed.on("init", async () => {
+                    ed.setContent(TEMPLATE_VISIT);
+                    try {
+                        await loadPostIfExists();
+                        await resolveEditorImagesToObjectURLs();
+                        await renderAttachmentGrid();
+                    } catch (err) {
+                        console.warn("글 불러오기:", err);
+                        await renderAttachmentGrid();
+                    }
+                });
+                ed.on("Change KeyUp SetContent", () => {
+                    renderAttachmentGrid();
+                });
+            },
+        });
+    };
+
+    const resetNew = async () => {
+        if (!confirm("새 글로 전환할까요? (현재 내용은 저장되지 않습니다)")) return;
+
+        editingId = uuid();
+        $("metaTitle").value = "";
+        $("metaAuthor").value = "";
+        $("metaDate").value = "";
+        $("metaPlace").value = "";
+        $("statusLine").textContent = `draft · ${editingId.slice(0, 8)}`;
+
+        const ed = tinymce.get("editor");
+        if (ed) ed.setContent(TEMPLATE_VISIT);
+
+        history.replaceState(null, "", "write_visit.html");
+        await renderAttachmentGrid();
+    };
+
+    const exportHtml = async () => {
+        const err = validateMeta();
+        if (err) return alert(err);
+
+        const post = collectPost("draft");
+        post.editorHtml = normalizeEditorHtmlForSave(post.editorHtml);
+
+        const doc = await buildExportHtmlWithEmbeddedImages(post, false);
+        const safeName = (post.title || "visit").replace(/[\\/:*?"<>|]/g, "_").slice(0, 60);
+        downloadTextFile(`${safeName}.html`, doc);
+    };
+
+    const uploadBlobToImgbb = async (blob, filename) => {
+        const key = await getImgbbApiKey();
+        if (!key) throw new Error("imgbb API 키를 불러올 수 없습니다. Supabase imgbb 테이블을 확인하세요.");
+
+        const form = new FormData();
+        form.append("image", blob, filename || "image");
+
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${encodeURIComponent(key)}`, {
+            method: "POST",
+            body: form,
+        });
+
+        const json = await res.json();
+        if (!res.ok || !json?.success) {
+            throw new Error(json?.error?.message || "ImgBB upload failed");
+        }
+
+        return json.data.display_url || json.data.url;
+    };
+
+    const replaceEditorImagesWithImgbbUrls = async (editorHtml) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = editorHtml || "";
+
+        const imgs = Array.from(wrapper.querySelectorAll("img[data-image-id]"));
+
+        for (const img of imgs) {
+            const imageId = Number(img.getAttribute("data-image-id"));
+            if (!imageId || Number.isNaN(imageId)) continue;
+
+            const record = await idbGet(STORE_IMAGES, imageId);
+            if (!record?.blob) continue;
+
+            const alt = (img.getAttribute("alt") || "").trim() || (record.alt || "");
+            if (alt) img.setAttribute("alt", alt);
+
+            // 업로드 → URL 치환
+            const url = await uploadBlobToImgbb(record.blob, record.fileName);
+            img.setAttribute("src", url);
+        }
+
+        return wrapper.innerHTML;
+    };
+
+    const setLoading = (on, title, desc) => {
+        const el = document.getElementById("loadingOverlay");
+        const t = document.getElementById("loadingTitle");
+        const d = document.getElementById("loadingDesc");
+        if (!el) return;
+
+        if (t && title) t.textContent = title;
+        if (d && desc) d.textContent = desc;
+
+        if (on) el.classList.add("show");
+        else el.classList.remove("show");
+    };
+
+    const updateAuthUI = (user, canWrite) => {
+        const btnLogin = $("btnLogin");
+        const btnLogout = $("btnLogout");
+        const userEmail = $("userEmail");
+        const btnSave = $("btnSave");
+        const btnPreview = $("btnPreview");
+        const btnModalSubmit = $("btnModalSubmit");
+        if (user) {
+            if (btnLogin) btnLogin.classList.add("hidden");
+            if (userEmail) { userEmail.textContent = (typeof window.getNameByEmail === "function" ? window.getNameByEmail(user.email || "") : "") || (user.email || ""); userEmail.classList.remove("hidden"); }
+            if (btnLogout) btnLogout.classList.remove("hidden");
+        } else {
+            if (btnLogin) btnLogin.classList.remove("hidden");
+            if (userEmail) userEmail.classList.add("hidden");
+            if (btnLogout) btnLogout.classList.add("hidden");
+        }
+        window._canWrite = !!canWrite;
+        if (btnSave) { btnSave.disabled = !canWrite; btnSave.title = canWrite ? "" : "글쓰기 권한이 없습니다."; }
+        if (btnPreview) { btnPreview.disabled = !canWrite; btnPreview.title = canWrite ? "" : "글쓰기 권한이 없습니다."; }
+        if (btnModalSubmit) { btnModalSubmit.disabled = !canWrite; btnModalSubmit.title = canWrite ? "" : "글쓰기 권한이 없습니다."; }
+    };
+
+    (async () => {
+        db = await openDB();
+
+        await initEditor();
+
+        try {
+            if (typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
+                try {
+                    var config = await supabaseGetApprovalConfig();
+                    if (config) window.initApprovalConfig(config);
+                } catch (_) {}
+            }
+            if (typeof supabaseAuthGetSession === "function") {
+                var ses = await supabaseAuthGetSession();
+                if (ses && ses.data && ses.data.session) {
+                    var canWrite = await (typeof supabaseAuthIsAllowedWriter === "function" ? supabaseAuthIsAllowedWriter() : Promise.resolve(false));
+                    updateAuthUI(ses.data.session.user, canWrite);
+                } else {
+                    updateAuthUI(null, false);
+                }
+            } else {
+                updateAuthUI(null, false);
+            }
+            if (typeof supabaseAuthOnAuthStateChange === "function") {
+                supabaseAuthOnAuthStateChange(async function (event, session) {
+                    if (session && typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
+                        try {
+                            var cfg = await supabaseGetApprovalConfig();
+                            if (cfg) window.initApprovalConfig(cfg);
+                        } catch (_) {}
+                    }
+                    var user = session ? session.user : null;
+                    var canWrite = user && typeof supabaseAuthIsAllowedWriter === "function" ? await supabaseAuthIsAllowedWriter() : false;
+                    updateAuthUI(user, canWrite);
+                });
+            }
+        } catch (e) {
+            console.warn("Auth 초기화:", e);
+            updateAuthUI(null, false);
+        }
+
+        if ($("btnLogin")) $("btnLogin").addEventListener("click", function () {
+            if (typeof supabaseAuthSignIn === "function") supabaseAuthSignIn();
+        });
+        if ($("btnLogout")) $("btnLogout").addEventListener("click", async function () {
+            try {
+                if (typeof supabaseAuthSignOut === "function") await supabaseAuthSignOut();
+            } catch (e) {
+                console.warn("로그아웃:", e);
+            }
+            updateAuthUI(null, false);
+        });
+
+        let attachOpen = true;
+        const setAttachOpen = (open) => {
+            attachOpen = open;
+            const panel = document.getElementById("attachPanel");
+            const handle = document.getElementById("btnAttachHandle");
+            const toggle = document.getElementById("btnToggleAttach");
+            const editorWrap = document.getElementById("editorWrap");
+            if (!panel || !handle || !toggle || !editorWrap) return;
+
+            if (open) {
+                panel.classList.remove("translate-x-[360px]");
+                handle.classList.add("hidden");
+                toggle.textContent = "✖️";
+            } else {
+                panel.classList.add("translate-x-[360px]");
+                handle.classList.remove("hidden");
+                toggle.textContent = "이미지 설명 관리 🖼️";
+            }
+        };
+        document.getElementById("btnToggleAttach")?.addEventListener("click", () => setAttachOpen(!attachOpen));
+        document.getElementById("btnAttachHandle")?.addEventListener("click", () => setAttachOpen(true));
+        setAttachOpen(false);
+
+        // 결재 상태에 따른 UI 설정 함수
+        const setupEditModeUI = async (post, userEmail) => {
+            const stage = post?.approvalStage ?? 0;
+            const status = post?.status || "draft";
+            const authorEmail = post?.authorEmail || "";
+            const history = Array.isArray(post?.approvalHistory) ? post.approvalHistory : [];
+            const lastHistory = history.length > 0 ? history[history.length - 1] : null;
+            // 반려: DB status가 'rejected'이거나, 결재 이력 마지막이 반려 기록인 경우(반려 시 DB에는 status를 안 바꿀 수 있음)
+            const isRejected = status === "rejected" || !!(lastHistory && lastHistory.rejected === true);
+            const effectiveStatus = isRejected ? "rejected" : status;
+
+            const statusBanner = $("statusBanner");
+            
+            // 상태 배너 표시 함수
+            const showBanner = (message, type) => {
+                if (!statusBanner) return;
+                statusBanner.classList.remove("hidden", "bg-blue-100", "text-blue-800", "bg-red-100", "text-red-800", "bg-green-100", "text-green-800", "bg-yellow-100", "text-yellow-800");
+                if (type === "readonly") {
+                    statusBanner.classList.add("bg-red-100", "text-red-800");
+                } else if (type === "edit") {
+                    statusBanner.classList.add("bg-blue-100", "text-blue-800");
+                } else if (type === "complete") {
+                    statusBanner.classList.add("bg-green-100", "text-green-800");
+                } else if (type === "draft") {
+                    statusBanner.classList.add("bg-yellow-100", "text-yellow-800");
+                }
+                statusBanner.textContent = message;
+            };
+            
+            // 임시저장(draft)이고 stage 0인 경우에만 작성자 수정 가능. submitted이면 결재자만 수정 가능.
+            if (status === "draft" && stage === 0 && !isRejected) {
+                showBanner("📝 임시저장 상태입니다. 수정 후 미리보기 및 제출을 눌러 주세요.", "draft");
+                return; // 일반 모드 유지
+            }
+            
+            // 결재 진행중: stage >= 1 이거나 status가 submitted. 단, 반려된 경우는 effectiveStatus로 판단.
+            const isApprovalInProgress = (typeof window.isApprovalInProgress === "function" 
+                ? window.isApprovalInProgress(stage) 
+                : (stage >= 1 && stage < 5)) || (effectiveStatus === "submitted");
+            
+            // 최종 승인 완료 여부
+            const isComplete = typeof window.isApprovalComplete === "function" 
+                ? window.isApprovalComplete(stage) 
+                : stage >= 5;
+            
+            // 수정 권한 확인 (반려 시에는 현재 단계 결재자만 수정 가능하도록 effectiveStatus 사용)
+            const canEdit = typeof window.canEditAtStage === "function"
+                ? window.canEditAtStage(stage, userEmail, authorEmail, effectiveStatus)
+                : true;
+            
+            // 결재 진행중이거나 반려된 경우
+            if (isApprovalInProgress || isRejected) {
+                // 새 글, 임시저장, ZIP 내보내기, 미리보기 및 제출 숨김
+                $("btnNew").classList.add("hidden");
+                $("btnSave").classList.add("hidden");
+                $("btnExportZip").classList.add("hidden");
+                $("btnPreview").classList.add("hidden");
+                
+                if (canEdit) {
+                    // 수정 권한이 있으면 수정완료 버튼 표시
+                    $("btnEditComplete").classList.remove("hidden");
+                    const stepInfo = typeof window.getApprovalStepInfo === "function" 
+                        ? window.getApprovalStepInfo(stage) 
+                        : null;
+                    const stepName = stepInfo ? stepInfo.name : `${stage}단계`;
+                    if (isRejected) {
+                        showBanner(`✏️ 수정 모드 - 반려된 문서입니다. ${stepName} 단계에서 수정 후 수정완료를 눌러주세요.`, "edit");
+                    } else {
+                        showBanner(`✏️ 수정 모드 - ${stepName} 결재 담당자로서 수정이 가능합니다. 수정 후 수정완료를 눌러주세요.`, "edit");
+                    }
+                } else {
+                    // 수정 권한이 없으면 readonly 모드
+                    $("btnEditComplete").classList.add("hidden");
+                    
+                    // 에디터를 readonly로 설정
+                    const ed = tinymce.get("editor");
+                    if (ed) {
+                        ed.mode.set("readonly");
+                    }
+                    
+                    // 메타 입력 필드도 readonly로 설정
+                    $("metaTitle").setAttribute("readonly", true);
+                    $("metaAuthor").setAttribute("readonly", true);
+                    $("metaDate").setAttribute("readonly", true);
+                    $("metaPlace").setAttribute("readonly", true);
+                    
+                    // 이미지 추가 버튼 숨김
+                    const imageInput = $("imageInput");
+                    if (imageInput) imageInput.disabled = true;
+                    const thumbInput = $("thumbnailInput");
+                    if (thumbInput) thumbInput.disabled = true;
+                    const thumbClearBtn = $("thumbnailClear");
+                    if (thumbClearBtn) thumbClearBtn.disabled = true;
+                    
+                    // 안내 메시지 표시
+                    const stepInfo = typeof window.getApprovalStepInfo === "function" 
+                        ? window.getApprovalStepInfo(stage) 
+                        : null;
+                    const stepName = stepInfo ? stepInfo.name : `${stage}단계`;
+                    showBanner(`🔒 읽기 전용 - 현재 결재가 제출된 상태라 수정이 불가능합니다. (${stepName} 진행중) 반려가 되면 해당 단계 결재자가 수정할 수 있습니다.`, "readonly");
+                }
+            } else if (isComplete) {
+                // 최종 승인 완료: 모든 수정 버튼 숨김
+                $("btnNew").classList.add("hidden");
+                $("btnSave").classList.add("hidden");
+                $("btnExportZip").classList.add("hidden");
+                $("btnPreview").classList.add("hidden");
+                $("btnEditComplete").classList.add("hidden");
+                
+                // 에디터를 readonly로 설정
+                const ed = tinymce.get("editor");
+                if (ed) {
+                    ed.mode.set("readonly");
+                }
+                
+                // 메타 입력 필드도 readonly로 설정
+                $("metaTitle").setAttribute("readonly", true);
+                $("metaAuthor").setAttribute("readonly", true);
+                $("metaDate").setAttribute("readonly", true);
+                $("metaPlace").setAttribute("readonly", true);
+                
+                showBanner("✅ 최종 승인 완료 - 이 문서는 발행되어 더 이상 수정할 수 없습니다.", "complete");
+            }
+            // draft 상태(stage 0)는 일반 모드 유지
+        };
+
+        $("btnNew").addEventListener("click", resetNew);
+        $("btnSave").addEventListener("click", async () => {
+            await savePost("draft");
+            alert("임시저장 완료");
+        });
+        $("btnPreview").addEventListener("click", previewAndOpenModal);
+        // $("btnExport").addEventListener("click", exportHtml);
+        $("btnExportZip").addEventListener("click", exportZip);
+
+        const thumbInput = $("thumbnailInput");
+        const thumbClear = $("thumbnailClear");
+        if (thumbInput) {
+            thumbInput.addEventListener("change", (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file || !file.type.startsWith("image/")) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    _thumbnailDataUrl = reader.result;
+                    _thumbnailUrl = null;
+                    setThumbnailPreview(_thumbnailDataUrl);
+                };
+                reader.readAsDataURL(file);
+                e.target.value = "";
+            });
+        }
+        if (thumbClear) {
+            thumbClear.addEventListener("click", () => {
+                _thumbnailDataUrl = null;
+                _thumbnailUrl = null;
+                setThumbnailPreview(null);
+            });
+        }
+
+        // 수정완료 버튼 이벤트
+        $("btnEditComplete").addEventListener("click", async () => {
+            let post = null;
+            if (typeof supabaseGetPostById === "function") post = await supabaseGetPostById(editingId);
+            if (!post) post = await idbGet(STORE_POSTS, editingId);
+            const history = Array.isArray(post?.approvalHistory) ? post.approvalHistory : [];
+            const lastHistory = history.length > 0 ? history[history.length - 1] : null;
+            const isRejectedAtStage0 = post && (post.approvalStage ?? 0) === 0 && !!(lastHistory && lastHistory.rejected === true);
+            if (isRejectedAtStage0) {
+                const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+                const newHistory = history.slice();
+                newHistory.push({
+                    step: 0,
+                    step_name: step0 ? step0.name : "기획 및 초안 작성",
+                    approver_name: (post && post.authorName) ? post.authorName + " 재제출" : "재제출",
+                    approved_at: new Date().toISOString()
+                });
+                await savePost("submitted", { approvalStage: 1, approvalHistory: newHistory });
+                if (typeof supabaseInvokeSlackApproval === "function") {
+                    supabaseInvokeSlackApproval({
+                        title: post && post.title,
+                        authorName: post && post.authorName,
+                        stage: 1,
+                        stepName: "1차 검수 및 표준화",
+                        postId: post && post.id,
+                        eventType: "submit"
+                    }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+                }
+                alert("재제출되었습니다. 1차 검수 단계로 진행됩니다.");
+            } else {
+                await savePost("submitted");
+                alert("수정이 완료되었습니다.");
+            }
+            location.href = "review.html";
+        });
+
+        // 포스트 로드 및 UI 설정
+        if (isEditMode) {
+            const post = await loadPostIfExists();
+            if (post) {
+                let userEmail = "";
+                if (typeof supabaseAuthGetUser === "function") {
+                    const user = await supabaseAuthGetUser();
+                    userEmail = user?.email || "";
+                    if (user?.id && post?.userId && user.id === post.userId) post.authorEmail = userEmail;
+                }
+                await setupEditModeUI(post, userEmail);
+            }
+        }
+
+        $("btnModalClose").addEventListener("click", closeModal);
+        $("btnModalSubmit").addEventListener("click", submitFromModal);
+
+        // $("btnAddImage").addEventListener("click", () => $("imageInput").click());
+        $("imageInput").addEventListener("change", async (e) => {
+            const files = Array.from(e.target.files || []);
+            e.target.value = "";
+            if (!files.length) return;
+            await addImages(files);
+        });
+    })();
+</script>
+
+</body>
+</html>

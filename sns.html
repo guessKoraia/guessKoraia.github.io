@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>한국인공지능협회 | 지식자산 관리 시스템</title>
+    <meta name="description" content="한국인공지능협회 지식자산 관리 시스템. 행사·회원사 탐방 콘텐츠 작성 및 결재 관리를 위한 내부 포털입니다." />
+
+    <link rel="icon" href="https://koraia.org/default/img/symbol.ico" />
+    <link rel="shortcut icon" href="https://koraia.org/default/img/symbol.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="한국인공지능협회 | 지식자산 관리 시스템" />
+    <meta property="og:description" content="한국인공지능협회 지식자산 관리 시스템. 행사·회원사 탐방 콘텐츠 작성 및 결재 관리를 위한 내부 포털입니다." />
+    <meta property="og:image" content="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png" />
+    <meta property="og:url" content="https://koraia.org/sns" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:site_name" content="한국인공지능협회 지식자산 관리" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="한국인공지능협회 | 지식자산 관리 시스템" />
+    <meta name="twitter:description" content="한국인공지능협회 지식자산 관리 시스템. 행사·회원사 탐방 콘텐츠 작성 및 결재 관리를 위한 내부 포털입니다." />
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png" />
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendardvariable.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/approval-workflow.js"></script>
+    <script src="js/supabase-auth.js"></script>
+
+    <style>
+        html, body {
+            font-family: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', Arial, sans-serif;
+            background-color: black;
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .seal-ring {
+            box-shadow: 
+                0 0 0 4px rgba(59, 130, 246, 0.3),
+                0 0 0 8px rgba(59, 130, 246, 0.1),
+                0 0 60px rgba(59, 130, 246, 0.2);
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+        }
+        
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .btn-google {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-google:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #60a5fa 100%);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .pulse-animation {
+            animation: pulse-ring 2s infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .menu-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-4px);
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+        .toast-item {
+            pointer-events: auto;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: toastSlideIn 0.3s ease-out;
+        }
+        .toast-item.success { border-color: rgba(34, 197, 94, 0.5); }
+        .toast-item.error { border-color: rgba(239, 68, 68, 0.5); }
+        @keyframes toastSlideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toastFadeOut {
+            to { opacity: 0; transform: translateX(100%); }
+        }
+        .toast-item.hiding { animation: toastFadeOut 0.25s ease-in forwards; }
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+
+<body class="login-container grid-bg text-white overflow-hidden">
+    <!-- 로그인 화면 -->
+    <div id="loginScreen" class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-8 md:p-12 max-w-md w-full text-center fade-in relative overflow-hidden">
+            <div class="scan-line"></div>
+            
+            <!-- 로고/심볼 -->
+            <div class="mb-8">
+                <img src="koraia_logo_index.png" alt="한국인공지능협회 로고" class="w-56 h-56 mx-auto mb-6">
+                <p class="text-blue-300 text-sm tracking-widest uppercase">
+                    Knowledge Asset Management System
+                </p>
+            </div>
+            
+            <!-- 상태 표시 -->
+            <div class="mb-8 py-4 border-t border-b border-white/10">
+                <div class="flex items-center justify-center gap-2 text-sm text-slate-400">
+                    <span class="w-2 h-2 rounded-full bg-green-500 pulse-animation"></span>
+                    <span>SYSTEM ONLINE</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 typing-cursor">
+                    AUTHENTICATION REQUIRED
+                </p>
+            </div>
+            
+            <!-- 로그인 버튼 -->
+            <button id="btnGoogleLogin" class="btn-google w-full py-4 px-6 rounded-lg font-semibold text-white flex items-center justify-center gap-3 mb-4">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                <span>Google 계정으로 로그인</span>
+            </button>
+            
+            <p class="text-xs text-slate-500">
+                승인된 사용자만 접근할 수 있습니다
+            </p>
+        </div>
+        
+        <!-- 하단 정보 -->
+        <div class="mt-8 text-center text-xs text-slate-500 fade-in" style="animation-delay: 0.3s;">
+            <p>© 2026 Korea AI Association. All rights reserved.</p>
+            <p class="mt-1">Secure Connection Established</p>
+        </div>
+    </div>
+
+    <!-- 메뉴 화면 (로그인 후) -->
+    <div id="menuScreen" class="min-h-screen flex flex-col items-center justify-center p-4 hidden">
+        <div class="max-w-2xl w-full fade-in">
+            <!-- 헤더 -->
+            <div class="text-center mb-10">
+                <img src="koraia_logo_index.png" alt="한국인공지능협회 로고" class="w-36 h-36 mx-auto mb-6">
+                <h1 class="text-2xl font-bold glow-text mb-1">지식자산 관리 시스템</h1>
+                <p class="text-blue-300 text-sm" id="welcomeUser">환영합니다</p>
+            </div>
+            
+            <!-- 접근 상태 -->
+            <div class="glass-card rounded-lg p-4 mb-8 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                    <span class="text-sm text-slate-300">ACCESS GRANTED</span>
+                </div>
+                <button id="btnLogout" class="text-sm text-slate-400 hover:text-white transition">
+                    로그아웃
+                </button>
+            </div>
+            
+            <!-- 메뉴 그리드 -->
+            <div class="grid md:grid-cols-2 gap-4 mb-8">
+                <!-- 행사 글쓰기 -->
+                <a href="write_event.html" class="menu-card rounded-xl p-6 block">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-600/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">행사 글쓰기</h3>
+                            <p class="text-sm text-slate-400">세미나, 컨퍼런스 등 행사 콘텐츠 작성</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 회원사 탐방 글쓰기 -->
+                <a href="write_visit.html" class="menu-card rounded-xl p-6 block">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-emerald-600/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">회원사 탐방</h3>
+                            <p class="text-sm text-slate-400">회원사 방문 및 인터뷰 콘텐츠 작성</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 콘텐츠 검토 -->
+                <a href="review.html" class="menu-card rounded-xl p-6 block" id="menuReview">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-amber-600/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">콘텐츠 검토</h3>
+                            <p class="text-sm text-slate-400">제출된 콘텐츠 검토 및 승인</p>
+                            <span id="reviewBadge" class="hidden inline-block mt-2 px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">검토자 전용</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 내 글 목록 -->
+                <div class="menu-card rounded-xl p-6 cursor-pointer" id="menuMyPosts">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-600/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">내 글 목록</h3>
+                            <p class="text-sm text-slate-400">작성한 글 확인 및 수정</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- 내 글 목록 모달 -->
+    <div id="myPostsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div class="glass-card rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between">
+                <h2 class="font-semibold">내 글 목록</h2>
+                <button id="btnCloseModal" class="text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh]" id="myPostsList">
+                <p class="text-slate-400 text-center py-8">불러오는 중...</p>
+            </div>
+            <div id="myPostsPagination" class="p-4 border-t border-white/10 flex items-center justify-center gap-2 flex-wrap hidden"></div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+
+        function showToast(message, type) {
+            type = type || "info";
+            var container = $("toastContainer");
+            if (!container) return;
+            var el = document.createElement("div");
+            el.className = "toast-item " + type;
+            el.textContent = message;
+            container.appendChild(el);
+            var duration = 3500;
+            var t = setTimeout(function () {
+                el.classList.add("hiding");
+                setTimeout(function () {
+                    if (el.parentNode) el.parentNode.removeChild(el);
+                }, 250);
+            }, duration);
+        }
+
+        const escapeHtml = (s) =>
+            String(s ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+
+        const showLogin = () => {
+            $("loginScreen").classList.remove("hidden");
+            $("menuScreen").classList.add("hidden");
+        };
+
+        const showMenu = (user) => {
+            $("loginScreen").classList.add("hidden");
+            $("menuScreen").classList.remove("hidden");
+            
+            if (user?.email) {
+                var display = typeof window.getNameByEmail === "function" ? window.getNameByEmail(user.email) : "";
+                $("welcomeUser").textContent = display || "환영합니다";
+            }
+        };
+
+        const checkReviewerAccess = async () => {
+            if (typeof supabaseAuthIsAllowedReviewer === "function") {
+                const isReviewer = await supabaseAuthIsAllowedReviewer();
+                if (isReviewer) {
+                    $("reviewBadge").classList.remove("hidden");
+                }
+            }
+        };
+
+        const MY_POSTS_PAGE_SIZE = 5;
+        let myPostsAll = [];
+        let myPostsCurrentPage = 1;
+
+        const renderMyPostsPage = (posts, page) => {
+            const listEl = $("myPostsList");
+            const paginationEl = $("myPostsPagination");
+            if (!listEl) return;
+            if (posts.length === 0) {
+                listEl.innerHTML = '<p class="text-slate-400 text-center py-8">작성한 글이 없습니다.</p>';
+                if (paginationEl) { paginationEl.classList.add("hidden"); paginationEl.innerHTML = ""; }
+                return;
+            }
+            const totalPages = Math.max(1, Math.ceil(posts.length / MY_POSTS_PAGE_SIZE));
+            const start = (page - 1) * MY_POSTS_PAGE_SIZE;
+            const pageItems = posts.slice(start, start + MY_POSTS_PAGE_SIZE);
+            const statusLabel = (s) => s === "draft" ? "임시저장" : (s === "submitted" ? "제출" : (s === "approved" ? "승인완료" : s || ""));
+            const canDelete = (p) => p.status === "draft" || (p.approvalStage != null ? p.approvalStage === 0 : true);
+            listEl.innerHTML = pageItems.map(function (p) {
+                const typeLabel = p.type === "event" ? "행사" : (p.type === "visit" ? "탐방" : p.type);
+                const href = (p.type === "event" ? "write_event.html" : "write_visit.html") + "?id=" + encodeURIComponent(p.id);
+                const statusColor = p.status === "submitted" ? "text-blue-400" : (p.status === "approved" ? "text-green-400" : "text-slate-400");
+                const statusText = statusLabel(p.status);
+                const showDelete = canDelete(p);
+                const deleteBtn = showDelete
+                    ? `<button type="button" data-delete-id="${escapeHtml(p.id)}" class="flex-shrink-0 self-center px-3 py-1.5 text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded border border-red-500/30 transition" title="삭제">삭제</button>`
+                    : "";
+                return `
+                    <div class="flex items-stretch gap-2 p-4 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 mb-3 transition group">
+                        <a href="${href}" class="flex-1 min-w-0">
+                            <div class="font-medium text-white">${escapeHtml(p.title || "(제목 없음)")}</div>
+                            <div class="text-xs text-slate-400 mt-1 flex gap-3">
+                                <span class="px-2 py-0.5 bg-white/10 rounded">${typeLabel}</span>
+                                <span class="${statusColor}">${escapeHtml(statusText)}</span>
+                                <span>${(p.updatedAt || "").slice(0, 10)}</span>
+                            </div>
+                        </a>
+                        ${deleteBtn}
+                    </div>
+                `;
+            }).join("");
+            if (paginationEl) {
+                if (totalPages <= 1) {
+                    paginationEl.classList.add("hidden");
+                    paginationEl.innerHTML = "";
+                } else {
+                    paginationEl.classList.remove("hidden");
+                    let html = "";
+                    if (page > 1) html += '<button type="button" data-mypage="' + (page - 1) + '" class="px-3 py-2 text-sm font-bold rounded bg-white/10 hover:bg-white/20 text-white border border-white/20">이전</button>';
+                    const maxShow = 5;
+                    let from = Math.max(1, page - Math.floor(maxShow / 2));
+                    let to = Math.min(totalPages, from + maxShow - 1);
+                    if (to - from + 1 < maxShow) from = Math.max(1, to - maxShow + 1);
+                    for (let i = from; i <= to; i++) {
+                        const active = i === page;
+                        html += '<button type="button" data-mypage="' + i + '" class="px-3 py-2 text-sm font-bold rounded border ' + (active ? "bg-blue-500 text-white border-blue-500" : "bg-white/10 hover:bg-white/20 text-white border-white/20") + '">' + i + "</button>";
+                    }
+                    if (page < totalPages) html += '<button type="button" data-mypage="' + (page + 1) + '" class="px-3 py-2 text-sm font-bold rounded bg-white/10 hover:bg-white/20 text-white border border-white/20">다음</button>';
+                    paginationEl.innerHTML = html;
+                    paginationEl.querySelectorAll("button[data-mypage]").forEach((btn) => {
+                        btn.addEventListener("click", () => {
+                            myPostsCurrentPage = parseInt(btn.getAttribute("data-mypage"), 10);
+                            renderMyPostsPage(myPostsAll, myPostsCurrentPage);
+                        });
+                    });
+                }
+            }
+            listEl.querySelectorAll("button[data-delete-id]").forEach((btn) => {
+                btn.addEventListener("click", async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = btn.getAttribute("data-delete-id");
+                    if (!id) return;
+                    if (!confirm("이 글을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.")) return;
+                    if (typeof supabaseDeletePost !== "function") {
+                        alert("삭제 기능을 사용할 수 없습니다.");
+                        return;
+                    }
+                    try {
+                        await supabaseDeletePost(id);
+                        myPostsAll = myPostsAll.filter((p) => p.id !== id);
+                        const totalPages = Math.max(1, Math.ceil(myPostsAll.length / MY_POSTS_PAGE_SIZE));
+                        if (myPostsCurrentPage > totalPages) myPostsCurrentPage = Math.max(1, totalPages);
+                        renderMyPostsPage(myPostsAll, myPostsCurrentPage);
+                        showToast("글이 삭제되었습니다.", "success");
+                    } catch (err) {
+                        var msg = err && err.message ? err.message : "";
+                        showToast("삭제에 실패했습니다.", "error");
+                        alert("삭제에 실패했습니다. " + msg);
+                    }
+                });
+            });
+        };
+
+        const openMyPostsModal = async () => {
+            const modal = $("myPostsModal");
+            const listEl = $("myPostsList");
+            const paginationEl = $("myPostsPagination");
+            
+            modal.classList.remove("hidden");
+            listEl.innerHTML = '<p class="text-slate-400 text-center py-8">불러오는 중...</p>';
+            if (paginationEl) { paginationEl.classList.add("hidden"); paginationEl.innerHTML = ""; }
+            
+            if (typeof supabaseGetMyPosts !== "function") {
+                listEl.innerHTML = '<p class="text-slate-400 text-center py-8">글 목록을 불러올 수 없습니다.</p>';
+                return;
+            }
+            
+            const posts = await supabaseGetMyPosts();
+            myPostsAll = posts || [];
+            myPostsCurrentPage = 1;
+            renderMyPostsPage(myPostsAll, 1);
+        };
+
+        const closeMyPostsModal = () => {
+            $("myPostsModal").classList.add("hidden");
+        };
+
+        (async () => {
+            if (typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
+                try {
+                    const config = await supabaseGetApprovalConfig();
+                    if (config) window.initApprovalConfig(config);
+                } catch (_) {}
+            }
+            if (typeof supabaseAuthGetSession === "function") {
+                const { data } = await supabaseAuthGetSession();
+                if (data?.session?.user) {
+                    showMenu(data.session.user);
+                    checkReviewerAccess();
+                } else {
+                    showLogin();
+                }
+            } else {
+                showLogin();
+            }
+            if (typeof supabaseAuthOnAuthStateChange === "function") {
+                supabaseAuthOnAuthStateChange(async (event, session) => {
+                    if (session?.user) {
+                        if (typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
+                            try {
+                                const cfg = await supabaseGetApprovalConfig();
+                                if (cfg) window.initApprovalConfig(cfg);
+                            } catch (_) {}
+                        }
+                        showMenu(session.user);
+                        checkReviewerAccess();
+                    } else {
+                        showLogin();
+                    }
+                });
+            }
+
+            // 구글 로그인 버튼
+            $("btnGoogleLogin").addEventListener("click", () => {
+                if (typeof supabaseAuthSignIn !== "function") {
+                    alert("로그인 기능을 사용할 수 없습니다.");
+                    return;
+                }
+                supabaseAuthSignIn().catch(function (err) {
+                    alert(err && err.message ? err.message : "로그인에 실패했습니다.");
+                });
+            });
+
+            // 로그아웃 버튼
+            $("btnLogout").addEventListener("click", async () => {
+                if (typeof supabaseAuthSignOut === "function") {
+                    await supabaseAuthSignOut();
+                }
+                showLogin();
+            });
+
+            // 내 글 목록
+            $("menuMyPosts").addEventListener("click", openMyPostsModal);
+            $("btnCloseModal").addEventListener("click", closeMyPostsModal);
+            
+            // 모달 외부 클릭 시 닫기
+            $("myPostsModal").addEventListener("click", (e) => {
+                if (e.target === $("myPostsModal")) {
+                    closeMyPostsModal();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
