@@ -242,6 +242,7 @@
 
     let _thumbnailDataUrl = null;
     let _thumbnailUrl = null;
+    let _postLoaded = false; // 포스트가 이미 로드되었는지 플래그
 
     const TEMPLATE_VISIT = `
 <h2>핵심 요약</h2>
@@ -474,7 +475,13 @@
     const normalizeEditorHtmlForSave = (html) => {
         const wrapper = document.createElement("div");
         wrapper.innerHTML = html || "";
-        wrapper.querySelectorAll("img[data-image-id]").forEach((img) => img.setAttribute("src", ""));
+        wrapper.querySelectorAll("img[data-image-id]").forEach((img) => {
+            const src = img.getAttribute("src") || "";
+            // imgbb URL은 보존, 그 외(blob:, data:, 빈 문자열 등)는 비움
+            if (!src.includes("i.ibb.co") && !src.includes("ibb.co")) {
+                img.setAttribute("src", "");
+            }
+        });
         return wrapper.innerHTML;
     };
 
@@ -553,17 +560,40 @@
     };
 
     const loadPostIfExists = async () => {
+        // 이미 로드된 경우 스킵 (사용자가 수정한 내용 보호)
+        if (_postLoaded) return null;
+        
         // 결재 단계/상태는 서버 기준으로 사용하기 위해 Supabase 우선 조회
         let post = null;
+        let fromSupabase = false;
         if (editingId && typeof supabaseGetPostById === "function") {
-            const fromSupabase = await supabaseGetPostById(editingId);
-            if (fromSupabase) post = fromSupabase;
+            const supabasePost = await supabaseGetPostById(editingId);
+            if (supabasePost) {
+                post = supabasePost;
+                fromSupabase = true;
+            }
         }
         if (!post) post = await idbGet(STORE_POSTS, editingId);
         if (!post) {
             $("statusLine").textContent = `draft · ${editingId.slice(0, 8)}`;
             return null;
         }
+        
+        // Supabase에서 가져온 데이터로 IndexedDB 동기화 (다른 PC에서도 최신 데이터 유지)
+        if (fromSupabase) {
+            try {
+                const existingLocal = await idbGet(STORE_POSTS, editingId);
+                const toSync = {
+                    ...post,
+                    // Supabase에 없는 로컬 전용 필드는 기존 값 유지
+                    thumbnailDataUrl: post.thumbnailDataUrl || existingLocal?.thumbnailDataUrl || null
+                };
+                await idbPut(STORE_POSTS, toSync);
+            } catch (e) {
+                console.warn("IndexedDB 동기화 실패:", e);
+            }
+        }
+        
         $("metaTitle").value = post.title || "";
         $("metaAuthor").value = post.authorName || "";
         $("metaDate").value = post.date || "";
@@ -574,6 +604,7 @@
         _thumbnailUrl = post.thumbnailUrl || null;
         _thumbnailDataUrl = post.thumbnailDataUrl || null;
         setThumbnailPreview(_thumbnailUrl || _thumbnailDataUrl || null);
+        _postLoaded = true; // 로드 완료 플래그 설정
         return post;
     };
 
@@ -650,57 +681,17 @@
     const renderAttachmentGrid = async () => {
         const grid = $("attachGrid");
         const empty = $("attachEmpty");
-        const idbItems = await listImagesByPost();
-
-        // 에디터 내의 모든 이미지를 스캔
-        const ed = tinymce.get("editor");
-        const editorImgs = ed ? Array.from(ed.getBody().querySelectorAll("img")) : [];
-
-        // IndexedDB 이미지 ID 세트
-        const idbIdSet = new Set(idbItems.map(it => String(it.id)));
-
-        // 에디터에 있지만 IndexedDB에 없는 이미지 (imgbb URL 또는 로컬 blob URL)
-        const externalItems = [];
-        editorImgs.forEach((img, idx) => {
-            const src = img.getAttribute("src") || "";
-            const dataId = img.getAttribute("data-image-id");
-            
-            // data-image-id가 있고 IndexedDB에 있으면 스킵 (이미 idbItems에서 처리)
-            if (dataId && idbIdSet.has(String(dataId))) return;
-            
-            // imgbb URL인 경우
-            if (src.includes("i.ibb.co") || src.includes("ibb.co")) {
-                externalItems.push({
-                    id: dataId || `imgbb-${idx}`,
-                    src: src,
-                    alt: img.getAttribute("alt") || "",
-                    isImgbb: true,
-                    imgElement: img
-                });
-            }
-            // blob URL인 경우 (새로 추가된 이미지가 아직 IndexedDB에 저장 안됨)
-            else if (src.startsWith("blob:")) {
-                externalItems.push({
-                    id: dataId || `blob-${idx}`,
-                    src: src,
-                    alt: img.getAttribute("alt") || "",
-                    isBlob: true,
-                    imgElement: img
-                });
-            }
-        });
+        const items = await listImagesByPost();
 
         grid.innerHTML = "";
-        const totalItems = idbItems.length + externalItems.length;
-        if (totalItems === 0) {
+        if (items.length === 0) {
             empty.classList.remove("hidden");
             return;
         }
         empty.classList.add("hidden");
 
-        // IndexedDB 이미지 렌더링
-        idbItems.forEach((it) => {
-            const url = it.blob ? URL.createObjectURL(it.blob) : "";
+        items.forEach((it) => {
+            const url = URL.createObjectURL(it.blob);
             const wrap = document.createElement("div");
             wrap.className = "border border-slate-200 p-3 bg-white";
 
@@ -712,8 +703,8 @@
           </div>
           <button data-del="1" class="border border-slate-200 px-2 py-1 text-xs font-extrabold">X</button>
         </div>
-        <div class="mt-3 border border-slate-200">
-          <img src="${url}" alt="${escapeHtml(it.alt || "")}" class="block w-full object-cover" />
+        <div class="mt-3 border border-slate-200 cursor-pointer hover:opacity-80 transition-opacity" data-scroll-to="1" title="클릭하면 에디터에서 이미지 위치로 이동">
+          <img src="${url}" alt="${escapeHtml(it.alt || "")}" class="block w-full object-cover pointer-events-none" />
         </div>
         <div class="mt-3">
         <div class="flex gap-2 justify-between items-center">
@@ -726,6 +717,22 @@
 
             wrap.querySelector('button[data-del="1"]').addEventListener("click", () => deleteImageEverywhere(it.id));
 
+            // 이미지 클릭 시 에디터 내 해당 이미지로 스크롤 이동
+            wrap.querySelector('[data-scroll-to="1"]').addEventListener("click", () => {
+                const ed = tinymce.get("editor");
+                if (!ed) return;
+                const targetImg = ed.getBody().querySelector(`img[data-image-id="${it.id}"]`);
+                if (targetImg) {
+                    // TinyMCE 에디터 내에서 해당 이미지로 스크롤
+                    targetImg.scrollIntoView({ behavior: "smooth", block: "center" });
+                    // 이미지 선택 (하이라이트)
+                    ed.selection.select(targetImg);
+                    ed.focus();
+                } else {
+                    alert("에디터에서 해당 이미지를 찾을 수 없습니다.");
+                }
+            });
+
             const altInput = wrap.querySelector('input[data-alt="1"]');
             wrap.querySelector('button[data-apply="1"]').addEventListener("click", async () => {
                 await updateAlt(it.id, altInput.value);
@@ -734,62 +741,6 @@
 
             grid.appendChild(wrap);
         });
-
-        // 외부 이미지 (imgbb/blob) 렌더링
-        for (const it of externalItems) {
-            const wrap = document.createElement("div");
-            wrap.className = "border border-slate-200 p-3 bg-white";
-
-            // imgbb 이미지는 캐시에서 로드 시도
-            let displaySrc = it.src;
-            if (it.isImgbb) {
-                displaySrc = await fetchImgbbWithCache(it.src);
-            }
-
-            const badge = it.isImgbb 
-                ? '<span class="inline-block px-1.5 py-0.5 bg-green-100 text-green-700 text-[10px] rounded mr-1">업로드됨</span>'
-                : '<span class="inline-block px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] rounded mr-1">새 이미지</span>';
-            const subText = it.isImgbb ? 'imgbb에 저장됨 (캐시됨)' : '저장 대기중';
-
-            wrap.innerHTML = `
-        <div class="flex items-start justify-between gap-2">
-          <div class="min-w-0">
-            <div class="text-xs font-extrabold text-slate-600 truncate">
-              ${badge}
-              ${escapeHtml(it.src.split("/").pop() || "image")}
-            </div>
-            <div class="mt-1 text-[11px] font-bold text-slate-500">${subText}</div>
-          </div>
-          <button data-del-ext="1" class="border border-slate-200 px-2 py-1 text-xs font-extrabold">X</button>
-        </div>
-        <div class="mt-3 border border-slate-200">
-          <img src="${escapeHtml(displaySrc)}" alt="${escapeHtml(it.alt || "")}" class="block w-full object-cover" />
-        </div>
-        <div class="mt-3">
-        <div class="flex gap-2 justify-between items-center">
-          <div class="text-xs font-extrabold text-slate-600">이미지 설명</div>
-            <button data-apply-ext="1" class="text-xs font-semibold border px-1.5 py-1 text-blue-600">적용하기️</button>
-        </div>
-          <input data-alt-ext="1" class="mt-2 w-full border border-slate-200 py-1.5 px-2 text-xs outline-none" value="${escapeHtml(it.alt || "")}" />
-        </div>
-      `;
-
-            // 외부 이미지 삭제 (에디터에서만 제거)
-            wrap.querySelector('button[data-del-ext="1"]').addEventListener("click", () => {
-                if (!confirm("이미지를 삭제하시겠습니까?")) return;
-                it.imgElement.remove();
-                renderAttachmentGrid();
-            });
-
-            // 외부 이미지 ALT 업데이트
-            const altInput = wrap.querySelector('input[data-alt-ext="1"]');
-            wrap.querySelector('button[data-apply-ext="1"]').addEventListener("click", () => {
-                it.imgElement.setAttribute("alt", altInput.value || "");
-                alert("이미지 설명(ALT)이 적용되었습니다.");
-            });
-
-            grid.appendChild(wrap);
-        }
     };
 
     const buildExportHtmlWithEmbeddedImages = async (post, forPreview) => {
@@ -1438,7 +1389,7 @@
         const thumbInput = $("thumbnailInput");
         const thumbClear = $("thumbnailClear");
         if (thumbInput) {
-            thumbInput.addEventListener("change", (e) => {
+            thumbInput.addEventListener("change", async (e) => {
                 const file = e.target.files && e.target.files[0];
                 if (!file || !file.type.startsWith("image/")) return;
                 const reader = new FileReader();
@@ -1446,16 +1397,52 @@
                     _thumbnailDataUrl = reader.result;
                     _thumbnailUrl = null;
                     setThumbnailPreview(_thumbnailDataUrl);
+                    
+                    // 에디터 최상단에 썸네일 이미지 자동 삽입
+                    const ed = tinymce.get("editor");
+                    if (ed) {
+                        const currentContent = ed.getContent();
+                        const thumbnailHtml = `<p><img src="${_thumbnailDataUrl}" alt="썸네일 이미지" style="max-width:100%; height:auto;" data-thumbnail="true" /></p>`;
+                        // 기존 썸네일 이미지가 있으면 제거 후 삽입
+                        const wrapper = document.createElement("div");
+                        wrapper.innerHTML = currentContent;
+                        const existingThumb = wrapper.querySelector('img[data-thumbnail="true"]');
+                        if (existingThumb) {
+                            existingThumb.parentElement?.remove();
+                        }
+                        ed.setContent(thumbnailHtml + wrapper.innerHTML);
+                    }
                 };
                 reader.readAsDataURL(file);
                 e.target.value = "";
             });
         }
         if (thumbClear) {
-            thumbClear.addEventListener("click", () => {
+            thumbClear.addEventListener("click", async () => {
                 _thumbnailDataUrl = null;
                 _thumbnailUrl = null;
                 setThumbnailPreview(null);
+                
+                // 즉시 DB에 null로 저장
+                if (editingId) {
+                    try {
+                        // IndexedDB 업데이트
+                        const existing = await idbGet(STORE_POSTS, editingId);
+                        if (existing) {
+                            existing.thumbnailUrl = null;
+                            existing.thumbnailDataUrl = null;
+                            await idbPut(STORE_POSTS, existing);
+                        }
+                        // Supabase 직접 update (썸네일만)
+                        if (window._canWrite && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
+                            const client = window.supabase?.createClient?.(window.SUPABASE_URL, window.SUPABASE_ANON_KEY) 
+                                         || supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+                            await client.from("posts").update({ thumbnail_url: null }).eq("id", editingId);
+                        }
+                    } catch (e) {
+                        console.warn("썸네일 제거 저장 실패:", e);
+                    }
+                }
             });
         }
 
