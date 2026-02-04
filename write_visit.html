@@ -429,9 +429,9 @@
             place: $("metaPlace").value.trim(),
             editorHtml: html,
             updatedAt: nowISO(),
+            thumbnailUrl: _thumbnailUrl || null,
+            thumbnailDataUrl: _thumbnailDataUrl || null,
         };
-        if (_thumbnailUrl) post.thumbnailUrl = _thumbnailUrl;
-        if (_thumbnailDataUrl) post.thumbnailDataUrl = _thumbnailDataUrl;
         return post;
     };
 
@@ -450,6 +450,12 @@
         for (const img of imgs) {
             const id = Number(img.getAttribute("data-image-id"));
             if (!id || Number.isNaN(id)) continue;
+
+            // 이미 imgbb URL이면 스킵
+            const currentSrc = img.getAttribute("src") || "";
+            if (currentSrc.includes("i.ibb.co") || currentSrc.includes("ibb.co")) {
+                continue;
+            }
 
             const record = await idbGet(STORE_IMAGES, id);
             if (!record?.blob) continue;
@@ -497,8 +503,10 @@
         if (typeof supabaseUpsertPost === "function" && window._canWrite) {
             try {
                 const supabasePayload = { ...toSave, editorHtml };
-                if (toSave.thumbnailDataUrl) delete supabasePayload.thumbnailDataUrl;
-                if (toSave.thumbnailUrl) supabasePayload.thumbnailUrl = toSave.thumbnailUrl;
+                // thumbnailDataUrl은 로컬용이므로 Supabase에 보내지 않음
+                delete supabasePayload.thumbnailDataUrl;
+                // thumbnailUrl은 null이어도 명시적으로 저장 (썸네일 제거 반영)
+                supabasePayload.thumbnailUrl = toSave.thumbnailUrl || null;
                 await supabaseUpsertPost(supabasePayload);
             } catch (e) {
                 console.warn("Supabase 임시저장 반영 실패:", e);
@@ -606,16 +614,46 @@
     const renderAttachmentGrid = async () => {
         const grid = $("attachGrid");
         const empty = $("attachEmpty");
-        const items = await listImagesByPost();
+        const idbItems = await listImagesByPost();
+
+        // 에디터 내의 모든 이미지를 스캔 (IndexedDB + imgbb URL 이미지 모두)
+        const ed = tinymce.get("editor");
+        const editorImgs = ed ? Array.from(ed.getBody().querySelectorAll("img")) : [];
+
+        // IndexedDB 이미지 ID 세트
+        const idbIdSet = new Set(idbItems.map(it => String(it.id)));
+
+        // imgbb URL 이미지 수집 (data-image-id가 없거나 IndexedDB에 없는 경우)
+        const imgbbItems = [];
+        editorImgs.forEach((img, idx) => {
+            const src = img.getAttribute("src") || "";
+            const dataId = img.getAttribute("data-image-id");
+            
+            // imgbb URL인 경우 (i.ibb.co 포함)
+            if (src.includes("i.ibb.co") || src.includes("ibb.co")) {
+                // 이미 IndexedDB에 있는 경우 스킵
+                if (dataId && idbIdSet.has(String(dataId))) return;
+                
+                imgbbItems.push({
+                    id: dataId || `imgbb-${idx}`,
+                    src: src,
+                    alt: img.getAttribute("alt") || "",
+                    isImgbb: true,
+                    imgElement: img
+                });
+            }
+        });
 
         grid.innerHTML = "";
-        if (items.length === 0) {
+        const totalItems = idbItems.length + imgbbItems.length;
+        if (totalItems === 0) {
             empty.classList.remove("hidden");
             return;
         }
         empty.classList.add("hidden");
 
-        items.forEach((it) => {
+        // IndexedDB 이미지 렌더링
+        idbItems.forEach((it) => {
             const url = URL.createObjectURL(it.blob);
             const wrap = document.createElement("div");
             wrap.className = "border border-slate-200 p-3 bg-white";
@@ -645,6 +683,51 @@
             const altInput = wrap.querySelector('input[data-alt="1"]');
             wrap.querySelector('button[data-apply="1"]').addEventListener("click", async () => {
                 await updateAlt(it.id, altInput.value);
+                alert("이미지 설명(ALT)이 적용되었습니다.");
+            });
+
+            grid.appendChild(wrap);
+        });
+
+        // imgbb 이미지 렌더링
+        imgbbItems.forEach((it) => {
+            const wrap = document.createElement("div");
+            wrap.className = "border border-slate-200 p-3 bg-white";
+
+            wrap.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-xs font-extrabold text-slate-600 truncate">
+              <span class="inline-block px-1.5 py-0.5 bg-green-100 text-green-700 text-[10px] rounded mr-1">업로드됨</span>
+              ${escapeHtml(it.src.split("/").pop() || "image")}
+            </div>
+            <div class="mt-1 text-[11px] font-bold text-slate-500">imgbb에 저장됨</div>
+          </div>
+          <button data-del-imgbb="1" class="border border-slate-200 px-2 py-1 text-xs font-extrabold">X</button>
+        </div>
+        <div class="mt-3 border border-slate-200">
+          <img src="${escapeHtml(it.src)}" alt="${escapeHtml(it.alt || "")}" class="block w-full object-cover" />
+        </div>
+        <div class="mt-3">
+        <div class="flex gap-2 justify-between items-center">
+          <div class="text-xs font-extrabold text-slate-600">이미지 설명</div>
+            <button data-apply-imgbb="1" class="text-xs font-semibold border px-1.5 py-1 text-blue-600">적용하기️</button>
+        </div>
+          <input data-alt-imgbb="1" class="mt-2 w-full border border-slate-200 py-1.5 px-2 text-xs outline-none" value="${escapeHtml(it.alt || "")}" />
+        </div>
+      `;
+
+            // imgbb 이미지 삭제 (에디터에서만 제거)
+            wrap.querySelector('button[data-del-imgbb="1"]').addEventListener("click", () => {
+                if (!confirm("이미지를 삭제하시겠습니까?")) return;
+                it.imgElement.remove();
+                renderAttachmentGrid();
+            });
+
+            // imgbb 이미지 ALT 업데이트
+            const altInput = wrap.querySelector('input[data-alt-imgbb="1"]');
+            wrap.querySelector('button[data-apply-imgbb="1"]').addEventListener("click", () => {
+                it.imgElement.setAttribute("alt", altInput.value || "");
                 alert("이미지 설명(ALT)이 적용되었습니다.");
             });
 
@@ -917,6 +1000,24 @@
                 });
                 ed.on("Change KeyUp SetContent", () => {
                     renderAttachmentGrid();
+                });
+
+                // 드래그앤드랍 이미지 업로드 처리
+                ed.on("drop", async (e) => {
+                    const dt = e.dataTransfer;
+                    if (!dt || !dt.files || dt.files.length === 0) return;
+
+                    const imageFiles = Array.from(dt.files).filter(f => f.type.startsWith("image/"));
+                    if (imageFiles.length === 0) return;
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    await addImages(imageFiles);
+                });
+
+                ed.on("dragover", (e) => {
+                    e.preventDefault();
                 });
             },
         });
