@@ -730,25 +730,31 @@
             articlesEl.innerHTML = '';
 
             try {
-                let query = supabaseClient.from('ai_info').select('*', { count: 'exact' });
-                
-                // 검색 모드인 경우 필터 추가
+                // 필터 조건 설정
+                let filters = {};
                 if (isSearchMode && currentSearchQuery) {
-                    query = query.ilike('title', `%${currentSearchQuery}%`);
+                    filters.search = currentSearchQuery;
                 }
-                
-                // 행사 필터인 경우 필터 추가
                 if (isEventMode) {
-                    query = query.or('url.ilike.%onoffmix%,url.ilike.%event-us%');
+                    filters.event = true;
                 }
-                
-                // 보고서 필터인 경우 필터 추가
                 if (isReportMode) {
-                    query = query.or('url.ilike.%ksp.etri.re.kr%,url.ilike.%iitp.kr%,url.ilike.%ettrends.etri.re.kr%,url.ilike.%spri.kr%,url.ilike.%nia.or.kr%');
+                    filters.report = true;
+                }
+
+                // 전체 개수 조회 (head: true로 count만)
+                let countQuery = supabaseClient.from('ai_info').select('*', { count: 'exact', head: true });
+                if (filters.search) {
+                    countQuery = countQuery.ilike('title', `%${filters.search}%`);
+                }
+                if (filters.event) {
+                    countQuery = countQuery.or('url.ilike.%onoffmix%,url.ilike.%event-us%');
+                }
+                if (filters.report) {
+                    countQuery = countQuery.or('url.ilike.%ksp.etri.re.kr%,url.ilike.%iitp.kr%,url.ilike.%ettrends.etri.re.kr%,url.ilike.%spri.kr%,url.ilike.%nia.or.kr%');
                 }
                 
-                // 전체 개수 조회
-                const { count: totalCount } = await query.select('*', { count: 'exact', head: true });
+                const { count: totalCount } = await countQuery;
                 
                 totalItems = totalCount || 0;
                 totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -757,21 +763,18 @@
                 const startIndex = (page - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage - 1;
 
-                // 데이터 조회
+                // 데이터 조회 (해당 페이지만)
                 let dataQuery = supabaseClient.from('ai_info').select('*');
-                
-                if (isSearchMode && currentSearchQuery) {
-                    dataQuery = dataQuery.ilike('title', `%${currentSearchQuery}%`);
+                if (filters.search) {
+                    dataQuery = dataQuery.ilike('title', `%${filters.search}%`);
                 }
-                
-                if (isEventMode) {
+                if (filters.event) {
                     dataQuery = dataQuery.or('url.ilike.%onoffmix%,url.ilike.%event-us%');
                 }
-                
-                if (isReportMode) {
+                if (filters.report) {
                     dataQuery = dataQuery.or('url.ilike.%ksp.etri.re.kr%,url.ilike.%iitp.kr%,url.ilike.%ettrends.etri.re.kr%,url.ilike.%spri.kr%,url.ilike.%nia.or.kr%');
                 }
-                
+
                 const { data: ai_info, error } = await dataQuery
                     .order('created_at', { ascending: false })
                     .range(startIndex, endIndex);
