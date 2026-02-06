@@ -1092,7 +1092,7 @@
                             <button class="timeline-delete" onclick="deleteTimelineItem(this)">×</button>
                         </div>
                     </div>
-                    <div class="timeline-content">만료된 인증 추가갱신 요청 안내</div>
+                    <div class="timeline-content">인증 추가갱신 요청 안내</div>
                 </div>
                 <div class="timeline-item type-inquiry" data-type="inquiry">
                     <div class="timeline-header">
@@ -1284,8 +1284,10 @@
             inputs.forEach(input => {
                 total += parseInt(input.value) || 0;
             });
-            document.getElementById('totalCert').textContent = total;
-            document.getElementById('totalBadge').textContent = total;
+            const totalCertEl = document.getElementById('totalCert');
+            const totalBadgeEl = document.getElementById('totalBadge');
+            if (totalCertEl) totalCertEl.textContent = total;
+            if (totalBadgeEl) totalBadgeEl.textContent = total;
             
             // Update year total
             updateYearTotal();
@@ -1604,13 +1606,18 @@
             reader.onload = function(e) {
                 try {
                     const backup = JSON.parse(e.target.result);
+                    console.log('백업 파일 내용:', backup);
                     const data = backup.data || backup;
-                    if (typeof data !== 'object') throw new Error('잘못된 형식');
+                    console.log('data 객체:', data);
+                    if (typeof data !== 'object' || data === null) throw new Error('잘못된 형식');
                     
                     // 가장 최근 백업 날짜와 데이터 찾기
                     let latestDate = null;
                     let latestData = null;
-                    for (const key of Object.keys(data)) {
+                    const keys = Object.keys(data);
+                    console.log('키 목록:', keys);
+                    
+                    for (const key of keys) {
                         if (key.startsWith('data_')) {
                             const dateStr = key.replace('data_', '');
                             if (!latestDate || dateStr > latestDate) {
@@ -1619,6 +1626,9 @@
                             }
                         }
                     }
+                    
+                    console.log('latestDate:', latestDate);
+                    console.log('latestData:', latestData);
                     
                     if (!latestData) throw new Error('데이터 없음');
                     
@@ -1632,8 +1642,9 @@
                     updateFilterCounts();
                     alert(`가져오기 완료!\n백업 날짜: ${latestDate}\n현재 날짜(${today})에 데이터가 복원되었습니다.`);
                 } catch (err) {
+                    console.error('가져오기 오류:', err);
                     event.target.value = '';
-                    alert('파일 형식이 올바르지 않습니다. 내보내기한 JSON 파일을 사용해주세요.');
+                    alert('파일 형식이 올바르지 않습니다. 내보내기한 JSON 파일을 사용해주세요.\n오류: ' + err.message);
                 }
             };
             reader.readAsText(file);
