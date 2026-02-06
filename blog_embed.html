@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국인공지능협회 | 탐방기 및 행사 블로그</title>
+<meta name="description" content="한국인공지능협회 회원사 탐방기와 행사 현장 기록을 만나보세요." />
+
+<link rel="icon" href="https://koraia.org/default/img/symbol.ico" />
+<link rel="shortcut icon" href="https://koraia.org/default/img/symbol.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="한국인공지능협회 | 탐방기 및 행사 블로그" />
+<meta property="og:description" content="한국인공지능협회 회원사 탐방기와 행사 현장 기록을 만나보세요." />
+<meta property="og:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/koraia_blog.png" />
+<meta property="og:url" content="https://guesskoraia.github.io/blog_embed.html" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:site_name" content="한국인공지능협회" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="한국인공지능협회 | 탐방기 및 행사 블로그" />
+<meta name="twitter:description" content="한국인공지능협회 회원사 탐방기와 행사 현장 기록을 만나보세요." />
+<meta name="twitter:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/koraia_blog.png" />
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #fff;
+    color: #222;
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* 헤더 */
+  .blog-header {
+    text-align: center;
+    padding: 24px 0 20px;
+    border-bottom: 2px solid #1a73e8;
+    margin-bottom: 24px;
+  }
+  .blog-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a73e8;
+    letter-spacing: -0.02em;
+  }
+  .blog-header p {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  /* 탭 필터 */
+  .type-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .type-filter button {
+    padding: 6px 16px;
+    border: 1.5px solid #ddd;
+    border-radius: 20px;
+    background: #fff;
+    color: #555;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .type-filter button:hover {
+    border-color: #1a73e8;
+    color: #1a73e8;
+  }
+  .type-filter button.active {
+    background: #1a73e8;
+    color: #fff;
+    border-color: #1a73e8;
+  }
+
+  /* 로딩 */
+  .loading {
+    text-align: center;
+    padding: 60px 0;
+    color: #888;
+    font-size: 0.9rem;
+  }
+  .loading .spinner {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 3px solid #e0e0e0;
+    border-top-color: #1a73e8;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 빈 상태 */
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: #999;
+  }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+  /* 카드 리스트 */
+  .post-list { display: flex; flex-direction: column; gap: 16px; }
+
+  .post-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .post-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+
+  .post-thumb {
+    flex-shrink: 0;
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .post-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .post-thumb .no-img {
+    font-size: 2rem;
+    color: #ccc;
+  }
+
+  .post-info { flex: 1; min-width: 0; }
+  .post-info .post-type {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+  }
+  .post-type.event { background: #e8f0fe; color: #1a73e8; }
+  .post-type.visit { background: #fef7e0; color: #e8a800; }
+
+  .post-info h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .post-meta {
+    font-size: 0.78rem;
+    color: #888;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .post-meta span { display: flex; align-items: center; gap: 3px; }
+  .post-excerpt {
+    font-size: 0.82rem;
+    color: #666;
+    margin-top: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 페이지네이션 */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 28px;
+    padding-bottom: 20px;
+  }
+  .pagination button {
+    min-width: 34px;
+    height: 34px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    color: #444;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pagination button:hover:not(:disabled) {
+    border-color: #1a73e8;
+    color: #1a73e8;
+  }
+  .pagination button.active {
+    background: #1a73e8;
+    color: #fff;
+    border-color: #1a73e8;
+  }
+  .pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  /* 반응형 */
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    .post-card { flex-direction: column; gap: 10px; }
+    .post-thumb { width: 100%; height: 160px; }
+    .blog-header h1 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="type-filter" id="typeFilter">
+  <button class="active" data-type="all">전체</button>
+  <button data-type="event">행사</button>
+  <button data-type="visit">탐방</button>
+</div>
+
+<div id="postList" class="post-list"></div>
+<div id="pagination" class="pagination"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script>
+(function () {
+  var PAGE_SIZE = 10;
+  var currentPage = 1;
+  var currentType = 'all';
+  var totalCount = 0;
+  var client = null;
+
+  function getClient() {
+    if (client) return client;
+    var url = window.SUPABASE_URL;
+    var key = window.SUPABASE_ANON_KEY;
+    if (!url || !key || url.indexOf('__') !== -1 || key.indexOf('__') !== -1) return null;
+    client = supabase.createClient(url, key);
+    return client;
+  }
+
+  /** HTML 태그 제거 → 텍스트 추출 */
+  function stripHtml(html) {
+    if (!html) return '';
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
+  }
+
+  /** 날짜 포맷 */
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
+  }
+
+  /** 타입 라벨 */
+  function typeLabel(type) {
+    if (type === 'event') return '행사';
+    if (type === 'visit') return '탐방';
+    return type || '';
+  }
+
+  /** 게시글 수 조회 (head: true) */
+  function fetchCount() {
+    var sb = getClient();
+    if (!sb) return Promise.resolve(0);
+    var q = sb.from('posts').select('id', { count: 'exact', head: true })
+      .eq('approval_stage', 5);
+    if (currentType !== 'all') q = q.eq('type', currentType);
+    return q.then(function (res) {
+      return (res.error ? 0 : res.count) || 0;
+    });
+  }
+
+  /** 게시글 목록 조회 */
+  function fetchPosts(page) {
+    var sb = getClient();
+    if (!sb) return Promise.resolve([]);
+    var from = (page - 1) * PAGE_SIZE;
+    var to = from + PAGE_SIZE - 1;
+    var q = sb.from('posts')
+      .select('id, title, author_name, date, place, type, thumbnail_url, editor_html, created_at')
+      .eq('approval_stage', 5)
+      .order('date', { ascending: false })
+      .range(from, to);
+    if (currentType !== 'all') q = q.eq('type', currentType);
+    return q.then(function (res) {
+      return res.error ? [] : (res.data || []);
+    });
+  }
+
+  /** 카드 렌더링 */
+  function renderCard(post) {
+    var excerpt = stripHtml(post.editor_html);
+    if (excerpt.length > 80) excerpt = excerpt.substring(0, 80) + '…';
+    var detailUrl = 'blog_post.html?id=' + encodeURIComponent(post.id);
+
+    var thumb = '';
+    if (post.thumbnail_url) {
+      thumb = '<img src="' + post.thumbnail_url + '" alt="" loading="lazy">';
+    } else {
+      thumb = '<div class="no-img">📄</div>';
+    }
+
+    return '<a class="post-card" href="' + detailUrl + '">' +
+      '<div class="post-thumb">' + thumb + '</div>' +
+      '<div class="post-info">' +
+        '<span class="post-type ' + (post.type || '') + '">' + typeLabel(post.type) + '</span>' +
+        '<h3>' + (post.title || '제목 없음') + '</h3>' +
+        '<div class="post-meta">' +
+          '<span>✍️ ' + (post.author_name || '익명') + '</span>' +
+          '<span>📅 ' + formatDate(post.date || post.created_at) + '</span>' +
+          (post.place ? '<span>📍 ' + post.place + '</span>' : '') +
+        '</div>' +
+        (excerpt ? '<div class="post-excerpt">' + excerpt + '</div>' : '') +
+      '</div>' +
+    '</a>';
+  }
+
+  /** 페이지네이션 렌더링 */
+  function renderPagination() {
+    var totalPages = Math.ceil(totalCount / PAGE_SIZE);
+    if (totalPages <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+
+    var html = '';
+    html += '<button ' + (currentPage <= 1 ? 'disabled' : '') + ' data-page="' + (currentPage - 1) + '">◀</button>';
+
+    var start = Math.max(1, currentPage - 2);
+    var end = Math.min(totalPages, start + 4);
+    if (end - start < 4) start = Math.max(1, end - 4);
+
+    for (var i = start; i <= end; i++) {
+      html += '<button data-page="' + i + '"' + (i === currentPage ? ' class="active"' : '') + '>' + i + '</button>';
+    }
+    html += '<button ' + (currentPage >= totalPages ? 'disabled' : '') + ' data-page="' + (currentPage + 1) + '">▶</button>';
+
+    var el = document.getElementById('pagination');
+    el.innerHTML = html;
+    el.querySelectorAll('button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var p = parseInt(this.getAttribute('data-page'));
+        if (p && p !== currentPage) { currentPage = p; loadPosts(); }
+      });
+    });
+  }
+
+  /** 로딩 표시 */
+  function showLoading() {
+    document.getElementById('postList').innerHTML =
+      '<div class="loading"><div class="spinner"></div><br>불러오는 중…</div>';
+    document.getElementById('pagination').innerHTML = '';
+  }
+
+  /** 메인 로드 */
+  function loadPosts() {
+    showLoading();
+    Promise.all([fetchCount(), fetchPosts(currentPage)]).then(function (results) {
+      totalCount = results[0];
+      var posts = results[1];
+      var listEl = document.getElementById('postList');
+
+      if (!posts.length) {
+        listEl.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>게시글이 없습니다.</p></div>';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+
+      listEl.innerHTML = posts.map(renderCard).join('');
+      renderPagination();
+    });
+  }
+
+  /** 타입 필터 이벤트 */
+  document.getElementById('typeFilter').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    currentType = btn.getAttribute('data-type');
+    currentPage = 1;
+    this.querySelectorAll('button').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    loadPosts();
+  });
+
+  /** 초기 로드 */
+  loadPosts();
+})();
+</script>
+</body>
+</html>
