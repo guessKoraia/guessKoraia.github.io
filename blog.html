@@ -416,7 +416,7 @@
     var from = (page - 1) * PAGE_SIZE;
     var to = from + PAGE_SIZE - 1;
     var q = sb.from('posts')
-      .select('id, title, author_name, date, place, type, thumbnail_url, editor_html, created_at')
+      .select('id, post_no, title, author_name, date, place, type, thumbnail_url, editor_html, created_at')
       .eq('approval_stage', 5)
       .order('date', { ascending: false })
       .range(from, to);
@@ -429,7 +429,7 @@
   function renderCard(post) {
     var excerpt = stripHtml(post.editor_html);
     if (excerpt.length > 100) excerpt = excerpt.substring(0, 100) + '…';
-    var detailUrl = 'blog_post?id=' + encodeURIComponent(post.id);
+    var detailUrl = 'blog_post?id=' + (post.post_no || post.id);
 
     var thumb = '';
     if (post.thumbnail_url) {

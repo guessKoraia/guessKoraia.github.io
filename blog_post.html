@@ -190,11 +190,12 @@
   .post-body p[style*="text-align: right"] { text-align: right; }
   .post-body p[style*="text-align: justify"] { text-align: justify; }
   /* Q&A 블록 */
-  .post-body .qa-item {
-    background-color: #f9fafb; border: 1px solid #d1d5db;
-    border-left: 3px solid #6b7280; padding: 16px 20px;
+  .post-body .qa-item,
+  .post-body blockquote.qa-item {
+    background-color: transparent; border: none; border-left: none;
+    padding: 16px 20px;
     margin: 20px 0; font-style: normal; color: #111827;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: none;
   }
   .post-body .qa-item strong { color: #3b82f6; font-weight: 700; }
   .post-body .qa-item .qa-answer { color: #374151; }
@@ -277,15 +278,18 @@
 
   /* 라이트박스 */
   .lightbox-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
     display: none; align-items: center; justify-content: center;
-    z-index: 9999; cursor: zoom-out; padding: 8px;
+    z-index: 9999; cursor: pointer; padding: 24px;
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
   }
   .lightbox-overlay.show { display: flex; }
   .lightbox-overlay img {
-    width: 96vw; height: 96vh; object-fit: contain;
-    border-radius: 4px; cursor: default;
+    max-width: 80vw; max-height: 70vh; width: auto; height: auto;
+    object-fit: contain;
+    border-radius: 10px; cursor: default;
     user-select: none; -webkit-user-select: none;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
   }
   .lightbox-close {
     position: absolute; top: 16px; right: 20px;
@@ -401,7 +405,12 @@
     if (!editorHtml) return { src: null, html: editorHtml };
     var wrap = document.createElement('div');
     wrap.innerHTML = editorHtml;
-    var firstImg = wrap.querySelector('img');
+    // 테이블 안 이미지는 건너뛰고, 테이블 밖 첫 이미지만 추출
+    var imgs = wrap.querySelectorAll('img');
+    var firstImg = null;
+    for (var i = 0; i < imgs.length; i++) {
+      if (!imgs[i].closest('table')) { firstImg = imgs[i]; break; }
+    }
     if (!firstImg) return { src: null, html: editorHtml };
     var src = firstImg.getAttribute('src') || null;
     // 이미지가 단독 p/div 안에 있으면 부모째 제거, 아니면 img만 제거
@@ -477,11 +486,16 @@
 
     showLoading();
 
-    sb.from('posts')
-      .select('id, title, author_name, date, place, type, thumbnail_url, editor_html, created_at')
-      .eq('id', postId)
-      .eq('approval_stage', 5)
-      .single()
+    var isNumeric = /^\d+$/.test(postId);
+    var q = sb.from('posts')
+      .select('id, post_no, title, author_name, date, place, type, thumbnail_url, editor_html, created_at')
+      .eq('approval_stage', 5);
+    if (isNumeric) {
+      q = q.eq('post_no', parseInt(postId));
+    } else {
+      q = q.eq('id', postId);
+    }
+    q.single()
       .then(function (res) {
         if (res.error || !res.data) {
           showError('게시글을 찾을 수 없습니다.');
