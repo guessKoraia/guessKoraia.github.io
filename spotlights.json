@@ -1,0 +1,22 @@
+{
+  "active": true,
+  "intervalMs": 8000,
+  "randomStart": true,
+  "items": [
+    {
+      "main": {
+        "image": "2026-02-11_100907.jpg",
+        "link": "https://ax.koraia.org/",
+        "badge": "공급/수요 매칭 플랫폼",
+        "title": "AX실증산단은 무엇인가요?",
+        "description": "충남 천안 디스플레이·소부장 제조기업을 대상으로 AI 기반 자율공정(피지컬 AI), 소버린 AI 인프라, SaaS형 제조 AI 서비스를 종합적으로 지원하는 국가·지자체 공동 프로젝트입니다."
+      },
+      "sub": {
+        "image": "koraia_main_popup/caio.png",
+        "link": "https://caio.koraia.org",
+        "title": "미래 리더를 위한 AI 혁신, CAIO 4기",
+        "location": "광주광역시"
+      }
+    }
+  ]
+}

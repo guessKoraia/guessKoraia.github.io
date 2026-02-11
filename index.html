@@ -1,461 +1,1848 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전문보고서 자료실 | 한국인공지능협회</title>
-    <meta name="description" content="한국인공지능협회 전문보고서 자료실 | 인공지능 관련 최신 연구보고서, 정책자료 및 전문서적을 확인하세요.">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="전문보고서 자료실 | 한국인공지능협회">
-    <meta property="og:description" content="연구자료 및 정책문서를 검색하고 다운로드 할 수 있는 자료실입니다.">
-    <meta name="twitter:title" content="전문보고서 자료실 | 한국인공지능협회">
-    <meta name="twitter:description" content="연구자료 및 정책문서를 검색하고 다운로드 할 수 있는 자료실입니다.">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:image"
-        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
-    <meta name="twitter:image"
-        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
-    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
-        media="(prefers-color-scheme: light)">
-    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
-        media="(prefers-color-scheme: dark)">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI 정보 포털 | 한국인공지능협회</title>
+<meta name="description" content="한국인공지능협회 AI 정보 포털 | AI 뉴스, 전문보고서, 사업공고, 세미나 정보를 한곳에서 확인하세요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI 정보 포털 | 한국인공지능협회">
+<meta property="og:description" content="AI 뉴스, 전문보고서, 사업공고, 세미나 정보를 한곳에서 확인하세요.">
+<meta property="og:image" content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/koraia_blog.png">
+<link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon" media="(prefers-color-scheme: light)">
+<link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                "primary": "#135bec",
+                "primary-dark": "#0d43b3",
+                "background-light": "#f6f6f8",
+                "background-dark": "#101622",
+                "surface-dark": "#1d2333",
+                "text-secondary": "#92a4c9",
+            },
+            fontFamily: {
+                "display": ["Space Grotesk", "Noto Sans KR", "sans-serif"],
+                "body": ["Noto Sans KR", "sans-serif"],
+                "serif": ["Merriweather", "serif"],
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+        },
+    },
+}
+</script>
+<style>
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
-    <link rel="stylesheet" href="styles.css">
+/* Page transitions */
+.page-section { display: none; animation: fadeIn 0.3s ease; }
+.page-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Spinner */
+.spinner-ring { border: 3px solid #e5e7eb; border-top-color: #135bec; border-radius: 50%; width: 32px; height: 32px; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Spotlight transitions */
+.spotlight-fade { transition: opacity 0.35s ease; }
+.spotlight-fade.is-fading { opacity: 0; }
+.spot-indicator { width: 8px; height: 8px; border-radius: 999px; background: #e2e8f0; transition: transform 0.2s, background 0.2s; }
+.spot-indicator.is-active { background: #135bec; transform: scale(1.15); }
+.dark .spot-indicator { background: #475569; }
+
+/* Spotlight image sizing (prevents height shift on slide change) */
+.aspect-video { aspect-ratio: 16 / 9; }
+@supports not (aspect-ratio: 16 / 9) {
+    .aspect-video { position: relative; }
+    .aspect-video::before { content: ''; display: block; padding-top: 56.25%; }
+    .aspect-video > * { position: absolute; inset: 0; }
+}
+
+/* Spotlight card fixed height */
+.spotlights-card-fixed { height: 520px; overflow: hidden; }
+
+/* Hero card fixed height */
+.hero-card-fixed { height: 260px; overflow: hidden; }
+
+/* Highlight search */
+.search-highlight { background: #fef08a; color: #1e293b; padding: 0 2px; border-radius: 2px; }
+
+/* Read badge */
+.read-badge-sm { font-size: 10px; background: #e0e7ff; color: #4338ca; padding: 1px 6px; border-radius: 999px; margin-left: 6px; font-weight: 600; }
+
+/* D-Day badges */
+.dday-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.dday-today { background: #fef2f2; color: #dc2626; }
+.dday-soon { background: #fff7ed; color: #ea580c; }
+.deadline-expired { color: #9ca3af; text-decoration: line-through; }
+
+/* Today badge pulse */
+.today-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block; animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* File type badges */
+.file-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+.file-pdf { background: #fef2f2; color: #dc2626; }
+.file-hwp { background: #eff6ff; color: #2563eb; }
+.file-xlsx { background: #f0fdf4; color: #16a34a; }
+.file-ppt { background: #fff7ed; color: #ea580c; }
+.file-other { background: #f1f5f9; color: #64748b; }
+.file-img { background: #faf5ff; color: #9333ea; }
+
+/* Active nav link */
+.nav-active { color: #135bec !important; position: relative; }
+.nav-active::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px; background: #135bec; border-radius: 999px; }
+
+/* Pagination */
+.pg-btn { min-width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 13px; font-weight: 600; transition: all 0.15s; cursor: pointer; border: 1px solid #e5e7eb; background: white; color: #475569; }
+.pg-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+.pg-btn.active { background: #135bec; color: white; border-color: #135bec; }
+.pg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.dark .pg-btn { background: #1d2333; border-color: #374151; color: #94a3b8; }
+.dark .pg-btn:hover { background: #283040; }
+.dark .pg-btn.active { background: #135bec; color: white; border-color: #135bec; }
+
+/* Mobile hamburger */
+.mobile-menu { display: none; }
+.mobile-menu.open { display: flex; }
+
+/* Event / Report labels */
+.label-event { font-size: 10px; font-weight: 700; background: #dcfce7; color: #16a34a; padding: 2px 6px; border-radius: 4px; }
+.label-report { font-size: 10px; font-weight: 700; background: #e0e7ff; color: #4f46e5; padding: 2px 6px; border-radius: 4px; }
+
+/* Visited article */
+.article-visited a { color: #94a3b8 !important; }
+
+/* Remove input focus outline/ring */
+input[type="text"] {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none;
+    appearance: none;
+}
+input[type="text"]:focus,
+input[type="text"]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+</style>
 </head>
 
-<body>
-    <header class="header">
-        <div class="header-container">
-            <a href="/" class="site-logo">
-                (사)한국인공지능협회
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body min-h-screen flex flex-col">
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-gray-800 bg-white/90 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="#home" class="flex items-center gap-3 shrink-0">
+        <h1 class="font-display font-bold text-lg tracking-tight hidden sm:block">사단법인 한국인공지능협회</h1>
+        <h1 class="font-display font-bold text-base tracking-tight sm:hidden">KORAIA</h1>
+    </a>
+    <!-- Desktop nav -->
+    <div class="hidden lg:flex items-center gap-6">
+        <a class="nav-link text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="home">홈</a>
+        <a class="nav-link text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="news">AI 뉴스</a>
+        <a class="nav-link text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="reports">전문자료실</a>
+        <a class="nav-link text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="biz">사업공고</a>
+        <a class="nav-link text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="seminar">국회 AI 세미나</a>
+        <a class="nav-link text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="blog">블로그</a>
+    </div>
+    <div class="flex items-center gap-3">
+        <button id="darkToggle" class="text-text-secondary hover:text-primary transition-colors p-1" title="다크모드 전환">
+            <span class="material-symbols-outlined text-[22px]" id="darkIcon">dark_mode</span>
+        </button>
+        <!-- Mobile hamburger -->
+        <button id="mobileMenuBtn" class="lg:hidden text-text-secondary hover:text-primary transition-colors p-1">
+            <span class="material-symbols-outlined text-[26px]">menu</span>
+        </button>
+    </div>
+</div>
+<!-- Mobile menu -->
+<div id="mobileMenu" class="mobile-menu flex-col gap-1 px-4 pb-4 lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800">
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="home">홈</a>
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="news">AI 뉴스</a>
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="reports">전문자료실</a>
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="biz">사업공고</a>
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="seminar">국회 AI 세미나</a>
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="blog">블로그</a>
+    <a class="nav-link-m block py-2 text-sm font-medium hover:text-primary transition-colors cursor-pointer" data-page="newsletter">AI 뉴스레터</a>
+</div>
+</nav>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<main class="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-8">
+
+<!-- ========== HOME PAGE ========== -->
+<div id="page-home" class="page-section">
+    <!-- Hero / Breaking News -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-6">
+        <div class="lg:col-span-12 relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm border border-slate-200 dark:border-gray-800 hero-card-fixed">
+            <div class="absolute inset-0 z-0">
+                <img id="hero-img" alt="Global AI Trends Visualization" class="w-full h-full object-cover opacity-90 dark:opacity-60" src="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_222.png">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" style="--tw-gradient-from: #000000 var(--tw-gradient-from-position);"></div>
+            </div>
+            <div class="relative z-10 h-full flex flex-col justify-start p-6 sm:p-8">
+                <div class="flex items-center gap-2 text-xs font-bold text-white/90 mb-3">
+                    <span id="hero-badge" class="inline-block px-3 py-1 text-[11px] font-bold text-white bg-primary rounded-full uppercase tracking-wider">최신 뉴스</span>
+                    <span id="hero-time" class="text-white/70"></span>
+                </div>
+                <h2 id="hero-title" class="text-2xl md:text-4xl font-display font-bold text-white mb-3 leading-tight">
+                    AI 뉴스를 불러오는 중...
+                </h2>
+                <p id="hero-desc" class="text-slate-200 text-base max-w-2xl line-clamp-2 mb-5"></p>
+                <div class="flex items-center gap-4">
+                    <a id="hero-link" href="#" target="_blank" class="flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 font-bold py-3 px-6 rounded-lg transition-colors">
+                        <span id="hero-cta">Read Full Story</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                    <span id="hero-sub" class="text-white/80 text-sm font-medium">AI News</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Main Grid: Latest News + Sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Column: News + Reports + Deadline + Blog -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+            <!-- News Section -->
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+                    <h3 class="text-base font-display font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-[20px]">feed</span>
+                        최신 AI 뉴스
+                    </h3>
+                    <a class="text-sm font-medium text-primary hover:text-primary-dark cursor-pointer" data-page="news">View All</a>
+                </div>
+                <div id="home-news-list" class="divide-y divide-gray-50 dark:divide-gray-800">
+                    <div class="flex items-center justify-center py-12"><div class="spinner-ring"></div></div>
+                </div>
+            </div>
+
+            <!-- Promo Banner Slider (between news and reports) -->
+            <section id="promo-banner" class="w-full hidden">
+                <a id="promo-link" href="#" target="_blank" class="block relative group overflow-hidden rounded-2xl bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-lg transition-all">
+                    <div class="relative h-[180px] sm:h-[200px] overflow-hidden">
+                        <img id="promo-img" src="" alt="" class="w-full h-full object-cover opacity-90 dark:opacity-70">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 z-10">
+                            <span id="promo-badge" class="inline-block px-3 py-1 mb-2 text-[11px] font-bold text-white rounded-full w-fit uppercase tracking-wider bg-primary"></span>
+                            <h3 id="promo-title" class="text-xl sm:text-2xl font-display font-bold text-white leading-tight mb-1"></h3>
+                            <p id="promo-desc" class="text-sm text-white/80 line-clamp-1"></p>
+                        </div>
+                    </div>
+                    <div id="promo-indicators" class="absolute bottom-3 right-4 flex gap-1.5 z-20"></div>
+                </a>
+            </section>
+
+            <!-- Blog Posts (above latest reports) -->
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+                    <h3 class="text-base font-display font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-amber-500 text-[20px]">edit_note</span>
+                        탐방기 & 행사 블로그
+                    </h3>
+                    <a class="text-sm font-medium text-primary hover:text-primary-dark cursor-pointer" data-page="blog">View All</a>
+                </div>
+                <div id="home-blog-list" class="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 divide-gray-100 dark:divide-gray-800">
+                    <div class="col-span-full flex items-center justify-center py-10"><div class="spinner-ring"></div></div>
+                </div>
+            </div>
+
+            <!-- Reports + Deadline Row -->
+            <div class="flex flex-col gap-4">
+                <!-- Latest Reports (full width) -->
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-800">
+                        <h4 class="font-bold text-sm flex items-center gap-2">
+                            <span class="material-symbols-outlined text-violet-500 text-[18px]">description</span>
+                            최신 전문보고서
+                        </h4>
+                        <a class="text-xs text-primary font-semibold hover:underline cursor-pointer" data-page="reports">더보기</a>
+                    </div>
+                    <div id="home-reports-list" class="divide-y divide-gray-50 dark:divide-gray-800">
+                        <div class="flex items-center justify-center py-8"><div class="spinner-ring"></div></div>
+                    </div>
+                </div>
+                <!-- Deadline Approaching Biz (full width, 2 columns) -->
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-800">
+                        <h4 class="font-bold text-sm flex items-center gap-2">
+                            <span class="material-symbols-outlined text-red-500 text-[18px]">alarm</span>
+                            마감 임박 AI 공고
+                        </h4>
+                        <a class="text-xs text-primary font-semibold hover:underline cursor-pointer" data-page="biz">더보기</a>
+                    </div>
+                    <div id="home-deadline-list" class="divide-y divide-gray-50 dark:divide-gray-800">
+                        <div class="flex items-center justify-center py-8"><div class="spinner-ring"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-4 flex flex-col gap-5">
+            <div id="spotlights-card" class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm flex flex-col spotlights-card-fixed">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">tour</span>
+                        공지사항
+                    </h4>
+                    <div class="flex gap-2">
+                        <button id="spot-prev" class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-500" aria-label="Previous spotlight">
+                            <span class="material-symbols-outlined text-sm">arrow_back</span>
+                        </button>
+                        <button id="spot-next" class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-500" aria-label="Next spotlight">
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="spot-indicators" class="flex justify-end gap-1.5 mb-3"></div>
+                <div class="flex-1 flex flex-col gap-4">
+                    <a id="spot-main-link" class="block relative rounded-xl overflow-hidden aspect-video cursor-pointer" href="#" target="_blank">
+                        <img id="spot-main-img" alt="Spotlight" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAM6gigXJS1BC6aB7tfD_7owhaZWoRc4jf3GDu74IoO4ViYM7jfihI9WdMhAdQ2mRjvTJsSX0hlq2i6y4WIYk7sfXbMnGpP3hLgkbS2fWr8FOpxkYpyga6-WkFM3JYrob-am6VwdpGFHSoddWb7Slf8NWw6JLdgQJPTk3-1vo-Xx0w99-qLM_z7VYjryqWCOrCNTpsU1YKNrpkkxzup1Yw_5odAPsmytY43bdNtfFqDDn7fdQ5xpzZVEhPqvtb_cC83fOJ1Et68hE">
+                        <div class="absolute inset-0 bg-black/20 transition-colors"></div>
+                        <div id="spot-main-badge" class="absolute bottom-3 left-3 bg-white/90 dark:bg-black/60 backdrop-blur-sm px-3 py-1 rounded text-xs font-bold text-slate-900 dark:text-white">
+                            Virtual Tour
+                        </div>
+                    </a>
+                    <div>
+                        <a id="spot-main-title" class="font-bold text-slate-900 dark:text-white text-lg leading-snug hover:text-primary transition-colors cursor-pointer line-clamp-2" href="#" target="_blank">
+                            Inside Boston Dynamics' New Atlas Lab
+                        </a>
+                        <p id="spot-main-desc" class="text-text-secondary text-sm mt-2 line-clamp-3">
+                            An exclusive look at the testing facility where the next generation of humanoid robots is learning parkour and heavy lifting.
+                        </p>
+                    </div>
+                </div>
+                <div class="h-px w-full bg-slate-100 dark:bg-gray-700 my-4"></div>
+                <a id="spot-sub-link" class="flex gap-4 items-center cursor-pointer" href="#" target="_blank">
+                    <div class="w-20 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                        <img id="spot-sub-img" alt="Spotlight" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0mjTSBoGQOhX3ki0wZDAMiiKdm94jKJP-bMz9ZPgOVesZnSnhHXaJAo2zZfJxyZ-L09etgdLwagx49OBbEnMa0-U5b1KwLgjy9b3WG0V5bT64_a4Y99eidt_rBPusSjy63s-WRQwe1191vMIgl22AXNlG-EtxvIrq4uMKYk3lA_x0soI0k2NGXdOmzAhw5K3r97K8Vmn8AojOLkz8dkvvSEC3kunhpizQ5IFGW3HHzvJ-5zDYFof8PGwH7yQxtoap9TSZIpcoEog">
+                    </div>
+                    <div>
+                        <div id="spot-sub-title" class="font-bold text-slate-800 dark:text-slate-200 text-sm hover:text-primary transition-colors line-clamp-1">
+                            DeepMind's Energy Efficiency Center
+                        </div>
+                        <p id="spot-sub-loc" class="text-xs text-text-secondary mt-1">London, UK</p>
+                    </div>
+                </a>
+            </div>
+            <!-- Sidebar Blog -->
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-amber-500 text-[18px]">edit_note</span>
+                        탐방기 & 행사 블로그
+                    </h4>
+                    <a class="text-xs text-primary font-semibold hover:underline cursor-pointer" data-page="blog">더보기</a>
+                </div>
+                <div id="home-sidebar-blog" class="flex flex-col gap-3">
+                    <div class="flex items-center justify-center py-4"><div class="spinner-ring"></div></div>
+                </div>
+            </div>
+
+            <!-- Upcoming Seminars -->
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-base flex items-center gap-2">
+                        <span class="material-symbols-outlined text-orange-500 text-[20px]">event</span>
+                        다가오는 세미나
+                    </h4>
+                    <a class="text-xs text-primary font-semibold hover:underline cursor-pointer" data-page="seminar">더보기</a>
+                </div>
+                <div id="home-seminar-list" class="flex flex-col gap-3">
+                    <div class="flex items-center justify-center py-6"><div class="spinner-ring"></div></div>
+                </div>
+            </div>
+
+            <!-- Latest Biz Announcements -->
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-base flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-500 text-[20px]">campaign</span>
+                        최신 사업공고
+                    </h4>
+                    <a class="text-xs text-primary font-semibold hover:underline cursor-pointer" data-page="biz">더보기</a>
+                </div>
+                <div id="home-biz-list" class="flex flex-col gap-3">
+                    <div class="flex items-center justify-center py-6"><div class="spinner-ring"></div></div>
+                </div>
+            </div>
+
+            <!-- Newsletter CTA -->
+            <div class="bg-blue-50 dark:bg-surface-dark border border-blue-100 dark:border-gray-800 rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/20 rounded-full blur-[40px]"></div>
+                <div class="relative z-10">
+                    <span class="material-symbols-outlined text-primary text-3xl mb-2">mail</span>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-1">AI 뉴스레터</h4>
+                    <p class="text-sm text-text-secondary mb-4">매일 아침 핵심 AI 소식을 받아보세요.</p>
+                    <a href="/newsletter" target="_blank" class="block w-full text-center bg-slate-900 dark:bg-primary text-white font-bold py-2.5 rounded-lg hover:opacity-90 transition-opacity text-sm">
+                        뉴스레터 보러가기
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Quick Link Buttons -->
+    <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <a data-page="news" class="cursor-pointer flex flex-col items-center text-center gap-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-primary hover:shadow-md transition-all shadow-sm group">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-[22px]">newspaper</span>
+            </div>
+            <div id="stat-news" class="text-lg font-extrabold text-primary">-</div>
+            <div>
+                <div class="text-sm font-bold">AI 뉴스</div>
+                <div class="text-xs text-text-secondary">최신 소식</div>
+            </div>
+        </a>
+        <a data-page="reports" class="cursor-pointer flex flex-col items-center text-center gap-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-primary hover:shadow-md transition-all shadow-sm group">
+            <div class="w-12 h-12 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-[22px]">description</span>
+            </div>
+            <div id="stat-reports" class="text-lg font-extrabold text-violet-600">-</div>
+            <div>
+                <div class="text-sm font-bold">전문자료실</div>
+                <div class="text-xs text-text-secondary">보고서 다운로드</div>
+            </div>
+        </a>
+        <a data-page="biz" class="cursor-pointer flex flex-col items-center text-center gap-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-primary hover:shadow-md transition-all shadow-sm group">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-[22px]">campaign</span>
+            </div>
+            <div id="stat-biz" class="text-lg font-extrabold text-emerald-600">-</div>
+            <div>
+                <div class="text-sm font-bold">사업공고</div>
+                <div class="text-xs text-text-secondary">공고 검색</div>
+            </div>
+        </a>
+        <a data-page="seminar" class="cursor-pointer flex flex-col items-center text-center gap-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-primary hover:shadow-md transition-all shadow-sm group">
+            <div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-[22px]">school</span>
+            </div>
+            <div id="stat-seminar" class="text-lg font-extrabold text-orange-600">-</div>
+            <div>
+                <div class="text-sm font-bold">국회 AI 세미나</div>
+                <div class="text-xs text-text-secondary">세미나 정보</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- ========== AI NEWS PAGE ========== -->
+<div id="page-news" class="page-section">
+    <div class="mb-6">
+        <h2 class="text-2xl font-display font-bold mb-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">newspaper</span>
+            AI 뉴스
+        </h2>
+        <p class="text-text-secondary text-sm">인공지능 관련 최신 뉴스를 확인하세요.</p>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 mb-5 shadow-sm">
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-stretch gap-2 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1 flex-grow max-w-md">
+                <input type="text" id="news-search" class="flex-1 bg-transparent outline-none text-sm min-w-0" placeholder="뉴스 검색...">
+                <button onclick="newsSearch()" class="text-primary hover:text-primary-dark"><span class="material-symbols-outlined text-[20px]">search</span></button>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+                <button id="news-clear" onclick="newsClear()" class="hidden text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-times"></i> 초기화
+                </button>
+                <button id="news-event-btn" onclick="newsToggleEvent()" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    행사
+                </button>
+                <button id="news-report-btn" onclick="newsToggleReport()" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    보고서
+                </button>
+            </div>
+        </div>
+        <div id="news-info" class="hidden text-xs text-text-secondary mt-3"></div>
+    </div>
+
+    <div id="news-loading" class="flex items-center justify-center py-16"><div class="spinner-ring"></div></div>
+    <div id="news-error" class="hidden text-center py-12 text-red-500"></div>
+    <div id="news-list" class="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm"></div>
+    <div id="news-pagination" class="flex items-center justify-center gap-1.5 mt-6 flex-wrap"></div>
+</div>
+
+<!-- ========== REPORTS PAGE ========== -->
+<div id="page-reports" class="page-section">
+    <div class="mb-6">
+        <h2 class="text-2xl font-display font-bold mb-2">
+            <a class="inline-flex items-center gap-2 hover:text-primary transition-colors cursor-pointer" data-page="reports">
+                <span class="material-symbols-outlined text-primary">description</span>
+                전문보고서 자료실
             </a>
-            <nav class="nav-menu">
-                <a href="/index" class="nav-link active">전문자료실</a>
-                <a href="/info" class="nav-link">AI 뉴스</a>
-                <a href="/biz" class="nav-link">사업공고</a>
-                <a href="/seminar" class="nav-link">국회 AI 세미나</a>
-                <a href="/newsletter" class="nav-link external-link">AI 뉴스레터</a>
-            </nav>
+        </h2>
+        <p class="text-text-secondary text-sm">인공지능 관련 최신 연구보고서 및 정책 자료를 검색하고 다운로드할 수 있습니다.</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+        <div class="flex items-stretch gap-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1 flex-grow max-w-md">
+            <input type="text" id="reports-search" class="flex-1 bg-transparent outline-none text-sm min-w-0" placeholder="보고서 검색...">
+            <button onclick="reportsSearch()" class="text-primary"><span class="material-symbols-outlined text-[20px]">search</span></button>
         </div>
-    </header>
-
-    <main class="container">
-        <section class="hero-section">
-            <h1 class="hero-title">전문보고서 자료실</h1>
-            <p class="hero-subtitle">인공지능 관련 최신 연구보고서 및 정책 자료를 검색하고 다운로드할 수 있습니다.</p>
-
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" class="search-input" placeholder="보고서 제목 또는 내용 검색...">
-                <button id="searchBtn" class="search-btn"><i class="fas fa-search"></i></button>
-            </div>
-        </section>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-label">Total Files</span>
-                <span class="stat-value" id="total-files">-</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">New Today</span>
-                <span class="stat-value" id="today-files">-</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Total Documents</span>
-                <span class="stat-value" id="current-page-info">-</span>
-            </div>
+        <div class="flex gap-1.5 flex-wrap">
+            <button class="report-tab text-xs font-semibold px-3 py-1.5 rounded-full bg-primary text-white" data-type="all">ALL</button>
+            <button class="report-tab text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors" data-type="pdf">PDF</button>
+            <button class="report-tab text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors" data-type="hwp">HWP</button>
+            <button class="report-tab text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors" data-type="xlsx">EXCEL</button>
+            <button class="report-tab text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors" data-type="ppt">PPT</button>
         </div>
+    </div>
 
-        <div class="controls-bar">
-            <div class="category-tabs">
-                <button class="tab active" data-type="all">ALL</button>
-                <button class="tab" data-type="pdf">PDF</button>
-                <button class="tab" data-type="hwp">HWP</button>
-                <button class="tab" data-type="xlsx">EXCEL</button>
-                <button class="tab" data-type="ppt">PPT</button>
-                <button class="tab" data-type="기타">OTHERS</button>
-            </div>
-            <!-- Hidden element to maintain script compatibility -->
-            <div id="page-info" style="display:none;"></div>
-        </div>
+    <div id="reports-loading" class="flex items-center justify-center py-16"><div class="spinner-ring"></div></div>
+    <div id="reports-list" class="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-surface-dark rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden"></div>
+    <div id="reports-pagination" class="flex items-center justify-center gap-1.5 mt-6 flex-wrap"></div>
+</div>
 
-        <div class="table-container">
-            <table id="fileTable">
-                <thead>
-                    <tr>
-                        <th>File Name</th>
-                        <th>Type</th>
-                        <th>Date</th>
-                        <th>Size (MB)</th>
-                        <th>Download</th>
-                    </tr>
-                </thead>
-                <tbody id="fileTableBody">
-                    <tr>
-                        <td colspan="5" class="loading">Loading Data...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<!-- ========== BIZ PAGE ========== -->
+<div id="page-biz" class="page-section">
+    <div class="mb-6">
+        <h2 class="text-2xl font-display font-bold mb-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">campaign</span>
+            사업공고
+        </h2>
+        <p class="text-text-secondary text-sm">정부 및 기업의 AI 관련 사업공고를 검색하고 확인할 수 있습니다.</p>
+    </div>
 
-        <div class="pagination" id="pagination">
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3><img src="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/KORAIA_Logo_(%EC%82%AC)%ED%95%9C%EA%B5%AD%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%ED%98%91%ED%9A%8C_%EA%B8%B0%EB%B3%B8_color_%EA%B0%80%EB%A1%9C@4x.png"  style="width: 50%" alt=""></h3>
-                    
-                </div>
-                <div class="footer-section">
-                    <h3>주요 메뉴</h3>
-                    <p><a href="/index">전문자료실</a></p>
-                    <p><a href="/info">AI 뉴스</a></p>
-                    <p><a href="/biz">사업공고</a></p>
-                    <p><a href="/seminar">국회 AI 세미나</a></p>
-                    <p><a href="/newsletter">AI 뉴스레터</a></p>
-                </div>
-                <div class="footer-section">
-                    <h3>연락처</h3>
-                    <p>이메일: info@koraia.org</p>
-                    <p>전화: 02-713-4800</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-copyright">
-                    © 2026 (사)한국인공지능협회. All rights reserved.
-                </div>
-                <div class="footer-links">
-                    <!-- <a hr -->
-                </div>
+    <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 mb-5 shadow-sm">
+        <!-- Notice -->
+        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 mb-4 flex items-start gap-3">
+            <span class="material-symbols-outlined text-amber-500 text-[20px] mt-0.5">info</span>
+            <div class="text-sm">
+                <strong class="text-amber-700 dark:text-amber-300">최대 1,000개까지만 조회 가능합니다.</strong>
+                <span class="text-amber-600 dark:text-amber-400 ml-1">
+                    <a href="https://www.koraia.org/default/mp2/sub1.php?sub=01" target="_blank" class="underline font-semibold hover:text-primary">회원사 가입</a> 시 무제한 열람 가능
+                </span>
             </div>
         </div>
-    </footer>
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-stretch gap-2 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1 flex-grow max-w-md">
+                <input type="text" id="biz-search" class="flex-1 bg-transparent outline-none text-sm min-w-0" placeholder="사업공고 검색...">
+                <button onclick="bizSearch()" class="text-primary"><span class="material-symbols-outlined text-[20px]">search</span></button>
+            </div>
+            <button id="biz-clear" onclick="bizClear()" class="hidden text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-times"></i> 초기화
+            </button>
+            <button id="biz-excel-btn" onclick="bizDownloadExcel()" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 transition-colors">
+                <i class="fas fa-file-excel"></i> 엑셀 다운로드
+            </button>
+        </div>
+    </div>
 
-    <button class="scroll-top" id="scrollTop" title="Move to Top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    <div id="biz-loading" class="flex items-center justify-center py-16"><div class="spinner-ring"></div></div>
+    <div id="biz-error" class="hidden text-center py-12 text-red-500"></div>
 
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
+    <!-- Desktop table header -->
+    <div id="biz-header" class="hidden md:grid grid-cols-12 gap-2 px-4 py-2 text-xs font-semibold text-text-secondary bg-gray-50 dark:bg-gray-800/50 rounded-t-2xl border border-b-0 border-gray-200 dark:border-gray-800">
+        <div class="col-span-1 text-center">번호</div>
+        <div class="col-span-2">소관부처</div>
+        <div class="col-span-5">사업명</div>
+        <div class="col-span-1 text-center">신청일</div>
+        <div class="col-span-1 text-center">마감일</div>
+        <div class="col-span-2">수행기관</div>
+    </div>
+    <div id="biz-list" class="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-surface-dark md:rounded-b-2xl md:rounded-t-none rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm"></div>
+    <div id="biz-pagination" class="flex items-center justify-center gap-1.5 mt-6 flex-wrap"></div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let files = [];
-            let filteredFiles = [];
-            const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            const fileTableBody = document.getElementById('fileTableBody');
-            const tabs = document.querySelectorAll('.tab');
-            const pagination = document.getElementById('pagination');
-            const scrollTopBtn = document.getElementById('scrollTop');
-            let currentFilter = 'all';
+<!-- ========== SEMINAR PAGE ========== -->
+<div id="page-seminar" class="page-section">
+    <div class="mb-6">
+        <h2 class="text-2xl font-display font-bold mb-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">school</span>
+            국회 AI 세미나
+        </h2>
+        <p class="text-text-secondary text-sm">국회에서 열리는 AI 세미나 정보를 확인하세요.</p>
+    </div>
 
-            // 페이징 관련 변수
-            let itemsPerPage = getItemsPerPage(); // 화면 크기에 따라 페이지당 아이템 수 조정
-            let currentPage = 1;
-            let totalPages = 1;
+    <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-4 mb-5 shadow-sm">
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-stretch gap-2 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1 flex-grow max-w-md">
+                <input type="text" id="seminar-search" class="flex-1 bg-transparent outline-none text-sm min-w-0" placeholder="세미나 검색...">
+                <button onclick="seminarSearch()" class="text-primary"><span class="material-symbols-outlined text-[20px]">search</span></button>
+            </div>
+            <button id="seminar-clear" onclick="seminarClear()" class="hidden text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-times"></i> 초기화
+            </button>
+        </div>
+    </div>
 
-            // 화면 크기에 따라 페이지당 아이템 수 설정
-            function getItemsPerPage() {
-                return window.innerWidth <= 768 ? 10 : 20;
+    <div id="seminar-loading" class="flex items-center justify-center py-16"><div class="spinner-ring"></div></div>
+    <div id="seminar-error" class="hidden text-center py-12 text-red-500"></div>
+    <div id="seminar-list" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+    <div id="seminar-pagination" class="flex items-center justify-center gap-1.5 mt-6 flex-wrap"></div>
+</div>
+
+<!-- ========== BLOG PAGE ========== -->
+<div id="page-blog" class="page-section">
+    <div class="mb-6">
+        <h2 class="text-2xl font-display font-bold mb-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">edit_note</span>
+            탐방기 & 행사 블로그
+        </h2>
+        <p class="text-text-secondary text-sm">회원사 탐방, 세미나, 행사 현장 기록을 만나보세요.</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+        <div class="flex gap-1.5" id="blog-type-filter">
+            <button class="blog-tab text-xs font-semibold px-4 py-1.5 rounded-full bg-primary text-white" data-type="all">전체</button>
+            <button class="blog-tab text-xs font-semibold px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors" data-type="event">행사</button>
+            <button class="blog-tab text-xs font-semibold px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors" data-type="visit">탐방</button>
+        </div>
+        <span id="blog-count" class="text-xs text-text-secondary"></span>
+    </div>
+
+    <div id="blog-loading" class="flex items-center justify-center py-16"><div class="spinner-ring"></div></div>
+    <div id="blog-error" class="hidden text-center py-12 text-red-500"></div>
+    <div id="blog-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    <div id="blog-pagination" class="flex items-center justify-center gap-1.5 mt-6 flex-wrap"></div>
+</div>
+
+<!-- ========== NEWSLETTER PAGE ========== -->
+<div id="page-newsletter" class="page-section">
+    <div class="mb-6">
+        <h2 class="text-2xl font-display font-bold mb-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">mail</span>
+            AI 뉴스레터
+        </h2>
+        <p class="text-text-secondary text-sm">한국인공지능협회 뉴스레터를 한 화면에서 확인하세요.</p>
+    </div>
+    <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+        <p class="text-sm text-text-secondary mb-4">뉴스레터는 새 창에서 확인하세요.</p>
+        <a href="/newsletter.html" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 dark:bg-primary text-white font-bold py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity text-sm">
+            뉴스레터 열기
+            <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+        </a>
+    </div>
+</div>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="w-full border-t border-gray-200 dark:border-gray-800 bg-background-light dark:bg-background-dark py-10 mt-8">
+<div class="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <div class="col-span-1 md:col-span-2 flex flex-col gap-3">
+        <div class="flex items-center">
+            <img src="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/KORAIA_Logo_(%EC%82%AC)%ED%95%9C%EA%B5%AD%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%ED%98%91%ED%9A%8C_%EA%B8%B0%EB%B3%B8_color_%EA%B0%80%EB%A1%9C@4x.png" alt="(사)한국인공지능협회 로고" class="h-8 w-auto">
+        </div>
+        <p class="text-text-secondary text-sm max-w-sm">인공지능 관련 최신 정보와 전문 자료를 제공합니다.</p>
+    </div>
+    <div class="col-span-1">
+        <h4 class="font-bold mb-3">주요 메뉴</h4>
+        <ul class="flex flex-col gap-1.5 text-sm text-text-secondary">
+            <li><a class="hover:text-primary cursor-pointer" data-page="reports">전문자료실</a></li>
+            <li><a class="hover:text-primary cursor-pointer" data-page="news">AI 뉴스</a></li>
+            <li><a class="hover:text-primary cursor-pointer" data-page="biz">사업공고</a></li>
+            <li><a class="hover:text-primary cursor-pointer" data-page="seminar">국회 AI 세미나</a></li>
+            <li><a class="hover:text-primary cursor-pointer" data-page="blog">블로그</a></li>
+            <li><a class="hover:text-primary cursor-pointer" data-page="newsletter">AI 뉴스레터</a></li>
+        </ul>
+    </div>
+    <div class="col-span-1">
+        <h4 class="font-bold mb-3">연락처</h4>
+        <ul class="flex flex-col gap-1.5 text-sm text-text-secondary">
+            <li>이메일: info@koraia.org</li>
+            <li>전화: 02-713-4800</li>
+        </ul>
+    </div>
+</div>
+<div class="max-w-[1280px] mx-auto px-6 mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 text-center text-xs text-text-secondary">
+    © 2026 (사)한국인공지능협회. All rights reserved.
+</div>
+</footer>
+
+<!-- Scroll to top -->
+<button id="scrollTopBtn" class="fixed bottom-6 right-6 z-50 bg-primary text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-all opacity-0 pointer-events-none" style="transition: opacity 0.3s;">
+    <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+</button>
+
+<!-- Lightbox for seminar posters -->
+<div id="lightbox" class="fixed inset-0 bg-black/80 z-[100] items-center justify-center p-4" style="display:none;">
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 z-10">&times;</button>
+    <img id="lightbox-img" src="" alt="포스터" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+</div>
+
+<script>
+// ==================== SUPABASE CONFIG ====================
+const SUPABASE_URL = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ==================== UTILITY FUNCTIONS ====================
+function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+function getFaviconUrl(url) {
+    try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=16`; }
+    catch { return ''; }
+}
+
+function relativeDate(dateString) {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    const now = new Date();
+    const dOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const nOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diff = Math.floor((nOnly - dOnly) / 86400000);
+    if (diff === 0) return '오늘';
+    if (diff === 1) return '어제';
+    if (diff > 1 && diff < 7) return `${diff}일 전`;
+    if (diff < 0) { const fd = Math.abs(diff); if (fd === 1) return '내일'; return `${fd}일 후`; }
+    return `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`;
+}
+
+function shortDate(ds) {
+    if (!ds) return '-';
+    const d = new Date(ds);
+    const now = new Date();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return d.getFullYear() === now.getFullYear() ? `${m}.${day}` : `${d.getFullYear()}.${m}.${day}`;
+}
+
+function getDDayHtml(ds) {
+    if (!ds) return '';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const ed = new Date(ds); ed.setHours(0,0,0,0);
+    const diff = Math.round((ed - today) / 86400000);
+    if (diff < 0) return '';
+    if (diff === 0) return '<span class="dday-badge dday-today">D-DAY</span>';
+    return `<span class="dday-badge dday-soon">D-${diff}</span>`;
+}
+
+function hl(text, q) {
+    if (!text) return '';
+    if (!q) return escapeHtml(text);
+    const esc = escapeHtml(text);
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return esc.replace(re, '<span class="search-highlight">$1</span>');
+}
+
+function truncate(s, n=100) { if (!s) return ''; return s.length > n ? s.substring(0, n) + '...' : s; }
+function isEventUrl(url) { return url && (url.includes('onoffmix') || url.includes('event-us')); }
+function isReportUrl(url) { return url && (url.includes('ksp.etri.re.kr') || url.includes('iitp.kr') || url.includes('ettrends.etri.re.kr') || url.includes('spri.kr') || url.includes('nia.or.kr')); }
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function getReadList(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; } }
+function markRead(key, id) {
+    const list = getReadList(key);
+    const s = String(id);
+    if (!list.includes(s)) { list.push(s); localStorage.setItem(key, JSON.stringify(list)); }
+}
+
+function getFileBadge(type) {
+    if (!type) return '';
+    const t = type.toLowerCase();
+    let cls = 'file-other';
+    if (t === 'pdf') cls = 'file-pdf';
+    else if (t === 'hwp' || t === 'hwpx') cls = 'file-hwp';
+    else if (t === 'xlsx') cls = 'file-xlsx';
+    else if (t === 'ppt' || t === 'pptx') cls = 'file-ppt';
+    else if (['png','jpg','jpeg'].includes(t)) cls = 'file-img';
+    return `<span class="file-badge ${cls}">${type.toUpperCase()}</span>`;
+}
+
+function renderPagination(containerId, currentPage, totalPages, goFn) {
+    const el = document.getElementById(containerId);
+    if (!el || totalPages <= 1) { if(el) el.innerHTML = ''; return; }
+    const isMobile = window.innerWidth <= 640;
+    const maxV = isMobile ? 3 : 5;
+    let start = Math.max(1, currentPage - Math.floor(maxV / 2));
+    let end = Math.min(totalPages, start + maxV - 1);
+    if (end - start + 1 < maxV) start = Math.max(1, end - maxV + 1);
+    
+    let html = `<button class="pg-btn" onclick="${goFn}(${currentPage-1})" ${currentPage<=1?'disabled':''}><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>`;
+    if (start > 1) { html += `<button class="pg-btn" onclick="${goFn}(1)">1</button>`; if (start > 2) html += `<span class="text-xs text-text-secondary px-1">…</span>`; }
+    for (let i = start; i <= end; i++) html += `<button class="pg-btn ${i===currentPage?'active':''}" onclick="${goFn}(${i})">${i}</button>`;
+    if (end < totalPages) { if (end < totalPages - 1) html += `<span class="text-xs text-text-secondary px-1">…</span>`; html += `<button class="pg-btn" onclick="${goFn}(${totalPages})">${totalPages}</button>`; }
+    html += `<button class="pg-btn" onclick="${goFn}(${currentPage+1})" ${currentPage>=totalPages?'disabled':''}><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>`;
+    el.innerHTML = html;
+}
+
+// ==================== ROUTING ====================
+let currentPageName = 'home';
+const pageLoaded = { home: false, news: false, reports: false, biz: false, seminar: false, blog: false, newsletter: false };
+
+function navigateTo(page) {
+    currentPageName = page;
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
+    
+    // Update nav active state
+    document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('nav-active'));
+    document.querySelectorAll(`.nav-link[data-page="${page}"]`).forEach(a => a.classList.add('nav-active'));
+    
+    // Close mobile menu
+    document.getElementById('mobileMenu').classList.remove('open');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Load data if not loaded
+    if (!pageLoaded[page]) {
+        pageLoaded[page] = true;
+        if (page === 'home') loadHomePage();
+        else if (page === 'news') loadNewsPage(1);
+        else if (page === 'reports') loadReportsPage();
+        else if (page === 'biz') loadBizPage(1);
+        else if (page === 'seminar') loadSeminarPage(1);
+        else if (page === 'blog') loadBlogPage(1);
+        else if (page === 'newsletter') {}
+    }
+}
+
+// Setup navigation click handlers
+document.querySelectorAll('[data-page]').forEach(el => {
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = el.getAttribute('data-page');
+        window.location.hash = page;
+    });
+});
+
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.replace('#', '') || 'home';
+    navigateTo(hash);
+});
+
+// ==================== HOME PAGE ====================
+async function loadHeroConfig() {
+    try {
+        const resp = await fetch('hero.json');
+        if (!resp.ok) return { custom: false, useLatestNews: true };
+        const cfg = await resp.json();
+        if (!cfg || cfg.active === false) return { custom: false, useLatestNews: true };
+
+        const useLatestNews = cfg.useLatestNews === true;
+        if (!useLatestNews) {
+            const img = document.getElementById('hero-img');
+            const badge = document.getElementById('hero-badge');
+            const time = document.getElementById('hero-time');
+            const title = document.getElementById('hero-title');
+            const desc = document.getElementById('hero-desc');
+            const cta = document.getElementById('hero-cta');
+            const link = document.getElementById('hero-link');
+            const sub = document.getElementById('hero-sub');
+
+            if (cfg.backgroundImage && img) img.src = cfg.backgroundImage;
+            if (badge) {
+                badge.textContent = cfg.badge || '';
+                badge.style.display = cfg.badge ? 'inline-block' : 'none';
+            }
+            if (time) time.textContent = cfg.timeText || '';
+            if (title) title.textContent = cfg.title || '';
+            if (desc) {
+                desc.textContent = cfg.description || '';
+                desc.style.display = cfg.description ? 'block' : 'none';
+            }
+            if (cta) cta.textContent = cfg.ctaText || '자세히 보기';
+            if (link) link.href = cfg.link || '#';
+            if (sub) {
+                sub.textContent = cfg.subText || '공지';
+                sub.style.display = cfg.subText ? 'inline' : 'none';
+            }
+        }
+
+        return { custom: !useLatestNews, useLatestNews };
+    } catch { return { custom: false, useLatestNews: true }; }
+}
+
+async function loadSpotlights() {
+    try {
+        const resp = await fetch('spotlights.json');
+        if (!resp.ok) return;
+        const cfg = await resp.json();
+        if (!cfg || cfg.active === false) return;
+
+        const items = Array.isArray(cfg.items) && cfg.items.length > 0
+            ? cfg.items
+            : [{ main: cfg.main || {}, sub: cfg.sub || {} }];
+
+        const mainImg = document.getElementById('spot-main-img');
+        const mainLink = document.getElementById('spot-main-link');
+        const mainBadge = document.getElementById('spot-main-badge');
+        const mainTitle = document.getElementById('spot-main-title');
+        const mainDesc = document.getElementById('spot-main-desc');
+        const subImg = document.getElementById('spot-sub-img');
+        const subLink = document.getElementById('spot-sub-link');
+        const subTitle = document.getElementById('spot-sub-title');
+        const subLoc = document.getElementById('spot-sub-loc');
+
+        const prevBtn = document.getElementById('spot-prev');
+        const nextBtn = document.getElementById('spot-next');
+        const indicators = document.getElementById('spot-indicators');
+        const card = document.getElementById('spotlights-card');
+
+        let idx = 0;
+        if (cfg.randomStart) idx = Math.floor(Math.random() * items.length);
+        let firstRender = true;
+        let fadeTimer = null;
+        const fadeMs = Number(cfg.fadeMs || 200);
+
+        function applySpotlight(item) {
+            const main = item.main || {};
+            const sub = item.sub || {};
+
+            if (mainImg && main.image) mainImg.src = main.image;
+            if (mainLink && main.link) mainLink.href = main.link;
+            if (mainBadge) {
+                mainBadge.textContent = main.badge || '';
+                mainBadge.style.display = main.badge ? 'inline-block' : 'none';
+            }
+            if (mainTitle) mainTitle.textContent = main.title || '';
+            if (mainDesc) {
+                mainDesc.textContent = main.description || '';
+                mainDesc.style.display = main.description ? 'block' : 'none';
             }
 
-            // 통계 업데이트 함수
-            function updateStats() {
-                document.getElementById('total-files').textContent = filteredFiles.length;
-                document.getElementById('current-page-info').textContent = files.length;
-
-                // 오늘 추가된 파일 계산
-                const today = new Date().toDateString();
-                const todayFiles = files.filter(file => {
-                    if (file.date) {
-                        return new Date(file.date).toDateString() === today;
-                    }
-                    return false;
-                });
-                document.getElementById('today-files').textContent = todayFiles.length;
+            if (subImg && sub.image) subImg.src = sub.image;
+            if (subLink && sub.link) subLink.href = sub.link;
+            if (subTitle) subTitle.textContent = sub.title || '';
+            if (subLoc) {
+                subLoc.textContent = sub.location || '';
+                subLoc.style.display = sub.location ? 'block' : 'none';
             }
+        }
 
-            // 스크롤 버튼 표시/숨김 처리
-            window.addEventListener('scroll', function () {
-                if (window.pageYOffset > 300) {
-                    scrollTopBtn.classList.add('visible');
-                } else {
-                    scrollTopBtn.classList.remove('visible');
-                }
-            });
-
-            // 스크롤 상단 버튼 클릭 이벤트
-            scrollTopBtn.addEventListener('click', function () {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-
-            // 화면 크기 변경 감지
-            window.addEventListener('resize', function () {
-                const newItemsPerPage = getItemsPerPage();
-                itemsPerPage = newItemsPerPage;
-                updatePagination(filteredFiles); // 화면 크기 변경 시 필터된 파일 목록 기준으로 페이지네이션 업데이트
-                displayFiles(filteredFiles);
-            });
-
-            // 파일 데이터 가져오기
-            fetch('files.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('파일 데이터를 불러오는데 실패했습니다.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    files = data;
-                    filteredFiles = [...files];
-                    updateStats();
-                    updatePagination();
-                    displayFiles(filteredFiles);
-                    document.getElementById('page-info').textContent = `총 ${files.length}개 파일`;
-                })
-                .catch(error => {
-                    console.error('Error loading file data:', error);
-                    fileTableBody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="no-results">
-                                <i class="fas fa-exclamation-circle"></i>
-                                데이터를 불러오는데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.
-                            </td>
-                        </tr>
-                    `;
-                });
-
-            // 검색 기능
-            searchBtn.addEventListener('click', performSearch);
-            searchInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-
-            // 탭 필터링
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function () {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.type;
-                    currentPage = 1; // 필터 변경시 첫 페이지로 이동
-                    performSearch(); // 검색어 유지하며 탭 필터 적용
-                });
-            });
-
-            function performSearch() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                let searchResult = files.filter(file => {
-                    const filename = file.filename ? file.filename.toLowerCase() : '';
-                    const description = file.description ? file.description.toLowerCase() : '';
-                    return filename.includes(searchTerm) || description.includes(searchTerm);
-                });
-
-                filterFiles(searchResult);
-            }
-
-            function filterFiles(filesToFilter) {
-                let result = [...filesToFilter];
-
-                if (currentFilter !== 'all') {
-                    if (currentFilter === '기타') {
-                        result = result.filter(file => {
-                            const fileType = file.type ? file.type.toLowerCase() : '';
-                            return !['pdf', 'hwp', 'hwpx', 'xlsx', 'ppt', 'pptx'].includes(fileType);
-                        });
-                    } else if (currentFilter === 'hwp') {
-                        result = result.filter(file => {
-                            const fileType = file.type ? file.type.toLowerCase() : '';
-                            return fileType === 'hwp' || fileType === 'hwpx';
-                        });
-                    } else if (currentFilter === 'ppt') {
-                        result = result.filter(file => {
-                            const fileType = file.type ? file.type.toLowerCase() : '';
-                            return fileType === 'ppt' || fileType === 'pptx';
-                        });
-                    } else {
-                        result = result.filter(file => {
-                            const fileType = file.type ? file.type.toLowerCase() : '';
-                            return fileType === currentFilter.toLowerCase();
-                        });
-                    }
-                }
-
-                filteredFiles = result; // 필터링된 결과를 전역 변수에 저장
-                currentPage = 1; // 필터링 후 첫 페이지로 이동
-                updateStats();
-                updatePagination(filteredFiles);
-                displayFiles(filteredFiles);
-            }
-
-            // 페이지네이션 업데이트 함수 (기존 코드와 동일)
-            function updatePagination(filesToShow = filteredFiles) {
-                const total = filesToShow.length;
-                totalPages = Math.ceil(total / itemsPerPage);
-                pagination.innerHTML = '';
-                const isMobile = window.innerWidth <= 480;
-                const maxVisibleButtons = isMobile ? 3 : 5;
-
-                if (totalPages <= 1) return;
-
-                const createButton = (text, pageNumber, disabled = false, active = false) => {
-                    const btn = document.createElement('button');
-                    btn.innerHTML = text;
-                    btn.classList.add('page-btn');
-                    if (disabled) btn.disabled = true;
-                    if (active) btn.classList.add('active');
+        function showAt(i) {
+            idx = (i + items.length) % items.length;
+            if (indicators) {
+                indicators.innerHTML = items.map((_, j) =>
+                    `<button class="spot-indicator ${j===idx?'is-active':''}" data-spot-index="${j}" aria-label="Spotlight ${j+1}"></button>`
+                ).join('');
+                indicators.querySelectorAll('button').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        currentPage = pageNumber;
-                        scrollToTop();
-                        displayFiles(filesToShow);
-                        updatePagination(filesToShow);
+                        const target = Number(btn.getAttribute('data-spot-index'));
+                        showAt(target);
+                        startRotation();
                     });
-                    return btn;
-                };
-
-                pagination.appendChild(createButton('<i class="fas fa-chevron-left"></i>', currentPage - 1, currentPage === 1));
-
-                let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-                let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
-                if (endPage === totalPages) {
-                    startPage = Math.max(1, endPage - maxVisibleButtons + 1);
-                }
-
-                if (startPage > 1) {
-                    pagination.appendChild(createButton('1', 1));
-                    if (startPage > 2) {
-                        const ellipsis = document.createElement('span');
-                        ellipsis.textContent = '...';
-                        ellipsis.classList.add('ellipsis');
-                        pagination.appendChild(ellipsis);
-                    }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                    pagination.appendChild(createButton(i, i, false, i === currentPage));
-                }
-
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const ellipsis = document.createElement('span');
-                        ellipsis.textContent = '...';
-                        ellipsis.classList.add('ellipsis');
-                        pagination.appendChild(ellipsis);
-                    }
-                    pagination.appendChild(createButton(totalPages, totalPages));
-                }
-
-                pagination.appendChild(createButton('<i class="fas fa-chevron-right"></i>', currentPage + 1, currentPage === totalPages));
-            }
-
-            // 페이지 이동 시 상단으로 스크롤
-            function scrollToTop() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
                 });
             }
 
-            // 파일 유형별 배지 HTML 생성 (기존 코드와 동일)
-            function getFileTypeBadge(fileType) {
-                if (!fileType) return '';
-                const type = fileType.toLowerCase();
-                let badgeClass = 'file-type-other';
-                if (type === 'pdf') badgeClass = 'file-type-pdf';
-                else if (type === 'hwp' || type === 'hwpx') badgeClass = 'file-type-hwp';
-                else if (type === 'xlsx') badgeClass = 'file-type-xlsx';
-                else if (type === 'ppt' || type === 'pptx') badgeClass = 'file-type-ppt';
-                else if (['png', 'jpeg', 'jpg'].includes(type)) badgeClass = 'file-type-png';
-                return `<span class="file-type-badge ${badgeClass}">${fileType.toUpperCase()}</span>`;
+            if (card && !firstRender) {
+                card.classList.add('spotlight-fade', 'is-fading');
+                if (fadeTimer) clearTimeout(fadeTimer);
+                fadeTimer = setTimeout(() => {
+                    applySpotlight(items[idx]);
+                    card.classList.remove('is-fading');
+                }, fadeMs);
+            } else {
+                if (card) card.classList.add('spotlight-fade');
+                applySpotlight(items[idx]);
+                firstRender = false;
             }
+        }
 
-            // 파일 표시 함수 (수정됨)
-            function displayFiles(filesToShow) {
-                fileTableBody.innerHTML = '';
+        showAt(idx);
 
-                if (filesToShow.length === 0) {
-                    fileTableBody.innerHTML = `<tr><td colspan="5" class="no-results"><i class="fas fa-search"></i> 검색 결과가 없습니다</td></tr>`;
-                    return;
+        let intervalId = null;
+        const intervalMs = Number(cfg.intervalMs || 0);
+        function startRotation() {
+            if (intervalId) clearInterval(intervalId);
+            if (items.length > 1 && intervalMs > 0) {
+                intervalId = setInterval(() => showAt(idx + 1), intervalMs);
+            }
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => { showAt(idx - 1); startRotation(); });
+        if (nextBtn) nextBtn.addEventListener('click', () => { showAt(idx + 1); startRotation(); });
+
+        startRotation();
+    } catch { /* ignore */ }
+}
+
+// Promo banner slider
+async function loadPromoBanner() {
+    try {
+        const resp = await fetch('banners.json');
+        const banners = (await resp.json()).filter(b => b.active);
+        if (!banners || banners.length === 0) return;
+        
+        const section = document.getElementById('promo-banner');
+        section.classList.remove('hidden');
+        
+        // Pick a random starting index (changes each refresh)
+        let idx = Math.floor(Math.random() * banners.length);
+        
+        function showBanner(i) {
+            const b = banners[i];
+            const img = document.getElementById('promo-img');
+            const link = document.getElementById('promo-link');
+            const badge = document.getElementById('promo-badge');
+            const title = document.getElementById('promo-title');
+            const desc = document.getElementById('promo-desc');
+            
+            // slide out then in
+            img.style.transition = 'opacity 0.5s'; img.style.opacity = '0';
+            setTimeout(() => {
+                link.href = b.link || '#';
+                img.src = b.image || '';
+                img.alt = b.title || '';
+                badge.textContent = b.badge || '';
+                badge.className = 'inline-block px-3 py-1 mb-2 text-[11px] font-bold text-white rounded-full w-fit uppercase tracking-wider ' + (b.badgeColor || 'bg-primary');
+                title.textContent = b.title || '';
+                desc.textContent = b.description || '';
+                img.style.opacity = '1';
+            }, 300);
+            
+            // indicators
+            document.getElementById('promo-indicators').innerHTML = banners.map((_, j) =>
+                `<div class="w-2 h-2 rounded-full transition-all ${j===i ? 'bg-white scale-110' : 'bg-white/40'}"></div>`
+            ).join('');
+        }
+        
+        showBanner(idx);
+        
+        // Auto-rotate every 6 seconds
+        if (banners.length > 1) {
+            setInterval(() => {
+                idx = (idx + 1) % banners.length;
+                showBanner(idx);
+            }, 6000);
+        }
+    } catch (e) { console.log('Banner load skipped:', e); }
+}
+
+async function loadHomePage() {
+    try {
+        // Load promo banner
+        loadPromoBanner();
+
+        // Load hero/spotlights from JSON
+        const heroPref = await loadHeroConfig();
+        loadSpotlights();
+        
+        // Load stats in parallel
+        const [newsCount, bizCount, seminarCount] = await Promise.all([
+            sb.from('ai_info').select('*', { count: 'exact', head: true }),
+            sb.from('business_announcements').select('*', { count: 'exact', head: true }),
+            sb.from('ampos_seminar').select('*', { count: 'exact', head: true })
+        ]);
+        
+        document.getElementById('stat-news').textContent = (newsCount.count || 0).toLocaleString();
+        document.getElementById('stat-biz').textContent = Math.min(bizCount.count || 0, 1000).toLocaleString();
+        document.getElementById('stat-seminar').textContent = (seminarCount.count || 0).toLocaleString();
+        
+        // Load reports count
+        try {
+            const resp = await fetch('files.json');
+            const files = await resp.json();
+            document.getElementById('stat-reports').textContent = files.length.toLocaleString();
+        } catch { document.getElementById('stat-reports').textContent = '-'; }
+        
+        // Load latest news for hero & list
+        const { data: latestNews } = await sb.from('ai_info').select('*').order('created_at', { ascending: false }).range(0, 50);
+        
+        if (latestNews && latestNews.length > 0) {
+            const todayKey = new Date().toDateString();
+            const todayNews = latestNews.filter(n => n.created_at && new Date(n.created_at).toDateString() === todayKey);
+            const pool = todayNews.length > 0 ? todayNews : latestNews;
+            const poolShuffled = shuffleArray([...pool]);
+
+            const hero = poolShuffled[0];
+            if (!heroPref.custom || heroPref.useLatestNews) {
+                document.getElementById('hero-title').textContent = hero.title;
+                document.getElementById('hero-link').href = hero.url;
+                document.getElementById('hero-time').textContent = relativeDate(hero.created_at);
+                const desc = document.getElementById('hero-desc');
+                if (desc) { desc.textContent = ''; desc.style.display = 'none'; }
+            }
+            
+            // Render news list (randomized from today's news when available)
+            const readList = getReadList('read_articles');
+            document.getElementById('home-news-list').innerHTML = poolShuffled.slice(0, 8).map(a => {
+                const isRead = readList.includes(String(a.id));
+                const fav = getFaviconUrl(a.url);
+                const evLabel = isEventUrl(a.url) ? '<span class="label-event">행사</span> ' : '';
+                const rpLabel = isReportUrl(a.url) ? '<span class="label-report">보고서</span> ' : '';
+                return `
+                <a href="${a.url}" target="_blank" onclick="markRead('read_articles','${a.id}')" 
+                   class="flex items-start gap-3 py-3 px-4 group hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${isRead?'article-visited':''}">
+                    ${fav ? `<img src="${fav}" class="w-4 h-4 mt-1 shrink-0 rounded-sm" onerror="this.style.display='none'" alt="">` : ''}
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium leading-snug line-clamp-2">${evLabel}${rpLabel}${escapeHtml(truncate(a.title, 100))}</div>
+                    </div>
+                    <span class="shrink-0 text-xs text-text-secondary whitespace-nowrap">${relativeDate(a.created_at)}</span>
+                </a>`;
+            }).join('');
+        }
+        
+        // Load upcoming seminars
+        const today = new Date().toISOString().split('T')[0];
+        const { data: upcomingSeminars } = await sb.from('ampos_seminar').select('*').gte('event_date', today).order('event_date', { ascending: true }).range(0, 4);
+        
+        if (upcomingSeminars && upcomingSeminars.length > 0) {
+            document.getElementById('home-seminar-list').innerHTML = upcomingSeminars.map(s => `
+                <div class="flex items-start gap-3 group">
+                    <div class="shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex flex-col items-center justify-center text-primary leading-none">
+                        <span class="text-[10px] font-semibold">${new Date(s.event_date).getMonth()+1}월</span>
+                        <span class="text-sm font-bold">${new Date(s.event_date).getDate()}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">${escapeHtml(truncate(s.seminar_name, 50))}</div>
+                        <div class="text-xs text-text-secondary mt-0.5">${escapeHtml(s.organizer || '')} ${getDDayHtml(s.event_date)}</div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            document.getElementById('home-seminar-list').innerHTML = '<p class="text-sm text-text-secondary text-center py-4">예정된 세미나가 없습니다.</p>';
+        }
+        
+        // Load latest biz announcements
+        const { data: latestBiz } = await sb.from('business_announcements').select('*').order('created_at', { ascending: false }).range(0, 4);
+        
+        if (latestBiz && latestBiz.length > 0) {
+            document.getElementById('home-biz-list').innerHTML = latestBiz.map(b => {
+                const endDDay = getDDayHtml(b.deadline_date);
+                return `
+                <a href="${b.url}" target="_blank" class="flex items-start gap-3 group hover:bg-gray-50 dark:hover:bg-gray-800/50 -mx-2 px-2 py-1.5 rounded transition-colors">
+                    <span class="material-symbols-outlined text-emerald-500 text-[18px] mt-0.5 shrink-0">article</span>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">${escapeHtml(truncate(b.business_name, 60))}</div>
+                        <div class="text-xs text-text-secondary mt-0.5">${escapeHtml(b.responsible_organization || '')} ${endDDay}</div>
+                    </div>
+                </a>`;
+            }).join('');
+        } else {
+            document.getElementById('home-biz-list').innerHTML = '<p class="text-sm text-text-secondary text-center py-4">등록된 공고가 없습니다.</p>';
+        }
+        
+        // Load latest reports for home
+        try {
+            const resp2 = await fetch('files.json');
+            const allFiles = await resp2.json();
+            allFiles.sort((a,b) => new Date(b.date) - new Date(a.date));
+            const todayKey = new Date().toDateString();
+            const todayFiles = allFiles.filter(f => f.date && new Date(f.date).toDateString() === todayKey);
+            const reportPool = todayFiles.length > 0 ? shuffleArray([...todayFiles]) : allFiles;
+            const latestFiles = reportPool.slice(0, 5);
+            if (latestFiles.length > 0) {
+                document.getElementById('home-reports-list').innerHTML = latestFiles.map(f => {
+                    const isToday = f.date && new Date(f.date).toDateString() === new Date().toDateString();
+                    return `
+                    <a href="${f.link}" target="_blank" class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                        <div class="shrink-0">${getFileBadge(f.type)}</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-[13px] font-medium line-clamp-1">${escapeHtml(f.filename || '-')}</div>
+                        </div>
+                        <span class="shrink-0 text-[11px] text-text-secondary">${isToday ? '<span class="text-emerald-500 font-semibold">오늘</span>' : (f.date ? new Date(f.date).toLocaleDateString('ko-KR',{month:'short',day:'numeric'}) : '-')}</span>
+                    </a>`;
+                }).join('');
+            } else {
+                document.getElementById('home-reports-list').innerHTML = '<p class="text-sm text-text-secondary text-center py-6">등록된 자료가 없습니다.</p>';
+            }
+        } catch { document.getElementById('home-reports-list').innerHTML = '<p class="text-sm text-text-secondary text-center py-6">자료를 불러올 수 없습니다.</p>'; }
+
+        // Load deadline-approaching AI/GPU/인공지능 biz announcements
+        const todayStr = new Date().toISOString().split('T')[0];
+        const aiKeywordFilter = 'business_name.ilike.%AI%,business_name.ilike.%GPU%,business_name.ilike.%인공지능%';
+        // First try: deadline within 30 days + AI keywords
+        let { data: deadlineBiz } = await sb.from('business_announcements').select('*').gte('deadline_date', todayStr).or(aiKeywordFilter).order('deadline_date', { ascending: true }).range(0, 30);
+        // Filter client-side: must have deadline in future AND contain keyword
+        const aiRe = /AI|GPU|인공지능/i;
+        if (deadlineBiz) {
+            deadlineBiz = deadlineBiz.filter(b => b.deadline_date && b.deadline_date >= todayStr && aiRe.test(b.business_name || ''));
+            deadlineBiz.sort((a,b) => new Date(a.deadline_date) - new Date(b.deadline_date));
+            deadlineBiz = deadlineBiz.slice(0, 10);
+        }
+        // Fallback: if none with deadline, show latest AI keyword biz
+        if (!deadlineBiz || deadlineBiz.length === 0) {
+            const { data: fallbackBiz } = await sb.from('business_announcements').select('*').or(aiKeywordFilter).order('created_at', { ascending: false }).range(0, 40);
+            deadlineBiz = (fallbackBiz || []).filter(b => aiRe.test(b.business_name || '')).slice(0, 10);
+        }
+        
+        if (deadlineBiz && deadlineBiz.length > 0) {
+            document.getElementById('home-deadline-list').innerHTML = deadlineBiz.map(b => {
+                const dd = getDDayHtml(b.deadline_date);
+                return `
+                <a href="${b.url}" target="_blank" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <span class="material-symbols-outlined text-red-400 text-[16px] shrink-0">schedule</span>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-[13px] font-medium line-clamp-1">${escapeHtml(truncate(b.business_name, 60))}</div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                        <span class="text-[11px] text-text-secondary">${shortDate(b.deadline_date)}</span>
+                        ${dd}
+                    </div>
+                </a>`;
+            }).join('');
+        } else {
+            document.getElementById('home-deadline-list').innerHTML = '<p class="text-sm text-text-secondary text-center py-6">AI 관련 마감 임박 공고가 없습니다.</p>';
+        }
+
+        // Load latest blog posts
+        try {
+            const { data: blogPosts } = await sb.from('posts').select('id, post_no, title, author_name, date, type, thumbnail_url, editor_html, created_at').eq('approval_stage', 5).order('date', { ascending: false }).range(0, 5);
+            if (blogPosts && blogPosts.length > 0) {
+                document.getElementById('home-blog-list').innerHTML = blogPosts.map(p => {
+                    const rawExcerpt = (p.editor_html || '').replace(/<[^>]+>/g, '');
+                    const tmp = document.createElement('textarea'); tmp.innerHTML = rawExcerpt;
+                    const excerpt = (tmp.value || '').replace(/\s+/g, ' ').trim();
+                    const typeLabel = p.type === 'event' ? '행사' : p.type === 'visit' ? '탐방' : (p.type || '');
+                    const typeCls = p.type === 'event' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300';
+                    const detailUrl = 'blog_post?id=' + (p.post_no || p.id);
+                    return `
+                    <a href="${detailUrl}" class="flex items-start gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+                        <div class="shrink-0 w-20 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+                            ${p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="" class="w-full h-full object-cover" loading="lazy">` : '<div class="w-full h-full flex items-center justify-center text-2xl text-gray-300">📄</div>'}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded ${typeCls}">${typeLabel}</span>
+                                <span class="text-[11px] text-text-secondary">${p.date ? new Date(p.date).toLocaleDateString('ko-KR',{month:'short',day:'numeric'}) : ''}</span>
+                            </div>
+                            <h4 class="text-sm font-bold line-clamp-1 leading-snug group-hover:text-primary transition-colors">${escapeHtml(p.title || '제목 없음')}</h4>
+                            <p class="text-xs text-text-secondary line-clamp-1 mt-0.5">${escapeHtml(truncate(excerpt, 80))}</p>
+                        </div>
+                    </a>`;
+                }).join('');
+
+                const sideEl = document.getElementById('home-sidebar-blog');
+                if (sideEl) {
+                    sideEl.innerHTML = blogPosts.slice(0, 3).map(p => {
+                        const detailUrl = 'blog_post?id=' + (p.post_no || p.id);
+                        const dateStr = p.date ? new Date(p.date).toLocaleDateString('ko-KR',{month:'short',day:'numeric'}) : '';
+                        return `
+                        <a href="${detailUrl}" class="group flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 -mx-2 px-2 py-2 rounded transition-colors">
+                            <div class="shrink-0 w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-amber-600 text-xs font-bold">
+                                BLOG
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">${escapeHtml(truncate(p.title || '제목 없음', 60))}</div>
+                                <div class="text-xs text-text-secondary mt-0.5">${dateStr}</div>
+                            </div>
+                        </a>`;
+                    }).join('');
                 }
-
-                filesToShow.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                const startIndex = (currentPage - 1) * itemsPerPage;
-                const endIndex = Math.min(startIndex + itemsPerPage, filesToShow.length);
-                const currentPageFiles = filesToShow.slice(startIndex, endIndex);
-
-                currentPageFiles.forEach(file => {
-                    const row = document.createElement('tr');
-
-                    // --- 날짜 처리 로직 수정 ---
-                    let dateDisplay;
-                    if (file.date) {
-                        const fileDate = new Date(file.date);
-                        const today = new Date();
-
-                        // 시간, 분, 초를 0으로 설정하여 날짜만 비교
-                        fileDate.setHours(0, 0, 0, 0);
-                        today.setHours(0, 0, 0, 0);
-
-                        if (fileDate.getTime() === today.getTime()) {
-                            dateDisplay = `<span class="highlight-today">오늘</span>`;
-                        } else {
-                            dateDisplay = new Date(file.date).toLocaleDateString('ko-KR');
-                        }
-                    } else {
-                        dateDisplay = '-';
-                    }
-
-                    const fileTypeBadge = getFileTypeBadge(file.type);
-
-                    const filenameContent = document.createElement('div');
-                    filenameContent.className = 'filename-content';
-                    const filenameSpan = document.createElement('span');
-                    filenameSpan.className = 'tooltip-trigger';
-                    filenameSpan.textContent = file.filename || '-';
-                    filenameSpan.setAttribute('data-tippy-content', file.description || '설명 없음');
-                    filenameContent.appendChild(filenameSpan);
-
-                    if (file.description) {
-                        const infoIcon = document.createElement('i');
-                        infoIcon.className = 'fas fa-info-circle info-icon';
-                        filenameContent.appendChild(infoIcon);
-                    }
-
-                    row.innerHTML = `
-                        <td class="filename-cell"></td>
-                        <td>${fileTypeBadge || '-'}</td>
-                        <td>${dateDisplay}</td>
-                        <td>${file.size || '-'}</td>
-                        <td><a href="${file.link}" class="download-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> 받기</a></td>
-                    `;
-
-                    row.querySelector('.filename-cell').appendChild(filenameContent);
-                    fileTableBody.appendChild(row);
-                });
-
-
-
-                tippy('.tooltip-trigger', {
-                    placement: 'bottom',
-                    arrow: true,
-                    theme: 'light',
-                    maxWidth: 500,
-                    allowHTML: true
-                });
+            } else {
+                document.getElementById('home-blog-list').innerHTML = '<p class="col-span-full text-sm text-text-secondary text-center py-6">등록된 블로그 글이 없습니다.</p>';
+                const sideEl = document.getElementById('home-sidebar-blog');
+                if (sideEl) sideEl.innerHTML = '<p class="text-sm text-text-secondary text-center py-4">등록된 글이 없습니다.</p>';
             }
-        });
-    </script>
+        } catch {
+            document.getElementById('home-blog-list').innerHTML = '<p class="col-span-full text-sm text-text-secondary text-center py-6">블로그를 불러올 수 없습니다.</p>';
+            const sideEl = document.getElementById('home-sidebar-blog');
+            if (sideEl) sideEl.innerHTML = '<p class="text-sm text-text-secondary text-center py-4">블로그를 불러올 수 없습니다.</p>';
+        }
+
+    } catch (err) {
+        console.error('Home load error:', err);
+    }
+}
+
+// ==================== AI NEWS PAGE ====================
+let newsState = { page: 1, perPage: 50, total: 0, query: '', event: false, report: false };
+
+async function loadNewsPage(page) {
+    newsState.page = page;
+    const loadEl = document.getElementById('news-loading');
+    const listEl = document.getElementById('news-list');
+    loadEl.classList.remove('hidden'); loadEl.style.display = 'flex';
+    listEl.innerHTML = '';
+    document.getElementById('news-pagination').innerHTML = '';
+    
+    try {
+        let countQ = sb.from('ai_info').select('*', { count: 'exact', head: true });
+        let dataQ = sb.from('ai_info').select('*');
+        
+        if (newsState.query) { countQ = countQ.ilike('title', `%${newsState.query}%`); dataQ = dataQ.ilike('title', `%${newsState.query}%`); }
+        if (newsState.event) { const f = 'url.ilike.%onoffmix%,url.ilike.%event-us%'; countQ = countQ.or(f); dataQ = dataQ.or(f); }
+        if (newsState.report) { const f = 'url.ilike.%ksp.etri.re.kr%,url.ilike.%iitp.kr%,url.ilike.%ettrends.etri.re.kr%,url.ilike.%spri.kr%,url.ilike.%nia.or.kr%'; countQ = countQ.or(f); dataQ = dataQ.or(f); }
+        
+        const { count } = await countQ;
+        newsState.total = count || 0;
+        const totalPages = Math.ceil(newsState.total / newsState.perPage);
+        const start = (page - 1) * newsState.perPage;
+        
+        const { data, error } = await dataQ.order('created_at', { ascending: false }).range(start, start + newsState.perPage - 1);
+        if (error) throw error;
+        
+        loadEl.style.display = 'none';
+        
+        // Info text
+        const infoEl = document.getElementById('news-info');
+        if (newsState.query || newsState.event || newsState.report) {
+            let infoText = `총 ${newsState.total.toLocaleString()}건`;
+            if (newsState.query) infoText += ` · "${newsState.query}" 검색`;
+            if (newsState.event) infoText += ' · 행사 필터';
+            if (newsState.report) infoText += ' · 보고서 필터';
+            infoEl.textContent = infoText;
+            infoEl.classList.remove('hidden');
+        } else {
+            infoEl.classList.add('hidden');
+        }
+        
+        if (!data || data.length === 0) {
+            listEl.innerHTML = '<div class="text-center py-12 text-text-secondary"><span class="material-symbols-outlined text-4xl mb-2 block">search_off</span>결과가 없습니다.</div>';
+            return;
+        }
+        
+        const readList = getReadList('read_articles');
+        listEl.innerHTML = data.map((a, i) => {
+            const num = newsState.total - start - i;
+            const isRead = readList.includes(String(a.id));
+            const fav = getFaviconUrl(a.url);
+            const evLabel = isEventUrl(a.url) ? '<span class="label-event">행사</span> ' : '';
+            const rpLabel = isReportUrl(a.url) ? '<span class="label-report">보고서</span> ' : '';
+            const readBadge = isRead ? '<span class="read-badge-sm">읽음</span>' : '';
+            
+            return `
+            <div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${isRead?'article-visited':''}" id="news-item-${a.id}">
+                <span class="text-xs text-text-secondary w-8 text-right shrink-0 hidden sm:block">${num}</span>
+                ${fav ? `<img src="${fav}" class="w-4 h-4 shrink-0 rounded-sm" onerror="this.style.display='none'" alt="">` : ''}
+                <a href="${a.url}" target="_blank" onclick="markRead('read_articles','${a.id}');document.getElementById('news-item-${a.id}').classList.add('article-visited')" 
+                   class="flex-1 text-sm font-medium hover:text-primary transition-colors line-clamp-1 min-w-0">
+                    ${evLabel}${rpLabel}${hl(truncate(a.title, 120), newsState.query)}${readBadge}
+                </a>
+                <span class="shrink-0 text-xs text-text-secondary whitespace-nowrap hidden sm:block">${relativeDate(a.created_at)}</span>
+                <a href="${a.url}" target="_blank" onclick="markRead('read_articles','${a.id}')" 
+                   class="shrink-0 text-xs font-semibold text-primary hover:underline">읽기</a>
+            </div>`;
+        }).join('');
+        
+        renderPagination('news-pagination', page, totalPages, 'newsGoTo');
+    } catch (err) {
+        loadEl.style.display = 'none';
+        document.getElementById('news-error').classList.remove('hidden');
+        document.getElementById('news-error').innerHTML = `<span class="material-symbols-outlined text-4xl mb-2 block">error</span>${err.message}`;
+    }
+}
+
+function newsGoTo(p) { loadNewsPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function newsSearch() {
+    newsState.query = document.getElementById('news-search').value.trim();
+    newsState.page = 1;
+    document.getElementById('news-clear').classList.toggle('hidden', !newsState.query);
+    loadNewsPage(1);
+}
+function newsClear() {
+    document.getElementById('news-search').value = '';
+    newsState.query = ''; newsState.event = false; newsState.report = false;
+    document.getElementById('news-clear').classList.add('hidden');
+    document.getElementById('news-event-btn').classList.remove('bg-primary', 'text-white');
+    document.getElementById('news-event-btn').classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600');
+    document.getElementById('news-report-btn').classList.remove('bg-primary', 'text-white');
+    document.getElementById('news-report-btn').classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600');
+    loadNewsPage(1);
+}
+function newsToggleEvent() {
+    newsState.event = !newsState.event;
+    if (newsState.event) newsState.report = false;
+    const btn = document.getElementById('news-event-btn');
+    const rbtn = document.getElementById('news-report-btn');
+    btn.classList.toggle('bg-primary', newsState.event); btn.classList.toggle('text-white', newsState.event);
+    btn.classList.toggle('bg-gray-100', !newsState.event); btn.classList.toggle('text-gray-600', !newsState.event);
+    rbtn.classList.remove('bg-primary', 'text-white'); rbtn.classList.add('bg-gray-100', 'text-gray-600');
+    loadNewsPage(1);
+}
+function newsToggleReport() {
+    newsState.report = !newsState.report;
+    if (newsState.report) newsState.event = false;
+    const btn = document.getElementById('news-report-btn');
+    const ebtn = document.getElementById('news-event-btn');
+    btn.classList.toggle('bg-primary', newsState.report); btn.classList.toggle('text-white', newsState.report);
+    btn.classList.toggle('bg-gray-100', !newsState.report); btn.classList.toggle('text-gray-600', !newsState.report);
+    ebtn.classList.remove('bg-primary', 'text-white'); ebtn.classList.add('bg-gray-100', 'text-gray-600');
+    loadNewsPage(1);
+}
+
+document.getElementById('news-search').addEventListener('keydown', e => { if(e.key==='Enter') newsSearch(); });
+
+// ==================== REPORTS PAGE ====================
+let reportsState = { files: [], filtered: [], page: 1, perPage: 20, filter: 'all', query: '' };
+
+async function loadReportsPage() {
+    try {
+        const resp = await fetch('files.json');
+        reportsState.files = await resp.json();
+        reportsState.filtered = [...reportsState.files];
+        reportsState.filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+        renderReports();
+    } catch (err) {
+        document.getElementById('reports-loading').style.display = 'none';
+        document.getElementById('reports-list').innerHTML = '<div class="text-center py-12 text-red-500">데이터를 불러오는데 실패했습니다.</div>';
+    }
+}
+
+function filterReports() {
+    let result = [...reportsState.files];
+    const q = reportsState.query.toLowerCase();
+    if (q) {
+        result = result.filter(f => (f.filename||'').toLowerCase().includes(q) || (f.description||'').toLowerCase().includes(q));
+    }
+    const ft = reportsState.filter;
+    if (ft !== 'all') {
+        if (ft === 'hwp') result = result.filter(f => ['hwp','hwpx'].includes((f.type||'').toLowerCase()));
+        else if (ft === 'ppt') result = result.filter(f => ['ppt','pptx'].includes((f.type||'').toLowerCase()));
+        else result = result.filter(f => (f.type||'').toLowerCase() === ft);
+    }
+    result.sort((a,b) => new Date(b.date) - new Date(a.date));
+    reportsState.filtered = result;
+    reportsState.page = 1;
+    renderReports();
+}
+
+function renderReports() {
+    document.getElementById('reports-loading').style.display = 'none';
+    const listEl = document.getElementById('reports-list');
+    const files = reportsState.filtered;
+    const totalPages = Math.ceil(files.length / reportsState.perPage);
+    const start = (reportsState.page - 1) * reportsState.perPage;
+    const pageFiles = files.slice(start, start + reportsState.perPage);
+    
+    if (files.length === 0) {
+        listEl.innerHTML = '<div class="text-center py-12 text-text-secondary"><span class="material-symbols-outlined text-4xl mb-2 block">search_off</span>검색 결과가 없습니다.</div>';
+        document.getElementById('reports-pagination').innerHTML = '';
+        return;
+    }
+    
+    const today = new Date(); today.setHours(0,0,0,0);
+    listEl.innerHTML = pageFiles.map(f => {
+        const isToday = f.date && new Date(f.date).toDateString() === today.toDateString();
+        const dateDisp = isToday ? '<span class="text-emerald-500 font-semibold">오늘</span>' : (f.date ? new Date(f.date).toLocaleDateString('ko-KR') : '-');
+        return `
+        <div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-0.5">
+                    ${getFileBadge(f.type)}
+                    ${isToday ? '<span class="today-dot"></span>' : ''}
+                </div>
+                <a href="${f.link}" target="_blank" class="text-sm font-medium line-clamp-1 hover:text-primary transition-colors">
+                    ${hl(f.filename || '-', reportsState.query)}
+                </a>
+                ${f.description ? `<div class="text-xs text-text-secondary line-clamp-1 mt-0.5">${hl(truncate(f.description, 80), reportsState.query)}</div>` : ''}
+            </div>
+            <span class="shrink-0 text-xs text-text-secondary">${dateDisp}</span>
+            <span class="shrink-0 text-xs text-text-secondary hidden sm:block">${f.size || '-'}</span>
+            <a href="${f.link}" target="_blank" class="shrink-0 text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">download</span>받기
+            </a>
+        </div>`;
+    }).join('');
+    
+    renderPagination('reports-pagination', reportsState.page, totalPages, 'reportsGoTo');
+}
+
+function reportsGoTo(p) { reportsState.page = p; renderReports(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function reportsSearch() { reportsState.query = document.getElementById('reports-search').value.trim(); filterReports(); }
+document.getElementById('reports-search').addEventListener('keydown', e => { if(e.key==='Enter') reportsSearch(); });
+
+// Report tab clicks
+document.querySelectorAll('.report-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.report-tab').forEach(t => { t.classList.remove('bg-primary','text-white'); t.classList.add('bg-gray-100','dark:bg-gray-800','text-gray-600'); });
+        tab.classList.remove('bg-gray-100','dark:bg-gray-800','text-gray-600'); tab.classList.add('bg-primary','text-white');
+        reportsState.filter = tab.dataset.type;
+        filterReports();
+    });
+});
+
+// ==================== BIZ PAGE ====================
+let bizState = { page: 0, perPage: 20, total: 0, query: '', data: [] };
+
+async function loadBizPage(page) {
+    bizState.page = page - 1; // 0-indexed internally
+    const loadEl = document.getElementById('biz-loading');
+    const listEl = document.getElementById('biz-list');
+    const headerEl = document.getElementById('biz-header');
+    loadEl.classList.remove('hidden'); loadEl.style.display = 'flex';
+    listEl.innerHTML = '';
+    document.getElementById('biz-pagination').innerHTML = '';
+    
+    try {
+        const MAX = 1000;
+        let q = sb.from('business_announcements').select('*', { count: 'exact' });
+        if (bizState.query) {
+            q = q.or(`business_name.ilike.%${bizState.query}%,site_name.ilike.%${bizState.query}%,responsible_organization.ilike.%${bizState.query}%,executing_organization.ilike.%${bizState.query}%`);
+        }
+        q = q.order('created_at', { ascending: false });
+        const from = bizState.page * bizState.perPage;
+        const to = Math.min(from + bizState.perPage - 1, MAX - 1);
+        
+        if (from > to || from >= MAX) {
+            bizState.data = []; bizState.total = 0;
+            loadEl.style.display = 'none';
+            listEl.innerHTML = '<div class="text-center py-12 text-text-secondary">더 이상 결과가 없습니다.</div>';
+            return;
+        }
+        
+        q = q.range(from, to);
+        const { data, error, count } = await q;
+        if (error) throw error;
+        
+        bizState.total = Math.min(count || 0, MAX);
+        const totalPages = Math.ceil(bizState.total / bizState.perPage);
+        
+        bizState.data = (data || []).map(item => ({
+            id: item.id,
+            siteName: item.site_name || '',
+            ministry: item.responsible_organization || '',
+            agency: item.executing_organization || '',
+            bizName: item.business_name || '',
+            url: item.url || '',
+            startDate: item.application_date || '',
+            endDate: item.deadline_date || '',
+            createdDate: item.created_at || ''
+        }));
+        
+        loadEl.style.display = 'none';
+        headerEl.classList.remove('hidden');
+        
+        if (bizState.data.length === 0) {
+            headerEl.classList.add('hidden');
+            listEl.innerHTML = '<div class="text-center py-12 text-text-secondary"><span class="material-symbols-outlined text-4xl mb-2 block">search_off</span>결과가 없습니다.</div>';
+            return;
+        }
+        
+        const today = new Date(); today.setHours(0,0,0,0);
+        const readIds = getReadList('readBizAnnouncements');
+        const startNum = bizState.total - from;
+        
+        listEl.innerHTML = bizState.data.map((item, idx) => {
+            const num = startNum - idx;
+            const isRead = readIds.includes(String(item.id));
+            const readBadge = isRead ? '<span class="read-badge-sm">읽음</span>' : '';
+            let endDateClass = '';
+            let ddayBadge = '';
+            if (item.endDate) {
+                const ed = new Date(item.endDate); ed.setHours(0,0,0,0);
+                const diff = Math.ceil((ed - today) / 86400000);
+                if (diff < 0) endDateClass = 'deadline-expired';
+                else if (diff === 0) ddayBadge = '<span class="dday-badge dday-today ml-1">D-Day</span>';
+                else if (diff <= 7) ddayBadge = `<span class="dday-badge dday-soon ml-1">D-${diff}</span>`;
+            }
+            
+            return `
+            <!-- Desktop -->
+            <div class="hidden md:grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors items-center text-sm">
+                <div class="col-span-1 text-center text-xs text-text-secondary">${num}</div>
+                <div class="col-span-2 text-xs text-text-secondary line-clamp-1" title="${escapeHtml(item.ministry)}">${escapeHtml(item.ministry) || '-'}</div>
+                <div class="col-span-5 min-w-0">
+                    <a href="${item.url}" target="_blank" onclick="markRead('readBizAnnouncements','${item.id}')" class="font-medium hover:text-primary transition-colors line-clamp-1 ${isRead?'text-gray-400':''}">${hl(item.bizName, bizState.query)} ${readBadge}</a>
+                </div>
+                <div class="col-span-1 text-center text-xs text-text-secondary">${shortDate(item.startDate)}</div>
+                <div class="col-span-1 text-center text-xs ${endDateClass}">${shortDate(item.endDate)}${ddayBadge}</div>
+                <div class="col-span-2 text-xs text-text-secondary line-clamp-1" title="${escapeHtml(item.agency)}">${escapeHtml(item.agency) || '-'}</div>
+            </div>
+            <!-- Mobile -->
+            <a href="${item.url}" target="_blank" onclick="markRead('readBizAnnouncements','${item.id}')" class="block md:hidden px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <div class="text-sm font-medium line-clamp-2 ${isRead?'text-gray-400':''}">${hl(item.bizName, bizState.query)} ${readBadge}</div>
+                <div class="flex items-center gap-2 mt-1 text-xs text-text-secondary flex-wrap">
+                    <span>${escapeHtml(item.ministry) || '-'}</span>
+                    <span>·</span>
+                    <span class="${endDateClass}">마감 ${shortDate(item.endDate)}${ddayBadge}</span>
+                </div>
+            </a>`;
+        }).join('');
+        
+        renderPagination('biz-pagination', bizState.page + 1, totalPages, 'bizGoTo');
+    } catch (err) {
+        loadEl.style.display = 'none';
+        document.getElementById('biz-error').classList.remove('hidden');
+        document.getElementById('biz-error').textContent = err.message;
+    }
+}
+
+function bizGoTo(p) { loadBizPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function bizSearch() {
+    bizState.query = document.getElementById('biz-search').value.trim();
+    document.getElementById('biz-clear').classList.toggle('hidden', !bizState.query);
+    loadBizPage(1);
+}
+function bizClear() {
+    document.getElementById('biz-search').value = '';
+    bizState.query = '';
+    document.getElementById('biz-clear').classList.add('hidden');
+    loadBizPage(1);
+}
+document.getElementById('biz-search').addEventListener('keydown', e => { if(e.key==='Enter') bizSearch(); });
+
+async function bizDownloadExcel() {
+    const btn = document.getElementById('biz-excel-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 다운로드 중...';
+    btn.disabled = true;
+    try {
+        const allData = [];
+        const MAX = 1000;
+        const pp = 20;
+        for (let p = 0; p < Math.ceil(MAX/pp); p++) {
+            let q = sb.from('business_announcements').select('*');
+            if (bizState.query) q = q.or(`business_name.ilike.%${bizState.query}%,site_name.ilike.%${bizState.query}%,responsible_organization.ilike.%${bizState.query}%,executing_organization.ilike.%${bizState.query}%`);
+            q = q.order('created_at', { ascending: false }).range(p*pp, p*pp+pp-1);
+            const { data } = await q;
+            if (!data || data.length === 0) break;
+            allData.push(...data.map(item => [item.site_name||'', item.responsible_organization||'', item.business_name||'', item.application_date||'', item.deadline_date||'', item.executing_organization||'', item.url||'']));
+            if (allData.length >= MAX) break;
+        }
+        if (allData.length === 0) { alert('다운로드할 데이터가 없습니다.'); return; }
+        const headers = ['번호','사이트명','소관부처','사업명','신청일','마감일','수행기관','URL'];
+        const csv = [headers.join(','), ...allData.map((r,i) => [`${i+1}`, ...r].map(c => `"${String(c).replace(/"/g,'""')}"`).join(','))].join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `사업공고_${allData.length}건_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+    } catch (err) { alert('다운로드 오류: ' + err.message); }
+    finally { btn.innerHTML = '<i class="fas fa-file-excel"></i> 엑셀 다운로드'; btn.disabled = false; }
+}
+
+// ==================== SEMINAR PAGE ====================
+let seminarState = { page: 1, perPage: 10, total: 0, query: '' };
+
+async function loadSeminarPage(page) {
+    seminarState.page = page;
+    const loadEl = document.getElementById('seminar-loading');
+    const listEl = document.getElementById('seminar-list');
+    loadEl.classList.remove('hidden'); loadEl.style.display = 'flex';
+    listEl.innerHTML = '';
+    document.getElementById('seminar-pagination').innerHTML = '';
+    
+    try {
+        let countQ = sb.from('ampos_seminar').select('*', { count: 'exact', head: true });
+        let dataQ = sb.from('ampos_seminar').select('*');
+        
+        if (seminarState.query) {
+            const f = `seminar_name.ilike.%${seminarState.query}%,organizer.ilike.%${seminarState.query}%,location.ilike.%${seminarState.query}%`;
+            countQ = countQ.or(f);
+            dataQ = dataQ.or(f);
+        }
+        
+        const { count } = await countQ;
+        seminarState.total = count || 0;
+        const totalPages = Math.ceil(seminarState.total / seminarState.perPage);
+        const start = (page - 1) * seminarState.perPage;
+        
+        const { data, error } = await dataQ.order('event_date', { ascending: false }).range(start, start + seminarState.perPage - 1);
+        if (error) throw error;
+        
+        loadEl.style.display = 'none';
+        
+        if (!data || data.length === 0) {
+            listEl.innerHTML = '<div class="col-span-full text-center py-12 text-text-secondary"><span class="material-symbols-outlined text-4xl mb-2 block">event_busy</span>등록된 세미나가 없습니다.</div>';
+            return;
+        }
+        
+        listEl.innerHTML = data.map((s, i) => {
+            const num = seminarState.total - start - i;
+            const ddayHtml = getDDayHtml(s.event_date);
+            const posterHtml = s.poster_url ? `
+                <div class="relative cursor-pointer group/poster bg-slate-50 dark:bg-slate-800" onclick="openLightbox('${s.poster_url}')">
+                    <div class="w-full aspect-[3/4]">
+                        <img src="${s.poster_url}" alt="포스터" class="w-full h-full object-contain rounded-t-xl" loading="lazy">
+                    </div>
+                    <div class="absolute inset-0 bg-black/0 group-hover/poster:bg-black/20 rounded-t-xl transition-colors flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white opacity-0 group-hover/poster:opacity-100 transition-opacity text-3xl">zoom_in</span>
+                    </div>
+                </div>` : '';
+            
+            return `
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+                ${posterHtml}
+                <div class="p-4">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <h4 class="font-bold text-sm leading-snug line-clamp-2">${hl(s.seminar_name || '', seminarState.query)}</h4>
+                        <span class="shrink-0 text-xs text-text-secondary">#${num}</span>
+                    </div>
+                    <div class="flex flex-col gap-1 text-xs text-text-secondary">
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                            ${s.event_date ? new Date(s.event_date).toLocaleDateString('ko-KR', { year:'numeric', month:'short', day:'numeric' }) : '-'}
+                            ${ddayHtml}
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">group</span>
+                            ${hl(s.organizer || '-', seminarState.query)}
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">location_on</span>
+                            ${hl(s.location || '-', seminarState.query)}
+                        </div>
+                    </div>
+                    ${s.material_link ? `<a href="${s.material_link}" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-primary hover:underline"><span class="material-symbols-outlined text-[14px]">description</span>자료보기</a>` : ''}
+                </div>
+            </div>`;
+        }).join('');
+        
+        renderPagination('seminar-pagination', page, totalPages, 'seminarGoTo');
+    } catch (err) {
+        loadEl.style.display = 'none';
+        document.getElementById('seminar-error').classList.remove('hidden');
+        document.getElementById('seminar-error').textContent = err.message;
+    }
+}
+
+function seminarGoTo(p) { loadSeminarPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function seminarSearch() {
+    seminarState.query = document.getElementById('seminar-search').value.trim();
+    document.getElementById('seminar-clear').classList.toggle('hidden', !seminarState.query);
+    loadSeminarPage(1);
+}
+function seminarClear() {
+    document.getElementById('seminar-search').value = '';
+    seminarState.query = '';
+    document.getElementById('seminar-clear').classList.add('hidden');
+    loadSeminarPage(1);
+}
+document.getElementById('seminar-search').addEventListener('keydown', e => { if(e.key==='Enter') seminarSearch(); });
+
+// ==================== BLOG PAGE ====================
+let blogState = { page: 1, perPage: 12, total: 0, type: 'all' };
+
+async function loadBlogPage(page) {
+    blogState.page = page;
+    const loadEl = document.getElementById('blog-loading');
+    const listEl = document.getElementById('blog-list');
+    loadEl.classList.remove('hidden'); loadEl.style.display = 'flex';
+    listEl.innerHTML = '';
+    document.getElementById('blog-pagination').innerHTML = '';
+    
+    try {
+        let countQ = sb.from('posts').select('*', { count: 'exact', head: true }).eq('approval_stage', 5);
+        let dataQ = sb.from('posts').select('id, post_no, title, author_name, date, place, type, thumbnail_url, editor_html, created_at').eq('approval_stage', 5);
+        
+        if (blogState.type !== 'all') {
+            countQ = countQ.eq('type', blogState.type);
+            dataQ = dataQ.eq('type', blogState.type);
+        }
+        
+        const { count } = await countQ;
+        blogState.total = count || 0;
+        const totalPages = Math.ceil(blogState.total / blogState.perPage);
+        const start = (page - 1) * blogState.perPage;
+        
+        const { data, error } = await dataQ.order('date', { ascending: false }).range(start, start + blogState.perPage - 1);
+        if (error) throw error;
+        
+        loadEl.style.display = 'none';
+        document.getElementById('blog-count').textContent = `총 ${blogState.total}건`;
+        
+        if (!data || data.length === 0) {
+            listEl.innerHTML = '<div class="col-span-full text-center py-16 text-text-secondary"><span class="material-symbols-outlined text-4xl mb-2 block">article</span>게시글이 없습니다.</div>';
+            return;
+        }
+        
+        listEl.innerHTML = data.map(p => {
+            const rawExcerpt = (p.editor_html || '').replace(/<[^>]+>/g, '');
+            const tmpEl = document.createElement('textarea'); tmpEl.innerHTML = rawExcerpt;
+            const excerpt = (tmpEl.value || '').replace(/\s+/g, ' ').trim();
+            const typeLabel = p.type === 'event' ? '행사' : p.type === 'visit' ? '탐방' : (p.type || '');
+            const typeCls = p.type === 'event' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300';
+            const detailUrl = 'blog_post?id=' + (p.post_no || p.id);
+            const dateStr = p.date ? new Date(p.date).toLocaleDateString('ko-KR', { year:'numeric', month:'short', day:'numeric' }) : '';
+            return `
+            <a href="${detailUrl}" class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all group">
+                <div class="h-44 bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    ${p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="" class="w-full h-full object-cover" loading="lazy">` : '<div class="w-full h-full flex items-center justify-center text-5xl text-gray-300 dark:text-gray-600">📄</div>'}
+                </div>
+                <div class="p-4">
+                    <span class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full ${typeCls} mb-2">${typeLabel}</span>
+                    <h4 class="text-sm font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-primary transition-colors">${escapeHtml(p.title || '제목 없음')}</h4>
+                    <p class="text-xs text-text-secondary line-clamp-2 mb-3">${escapeHtml(truncate(excerpt, 100))}</p>
+                    <div class="flex items-center gap-3 text-[11px] text-text-secondary pt-3 border-t border-gray-100 dark:border-gray-800">
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">person</span>${escapeHtml(p.author_name || '익명')}</span>
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">calendar_today</span>${dateStr}</span>
+                        ${p.place ? `<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">location_on</span>${escapeHtml(p.place)}</span>` : ''}
+                    </div>
+                </div>
+            </a>`;
+        }).join('');
+        
+        renderPagination('blog-pagination', page, totalPages, 'blogGoTo');
+    } catch (err) {
+        loadEl.style.display = 'none';
+        document.getElementById('blog-error').classList.remove('hidden');
+        document.getElementById('blog-error').textContent = err.message;
+    }
+}
+
+function blogGoTo(p) { loadBlogPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+// Blog tab clicks
+document.querySelectorAll('.blog-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.blog-tab').forEach(t => { t.classList.remove('bg-primary','text-white'); t.classList.add('bg-gray-100','dark:bg-gray-800','text-gray-600'); });
+        tab.classList.remove('bg-gray-100','dark:bg-gray-800','text-gray-600'); tab.classList.add('bg-primary','text-white');
+        blogState.type = tab.dataset.type;
+        blogState.page = 1;
+        loadBlogPage(1);
+    });
+});
+
+// ==================== LIGHTBOX ====================
+function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    document.getElementById('lightbox-img').src = src;
+    lb.style.display = 'flex';
+}
+function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    lb.style.display = 'none';
+    document.getElementById('lightbox-img').src = '';
+}
+document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ==================== DARK MODE ====================
+const darkToggle = document.getElementById('darkToggle');
+const darkIcon = document.getElementById('darkIcon');
+
+function setDark(isDark) {
+    document.documentElement.classList.toggle('dark', isDark);
+    darkIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    localStorage.setItem('darkMode', isDark);
+}
+
+darkToggle.addEventListener('click', () => {
+    setDark(!document.documentElement.classList.contains('dark'));
+});
+
+// Init dark mode
+if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    setDark(true);
+}
+
+// ==================== MOBILE MENU ====================
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('open');
+});
+
+// ==================== SCROLL TO TOP ====================
+const stb = document.getElementById('scrollTopBtn');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) { stb.style.opacity = '1'; stb.style.pointerEvents = 'auto'; }
+    else { stb.style.opacity = '0'; stb.style.pointerEvents = 'none'; }
+});
+stb.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ==================== INIT ====================
+const initHash = window.location.hash.replace('#', '') || 'home';
+navigateTo(initHash);
+</script>
 </body>
-
 </html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Nexus News Feed</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;family=Merriweather:wght@300;400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "primary-dark": "#0d43b3",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#1d2333",
+                        "text-secondary": "#92a4c9",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                        "serif": ["Merriweather", "serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body min-h-screen flex flex-col">
+<nav class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-[1280px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-[32px]">hub</span>
+</div>
+<h1 class="font-display font-bold text-xl tracking-tight">AI Nexus</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-sm font-medium text-primary" href="#">News</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Reports</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Events</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex text-sm font-medium hover:text-primary transition-colors">
+                Search
+            </button>
+<button class="bg-primary hover:bg-primary-dark text-white text-sm font-bold px-5 py-2 rounded-lg transition-colors">
+                Subscribe
+            </button>
+</div>
+</div>
+</nav>
+<main class="flex-grow w-full max-w-[1280px] mx-auto px-6 py-8 flex flex-col gap-10">
+<section class="w-full">
+<div class="relative overflow-hidden rounded-xl bg-surface-dark border-l-4 border-primary shadow-lg">
+<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDa5yXQ9YHiei_sSAQFCdvIqF6Y8lQWPOlkiYlN_PuqWfgYLiJWEQ9pA9egfkDBdY717E5YNZxNaq1vH8tvCspXPBDR1_FBtCEiPdw_dqo-EBF5Y-mkegbSPcYZArlotzQIjqjNRiOknOri5F8Dr8Q7K6AS0yIcLb1WQmoTp_fNSy--0XropQHd5JYu27hPn3mG4Hd0URTkTfBmtrbF_bwpGuS55iU8ihjp0JgsOJOvbI16Z4WsFVpiIO7Kd_YIo9o8fGT5f8YvIjs');"></div>
+<div class="relative z-20 flex flex-col md:flex-row items-start md:items-center justify-between p-6 gap-6">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-3">
+<span class="animate-pulse flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+</span>
+<span class="text-red-400 font-bold uppercase tracking-wider text-xs">Breaking News</span>
+<span class="text-gray-400 text-xs">|</span>
+<span class="text-gray-300 text-xs">10 minutes ago</span>
+</div>
+<h2 class="font-serif text-2xl md:text-3xl font-bold text-white leading-tight hover:text-blue-200 transition-colors cursor-pointer">
+                        Global AI Summit Announces New International Safety Protocols
+                    </h2>
+</div>
+<button class="whitespace-nowrap flex items-center gap-2 bg-white text-slate-900 hover:bg-blue-50 font-bold py-2.5 px-5 rounded-lg transition-all text-sm">
+                    Read Full Story
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<div class="lg:col-span-8 flex flex-col gap-8">
+<div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
+<h3 class="text-xl font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">feed</span>
+                    Latest Stories
+                </h3>
+<div class="flex gap-2">
+<button class="text-xs font-semibold px-3 py-1 rounded-full bg-primary text-white">All</button>
+<button class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Tech</button>
+<button class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Policy</button>
+<button class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Business</button>
+</div>
+</div>
+<article class="flex flex-col md:flex-row gap-6 group cursor-pointer border-b border-gray-100 dark:border-gray-800 pb-8 last:border-0">
+<div class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative">
+<div class="absolute top-2 left-2 z-10">
+<span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm uppercase tracking-wide">Business</span>
+</div>
+<div class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJUNVPvvsJ8Chtl3Isy26Hs9gyOpSQZ25lRdnJ6cPiqb5omPX2dPlOS5XuIFLYMekCgsFeuGzSZTklo3pQP0muuEsD6Y_be7f_HAaUHRLeMRlcdX8xoEE7Dqzh70wsL8TmyEPShGv7WJiwjvZJVOntezdj1OBkz7i-GYe7B_4R_qfnhk4ykevB7y8AfO9QDjU1qxd76CkJ1pAo30UJh_5bBkzAHASjQKwekParePfVvg7AImx6WzCfhtYtvYAxuH1pxpN7ep1K_CQ');"></div>
+</div>
+<div class="w-full md:w-2/3 flex flex-col justify-start">
+<div class="flex items-center gap-2 mb-2 text-xs text-text-secondary">
+<span class="font-semibold text-slate-700 dark:text-gray-300">By Sarah Jenkins</span>
+<span>•</span>
+<span>2 hours ago</span>
+</div>
+<h3 class="font-serif text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors leading-snug">
+                        Major Tech Firms Agree to Voluntary Watermarking Standards for AI Content
+                    </h3>
+<p class="text-slate-600 dark:text-gray-400 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
+                        In a historic move, seven leading AI companies have signed a voluntary agreement to implement invisible watermarking on all AI-generated content to combat misinformation ahead of the election cycle.
+                    </p>
+<div class="mt-auto flex items-center gap-4">
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            Read More <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+</button>
+<div class="flex items-center gap-3 ml-auto text-gray-400">
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">bookmark_border</span></button>
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">share</span></button>
+</div>
+</div>
+</div>
+</article>
+<article class="flex flex-col md:flex-row gap-6 group cursor-pointer border-b border-gray-100 dark:border-gray-800 pb-8 last:border-0">
+<div class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative">
+<div class="absolute top-2 left-2 z-10">
+<span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm uppercase tracking-wide">Tech</span>
+</div>
+<div class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAM6gigXJS1BC6aB7tfD_7owhaZWoRc4jf3GDu74IoO4ViYM7jfihI9WdMhAdQ2mRjvTJsSX0hlq2i6y4WIYk7sfXbMnGpP3hLgkbS2fWr8FOpxkYpyga6-WkFM3JYrob-am6VwdpGFHSoddWb7Slf8NWw6JLdgQJPTk3-1vo-Xx0w99-qLM_z7VYjryqWCOrCNTpsU1YKNrpkkxzup1Yw_5odAPsmytY43bdNtfFqDDn7fdQ5xpzZVEhPqvtb_cC83fOJ1Et68hE');"></div>
+</div>
+<div class="w-full md:w-2/3 flex flex-col justify-start">
+<div class="flex items-center gap-2 mb-2 text-xs text-text-secondary">
+<span class="font-semibold text-slate-700 dark:text-gray-300">By Dr. Alex Wong</span>
+<span>•</span>
+<span>5 hours ago</span>
+</div>
+<h3 class="font-serif text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors leading-snug">
+                        New Robotics Transformer Model Shows Promise in General Purpose Tasks
+                    </h3>
+<p class="text-slate-600 dark:text-gray-400 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
+                        Researchers have unveiled RT-2, a vision-language-action model that learns from both web data and robotics data, translating this knowledge into generalized robotic instructions.
+                    </p>
+<div class="mt-auto flex items-center gap-4">
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            Read More <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+</button>
+<div class="flex items-center gap-3 ml-auto text-gray-400">
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">bookmark_border</span></button>
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">share</span></button>
+</div>
+</div>
+</div>
+</article>
+<article class="flex flex-col md:flex-row gap-6 group cursor-pointer border-b border-gray-100 dark:border-gray-800 pb-8 last:border-0">
+<div class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative">
+<div class="absolute top-2 left-2 z-10">
+<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm uppercase tracking-wide">Policy</span>
+</div>
+<div class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0mjTSBoGQOhX3ki0wZDAMiiKdm94jKJP-bMz9ZPgOVesZnSnhHXaJAo2zZfJxyZ-L09etgdLwagx49OBbEnMa0-U5b1KwLgjy9b3WG0V5bT64_a4Y99eidt_rBPusSjy63s-WRQwe1191vMIgl22AXNlG-EtxvIrq4uMKYk3lA_x0soI0k2NGXdOmzAhw5K3r97K8Vmn8AojOLkz8dkvvSEC3kunhpizQ5IFGW3HHzvJ-5zDYFof8PGwH7yQxtoap9TSZIpcoEog');"></div>
+</div>
+<div class="w-full md:w-2/3 flex flex-col justify-start">
+<div class="flex items-center gap-2 mb-2 text-xs text-text-secondary">
+<span class="font-semibold text-slate-700 dark:text-gray-300">By Elena Ross</span>
+<span>•</span>
+<span>8 hours ago</span>
+</div>
+<h3 class="font-serif text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors leading-snug">
+                        EU Parliament Passes Landmark AI Act with Focus on High-Risk Systems
+                    </h3>
+<p class="text-slate-600 dark:text-gray-400 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
+                        The comprehensive legislation categorizes AI applications by risk levels and bans certain uses entirely, setting a global precedent for AI governance.
+                    </p>
+<div class="mt-auto flex items-center gap-4">
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            Read More <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+</button>
+<div class="flex items-center gap-3 ml-auto text-gray-400">
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">bookmark_border</span></button>
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">share</span></button>
+</div>
+</div>
+</div>
+</article>
+<article class="flex flex-col md:flex-row gap-6 group cursor-pointer pb-8 last:border-0">
+<div class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative">
+<div class="absolute top-2 left-2 z-10">
+<span class="bg-orange-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm uppercase tracking-wide">Startup</span>
+</div>
+<div class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBjfA-Zigcdx07v3n_Zf66OZUW_uAwsUDys_tcgkaLXwGEzdlj6UKfpFTsCPpcYMgZG-gd5F4QMqE92ivULJUGSV2dZ_qs6gYcgVDt7W7nzW49B8KbtcE7GmbBr8ptYGovfHGa6DrF44IsF4CsbByDx2fCQJ0Zxk8va2uj6sGbZMRoP7vamNS5KcNo-Cu8CTnCM1y2Znuu_4lO2YMD4ibIHKY3VrvoVcnpa9-_w1QSoVuo4fkAqrRWomUeH819moljceb_7Fm5xdJA');"></div>
+</div>
+<div class="w-full md:w-2/3 flex flex-col justify-start">
+<div class="flex items-center gap-2 mb-2 text-xs text-text-secondary">
+<span class="font-semibold text-slate-700 dark:text-gray-300">By David Miller</span>
+<span>•</span>
+<span>12 hours ago</span>
+</div>
+<h3 class="font-serif text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors leading-snug">
+                        Anthropic Raises $4B to Compete in Generative AI Race
+                    </h3>
+<p class="text-slate-600 dark:text-gray-400 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
+                        The fresh capital injection will be used to train their next-generation foundation model, Claude-Next, focusing on safety and interpretability.
+                    </p>
+<div class="mt-auto flex items-center gap-4">
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            Read More <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+</button>
+<div class="flex items-center gap-3 ml-auto text-gray-400">
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">bookmark_border</span></button>
+<button class="hover:text-primary"><span class="material-symbols-outlined text-[18px]">share</span></button>
+</div>
+</div>
+</div>
+</article>
+<div class="flex justify-center mt-4">
+<button class="px-6 py-3 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    Load More News
+                </button>
+</div>
+</div>
+<aside class="lg:col-span-4 flex flex-col gap-8">
+<div class="bg-primary/5 dark:bg-surface-dark border border-primary/20 rounded-xl p-6 relative overflow-hidden">
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/20 rounded-full blur-[40px]"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-3 text-primary">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-bold text-sm uppercase tracking-wider">The Daily Nexus</span>
+</div>
+<h3 class="font-display font-bold text-xl text-slate-900 dark:text-white mb-3">
+                        Get the top AI stories in your inbox every morning.
+                    </h3>
+<p class="text-sm text-text-secondary mb-5">
+                        Join 50,000+ professionals staying ahead of the curve. No spam, unsubscribe anytime.
+                    </p>
+<form class="flex flex-col gap-3">
+<input class="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-transparent text-sm" placeholder="Enter your email" type="email"/>
+<button class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2.5 rounded-lg transition-colors text-sm" type="button">
+                            Subscribe Free
+                        </button>
+</form>
+<p class="text-[10px] text-text-secondary mt-3 text-center">
+                        By subscribing, you agree to our Terms &amp; Privacy Policy.
+                    </p>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+<div class="flex items-center justify-between mb-5">
+<h4 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-orange-500">trending_up</span>
+                        Trending Now
+                    </h4>
+</div>
+<div class="flex flex-col gap-5">
+<a class="group flex gap-4 items-start" href="#">
+<span class="text-3xl font-bold text-gray-200 dark:text-gray-700 leading-none group-hover:text-primary transition-colors">01</span>
+<div>
+<span class="text-[10px] font-bold text-orange-500 uppercase">Opinion</span>
+<h5 class="font-medium text-slate-900 dark:text-white text-sm leading-snug group-hover:text-primary transition-colors mt-1">
+                                Why LLMs are hitting a plateau in reasoning capabilities
+                            </h5>
+</div>
+</a>
+<a class="group flex gap-4 items-start" href="#">
+<span class="text-3xl font-bold text-gray-200 dark:text-gray-700 leading-none group-hover:text-primary transition-colors">02</span>
+<div>
+<span class="text-[10px] font-bold text-blue-500 uppercase">Hardware</span>
+<h5 class="font-medium text-slate-900 dark:text-white text-sm leading-snug group-hover:text-primary transition-colors mt-1">
+                                NVIDIA unveils H200 chip designed specifically for generative AI
+                            </h5>
+</div>
+</a>
+<a class="group flex gap-4 items-start" href="#">
+<span class="text-3xl font-bold text-gray-200 dark:text-gray-700 leading-none group-hover:text-primary transition-colors">03</span>
+<div>
+<span class="text-[10px] font-bold text-purple-500 uppercase">Research</span>
+<h5 class="font-medium text-slate-900 dark:text-white text-sm leading-snug group-hover:text-primary transition-colors mt-1">
+                                DeepMind's AlphaFold 3 predicts structure of DNA, RNA
+                            </h5>
+</div>
+</a>
+<a class="group flex gap-4 items-start" href="#">
+<span class="text-3xl font-bold text-gray-200 dark:text-gray-700 leading-none group-hover:text-primary transition-colors">04</span>
+<div>
+<span class="text-[10px] font-bold text-green-500 uppercase">Finance</span>
+<h5 class="font-medium text-slate-900 dark:text-white text-sm leading-snug group-hover:text-primary transition-colors mt-1">
+                                AI startups valuation corrections coming in Q4, analysts say
+                            </h5>
+</div>
+</a>
+<a class="group flex gap-4 items-start" href="#">
+<span class="text-3xl font-bold text-gray-200 dark:text-gray-700 leading-none group-hover:text-primary transition-colors">05</span>
+<div>
+<span class="text-[10px] font-bold text-red-500 uppercase">Security</span>
+<h5 class="font-medium text-slate-900 dark:text-white text-sm leading-snug group-hover:text-primary transition-colors mt-1">
+                                New prompt injection technique bypasses major safety filters
+                            </h5>
+</div>
+</a>
+</div>
+</div>
+<div class="relative rounded-xl overflow-hidden aspect-[4/5] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrcrc30I_mWP2nzwIq1g6qGT7dqhMgvT2ZtAwyjg43_RSMLk6xRVp-0AZtXm41a882E8ad-1RHeq0NsCtkrKEmsnSWgwyNvmb8RksxCB-ktDlldj2vRIMQEkpT_S_U72g6DpU4g5SQfbSDtqW9teM2yqEGvcOaJ16uXAMvM2HFroxY4AiWVOFlIubjnuv5rZ78ilg9HdRGf_KO0IzU0bT2kligysbrdTh5Y6GFJCt5b5-wHxr_yWONj1PKGiAI8S-0qgUgwZgxvVQ');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded border border-white/20 mb-3 inline-block">Editor's Pick</span>
+<h4 class="font-display font-bold text-xl text-white leading-tight mb-2">
+                        The Future of Code: AI Assistants
+                    </h4>
+<p class="text-gray-300 text-sm line-clamp-2 mb-3">
+                        How tools like Copilot are fundamentally changing software engineering workflows.
+                    </p>
+<span class="text-white text-sm font-bold underline decoration-primary underline-offset-4 decoration-2">Read Feature</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="w-full border-t border-gray-200 dark:border-gray-800 bg-background-light dark:bg-background-dark py-12">
+<div class="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="col-span-1 md:col-span-2 flex flex-col gap-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[28px]">hub</span>
+<span class="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">AI Nexus</span>
+</div>
+<p class="text-text-secondary text-sm max-w-sm">
+                Your daily source for artificial intelligence news, policy analysis, and technological breakthroughs.
+            </p>
+<div class="flex gap-4 mt-2">
+<a class="text-text-secondary hover:text-primary transition-colors" href="#">
+<span class="sr-only">Twitter</span>
+<svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"></path></svg>
+</a>
+<a class="text-text-secondary hover:text-primary transition-colors" href="#">
+<span class="sr-only">LinkedIn</span>
+<svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg>
+</a>
+</div>
+</div>
+<div class="col-span-1">
+<h4 class="font-bold text-slate-900 dark:text-white mb-4">News Sections</h4>
+<ul class="flex flex-col gap-2 text-sm text-text-secondary">
+<li><a class="hover:text-primary" href="#">Technology</a></li>
+<li><a class="hover:text-primary" href="#">Business &amp; Finance</a></li>
+<li><a class="hover:text-primary" href="#">Policy &amp; Regulations</a></li>
+<li><a class="hover:text-primary" href="#">Research</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="font-bold text-slate-900 dark:text-white mb-4">Company</h4>
+<ul class="flex flex-col gap-2 text-sm text-text-secondary">
+<li><a class="hover:text-primary" href="#">About AI Nexus</a></li>
+<li><a class="hover:text-primary" href="#">Editorial Team</a></li>
+<li><a class="hover:text-primary" href="#">Advertise</a></li>
+<li><a class="hover:text-primary" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-6 mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-text-secondary">
+        © 2024 AI Nexus. All rights reserved.
+    </div>
+</footer>
+
+</body></html>

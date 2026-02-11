@@ -1,0 +1,388 @@
+
+<div id="koraiBlog" style="font-family:'Pretendard',system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;">
+
+<!-- ── 목록 영역 ── -->
+<div id="blogList">
+  <div id="blogFilter" style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+    <button class="kbf-btn active" data-type="all">전체</button>
+    <button class="kbf-btn" data-type="event">행사</button>
+    <button class="kbf-btn" data-type="visit">탐방</button>
+  </div>
+  <div id="blogCards"></div>
+  <div id="blogPaging" style="display:flex;justify-content:center;gap:6px;margin-top:28px;"></div>
+</div>
+
+<!-- ── 본문 영역 (인라인, 초기 숨김) ── -->
+<div id="blogPost" style="display:none;">
+  <div id="blogPostContent"></div>
+</div>
+
+</div><!-- /koraiBlog -->
+
+<style>
+/* ── 스코프: #koraiBlog ── */
+#koraiBlog { max-width:900px; margin:0 auto; padding:20px; color:#222; line-height:1.6; }
+
+/* 필터 버튼 */
+.kbf-btn {
+  padding:8px 22px; border:1.5px solid #ddd; border-radius:20px;
+  background:#fff; color:#555; font-size:1.1rem; cursor:pointer; transition:all .2s;
+}
+.kbf-btn:hover { border-color:#1a73e8; color:#1a73e8; }
+.kbf-btn.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
+
+/* 카드 그리드 */
+#blogCards {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px;
+}
+.kb-card {
+  display:flex; flex-direction:column; border:1px solid #e8e8e8; border-radius:12px;
+  background:#fff; overflow:hidden; cursor:pointer; transition:box-shadow .2s,transform .15s;
+  text-decoration:none; color:inherit;
+}
+.kb-card:hover { box-shadow:0 6px 20px rgba(0,0,0,.08); transform:translateY(-2px); }
+.kb-card-thumb {
+  width:100%; height:170px; background:#f0f0f0;
+  overflow:hidden; display:flex; align-items:center; justify-content:center;
+}
+.kb-card-thumb img { width:100%; height:100%; object-fit:cover; }
+.kb-card-thumb .no-img { font-size:2.5rem; color:#d0d0d0; }
+.kb-card-body { padding:18px; flex:1; display:flex; flex-direction:column; }
+.kb-badge {
+  display:inline-block; font-size:1.0rem; font-weight:600;
+  padding:4px 16px; border-radius:10px; margin-bottom:10px; width:fit-content;
+}
+.kb-badge.event { background:#e8f0fe; color:#1a73e8; }
+.kb-badge.visit { background:#fef7e0; color:#e8a800; }
+.kb-card-body h3 {
+  font-size:1.35rem; font-weight:700; color:#111; margin:0 0 8px; line-height:1.45;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.kb-card-body .kb-excerpt {
+  font-size:1.15rem; color:#666; margin-bottom:14px; flex:1;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.kb-card-meta {
+  font-size:1.05rem; color:#999; display:flex; gap:16px; flex-wrap:wrap;
+  padding-top:14px; border-top:1px solid #f0f0f0;
+}
+.kb-card-meta span { display:flex; align-items:center; gap:3px; }
+
+/* 페이징 */
+.kb-pg {
+  min-width:34px; height:34px; border:1px solid #ddd; border-radius:6px;
+  background:#fff; color:#444; font-size:.82rem; cursor:pointer; transition:all .2s;
+}
+.kb-pg:hover:not(:disabled) { border-color:#1a73e8; color:#1a73e8; }
+.kb-pg.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
+.kb-pg:disabled { opacity:.4; cursor:default; }
+
+/* 로딩/빈 상태 */
+.kb-loading, .kb-empty { text-align:center; padding:60px 0; color:#888; font-size:.9rem; }
+.kb-spinner {
+  display:inline-block; width:26px; height:26px; border:3px solid #e0e0e0;
+  border-top-color:#1a73e8; border-radius:50%; animation:kbSpin .8s linear infinite; margin-bottom:8px;
+}
+@keyframes kbSpin { to { transform:rotate(360deg); } }
+
+/* ── 전체화면 오버레이 → 인라인 본문 ── */
+#blogPost {
+  min-height:200px;
+}
+
+/* 본문 뒤로가기 */
+.kb-back {
+  display:inline-flex; align-items:center; gap:4px;
+  color:#1a73e8; text-decoration:none; font-size:.85rem; margin-bottom:20px; cursor:pointer;
+}
+.kb-back:hover { text-decoration:underline; }
+
+/* 타입 뱃지 (본문) */
+.kb-post-badge {
+  display:inline-block; font-size:.72rem; font-weight:600;
+  padding:3px 10px; border-radius:12px; margin-bottom:8px;
+}
+.kb-post-badge.event { background:#e8f0fe; color:#1a73e8; }
+.kb-post-badge.visit { background:#fef7e0; color:#e8a800; }
+
+/* 제목 */
+.kb-post-title {
+  font-size:1.5rem; font-weight:700; color:#111; line-height:1.4;
+  margin:0 0 12px; letter-spacing:-.02em;
+}
+
+/* 메타 바 */
+.kb-post-meta {
+  display:flex; flex-wrap:wrap; gap:14px; font-size:.82rem; color:#777;
+  padding-bottom:16px; border-bottom:1px solid #eee; margin-bottom:24px;
+}
+.kb-post-meta span { display:flex; align-items:center; gap:4px; }
+
+/* 히어로 이미지 */
+.kb-post-hero {
+  width:100%; max-height:400px; object-fit:cover; border-radius:10px; margin-bottom:24px;
+}
+
+/* ── 본문 스타일 (blog_post.html 동기화) ── */
+.kb-post-body {
+  font-size:14px; line-height:1.7; color:#111827; word-break:keep-all; overflow-wrap:break-word;
+}
+.kb-post-body h1 {
+  font-size:26px; font-weight:800; margin:0 0 14px; color:#1a1a2e;
+  padding-bottom:10px; border-bottom:3px solid #1a73e8;
+  background:linear-gradient(90deg,#1a73e8,#4f8fef); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.kb-post-body h2 {
+  font-size:18px; font-weight:800; margin:24px 0 10px; color:#1a73e8;
+  padding-left:12px; 
+}
+.kb-post-body h3 {
+  font-size:16px; font-weight:700; margin:20px 0 8px; color:#2d3748;
+  padding-left:10px; 
+}
+.kb-post-body h4 { font-size:14px; font-weight:600; margin:14px 0 6px; }
+.kb-post-body p { margin:10px 0; line-height:1.7; }
+.kb-post-body strong { font-weight:700; }
+.kb-post-body em { font-style:italic; }
+.kb-post-body u { text-decoration:underline; }
+.kb-post-body ul, .kb-post-body ol { margin:10px 0; padding-left:20px; }
+.kb-post-body li { margin:5px 0; }
+.kb-post-body blockquote {
+  background:#f9fafb; border:1px solid #d1d5db; border-left:3px solid #6b7280;
+  padding:16px 20px; margin:20px 0; color:#111827; box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+.kb-post-body .qa-item,
+.kb-post-body blockquote.qa-item {
+  background:transparent; border:none;
+  border-left:none; border-radius:10px;
+  padding:20px 24px; margin:20px 0; color:#111827; box-shadow:0 2px 8px rgba(26,115,232,.08);
+}
+.kb-post-body .qa-item strong { color:#1a56db; font-weight:700; }
+.kb-post-body .qa-item .qa-answer { color:#374151; line-height:1.8; }
+.kb-post-body .qa-label {
+  font-size:15px; font-weight:700; line-height:1.7;
+}
+.kb-post-body .qa-q {
+  color:#1a73e8;
+}
+.kb-post-body .qa-a {
+  color:#10b981;
+}
+.kb-post-body .blockquote-type5 {
+  width:fit-content; max-width:min(520px,calc(100% - 28px));
+  margin-left:0; margin-right:auto; padding:10px 16px; border-radius:24px;
+  background:#f3f4f6; color:#374151; border:none; box-shadow:none; border-left:none;
+}
+.kb-post-body .blockquote-type6 {
+  width:fit-content; max-width:min(520px,calc(100% - 28px));
+  margin-left:auto; margin-right:0; padding:10px 16px; border-radius:24px;
+  background:#2563eb; color:#fff; border:none; box-shadow:none; border-left:none;
+}
+.kb-post-body table {
+  width:100%; border-collapse:collapse; border:1px solid #e8e8e8; margin-bottom:20px;
+}
+.kb-post-body th, .kb-post-body td { padding:10px 15px; }
+.kb-post-body th { background:#f3f4f6; font-weight:600; border:1px solid #dedede; }
+.kb-post-body td { border:1px solid #e8e8e8; }
+.kb-post-body img { max-width:100%; height:auto; border-radius:4px; }
+.kb-post-body a { color:#2563eb; text-decoration:none; }
+.kb-post-body a:hover { text-decoration:underline; }
+.kb-post-body hr { border:0; border-top:1px solid #e5e7eb; margin:20px 0; }
+
+/* 반응형 */
+@media (max-width:600px) {
+  #blogCards { grid-template-columns:1fr; }
+  .kb-card-thumb { height:150px; }
+  .kb-post-title { font-size:1.25rem; }
+  .kb-post-body { font-size:.9rem; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function() {
+  /* ★ 여기에 실제 Supabase 키를 넣으세요 ★ */
+
+  var SB_URL  = 'https://kydkwdwtsqsjxasirxoi.supabase.co';
+  var SB_KEY  = 'sb_publishable_8s2AtTlUWOaLtiOvdsH7jQ_t7gVjUCM';
+
+  var PAGE_SIZE = 12;
+  var page = 1;
+  var typeFilter = 'all';
+  var total = 0;
+  var sb = null;
+
+  function getSb() {
+    if (sb) return sb;
+    if (!SB_URL || !SB_KEY || SB_URL.indexOf('__') !== -1) return null;
+    sb = supabase.createClient(SB_URL, SB_KEY);
+    return sb;
+  }
+
+  function strip(html) {
+    if (!html) return '';
+    var t = document.createElement('div'); t.innerHTML = html;
+    return (t.textContent || '').replace(/\s+/g,' ').trim();
+  }
+  function fmtDate(s) {
+    if (!s) return '';
+    var d = new Date(s); if (isNaN(d)) return s;
+    return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+  }
+  function typeLabel(t) { return t==='event'?'행사':t==='visit'?'탐방':(t||''); }
+
+  /* ── 목록 ── */
+  function fetchCount() {
+    var s = getSb(); if (!s) return Promise.resolve(0);
+    var q = s.from('posts').select('id',{count:'exact',head:true}).eq('approval_stage',5);
+    if (typeFilter!=='all') q = q.eq('type', typeFilter);
+    return q.then(function(r){ return (r.error?0:r.count)||0; });
+  }
+  function fetchList(pg) {
+    var s = getSb(); if (!s) return Promise.resolve([]);
+    var from = (pg-1)*PAGE_SIZE, to = from+PAGE_SIZE-1;
+    var q = s.from('posts')
+      .select('id,title,author_name,date,place,type,thumbnail_url,editor_html,created_at')
+      .eq('approval_stage',5).order('date',{ascending:false}).range(from,to);
+    if (typeFilter!=='all') q = q.eq('type', typeFilter);
+    return q.then(function(r){ return r.error?[]:(r.data||[]); });
+  }
+
+  function renderList(posts) {
+    var el = document.getElementById('blogCards');
+    if (!posts.length) { el.innerHTML='<div class="kb-empty">📭 게시글이 없습니다.</div>'; return; }
+    el.innerHTML = posts.map(function(p) {
+      var ex = strip(p.editor_html); if (ex.length>90) ex=ex.substring(0,90)+'…';
+      var tid = p.id;
+      var thumb = p.thumbnail_url
+        ? '<img src="'+p.thumbnail_url+'" alt="" loading="lazy">'
+        : '<div class="no-img">📄</div>';
+      return '<div class="kb-card" data-pid="'+tid+'">'+
+        '<div class="kb-card-thumb">'+thumb+'</div>'+
+        '<div class="kb-card-body">'+
+          '<span class="kb-badge '+(p.type||'')+'">'+typeLabel(p.type)+'</span>'+
+          '<h3>'+(p.title||'제목 없음')+'</h3>'+
+          (ex?'<div class="kb-excerpt">'+ex+'</div>':'')+
+          '<div class="kb-card-meta">'+
+            '<span>✍️ '+(p.author_name||'익명')+'</span>'+
+            '<span>📅 '+fmtDate(p.date||p.created_at)+'</span>'+
+            (p.place?'<span>📍 '+p.place+'</span>':'')+
+          '</div>'+
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('.kb-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        openPost(this.getAttribute('data-pid'));
+      });
+    });
+  }
+
+  function renderPaging() {
+    var tp = Math.ceil(total/PAGE_SIZE);
+    var el = document.getElementById('blogPaging');
+    if (tp<=1) { el.innerHTML=''; return; }
+    var h = '<button class="kb-pg" '+(page<=1?'disabled':'')+' data-p="'+(page-1)+'">◀</button>';
+    var s = Math.max(1,page-2), e = Math.min(tp,s+4);
+    if (e-s<4) s=Math.max(1,e-4);
+    for (var i=s;i<=e;i++) h+='<button class="kb-pg'+(i===page?' active':'')+'" data-p="'+i+'">'+i+'</button>';
+    h+='<button class="kb-pg" '+(page>=tp?'disabled':'')+' data-p="'+(page+1)+'">▶</button>';
+    el.innerHTML=h;
+    el.querySelectorAll('.kb-pg').forEach(function(b){
+      b.addEventListener('click',function(){
+        var p=parseInt(this.getAttribute('data-p'));
+        if(p&&p!==page){page=p;load();}
+      });
+    });
+  }
+
+  function load() {
+    document.getElementById('blogCards').innerHTML='<div class="kb-loading"><div class="kb-spinner"></div><br>불러오는 중…</div>';
+    document.getElementById('blogPaging').innerHTML='';
+    Promise.all([fetchCount(),fetchList(page)]).then(function(r){
+      total=r[0]; renderList(r[1]); renderPaging();
+    });
+  }
+
+  /* 필터 */
+  document.getElementById('blogFilter').addEventListener('click',function(e){
+    var btn=e.target.closest('.kbf-btn'); if(!btn) return;
+    typeFilter=btn.getAttribute('data-type'); page=1;
+    this.querySelectorAll('.kbf-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    load();
+  });
+
+  /* ── 본문 전체화면 ── */
+  function extractFirstImage(html) {
+    if (!html) return {src:null,html:html};
+    var w=document.createElement('div'); w.innerHTML=html;
+    // 테이블 안 이미지는 건너뛰고, 테이블 밖 첫 이미지만 히어로로 추출
+    var imgs=w.querySelectorAll('img');
+    var img=null;
+    for(var i=0;i<imgs.length;i++){
+      if(!imgs[i].closest('table')){ img=imgs[i]; break; }
+    }
+    if(!img) return {src:null,html:html};
+    var src=img.getAttribute('src')||null;
+    var par=img.parentElement;
+    if(par&&par!==w&&par.children.length===1&&(par.tagName==='P'||par.tagName==='DIV')) par.remove();
+    else img.remove();
+    return {src:src,html:w.innerHTML};
+  }
+
+  function openPost(pid) {
+    var s=getSb(); if(!s) return;
+    var listEl=document.getElementById('blogList');
+    var postEl=document.getElementById('blogPost');
+    var content=document.getElementById('blogPostContent');
+    content.innerHTML='<div class="kb-loading"><div class="kb-spinner"></div><br>불러오는 중…</div>';
+    listEl.style.display='none';
+    postEl.style.display='block';
+
+    var q=s.from('posts')
+      .select('id,title,author_name,date,place,type,thumbnail_url,editor_html,created_at')
+      .eq('approval_stage',5)
+      .eq('id',pid);
+    q.maybeSingle().then(function(res){
+      if(res.error||!res.data){
+        console.error('Blog post fetch error:', res.error);
+        content.innerHTML='<div class="kb-empty">😥 게시글을 찾을 수 없습니다.</div>';
+        return;
+      }
+      var p=res.data;
+      var ex=extractFirstImage(p.editor_html||'');
+      var hero=ex.src||p.thumbnail_url;
+      var h='';
+      h+='<span class="kb-back" id="blogBackBtn">← 목록으로</span>';
+      h+='<span class="kb-post-badge '+(p.type||'')+'">'+typeLabel(p.type)+'</span>';
+      h+='<h1 class="kb-post-title">'+(p.title||'제목 없음')+'</h1>';
+      h+='<div class="kb-post-meta">';
+      h+='<span>✍️ '+(p.author_name||'익명')+'</span>';
+      h+='<span>📅 '+fmtDate(p.date||p.created_at)+'</span>';
+      if(p.place) h+='<span>📍 '+p.place+'</span>';
+      h+='</div>';
+      if(hero) h+='<img class="kb-post-hero" src="'+hero+'" alt="">';
+      h+='<div class="kb-post-body">'+(ex.html||'<p>내용이 없습니다.</p>')+'</div>';
+      h+='<div style="margin-top:32px;padding-top:16px;border-top:1px solid #eee;text-align:center;"><span class="kb-back" id="blogBackBtn2">← 목록으로 돌아가기</span></div>';
+      content.innerHTML=h;
+
+      document.getElementById('blogBackBtn').addEventListener('click', backToList);
+      document.getElementById('blogBackBtn2').addEventListener('click', backToList);
+    });
+  }
+
+  function backToList() {
+    document.getElementById('blogPost').style.display='none';
+    document.getElementById('blogList').style.display='block';
+  }
+
+  /* ESC 키로 목록으로 */
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&document.getElementById('blogPost').style.display==='block') backToList();
+  });
+
+  /* 초기 로드 */
+  load();
+})();
+</script>

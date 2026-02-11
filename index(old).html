@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전문보고서 자료실 | 한국인공지능협회</title>
+    <meta name="description" content="한국인공지능협회 전문보고서 자료실 | 인공지능 관련 최신 연구보고서, 정책자료 및 전문서적을 확인하세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="전문보고서 자료실 | 한국인공지능협회">
+    <meta property="og:description" content="연구자료 및 정책문서를 검색하고 다운로드 할 수 있는 자료실입니다.">
+    <meta name="twitter:title" content="전문보고서 자료실 | 한국인공지능협회">
+    <meta name="twitter:description" content="연구자료 및 정책문서를 검색하고 다운로드 할 수 있는 자료실입니다.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
+    <meta name="twitter:image"
+        content="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_1.png">
+    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
+        media="(prefers-color-scheme: light)">
+    <link href="https://framerusercontent.com/images/yHL6S80IssKYxSTQMOG4ilm6ck.png" rel="icon"
+        media="(prefers-color-scheme: dark)">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                (사)한국인공지능협회
+            </a>
+            <nav class="nav-menu">
+                <a href="/index" class="nav-link active">전문자료실</a>
+                <a href="/info" class="nav-link">AI 뉴스</a>
+                <a href="/biz" class="nav-link">사업공고</a>
+                <a href="/seminar" class="nav-link">국회 AI 세미나</a>
+                <a href="/newsletter" class="nav-link external-link">AI 뉴스레터</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-section">
+            <h1 class="hero-title">전문보고서 자료실</h1>
+            <p class="hero-subtitle">인공지능 관련 최신 연구보고서 및 정책 자료를 검색하고 다운로드할 수 있습니다.</p>
+
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" class="search-input" placeholder="보고서 제목 또는 내용 검색...">
+                <button id="searchBtn" class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+        </section>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total Files</span>
+                <span class="stat-value" id="total-files">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">New Today</span>
+                <span class="stat-value" id="today-files">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Total Documents</span>
+                <span class="stat-value" id="current-page-info">-</span>
+            </div>
+        </div>
+
+        <div class="controls-bar">
+            <div class="category-tabs">
+                <button class="tab active" data-type="all">ALL</button>
+                <button class="tab" data-type="pdf">PDF</button>
+                <button class="tab" data-type="hwp">HWP</button>
+                <button class="tab" data-type="xlsx">EXCEL</button>
+                <button class="tab" data-type="ppt">PPT</button>
+                <button class="tab" data-type="기타">OTHERS</button>
+            </div>
+            <!-- Hidden element to maintain script compatibility -->
+            <div id="page-info" style="display:none;"></div>
+        </div>
+
+        <div class="table-container">
+            <table id="fileTable">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Size (MB)</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody id="fileTableBody">
+                    <tr>
+                        <td colspan="5" class="loading">Loading Data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination" id="pagination">
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><img src="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/KORAIA_Logo_(%EC%82%AC)%ED%95%9C%EA%B5%AD%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%ED%98%91%ED%9A%8C_%EA%B8%B0%EB%B3%B8_color_%EA%B0%80%EB%A1%9C@4x.png"  style="width: 50%" alt=""></h3>
+                    
+                </div>
+                <div class="footer-section">
+                    <h3>주요 메뉴</h3>
+                    <p><a href="/index">전문자료실</a></p>
+                    <p><a href="/info">AI 뉴스</a></p>
+                    <p><a href="/biz">사업공고</a></p>
+                    <p><a href="/seminar">국회 AI 세미나</a></p>
+                    <p><a href="/newsletter">AI 뉴스레터</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>연락처</h3>
+                    <p>이메일: info@koraia.org</p>
+                    <p>전화: 02-713-4800</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    © 2026 (사)한국인공지능협회. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <!-- <a hr -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop" title="Move to Top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let files = [];
+            let filteredFiles = [];
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const fileTableBody = document.getElementById('fileTableBody');
+            const tabs = document.querySelectorAll('.tab');
+            const pagination = document.getElementById('pagination');
+            const scrollTopBtn = document.getElementById('scrollTop');
+            let currentFilter = 'all';
+
+            // 페이징 관련 변수
+            let itemsPerPage = getItemsPerPage(); // 화면 크기에 따라 페이지당 아이템 수 조정
+            let currentPage = 1;
+            let totalPages = 1;
+
+            // 화면 크기에 따라 페이지당 아이템 수 설정
+            function getItemsPerPage() {
+                return window.innerWidth <= 768 ? 10 : 20;
+            }
+
+            // 통계 업데이트 함수
+            function updateStats() {
+                document.getElementById('total-files').textContent = filteredFiles.length;
+                document.getElementById('current-page-info').textContent = files.length;
+
+                // 오늘 추가된 파일 계산
+                const today = new Date().toDateString();
+                const todayFiles = files.filter(file => {
+                    if (file.date) {
+                        return new Date(file.date).toDateString() === today;
+                    }
+                    return false;
+                });
+                document.getElementById('today-files').textContent = todayFiles.length;
+            }
+
+            // 스크롤 버튼 표시/숨김 처리
+            window.addEventListener('scroll', function () {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.classList.add('visible');
+                } else {
+                    scrollTopBtn.classList.remove('visible');
+                }
+            });
+
+            // 스크롤 상단 버튼 클릭 이벤트
+            scrollTopBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // 화면 크기 변경 감지
+            window.addEventListener('resize', function () {
+                const newItemsPerPage = getItemsPerPage();
+                itemsPerPage = newItemsPerPage;
+                updatePagination(filteredFiles); // 화면 크기 변경 시 필터된 파일 목록 기준으로 페이지네이션 업데이트
+                displayFiles(filteredFiles);
+            });
+
+            // 파일 데이터 가져오기
+            fetch('files.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('파일 데이터를 불러오는데 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    files = data;
+                    filteredFiles = [...files];
+                    updateStats();
+                    updatePagination();
+                    displayFiles(filteredFiles);
+                    document.getElementById('page-info').textContent = `총 ${files.length}개 파일`;
+                })
+                .catch(error => {
+                    console.error('Error loading file data:', error);
+                    fileTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="no-results">
+                                <i class="fas fa-exclamation-circle"></i>
+                                데이터를 불러오는데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.
+                            </td>
+                        </tr>
+                    `;
+                });
+
+            // 검색 기능
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 탭 필터링
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.type;
+                    currentPage = 1; // 필터 변경시 첫 페이지로 이동
+                    performSearch(); // 검색어 유지하며 탭 필터 적용
+                });
+            });
+
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let searchResult = files.filter(file => {
+                    const filename = file.filename ? file.filename.toLowerCase() : '';
+                    const description = file.description ? file.description.toLowerCase() : '';
+                    return filename.includes(searchTerm) || description.includes(searchTerm);
+                });
+
+                filterFiles(searchResult);
+            }
+
+            function filterFiles(filesToFilter) {
+                let result = [...filesToFilter];
+
+                if (currentFilter !== 'all') {
+                    if (currentFilter === '기타') {
+                        result = result.filter(file => {
+                            const fileType = file.type ? file.type.toLowerCase() : '';
+                            return !['pdf', 'hwp', 'hwpx', 'xlsx', 'ppt', 'pptx'].includes(fileType);
+                        });
+                    } else if (currentFilter === 'hwp') {
+                        result = result.filter(file => {
+                            const fileType = file.type ? file.type.toLowerCase() : '';
+                            return fileType === 'hwp' || fileType === 'hwpx';
+                        });
+                    } else if (currentFilter === 'ppt') {
+                        result = result.filter(file => {
+                            const fileType = file.type ? file.type.toLowerCase() : '';
+                            return fileType === 'ppt' || fileType === 'pptx';
+                        });
+                    } else {
+                        result = result.filter(file => {
+                            const fileType = file.type ? file.type.toLowerCase() : '';
+                            return fileType === currentFilter.toLowerCase();
+                        });
+                    }
+                }
+
+                filteredFiles = result; // 필터링된 결과를 전역 변수에 저장
+                currentPage = 1; // 필터링 후 첫 페이지로 이동
+                updateStats();
+                updatePagination(filteredFiles);
+                displayFiles(filteredFiles);
+            }
+
+            // 페이지네이션 업데이트 함수 (기존 코드와 동일)
+            function updatePagination(filesToShow = filteredFiles) {
+                const total = filesToShow.length;
+                totalPages = Math.ceil(total / itemsPerPage);
+                pagination.innerHTML = '';
+                const isMobile = window.innerWidth <= 480;
+                const maxVisibleButtons = isMobile ? 3 : 5;
+
+                if (totalPages <= 1) return;
+
+                const createButton = (text, pageNumber, disabled = false, active = false) => {
+                    const btn = document.createElement('button');
+                    btn.innerHTML = text;
+                    btn.classList.add('page-btn');
+                    if (disabled) btn.disabled = true;
+                    if (active) btn.classList.add('active');
+                    btn.addEventListener('click', () => {
+                        currentPage = pageNumber;
+                        scrollToTop();
+                        displayFiles(filesToShow);
+                        updatePagination(filesToShow);
+                    });
+                    return btn;
+                };
+
+                pagination.appendChild(createButton('<i class="fas fa-chevron-left"></i>', currentPage - 1, currentPage === 1));
+
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+                if (endPage === totalPages) {
+                    startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+                }
+
+                if (startPage > 1) {
+                    pagination.appendChild(createButton('1', 1));
+                    if (startPage > 2) {
+                        const ellipsis = document.createElement('span');
+                        ellipsis.textContent = '...';
+                        ellipsis.classList.add('ellipsis');
+                        pagination.appendChild(ellipsis);
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    pagination.appendChild(createButton(i, i, false, i === currentPage));
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        const ellipsis = document.createElement('span');
+                        ellipsis.textContent = '...';
+                        ellipsis.classList.add('ellipsis');
+                        pagination.appendChild(ellipsis);
+                    }
+                    pagination.appendChild(createButton(totalPages, totalPages));
+                }
+
+                pagination.appendChild(createButton('<i class="fas fa-chevron-right"></i>', currentPage + 1, currentPage === totalPages));
+            }
+
+            // 페이지 이동 시 상단으로 스크롤
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            // 파일 유형별 배지 HTML 생성 (기존 코드와 동일)
+            function getFileTypeBadge(fileType) {
+                if (!fileType) return '';
+                const type = fileType.toLowerCase();
+                let badgeClass = 'file-type-other';
+                if (type === 'pdf') badgeClass = 'file-type-pdf';
+                else if (type === 'hwp' || type === 'hwpx') badgeClass = 'file-type-hwp';
+                else if (type === 'xlsx') badgeClass = 'file-type-xlsx';
+                else if (type === 'ppt' || type === 'pptx') badgeClass = 'file-type-ppt';
+                else if (['png', 'jpeg', 'jpg'].includes(type)) badgeClass = 'file-type-png';
+                return `<span class="file-type-badge ${badgeClass}">${fileType.toUpperCase()}</span>`;
+            }
+
+            // 파일 표시 함수 (수정됨)
+            function displayFiles(filesToShow) {
+                fileTableBody.innerHTML = '';
+
+                if (filesToShow.length === 0) {
+                    fileTableBody.innerHTML = `<tr><td colspan="5" class="no-results"><i class="fas fa-search"></i> 검색 결과가 없습니다</td></tr>`;
+                    return;
+                }
+
+                filesToShow.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = Math.min(startIndex + itemsPerPage, filesToShow.length);
+                const currentPageFiles = filesToShow.slice(startIndex, endIndex);
+
+                currentPageFiles.forEach(file => {
+                    const row = document.createElement('tr');
+
+                    // --- 날짜 처리 로직 수정 ---
+                    let dateDisplay;
+                    if (file.date) {
+                        const fileDate = new Date(file.date);
+                        const today = new Date();
+
+                        // 시간, 분, 초를 0으로 설정하여 날짜만 비교
+                        fileDate.setHours(0, 0, 0, 0);
+                        today.setHours(0, 0, 0, 0);
+
+                        if (fileDate.getTime() === today.getTime()) {
+                            dateDisplay = `<span class="highlight-today">오늘</span>`;
+                        } else {
+                            dateDisplay = new Date(file.date).toLocaleDateString('ko-KR');
+                        }
+                    } else {
+                        dateDisplay = '-';
+                    }
+
+                    const fileTypeBadge = getFileTypeBadge(file.type);
+
+                    const filenameContent = document.createElement('div');
+                    filenameContent.className = 'filename-content';
+                    const filenameSpan = document.createElement('span');
+                    filenameSpan.className = 'tooltip-trigger';
+                    filenameSpan.textContent = file.filename || '-';
+                    filenameSpan.setAttribute('data-tippy-content', file.description || '설명 없음');
+                    filenameContent.appendChild(filenameSpan);
+
+                    if (file.description) {
+                        const infoIcon = document.createElement('i');
+                        infoIcon.className = 'fas fa-info-circle info-icon';
+                        filenameContent.appendChild(infoIcon);
+                    }
+
+                    row.innerHTML = `
+                        <td class="filename-cell"></td>
+                        <td>${fileTypeBadge || '-'}</td>
+                        <td>${dateDisplay}</td>
+                        <td>${file.size || '-'}</td>
+                        <td><a href="${file.link}" class="download-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> 받기</a></td>
+                    `;
+
+                    row.querySelector('.filename-cell').appendChild(filenameContent);
+                    fileTableBody.appendChild(row);
+                });
+
+
+
+                tippy('.tooltip-trigger', {
+                    placement: 'bottom',
+                    arrow: true,
+                    theme: 'light',
+                    maxWidth: 500,
+                    allowHTML: true
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
