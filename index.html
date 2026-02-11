@@ -192,7 +192,7 @@ input[type="text"]:focus-visible {
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-6">
         <div class="lg:col-span-12 relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm border border-slate-200 dark:border-gray-800 hero-card-fixed">
             <div class="absolute inset-0 z-0">
-                <img id="hero-img" alt="Global AI Trends Visualization" class="w-full h-full object-cover opacity-90 dark:opacity-60" src="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/report_222.png">
+                <img id="hero-img" alt="Global AI Trends Visualization" class="w-full h-full object-cover opacity-90 dark:opacity-60" src="https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/koraia_main_popup/2026_koraia.jpg">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" style="--tw-gradient-from: #000000 var(--tw-gradient-from-position);"></div>
             </div>
             <div class="relative z-10 h-full flex flex-col justify-start p-6 sm:p-8">
@@ -1141,7 +1141,7 @@ async function loadHomePage() {
             const todayKey = new Date().toDateString();
             const todayFiles = allFiles.filter(f => f.date && new Date(f.date).toDateString() === todayKey);
             const reportPool = todayFiles.length > 0 ? shuffleArray([...todayFiles]) : allFiles;
-            const latestFiles = reportPool.slice(0, 5);
+            const latestFiles = reportPool.slice(0, 10);
             if (latestFiles.length > 0) {
                 document.getElementById('home-reports-list').innerHTML = latestFiles.map(f => {
                     const isToday = f.date && new Date(f.date).toDateString() === new Date().toDateString();
@@ -1209,7 +1209,7 @@ async function loadHomePage() {
                     const detailUrl = 'blog_post?id=' + (p.post_no || p.id);
                     return `
                     <a href="${detailUrl}" class="flex items-start gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
-                        <div class="shrink-0 w-20 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+                            <div class="shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
                             ${p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="" class="w-full h-full object-cover" loading="lazy">` : '<div class="w-full h-full flex items-center justify-center text-2xl text-gray-300">📄</div>'}
                         </div>
                         <div class="flex-1 min-w-0">
@@ -1218,7 +1218,7 @@ async function loadHomePage() {
                                 <span class="text-[11px] text-text-secondary">${p.date ? new Date(p.date).toLocaleDateString('ko-KR',{month:'short',day:'numeric'}) : ''}</span>
                             </div>
                             <h4 class="text-sm font-bold line-clamp-1 leading-snug group-hover:text-primary transition-colors">${escapeHtml(p.title || '제목 없음')}</h4>
-                            <p class="text-xs text-text-secondary line-clamp-1 mt-0.5">${escapeHtml(truncate(excerpt, 80))}</p>
+                            <p class="text-xs text-text-secondary mt-0.5">${escapeHtml(truncate(excerpt, 80))}</p>
                         </div>
                     </a>`;
                 }).join('');
