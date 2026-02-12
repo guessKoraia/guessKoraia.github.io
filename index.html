@@ -700,13 +700,13 @@ function relativeDate(dateString) {
     if (!dateString) return '-';
     const date = new Date(dateString);
     const now = new Date();
-    const dOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const nOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const diff = Math.floor((nOnly - dOnly) / 86400000);
-    if (diff === 0) return '오늘';
-    if (diff === 1) return '어제';
-    if (diff > 1 && diff < 7) return `${diff}일 전`;
-    if (diff < 0) { const fd = Math.abs(diff); if (fd === 1) return '내일'; return `${fd}일 후`; }
+    const diffMs = now - date;
+    if (diffMs < 0) return '방금 전';
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffMinutes < 60) return diffMinutes <= 0 ? '방금 전' : `${diffMinutes}분 전`;
+    if (diffDays === 1) return '어제';
     return `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`;
 }
 
