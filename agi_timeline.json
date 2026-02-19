@@ -864,6 +864,14 @@
     "category": "모델 출시"
   },
   {
+    "date": "2025-11-06",
+    "link": "https://www.cnbc.com/2025/11/06/alibaba-backed-moonshot-releases-new-ai-model-kimi-k2-thinking.html",
+    "title": "Kimi K2 Thinking",
+    "description": "알리바바 투자를 받은 중국 AI 스타트업 Moonshot AI가 2025년 11월 6일, AI가 사용자의 의도를 스스로 파악하고 작업을 수행하는 에이전틱 AI 모델 Kimi K2 Thinking을 출시했습니다. 세세하게 지시하지 않아도 목표를 이해하고 자율적으로 실행하는 능력이 특징입니다.",
+    "additional_description": "2025년 7월 출시된 Kimi K2의 업그레이드 버전으로, 중국 모델 최초로 에이전틱 AI 분야에서 글로벌 프런티어 모델과 직접 경쟁하는 수준에 도달했다는 평가를 받았습니다. OpenAI의 에이전틱 성능을 뛰어넘었다고 주장했습니다.",
+    "category": "모델 출시"
+  },
+  {
     "date": "2025-11-12",
     "link": "https://openai.com/index/gpt-5-1/",
     "title": "GPT‑5.1",
@@ -936,6 +944,22 @@
     "category": "모델 출시"
   },
   {
+    "date": "2025-12-16",
+    "link": "https://seed.bytedance.com/en/blog/sound-and-vision-all-in-one-take-the-official-release-of-seedance-1-5-pro",
+    "title": "Seedance 1.5 Pro",
+    "description": "바이트댄스가 2025년 12월 16일, 영상과 소리를 동시에 생성하는 최초의 오디오-비주얼 통합 AI 영상 모델 Seedance 1.5 Pro를 공식 출시했습니다. 이전 버전인 Seedance 1.0이 무음 영상만 생성했던 것과 달리, 1.5 Pro는 한 번의 실행으로 영상과 소리를 함께 만들 수 있습니다.",
+    "additional_description": "텍스트 또는 이미지 입력으로부터 대사, 효과음, 배경음을 영상에 맞게 자동으로 합성하는 Joint Audio-Visual Generation 아키텍처를 채택했습니다. 다국어 립싱크, 영화 수준의 카메라 무빙, 방언 연기까지 구현 가능하며, 이전 모델 대비 추론 속도가 10배 향상되었습니다. Seedance 1.0이 영상 생성의 '기본기(performance floor)'를 다졌다면, 1.5 Pro는 몰입감 있는 오디오-비주얼 경험을 목표로 더 높은 수준을 지향합니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-01-21",
+    "link": "https://www.scmp.com/tech/tech-trends/article/3340866/baidu-launches-ernie-50-firms-ai-assistant-users-reach-200-million-month",
+    "title": "ERNIE 5.0 (文心 5.0)",
+    "description": "중국 최대 검색 기업 바이두가 2026년 1월 21일, 텍스트·이미지·음성·영상을 하나의 모델에서 처리하는 완전 멀티모달 AI 모델 ERNIE 5.0을 공식 출시했습니다. 글로벌 AI 리더보드 LMArena에서 중국 모델 1위, 전 세계 8위를 기록했습니다.",
+    "additional_description": "2조 4000억 개의 파라미터를 보유한 초대형 MoE 구조이지만, 실제 추론 시 전체 파라미터의 3% 미만만 활성화해 효율적으로 작동합니다. 텍스트, 이미지, 오디오, 영상을 하나의 통합 모델로 처리하는 '네이티브 풀모달' 구조를 구현했으며, 월 2억 명의 AI 어시스턴트 이용자를 보유하고 있습니다.",
+    "category": "모델 출시"
+},
+  {
     "date": "2026-01-22",
     "link": "https://www.anthropic.com/news/claude-new-constitution",
     "title": "Claude 헌법 2026 업데이트",
@@ -976,6 +1000,14 @@
     "category": "비즈니스 및 산업"
   },
   {
+    "date": "2026-01-27",
+    "link": "https://comfyui-wiki.com/en/news/2026-01-27-moonshot-ai-kimi-k2-5-release",
+    "title": "Kimi K2.5",
+    "description": "Moonshot AI가 2026년 1월 27일, 이미지와 영상까지 이해하는 멀티모달 오픈소스 모델 Kimi K2.5를 공개했습니다. 1조 개의 파라미터를 갖추고 있으며, 최대 100개의 하위 AI가 동시에 협력하는 에이전트 군집(Agent Swarm) 기능이 포함되었습니다.",
+    "additional_description": "실제로 작동하는 파라미터는 320억 개인 MoE(전문가 혼합) 구조로, 텍스트 15조 개 분량의 시각·텍스트 혼합 데이터로 학습되었습니다. Instant(즉각 응답), Thinking(심층 사고), Agent(업무 수행), Agent Swarm(다중 에이전트 협업) 4가지 모드를 지원하며, Artificial Analysis 글로벌 순위에서 지능 5위, 오픈소스 모델 중 유일하게 Top 5에 진입했습니다. HuggingFace에 전체 오픈소스 가중치가 공개되었으며, GPT-5.2 대비 약 10분의 1 비용으로 동급 성능을 제공한다고 주장했습니다.",
+    "category": "모델 출시"
+},
+  {
     "date": "2026-01-28",
     "link": "https://www.moltbook.com/",
     "title": "Moltbook 출시 및 논란",
@@ -1006,5 +1038,31 @@
     "description": "OpenAI는 2026년 2월 5일, Anthropic이 Claude Opus 4.6을 발표한 직후 몇 분 만에 코딩 전문 AI 모델 GPT-5.3-Codex를 출시했습니다. 이는 기존 Codex(코딩 특화 모델)와 GPT-5(범용 지능 모델)의 장점을 합친 최초의 모델입니다.",
     "additional_description": "GPT-5.3-Codex는 이전 GPT-5.2-Codex의 뛰어난 코딩 실력과 GPT-5.2의 논리적 사고 및 전문 지식 능력을 하나로 합쳐 약 25% 더 빠른 속도로 작업을 처리합니다. 단순히 코드를 작성하고 검토하는 수준을 넘어, 개발자나 전문가가 컴퓨터로 하는 거의 모든 작업(문서 작성, 데이터 분석, 디자인 등)을 수행할 수 있습니다. 며칠에 걸쳐 처음부터 복잡한 게임이나 앱을 완성할 수 있을 정도로 고도화되었으며, 실제로 OpenAI는 이 모델이 자기 자신을 만들고 배포하는 과정에도 참여했다고 밝혔습니다. 이는 단순히 '코드를 생성해주는 도구'에서 사용자가 목표만 알려주면 스스로 계획하고 실행하는 '범용 코딩 에이전트(AI 비서)'로 진화했음을 의미합니다.",
     "category": "모델 출시"
-  }
+  },
+  {
+    "date": "2026-02-11",
+    "link": "https://hyper.ai/en/stories/35494a9e9ce1cab0d85bdeda11249861",
+    "title": "GLM-5",
+    "description": "중국 AI 기업 즈푸 AI(Zhipu AI)가 2026년 2월 11일, 음력 설 연휴 직전 코딩·추론·에이전트 능력을 대폭 강화한 744B 파라미터 규모의 대형 언어 모델 GLM-5를 출시했습니다. Artificial Analysis 오픈소스 순위 1위, LMArena Text Arena 오픈소스 1위(전체 11위, 점수 1452)를 기록했습니다.",
+    "additional_description": "장시간 입력 없이 스스로 작업을 수행하는 장기 자율 실행 능력이 특징이며, Kimi K2.5를 오픈소스 순위에서 제치는 성과를 냈습니다. 홍콩 증시에서 주가가 하루 최대 34% 급등하는 등 시장의 뜨거운 반응을 이끌었습니다. 'GLM 코딩 플랜' 요금이 30% 인상될 만큼 수요가 폭발적으로 늘었으며, 중국 오픈소스 AI 모델의 글로벌 경쟁력을 다시 한번 입증했습니다.",
+    "category": "모델 출시"
+},
+  {
+    "date": "2026-02-12",
+    "link": "https://seed.bytedance.com/seedance",
+    "title": "Seedance 2.0",
+    "description": "바이트댄스가 2026년 2월 12일, '몇 초 만에 영화 수준의 영상을 제작할 수 있다'는 차세대 영상 생성 AI 모델 Seedance 2.0을 출시했습니다. Doubao 2.0과 함께 바이트댄스의 음력 설 연휴 AI 대공세의 일환으로 공개되었습니다.",
+    "additional_description": "Seedance 1.5 Pro 대비 영상 품질, 지시 이해력, 생성 속도 전 영역에서 대폭 향상되었으며, Sora, Runway Gen-3, Kling 등 경쟁 영상 생성 AI와 직접 경쟁합니다. 바이트댄스의 크리에이터 플랫폼 Dreamina에 통합되어 있으며, 텍스트·이미지 투 비디오 양방향 생성을 지원합니다.",
+    "category": "모델 출시"
+},
+  {
+    "date": "2026-02-14",
+    "link": "https://theaitrack.com/bytedance-doubao-2-0-agent-era-china-ai/",
+    "title": "Doubao 2.0",
+    "description": "바이트댄스가 2026년 2월 14일(음력 설 연휴 전날), 중국 최다 이용 AI 앱 더우바오(Doubao)의 대규모 업그레이드 버전 Doubao 2.0을 출시했습니다. GPT-5.2, Gemini 3 Pro 수준의 성능을 제공하면서 비용은 약 10분의 1 수준이라고 주장했습니다.",
+    "additional_description": "Pro 버전은 복잡한 추론과 여러 단계에 걸친 작업 실행 능력을 갖춘 '에이전트 시대' 대응 모델로, 월간 활성 사용자 1억 6300만 명을 보유한 더우바오 앱에 직접 통합되었습니다. 2025년 설 연휴에 DeepSeek 충격으로 선제적 대응에 실패했던 바이트댄스가, 1년 만에 동일한 시점을 노려 전략적으로 출시한 것으로 분석됩니다.",
+    "category": "모델 출시"
+}
+
+
 ]
