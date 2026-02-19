@@ -701,13 +701,32 @@ function relativeDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
     const diffMs = now - date;
+    
     if (diffMs < 0) return '방금 전';
+
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffMinutes < 720) return diffMinutes <= 0 ? '방금 전' : `${diffMinutes}분 전`;
+
+    // 1. 1시간 미만 (방금 크롤링 완료)
+    if (diffMinutes < 60) {
+        return diffMinutes <= 0 ? '방금 전' : `${diffMinutes}분 전`;
+    }
+    
+    // 2. 24시간 미만 (오늘 중 크롤링 - 6시간 주기이므로 가장 많이 보게 될 구간)
+    if (diffHours < 24) {
+        // 날짜가 같으면 'N시간 전', 날짜가 다르면 '어제' 혹은 시간 표시
+        if (date.getDate() === now.getDate()) {
+            return `${diffHours}시간 전`;
+        }
+        return '어제';
+    }
+
+    // 3. 어제 (날짜 차이가 1일 때)
     if (diffDays === 1) return '어제';
-    return `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`;
+
+    // 4. 그 외 오래된 데이터
+    return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
 }
 
 function shortDate(ds) {
