@@ -1062,7 +1062,17 @@
     "description": "바이트댄스가 2026년 2월 14일(음력 설 연휴 전날), 중국 최다 이용 AI 앱 더우바오(Doubao)의 대규모 업그레이드 버전 Doubao 2.0을 출시했습니다. GPT-5.2, Gemini 3 Pro 수준의 성능을 제공하면서 비용은 약 10분의 1 수준이라고 주장했습니다.",
     "additional_description": "Pro 버전은 복잡한 추론과 여러 단계에 걸친 작업 실행 능력을 갖춘 '에이전트 시대' 대응 모델로, 월간 활성 사용자 1억 6300만 명을 보유한 더우바오 앱에 직접 통합되었습니다. 2025년 설 연휴에 DeepSeek 충격으로 선제적 대응에 실패했던 바이트댄스가, 1년 만에 동일한 시점을 노려 전략적으로 출시한 것으로 분석됩니다.",
     "category": "모델 출시"
+},
+  {
+    "date": "2026-02-19",
+    "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
+    "title": "Gemini 3.1 Pro",
+    "description": "Google이 2026년 2월 19일, Gemini 3 시리즈의 핵심 추론 지능을 업그레이드한 Gemini 3.1 Pro를 프리뷰로 출시했습니다. ARC-AGI-2 벤치마크에서 77.1%를 기록해 이전 Gemini 3 Pro(31.1%) 대비 추론 성능이 148% 향상되었으며, Gemini 3 Deep Think의 과학·연구·엔지니어링 분야 돌파구를 가능하게 한 핵심 지능 업그레이드입니다.",
+    "additional_description": "텍스트, 이미지, 영상, 오디오, PDF, 코드 저장소 전체를 처리할 수 있는 100만 토큰 컨텍스트 윈도우를 제공합니다. 코딩 능력도 향상되어 LiveCodeBench Pro에서 2887 Elo를 기록했으며, GPQA Diamond에서 94.3%를 달성했습니다. 개발자는 Google AI Studio·Gemini CLI·Antigravity·Android Studio를 통해 API 프리뷰로, 기업 고객은 Vertex AI와 Gemini Enterprise를 통해, 소비자는 Gemini 앱(Google AI Pro·Ultra 플랜)과 NotebookLM(Pro·Ultra 전용)에서 이용 가능합니다. 2025년 11월 출시된 Gemini 3 Pro의 후속으로 약 3개월 만에 나온 업데이트이며, 에이전틱 워크플로우 등 추가 개선 후 정식 GA(일반 출시) 예정입니다.",
+    "category": "모델 출시"
 }
 
 
+
 ]
+
