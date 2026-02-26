@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML 가공 도구</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Pretendard', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+body { font-family: "Pretendard", sans-serif; }
+textarea::-webkit-scrollbar { width: 8px; }
+textarea::-webkit-scrollbar-track { background: transparent; }
+textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-12 relative overflow-x-hidden">
+
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-400/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+<div class="max-w-[1200px] mx-auto px-6 relative z-10">
+  <div class="mb-12 text-center">
+    <div class="inline-flex items-center justify-center px-3 py-1 mb-4 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
+      Workspace Tool
+    </div>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-500 tracking-tight mb-4">
+      HTML 가공 도구
+    </h1>
+    <p class="text-slate-500 font-medium">외부 코드를 안전하게 정제하고 최적화된 파일로 내보내세요.</p>
+  </div>
+  
+  <div class="bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white p-8 md:p-10">
+    
+    <div class="mb-6">
+      <label class="block text-sm font-bold text-slate-700 mb-4">사이트 이름 (Site Name)</label>
+      
+      <div class="bg-slate-100 rounded-t-2xl px-4 pt-4 flex items-end border-b border-slate-200 overflow-hidden">
+        <div class="flex items-center gap-2 mb-3 mr-4">
+          <div class="w-3 h-3 rounded-full bg-red-400"></div>
+          <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+          <div class="w-3 h-3 rounded-full bg-green-400"></div>
+        </div>
+        <div class="bg-white px-4 py-2 rounded-t-xl flex items-center gap-3 w-64 shadow-sm border border-b-0 border-slate-200 relative translate-y-[1px]">
+          
+          <div id="tab-favicon-container" class="w-4 h-4 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-sm shrink-0 flex items-center justify-center overflow-hidden">
+            <svg id="tab-favicon-default" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+            <img id="tab-favicon-img" class="w-full h-full object-cover hidden" alt="favicon">
+          </div>
+          
+          <span id="tab-preview-text" class="text-sm text-slate-600 truncate font-medium select-none">이곳에 표시됩니다</span>
+          <svg class="w-4 h-4 text-slate-400 ml-auto shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </div>
+      </div>
+      
+      <input type="text" id="site-name" class="w-full px-5 py-4 bg-white border border-slate-200 rounded-b-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-700 font-medium placeholder:text-slate-400" placeholder="예: 골드 러시 파트너스 | 한국인공지능협회">
+    </div>
+
+    <div class="mb-10 p-6 bg-slate-50/50 rounded-2xl border border-slate-200/70">
+      <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        검색엔진 최적화 (SEO / GEO) <span class="text-xs font-normal text-slate-500 ml-1">선택사항</span>
+      </h3>
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="flex-1">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">사이트의 메인 주소를 입력해 주세요. (Canonical URL)</label>
+            <input type="url" id="site-canonical" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="https://example.com">
+          </div>
+          <div class="flex-1">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">대표 키워드를 쉼표(, )로 구분해서 3~5개 작성해 주세요. (Keywords)</label>
+            <input type="text" id="site-keywords" value="한국인공지능협회, " class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="키워드1, 키워드2...">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">사이트에 대해 설명해 주세요.</label>
+          <input type="text" id="site-description" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="예: 세상을 바꾸는 혁신적인 AI 솔루션">
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="flex-1">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">파비콘 이미지 URL을 입력해 주세요. (Favicon)</label>
+            <input type="url" id="site-favicon" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="https://example.com/favicon.png">
+          </div>
+          <div class="flex-1">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">SNS 공유용 썸네일 이미지 URL을 입력해 주세요. (OG Image)</label>
+            <input type="url" id="site-og-image" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="https://example.com/og-image.jpg">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-10">
+      <label class="block text-sm font-bold text-slate-700 mb-4">원본 HTML 코드</label>
+      <div class="relative group">
+        <textarea id="raw-html" class="w-full h-80 px-5 py-5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono text-sm leading-relaxed text-slate-600 resize-y" placeholder="여기에 가공할 HTML 코드를 붙여넣으세요..."></textarea>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+      <button id="btn-preview" class="flex-1 px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+        결과 미리보기
+      </button>
+      <button id="btn-export" class="flex-1 px-6 py-4 bg-slate-900 hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-slate-900/20 hover:shadow-blue-600/30 transition-all duration-200 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        HTML 내보내기
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity" id="modal-backdrop"></div>
+  <div class="absolute inset-4 md:inset-10 bg-white rounded-[2rem] shadow-2xl flex flex-col overflow-hidden border border-slate-200/50 scale-100 transition-transform">
+    <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-sm z-10">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">미리보기</h2>
+      </div>
+      <button id="btn-close-modal" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 rounded-xl transition-colors">닫기</button>
+    </div>
+    <div class="flex-1 bg-slate-50 relative">
+      <iframe id="preview-frame" class="w-full h-full border-0 absolute inset-0"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+const siteNameInput = document.getElementById('site-name');
+const tabPreviewText = document.getElementById('tab-preview-text');
+const siteFaviconInput = document.getElementById('site-favicon');
+const tabFaviconDefault = document.getElementById('tab-favicon-default');
+const tabFaviconImg = document.getElementById('tab-favicon-img');
+const tabFaviconContainer = document.getElementById('tab-favicon-container');
+
+// 사이트 이름 탭 미리보기 연동
+siteNameInput.addEventListener('input', (e) => {
+  const value = e.target.value.trim();
+  tabPreviewText.textContent = value || '이곳에 표시됩니다';
+  if (value) {
+    tabPreviewText.classList.remove('text-slate-400');
+    tabPreviewText.classList.add('text-slate-700');
+  } else {
+    tabPreviewText.classList.remove('text-slate-700');
+    tabPreviewText.classList.add('text-slate-400');
+  }
+});
+
+// 파비콘 탭 아이콘 미리보기 연동
+siteFaviconInput.addEventListener('input', (e) => {
+  const url = e.target.value.trim();
+  if (url) {
+    tabFaviconImg.src = url;
+    tabFaviconImg.classList.remove('hidden');
+    tabFaviconDefault.classList.add('hidden');
+    tabFaviconContainer.classList.remove('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
+    tabFaviconContainer.classList.add('bg-transparent');
+  } else {
+    tabFaviconImg.src = '';
+    tabFaviconImg.classList.add('hidden');
+    tabFaviconDefault.classList.remove('hidden');
+    tabFaviconContainer.classList.add('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
+    tabFaviconContainer.classList.remove('bg-transparent');
+  }
+});
+
+tabFaviconImg.addEventListener('error', () => {
+  tabFaviconImg.classList.add('hidden');
+  tabFaviconDefault.classList.remove('hidden');
+  tabFaviconContainer.classList.add('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
+  tabFaviconContainer.classList.remove('bg-transparent');
+});
+
+function processHtml() {
+  const siteName = document.getElementById('site-name').value;
+  const rawHtml = document.getElementById('raw-html').value;
+  
+  // SEO 입력값 가져오기
+  const siteCanonical = document.getElementById('site-canonical').value.trim();
+  const siteKeywords = document.getElementById('site-keywords').value.trim();
+  const siteDesc = document.getElementById('site-description').value.trim();
+  const siteFavicon = document.getElementById('site-favicon').value.trim();
+  const siteOgImage = document.getElementById('site-og-image').value.trim();
+
+  if (!siteName || !rawHtml) {
+    alert('사이트 이름과 HTML 코드를 모두 입력해주세요.');
+    return null;
+  }
+
+  let headContent = '';
+  const titleSplitMatch = rawHtml.match(/<\/title>\s*([\s\S]*?)<\/head>/i);
+  if (titleSplitMatch) {
+    headContent = titleSplitMatch[1];
+  } else {
+    const headOnlyMatch = rawHtml.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+    if (headOnlyMatch) headContent = headOnlyMatch[1];
+  }
+
+  // --- 기존의 방해되는 태그를 완벽하게 지우는 철벽 방어 정규식 ---
+  headContent = headContent.replace(/<title[^>]*>[\s\S]*?<\/title>/gi, '');
+
+  const metaTagsToRemove = [
+    'og:title', 'twitter:title', 'title', 
+    'description', 'og:description', 'twitter:description', 
+    'og:image', 'twitter:image', 
+    'og:type', 'twitter:card', 'og:site_name',
+    'og:url', 'author', 'keywords'
+  ];
+  const metaPattern = metaTagsToRemove.join('|');
+  const metaStripRegex = new RegExp(`<meta[^>]*(?:name|property)\\s*=\\s*["'](?:${metaPattern})["'][^>]*>`, 'gi');
+  headContent = headContent.replace(metaStripRegex, '');
+
+  const linkStripRegex = /<link[^>]*rel\s*=\s*["'][^"']*(?:icon|apple-touch-icon|canonical)[^"']*["'][^>]*>/gi;
+  headContent = headContent.replace(linkStripRegex, '');
+  
+  // 기존 원본에 혹시라도 존재할지 모를 구조화된 데이터(ld+json) 제거
+  headContent = headContent.replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+
+  // 바디 영역 추출
+  const bodyRegex = /<body[^>]*>([\s\S]*?)<\/body>/i;
+  const bodyMatch = rawHtml.match(bodyRegex);
+  let bodyContent = bodyMatch ? bodyMatch[1] : '';
+
+  function removeDivById(htmlStr, id) {
+    let idIndex = htmlStr.indexOf('id="' + id + '"');
+    if (idIndex === -1) idIndex = htmlStr.indexOf("id='" + id + "'");
+    if (idIndex === -1) return htmlStr;
+    
+    const startIndex = htmlStr.lastIndexOf('<div', idIndex);
+    if (startIndex === -1) return htmlStr;
+    
+    let openTags = 0;
+    let i = startIndex;
+    
+    while (i < htmlStr.length) {
+      if (htmlStr.substr(i, 4).toLowerCase() === '<div') {
+        openTags++;
+        i += 4;
+      } else if (htmlStr.substr(i, 5).toLowerCase() === '</div') {
+        openTags--;
+        if (openTags === 0) {
+          const endIndex = htmlStr.indexOf('>', i) + 1;
+          return htmlStr.slice(0, startIndex) + htmlStr.slice(endIndex);
+        }
+        i += 5;
+      } else {
+        i++;
+      }
+    }
+    return htmlStr;
+  }
+
+  bodyContent = removeDivById(bodyContent, '__framer-badge-container');
+  bodyContent = removeDivById(bodyContent, '__framer-editorbar-container');
+
+  // --- 사용자 입력 + 하드코딩 기반 새 SEO 데이터 생성 ---
+  let seoTags = `\n  <meta name="author" content="한국인공지능협회">`;
+  
+  // 키워드 (기본값 처리)
+  const finalKeywords = siteKeywords ? siteKeywords : '한국인공지능협회';
+  seoTags += `\n  <meta name="keywords" content="${finalKeywords}">`;
+
+  if (siteName) {
+    seoTags += `\n  <meta property="og:title" content="${siteName}">\n  <meta property="og:site_name" content="${siteName}">\n  <meta name="twitter:title" content="${siteName}">\n  <meta property="og:type" content="website">`;
+  }
+  if (siteCanonical) {
+    seoTags += `\n  <link rel="canonical" href="${siteCanonical}">\n  <meta property="og:url" content="${siteCanonical}">`;
+  }
+  if (siteDesc) {
+    seoTags += `\n  <meta name="description" content="${siteDesc}">\n  <meta property="og:description" content="${siteDesc}">\n  <meta name="twitter:description" content="${siteDesc}">`;
+  }
+  if (siteFavicon) {
+    seoTags += `\n  <link rel="icon" href="${siteFavicon}">\n  <link rel="apple-touch-icon" href="${siteFavicon}">`;
+  }
+  if (siteOgImage) {
+    seoTags += `\n  <meta property="og:image" content="${siteOgImage}">\n  <meta name="twitter:image" content="${siteOgImage}">\n  <meta name="twitter:card" content="summary_large_image">`;
+  }
+
+  const SCRIPT_START = '<' + 'script>';
+  const SCRIPT_END = '<' + '/script>';
+
+  // --- ld+json (구조화된 데이터 - AI 검색엔진 최적화) 주입 ---
+  const ldJsonData = {
+    "@context": "https://schema.org",
+    "@type": "NGO",
+    "name": "한국인공지능협회",
+    "logo": "https://raw.githubusercontent.com/koraiadev/img/04c57e6691ee81cf1336d87a5d45178f3137691b/koraia/logo-koraia.svg",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+82-2-713-4800",
+      "email": "info@koraia.org",
+      "contactType": "customer service"
+    },
+    "sameAs": [
+      "https://www.facebook.com/koraiaorg",
+      "https://www.instagram.com/koraia_org",
+      "https://x.com/koraia_official",
+      "https://www.linkedin.com/in/koraia",
+      "https://www.youtube.com/channel/UClmlU0giEZJauHuiA0Yf2yw"
+    ]
+  };
+  if (siteCanonical) {
+    ldJsonData.url = siteCanonical;
+  }
+  
+  seoTags += `\n  <script type="application/ld+json">\n${JSON.stringify(ldJsonData, null, 4)}\n  <${'/'}script>`;
+
+  // React(Framer)의 동적 덮어쓰기를 막는 옵저버
+  const safeSiteName = siteName ? siteName.replace(/"/g, '\\"') : '';
+  let seoLockScript = `\n  ${SCRIPT_START}
+    (function() {
+      var targetTitle = "${safeSiteName}";
+      if (!targetTitle) return;
+      document.title = targetTitle;
+      window.addEventListener('DOMContentLoaded', function() {
+        document.title = targetTitle;
+        var observer = new MutationObserver(function() {
+          if (document.title !== targetTitle) {
+            document.title = targetTitle;
+          }
+        });
+        var titleEl = document.querySelector('title');
+        if (titleEl) {
+          observer.observe(titleEl, { childList: true, characterData: true, subtree: true });
+        }
+        observer.observe(document.head, { childList: true, subtree: true });
+      });
+    })();
+  ${SCRIPT_END}\n`;
+
+  // 최종 조합
+  headContent = seoTags + headContent + `\n  <style>#__framer-badge-container, #__framer-editorbar-container { display: none !important; opacity: 0 !important; pointer-events: none !important; }</style>\n` + seoLockScript;
+
+  const BODY_END = '<' + '/body>';
+  const HTML_END = '<' + '/html>';
+
+  const template = `<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="generator" content="Framer 904da2c">
+  
+  <title>${siteName}</title>${headContent}
+</head>
+
+<body>
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p>로딩 중...</p>
+  </div>
+
+${bodyContent}
+  ${SCRIPT_START}
+    document.addEventListener('DOMContentLoaded', function () {
+      let resourcesLoaded = false;
+      let timeoutPassed = false;
+
+      setTimeout(function () {
+        timeoutPassed = true;
+        if (resourcesLoaded) {
+          hideLoadingScreen();
+        }
+      }, 1000);
+
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          resourcesLoaded = true;
+          if (timeoutPassed) {
+            hideLoadingScreen();
+          }
+        }, 500);
+      });
+
+      function hideLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+          loadingScreen.style.opacity = '0';
+          setTimeout(function () {
+            loadingScreen.style.display = 'none';
+          }, 300);
+        }
+      }
+    });
+  ${SCRIPT_END}
+${BODY_END}
+
+${HTML_END}`;
+
+  return template;
+}
+
+document.getElementById('btn-preview').addEventListener('click', () => {
+  const finalHtml = processHtml();
+  if (!finalHtml) return;
+
+  const modal = document.getElementById('modal');
+  const iframe = document.getElementById('preview-frame');
+  
+  iframe.srcdoc = finalHtml;
+  modal.classList.remove('hidden');
+});
+
+const closeModal = () => {
+  document.getElementById('modal').classList.add('hidden');
+  document.getElementById('preview-frame').srcdoc = '';
+};
+
+document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+
+document.getElementById('btn-export').addEventListener('click', () => {
+  const finalHtml = processHtml();
+  if (!finalHtml) return;
+
+  const blob = new Blob([finalHtml], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
