@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Pro Editor - Ultimate Dynamic</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/moveable@0.37.1/dist/moveable.min.js"></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { display: flex; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1e1e1e; overflow: hidden; }
+        
+        /* 좌측 에디터 영역 */
+        .editor-container { width: 45%; display: flex; flex-direction: column; border-right: 1px solid #444; height: 100%; }
+        .toolbar { background: #282a36; padding: 10px 15px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: white; border-bottom: 1px solid #444; }
+        .toolbar .title { font-weight: bold; font-size: 14px; color: #f8f8f2; margin-right: 10px; }
+        
+        /* 스냅샷(임시저장) UI */
+        #saveBtn { background: #50fa7b; color: #282a36; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
+        #saveBtn:hover { background: #40c962; }
+        .save-slot { background: #6272a4; color: white; border: 1px solid #44475a; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s; }
+        .save-slot:hover { background: #ff79c6; color: #282a36; font-weight: bold; }
+        #saveSlotsContainer { display: flex; gap: 5px; }
+
+        .hint { font-size: 11px; color: #6272a4; margin-left: auto; width: 100%; text-align: right; margin-top: 5px; }
+        
+        .CodeMirror { flex-grow: 1; height: 100% !important; font-family: 'Consolas', monospace; font-size: 14px; }
+        
+        /* 우측 미리보기 영역 */
+        .preview-container { width: 55%; display: flex; flex-direction: column; background: #fff; height: 100%; position: relative; }
+        
+        /* 상단 툴바 */
+        .viewer-toolbar { background: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 8px; z-index: 10; }
+        .viewer-row { display: flex; align-items: center; gap: 10px; }
+        
+        #playPauseBtn { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; }
+        #playPauseBtn.active { background: #ef4444; }
+
+        .zoom-controls { margin-left: auto; display: flex; gap: 3px; align-items: center; background: #e2e8f0; padding: 3px; border-radius: 6px; }
+        .zoom-controls button { background: white; color: #333; padding: 2px 8px; font-size: 14px; cursor: pointer; border: 1px solid #cbd5e1; border-radius: 4px; }
+        
+        .kf-btn { background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; font-weight: bold; }
+
+        /* 캔버스 영역 */
+        .canvas-area { flex-grow: 1; position: relative; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; background-color: #f8fafc; overflow: hidden; touch-action: none; cursor: crosshair; }
+        
+        #preview-wrapper { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform-origin: center center; will-change: transform; }
+        #preview { position: relative; }
+        #preview svg { overflow: visible; pointer-events: auto; }
+        
+        #coordsDisplay { position: absolute; bottom: 15px; right: 15px; background: rgba(30, 30, 30, 0.9); color: #50fa7b; padding: 5px 12px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 12px; pointer-events: none; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid #444; }
+
+        /* 상태 스타일 */
+        .is-paused * { animation-play-state: paused !important; }
+        .svg-hovered { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) !important; cursor: pointer; }
+        
+        /* 그룹 vs 개별 요소 선택 스타일 분리 */
+        .svg-selected-group { outline: 2px dashed #bd93f9 !important; outline-offset: 4px; }
+        .svg-selected-item { outline: 2px dashed #50fa7b !important; outline-offset: 4px; }
+        
+        .highlight-line { background: rgba(255, 121, 198, 0.2) !important; border-left: 3px solid #ff79c6; }
+
+        /* Moveable UI 테마 동적 맞춤 (CSS 변수 활용) */
+        .canvas-area { --theme-color: #50fa7b; }
+        .moveable-control-box {
+            --moveable-color: var(--theme-color) !important;
+            --moveable-line-color: var(--theme-color) !important;
+        }
+        .moveable-line { background: var(--theme-color) !important; width: 2px !important; }
+        .moveable-control { background: var(--theme-color) !important; border: 2px solid #282a36 !important; width: 12px !important; height: 12px !important; margin-top: -6px !important; margin-left: -6px !important; }
+
+        /* 플로팅 다이나믹 툴바 */
+        #contextToolbar {
+            position: absolute; display: none; background: rgba(40, 42, 54, 0.95); 
+            border: 1px solid #6272a4; border-radius: 8px; padding: 8px; gap: 6px; 
+            z-index: 200; box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-direction: column;
+            pointer-events: auto;
+        }
+        #contextToolbar button {
+            background: #44475a; color: #f8f8f2; border: 1px solid #6272a4; padding: 6px 10px; 
+            border-radius: 4px; cursor: pointer; font-size: 11px; text-align: left; transition: 0.2s;
+        }
+        #contextToolbar button:hover { background: #bd93f9; color: #282a36; font-weight: bold; }
+        
+        /* 고스트(잔상) 요소 시각적 처리 */
+        .ghost-snapshot { opacity: 0.3 !important; pointer-events: none !important; filter: drop-shadow(0 0 5px #ff79c6) !important; }
+    </style>
+</head>
+<body>
+
+    <div class="editor-container">
+        <div class="toolbar">
+            <span class="title">📝 Code Editor</span>
+            <button id="saveBtn">💾 스냅샷 저장</button>
+            <div id="saveSlotsContainer"></div>
+            <span class="hint">Ctrl+Z: 취소 | Del: 삭제 | <b>그룹 클릭: 🟪 보라색</b> | <b>개별/더블클릭: 🟩 초록색</b></span>
+        </div>
+        <textarea id="codeEditor"></textarea>
+    </div>
+
+    <div class="preview-container">
+        <div class="viewer-toolbar">
+            <div class="viewer-row">
+                <button id="playPauseBtn" class="active">⏸️ 애니메이션 멈춤 (편집)</button>
+                <span style="font-size: 12px; font-weight: bold;">타임라인:</span>
+                <input type="range" id="timeline" min="0" max="100" value="0" style="flex-grow: 1;">
+                <span id="timeVal" style="width: 35px; font-size: 12px; font-weight: bold;">0%</span>
+                
+                <div class="zoom-controls">
+                    <button id="zoomOut">➖</button>
+                    <span id="zoomVal" style="font-size: 11px; width: 35px; text-align: center;">100%</span>
+                    <button id="zoomIn">➕</button>
+                    <button id="zoomReset">Reset</button>
+                </div>
+            </div>
+            <div class="viewer-row">
+                <span style="font-size: 11px; font-weight: bold; color: #64748b;">Keyframes:</span>
+                <div id="keyframe-tags" style="display: flex; gap: 4px; flex-wrap: wrap;"></div>
+            </div>
+        </div>
+        
+        <div class="canvas-area">
+            <div id="preview-wrapper">
+                <div id="preview"></div>
+            </div>
+            
+            <div id="contextToolbar">
+                <div style="font-size: 10px; color: #8be9fd; margin-bottom: 2px;">⚡ 다이나믹 컨트롤</div>
+                <button id="btnWrapGroup" title="기존 애니메이션을 유지한 채 덩어리째 옮기기 위해 그룹으로 묶습니다.">📦 새 그룹으로 묶기 (덩어리 이동)</button>
+                <button id="btnGhost" title="현재 타임라인 시점의 모습을 반투명하게 복제하여 경로 확인용으로 씁니다.">👻 현재 위치 스냅샷(잔상) 남기기</button>
+                
+                <button id="btnCopyKeyframe" style="background: #50fa7b; color: #282a36; font-weight: bold;">📋 현재 위치 CSS 복사 (키프레임용)</button>
+                
+                <button id="btnClearGhosts">🧹 잔상 모두 지우기</button>
+                <button id="btnResetTransform" style="color:#ff5555;">🔄 Transform(변형) 초기화</button>
+            </div>
+
+            <div id="coordsDisplay">X: 0, Y: 0</div>
+        </div>
+    </div>
+
+    <script>
+        // 기본 제공된 우체통 애니메이션 SVG
+        const defaultSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="500px" height="auto" style="animation-delay: -1.4s;">
+  <defs style="animation-delay: -1.4s;">
+    <style style="animation-delay: -1.4s;">
+      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+      * { font-family: 'Pretendard', sans-serif; }
+      @keyframes fly-in {
+        0%, 5% { transform: translate(150px, 260px) scale(0) rotate(-45deg); opacity: 0; }
+        12% { opacity: 1; transform: translate(150px, 120px) scale(0.4) rotate(-15deg); }
+        20% { transform: translate(350px, 80px) scale(0.8) rotate(10deg); }
+        28%, 85% { transform: translate(650px, 400px) scale(1.2) rotate(0deg); opacity: 1; }
+        90%, 100% { transform: translate(650px, 400px) scale(1.2) rotate(0deg); opacity: 0; }
+      }
+      @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+      @keyframes flap-close { 0%, 28% { transform: scaleY(1); opacity: 1; } 30% { transform: scaleY(0); opacity: 1; } 31%, 100% { transform: scaleY(0); opacity: 0; } }
+      @keyframes flap-open { 0%, 29% { transform: scaleY(0); opacity: 0; } 30% { transform: scaleY(0); opacity: 1; } 32%, 100% { transform: scaleY(1); opacity: 1; } }
+      @keyframes slide-up { 0%, 33% { transform: translateY(0); } 42%, 85% { transform: translateY(-165px); } 100% { transform: translateY(0); } }
+      @keyframes sparkle-minimal { 0%, 40% { opacity: 0; transform: scale(0) rotate(0deg); } 43% { opacity: 1; transform: scale(1) rotate(45deg); } 48%, 80% { opacity: 0; transform: scale(0.5) rotate(90deg); } 85%, 100% { opacity: 0; transform: scale(0); } }
+      @keyframes aura-glow-minimal { 0%, 35% { opacity: 0; transform: scale(0.8); } 45%, 80% { opacity: 1; transform: scale(1); } 85%, 100% { opacity: 0; } }
+
+      .fly-group { animation: fly-in 12s cubic-bezier(0.25, 1, 0.5, 1) infinite; }
+      .float-group { animation: float 4s ease-in-out infinite; }
+      .flap-closed { animation: flap-close 12s ease-in-out infinite; transform-origin: 0px -80px; }
+      .flap-opened { animation: flap-open 12s ease-in-out infinite; transform-origin: 0px -80px; }
+      .card-slide { animation: slide-up 12s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+      .aura { animation: aura-glow-minimal 12s ease-out infinite; transform-origin: center; }
+      .sp-1 { animation: sparkle-minimal 12s infinite; transform-origin: center; animation-delay: 0.1s; }
+      .sp-2 { animation: sparkle-minimal 12s infinite; transform-origin: center; animation-delay: 0.2s; }
+      .sp-3 { animation: sparkle-minimal 12s infinite; transform-origin: center; animation-delay: 0.3s; }
+      .sp-4 { animation: sparkle-minimal 12s infinite; transform-origin: center; animation-delay: 0.4s; }
+    </style>
+    <linearGradient id="text-grad" x1="0%" y1="0%" x2="100%" y2="0%" style="animation-delay: -1.4s;">
+      <stop offset="0%" stop-color="#1e293b" style="animation-delay: -1.4s;"></stop><stop offset="100%" stop-color="#334155" style="animation-delay: -1.4s;"></stop>
+    </linearGradient>
+    <radialGradient id="glow-grad-light" cx="50%" cy="50%" r="50%" style="animation-delay: -1.4s;">
+      <stop offset="0%" stop-color="#eff6ff" stop-opacity="1" style="animation-delay: -1.4s;"></stop>
+      <stop offset="50%" stop-color="#eff6ff" stop-opacity="0.5" style="animation-delay: -1.4s;"></stop>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" style="animation-delay: -1.4s;"></stop>
+    </radialGradient>
+    <filter id="soft-shadow-light" x="-20%" y="-20%" width="140%" height="140%" style="animation-delay: -1.4s;">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.08" style="animation-delay: -1.4s;"></feDropShadow>
+    </filter>
+    <filter id="inner-shadow" x="-10%" y="-10%" width="120%" height="120%" style="animation-delay: -1.4s;">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.05" style="animation-delay: -1.4s;"></feDropShadow>
+    </filter>
+    <g id="sparkle-shape" style="animation-delay: -1.4s;"><path d="M0,-16 Q0,0 16,0 Q0,0 0,16 Q0,0 -16,0 Q0,0 0,-16 Z" style="animation-delay: -1.4s;"></path></g>
+  </defs>
+  
+  <g id="mailbox" transform="translate(150, 200)" style="animation-delay: -1.4s; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 150, 200, 0, 1) translate(0.047619px, -0.333333px);" >
+    <ellipse cx="0" cy="280" rx="45" ry="12" fill="#e2e8f0" style="animation-delay: -1.4s; transform: translate(-3px, -4px);" ></ellipse>
+    <rect x="-8" y="100" width="16" height="180" fill="#cbd5e1" rx="8" style="animation-delay: -1.4s; transform: translate(-5px, -5px);" ></rect>
+    <rect x="-15" y="270" width="30" height="8" fill="#94a3b8" rx="4" style="animation-delay: -1.4s; transform: translate(-4px, -1px);" ></rect>
+    <path d="M-45,100 L45,100 L45,0 A45,45 0 0,0 -45,0 Z" fill="#dc2626" style="animation-delay: -1.4s;"></path>
+    <path d="M-55,100 L35,100 L35,0 A45,45 0 0,0 -55,0 Z" fill="#ef4444" style="animation-delay: -1.4s;"></path>
+    <path d="M-55,0 A45,45 0 0,1 35,0 A45,45 0 0,1 -55,0" fill="#f87171" style="animation-delay: -1.4s;"></path>
+    <rect x="-28" y="0" width="40" height="8" rx="4" fill="#7f1d1d" style="animation-delay: -1.4s;"></rect>
+    <rect x="-28" y="0" width="40" height="3" rx="1.5" fill="#000000" opacity="0.2" style="animation-delay: -1.4s;"></rect>
+    <rect x="-30" y="60" width="50" height="24" rx="12" fill="#ffffff" opacity="0.9" style="animation-delay: -1.4s; transform: translate(-0.428571px, 0px) scale(1.28571, 1);" ></rect>
+    <text x="-5" y="76" fill="#ef4444" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="1.5" style="animation-delay: -1.4s;">POST</text>
+  </g>
+  <g class="fly-group" style="animation-delay: -1.4s;">
+    <g class="float-group" filter="url(#soft-shadow-light)" style="animation-delay: -1.4s;">
+      <circle cx="0" cy="-100" r="280" fill="url(#glow-grad-light)" class="aura" style="animation-delay: -1.4s;"></circle>
+      <rect x="-130" y="-80" width="260" height="160" fill="#f1f5f9" rx="6" style="animation-delay: -1.4s;"></rect>
+      <polygon class="flap-opened" points="-130,-80 0,-160 130,-80" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" stroke-linejoin="round" style="animation-delay: -1.4s;"></polygon>
+      <g class="card-slide" style="animation-delay: -1.4s;">
+        <rect x="-120" y="-80" width="240" height="155" fill="#ffffff" rx="12" filter="url(#inner-shadow)" style="animation-delay: -1.4s;"></rect>
+        <rect x="-110" y="-70" width="220" height="135" fill="none" stroke="#f1f5f9" stroke-width="2" rx="6" style="animation-delay: -1.4s;"></rect>
+        <rect x="-20" y="-70" width="40" height="4" fill="#3b82f6" rx="2" style="animation-delay: -1.4s;"></rect>
+        <text x="0" y="-30" fill="#64748b" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="0.5" style="animation-delay: -1.4s;">사단법인 한국인공지능협회</text>
+        <text x="0" y="10" fill="url(#text-grad)" font-size="26" font-weight="800" text-anchor="middle" letter-spacing="-0.5" style="animation-delay: -1.4s;">회원사로 모십니다</text>
+        <rect x="-40" y="32" width="80" height="22" rx="11" fill="#eff6ff" style="animation-delay: -1.4s;"></rect>
+        <text x="0" y="47" fill="#3b82f6" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1" style="animation-delay: -1.4s;">INVITATION</text>
+      </g>
+      <g style="animation-delay: -1.4s;">
+        <polygon points="-130,-80 -130,80 0,20" fill="#f8fafc" style="animation-delay: -1.4s;"></polygon>
+        <polygon points="130,-80 130,80 0,20" fill="#f8fafc" style="animation-delay: -1.4s;"></polygon>
+        <polygon points="-130,80 130,80 0,-5" fill="#ffffff" style="animation-delay: -1.4s;"></polygon>
+      </g>
+      <g class="flap-closed" style="animation-delay: -1.4s; transform: translate(212.856px, 84.9168px);">
+        <polygon points="-130,-80 130,-80 0,25" fill="#ffffff" filter="url(#inner-shadow)" style="animation-delay: -1.4s;"></polygon>
+        <circle cx="0" cy="18" r="20" fill="#ef4444" filter="url(#inner-shadow)" style="animation-delay: -1.4s;"></circle>
+        <path d="M-5,24 L0,12 L5,24 M-3,19 L3,19" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" style="animation-delay: -1.4s;"></path>
+      </g>
+      <g transform="translate(-130, -160)" style="animation-delay: -1.4s; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -130, -160, 0, 1) translate(-250.881px, 158.873px);" ><use href="#sparkle-shape" class="sp-1" fill="#fbbf24" transform="scale(0.8)" style="animation-delay: -1.4s;"></use></g>
+      <g transform="translate(120, -190)" style="animation-delay: -1.4s; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 120, -190, 0, 1) translate(-592.674px, 173.726px);" ><use href="#sparkle-shape" class="sp-2" fill="#3b82f6" transform="scale(1.1)" style="animation-delay: -1.4s;"></use></g>
+      <g transform="translate(-80, -220)" style="animation-delay: -1.4s; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -80, -220, 0, 1) translate(-212.121px, 143.939px);" ><use href="#sparkle-shape" class="sp-3" fill="#60a5fa" transform="scale(0.6)" style="animation-delay: -1.4s;"></use></g>
+      <g transform="translate(140, -100)" style="animation-delay: -1.4s; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 140, -100, 0, 1) translate(-502.699px, 183.847px);" ><use href="#sparkle-shape" class="sp-4" fill="#fcd34d" transform="scale(0.7)" style="animation-delay: -1.4s;"></use></g>
+    </g>
+  </g>
+</svg>`;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. 에디터 초기화
+            const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+                mode: "xml", theme: "dracula", lineNumbers: true, lineWrapping: true,
+                viewportMargin: Infinity, extraKeys: {"Ctrl-Z": "undo", "Cmd-Z": "undo"}
+            });
+            editor.setValue(defaultSVG);
+
+            const preview = document.getElementById('preview');
+            const previewWrapper = document.getElementById('preview-wrapper');
+            const canvasArea = document.querySelector('.canvas-area');
+            const coordsDisplay = document.getElementById('coordsDisplay');
+            const contextToolbar = document.getElementById('contextToolbar');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const timeline = document.getElementById('timeline');
+            
+            let isPlaying = true;
+            let currentZoom = 1, panX = 0, panY = 0;
+            let isPanning = false, startPanX = 0, startPanY = 0;
+            let isInternalChange = false;
+
+            // 로컬스토리지 저장 슬롯 기능
+            const LOCAL_STORAGE_KEY = 'svg_editor_snapshots';
+            const saveSlotsContainer = document.getElementById('saveSlotsContainer');
+            const saveBtn = document.getElementById('saveBtn');
+
+            function loadSnapshots() {
+                const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            }
+
+            function renderSnapshots() {
+                saveSlotsContainer.innerHTML = '';
+                const snapshots = loadSnapshots();
+                snapshots.forEach((snap) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'save-slot';
+                    btn.innerText = `⏱️ ${snap.time}`;
+                    btn.title = '이 시점으로 되돌리기';
+                    btn.onclick = () => {
+                        editor.setValue(snap.code);
+                        moveable.target = null;
+                        contextToolbar.style.display = 'none';
+                        updatePreview();
+                    };
+                    saveSlotsContainer.appendChild(btn);
+                });
+            }
+
+            saveBtn.onclick = () => {
+                const currentCode = editor.getValue();
+                let snapshots = loadSnapshots();
+                const now = new Date();
+                const timeString = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+                
+                snapshots.unshift({ time: timeString, code: currentCode });
+                if (snapshots.length > 5) snapshots.pop(); 
+                
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(snapshots));
+                renderSnapshots();
+                
+                const originalText = saveBtn.innerText;
+                saveBtn.innerText = "✅ 저장됨!";
+                setTimeout(() => saveBtn.innerText = originalText, 1000);
+            };
+
+            renderSnapshots();
+
+            // 2. Moveable (조절 도구)
+            const moveable = new Moveable(canvasArea, {
+                target: null, draggable: true, scalable: true, rotatable: true, snappable: true,
+                snapThreshold: 5, isDisplaySnapDigit: true, elementGuidelines: [],
+                keepRatio: false, throttleDrag: 0, throttleScale: 0, throttleRotate: 0
+            });
+
+            // 3. 실시간 동기화 (Canvas -> Code)
+            function syncCanvasToCode() {
+                isInternalChange = true;
+                const cleanHTML = preview.innerHTML
+                    .replace(/\s*svg-selected-group\s*/g, '')
+                    .replace(/\s*svg-selected-item\s*/g, '')
+                    .replace(/\s*svg-hovered\s*/g, '')
+                    .replace(/class=""\s*/g, '')
+                    .trim();
+
+                editor.replaceRange(cleanHTML, {line: 0, ch: 0}, {line: editor.lineCount()}, "+move");
+                isInternalChange = false;
+            }
+
+            moveable.on("drag", e => { e.target.style.transform = e.transform; syncCanvasToCode(); });
+            moveable.on("scale", e => { e.target.style.transform = e.drag.transform; syncCanvasToCode(); });
+            moveable.on("rotate", e => { e.target.style.transform = e.drag.transform; syncCanvasToCode(); });
+            moveable.on("dragEnd", () => syncCanvasToCode());
+            moveable.on("scaleEnd", () => syncCanvasToCode());
+            moveable.on("rotateEnd", () => syncCanvasToCode());
+
+            // 4. 미리보기 업데이트
+            function updatePreview() {
+                if (isInternalChange) return;
+                const code = editor.getValue();
+                preview.innerHTML = code;
+                if (!isPlaying) preview.classList.add('is-paused');
+                extractKeyframes(code);
+                if (moveable.target) moveable.updateRect();
+            }
+            editor.on("change", updatePreview);
+            updatePreview();
+
+            // 5. 전역 단축키 제어
+            window.addEventListener('keydown', e => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                    if (!editor.hasFocus()) {
+                        e.preventDefault();
+                        editor.undo();
+                        setTimeout(updatePreview, 10);
+                        moveable.target = null;
+                        contextToolbar.style.display = 'none';
+                    }
+                }
+                
+                if ((e.key === 'Delete' || e.key === 'Backspace') && moveable.target && !document.activeElement.closest('.CodeMirror')) {
+                    e.preventDefault();
+                    moveable.target.remove();
+                    moveable.target = null;
+                    contextToolbar.style.display = 'none';
+                    syncCanvasToCode();
+                }
+
+                if (moveable.target && !document.activeElement.closest('.CodeMirror')) {
+                    const step = e.shiftKey ? 10 : 1;
+                    let dx = 0, dy = 0;
+                    if (e.key === 'ArrowUp') dy = -step;
+                    else if (e.key === 'ArrowDown') dy = step;
+                    else if (e.key === 'ArrowLeft') dx = -step;
+                    else if (e.key === 'ArrowRight') dx = step;
+                    else return;
+                    
+                    e.preventDefault();
+                    let t = moveable.target.style.transform || 'translate(0px, 0px)';
+                    let m = t.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
+                    let cx = m ? parseFloat(m[1]) : 0, cy = m ? parseFloat(m[2]) : 0;
+                    
+                    if (m) moveable.target.style.transform = t.replace(/translate\([^)]+\)/, `translate(${cx+dx}px, ${cy+dy}px)`);
+                    else moveable.target.style.transform = `translate(${dx}px, ${dy}px) ` + t;
+                    
+                    moveable.updateRect();
+                    syncCanvasToCode();
+                }
+            });
+
+            // 6. 개체 선택 및 하이라이트
+            preview.addEventListener('mouseover', e => {
+                let target = e.target.closest('svg > *:not(style)');
+                if (target && e.target.tagName !== 'svg') target.classList.add('svg-hovered');
+            });
+            preview.addEventListener('mouseout', e => {
+                let target = e.target.closest('svg > *:not(style)');
+                if (target) target.classList.remove('svg-hovered');
+            });
+
+            // 단일 클릭 (그룹 단위 선택)
+            preview.addEventListener('mousedown', e => {
+                if (isPlaying) return;
+                
+                // 바탕 클릭 시 선택 해제 및 툴바 숨김
+                if (e.target.tagName.toLowerCase() === 'svg') {
+                    moveable.target = null;
+                    document.querySelectorAll('.svg-selected-group, .svg-selected-item').forEach(el => {
+                        el.classList.remove('svg-selected-group', 'svg-selected-item');
+                    });
+                    contextToolbar.style.display = 'none';
+                    return;
+                }
+
+                // 초록색 개별 요소 클릭 시 상위 그룹으로 안 돌아가게 막기
+                if (moveable.target === e.target && e.target.classList.contains('svg-selected-item')) {
+                    e.stopPropagation();
+                    return; 
+                }
+
+                let target = e.target.closest('g') || e.target;
+                if (target && target.tagName !== 'svg') {
+                    e.stopPropagation();
+                    selectElement(target);
+                }
+            });
+
+            // 더블 클릭 (그룹 내 개별 요소 선택)
+            preview.addEventListener('dblclick', e => {
+                if (isPlaying) return;
+                let target = e.target;
+                if (target.tagName !== 'svg' && target.closest('g')) {
+                    e.stopPropagation();
+                    selectElement(target);
+                }
+            });
+
+            function selectElement(target) {
+                document.querySelectorAll('.svg-selected-group, .svg-selected-item').forEach(el => {
+                    el.classList.remove('svg-selected-group', 'svg-selected-item');
+                });
+                
+                if (target.tagName.toLowerCase() === 'g') {
+                    target.classList.add('svg-selected-group');
+                    canvasArea.style.setProperty('--theme-color', '#bd93f9'); 
+                } else {
+                    target.classList.add('svg-selected-item');
+                    canvasArea.style.setProperty('--theme-color', '#50fa7b'); 
+                }
+                
+                const otherElements = Array.from(preview.querySelectorAll('svg *')).filter(el => el !== target && !el.contains(target) && el.tagName !== 'svg' && el.tagName !== 'g');
+                moveable.elementGuidelines = otherElements;
+                moveable.target = target;
+                highlightCode(target);
+
+                // 툴바 위치 계산 및 띄우기
+                const rect = target.getBoundingClientRect();
+                const canvasRect = canvasArea.getBoundingClientRect();
+                contextToolbar.style.display = 'flex';
+                contextToolbar.style.left = Math.min(canvasRect.width - 250, Math.max(10, rect.right - canvasRect.left + 15)) + 'px';
+                contextToolbar.style.top = Math.max(10, rect.top - canvasRect.top) + 'px';
+            }
+
+            function highlightCode(el) {
+                const tag = el.tagName.toLowerCase();
+                const cursor = editor.getSearchCursor(new RegExp(`<${tag}[^>]*`, 'i'));
+                if (cursor.findNext()) {
+                    const line = cursor.from().line;
+                    editor.scrollIntoView({line, ch: 0}, 200);
+                    editor.addLineClass(line, "background", "highlight-line");
+                    setTimeout(() => editor.removeLineClass(line, "background", "highlight-line"), 1500);
+                }
+            }
+
+            // 7. 패닝 및 줌
+            canvasArea.addEventListener('mousedown', e => {
+                if (e.target === canvasArea || e.target.id === 'preview-wrapper' || e.target.tagName === 'svg') {
+                    isPanning = true;
+                    startPanX = e.clientX - panX;
+                    startPanY = e.clientY - panY;
+                    canvasArea.style.cursor = 'grabbing';
+                }
+            });
+            window.addEventListener('mousemove', e => {
+                if (isPanning) {
+                    panX = e.clientX - startPanX;
+                    panY = e.clientY - startPanY;
+                    applyTransform();
+                }
+                const rect = preview.getBoundingClientRect();
+                const x = Math.round((e.clientX - rect.left) / currentZoom);
+                const y = Math.round((e.clientY - rect.top) / currentZoom);
+                coordsDisplay.innerText = `X: ${x}, Y: ${y}`;
+            });
+            window.addEventListener('mouseup', () => { isPanning = false; canvasArea.style.cursor = 'crosshair'; });
+
+            function applyTransform() {
+                previewWrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+                document.getElementById('zoomVal').innerText = Math.round(currentZoom * 100) + "%";
+                moveable.updateRect();
+            }
+
+            canvasArea.addEventListener('wheel', e => {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                    currentZoom = Math.min(Math.max(0.1, currentZoom + delta), 5);
+                    applyTransform();
+                }
+            }, {passive: false});
+
+            document.getElementById('zoomIn').onclick = () => { currentZoom += 0.2; applyTransform(); };
+            document.getElementById('zoomOut').onclick = () => { currentZoom = Math.max(0.1, currentZoom - 0.2); applyTransform(); };
+            document.getElementById('zoomReset').onclick = () => { currentZoom = 1; panX = 0; panY = 0; applyTransform(); };
+
+            // 8. 애니메이션 & 키프레임 컨트롤
+            playPauseBtn.onclick = () => {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    playPauseBtn.innerText = "⏸️ 애니메이션 멈춤 (편집)";
+                    playPauseBtn.classList.add('active');
+                    preview.classList.remove('is-paused');
+                    moveable.target = null;
+                    contextToolbar.style.display = 'none';
+                } else {
+                    playPauseBtn.innerText = "▶️ 다시 재생 (감상)";
+                    playPauseBtn.classList.remove('active');
+                    preview.classList.add('is-paused');
+                }
+            };
+
+            timeline.oninput = e => {
+                if (isPlaying) playPauseBtn.click();
+                const progress = e.target.value;
+                document.getElementById('timeVal').innerText = progress + "%";
+                preview.querySelectorAll('*').forEach(el => el.style.animationDelay = `-${(progress/100)*12}s`); // 12초 루프 기준 반영
+                moveable.updateRect();
+            };
+
+            function extractKeyframes(code) {
+                const container = document.getElementById('keyframe-tags');
+                container.innerHTML = '';
+                const matches = code.matchAll(/\b(\d+)%\s*{/g);
+                const percents = [...new Set([...matches].map(m => m[1]))].sort((a,b)=>a-b);
+                percents.forEach(p => {
+                    const btn = document.createElement('button');
+                    btn.className = 'kf-btn';
+                    btn.innerText = p + '%';
+                    btn.onclick = () => { timeline.value = p; timeline.dispatchEvent(new Event('input')); };
+                    container.appendChild(btn);
+                });
+            }
+
+            // 9. 다이나믹 툴바 기능 로직
+            
+            // 9-1. 새 그룹으로 묶기
+            document.getElementById('btnWrapGroup').onclick = () => {
+                if (!moveable.target) return;
+                const wrapper = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                wrapper.setAttribute('class', 'wrapped-group');
+                moveable.target.parentNode.insertBefore(wrapper, moveable.target);
+                wrapper.appendChild(moveable.target);
+                
+                moveable.target = wrapper;
+                syncCanvasToCode();
+                selectElement(wrapper); 
+            };
+
+            // 9-2. 잔상 남기기
+            document.getElementById('btnGhost').onclick = () => {
+                if (!moveable.target) return;
+                const clone = moveable.target.cloneNode(true);
+                clone.removeAttribute('id'); 
+                clone.classList.remove('svg-selected-group', 'svg-selected-item');
+                clone.classList.add('ghost-snapshot');
+                clone.style.animation = 'none'; 
+                clone.style.transition = 'none';
+                
+                moveable.target.parentNode.insertBefore(clone, moveable.target);
+                syncCanvasToCode();
+            };
+
+            // 9-3. 키프레임 CSS 복사
+            document.getElementById('btnCopyKeyframe').onclick = () => {
+                if (!moveable.target) return;
+                
+                let currentTransform = moveable.target.style.transform || moveable.target.getAttribute('transform') || '';
+                if (!currentTransform) {
+                    alert("이동이나 변형된 값이 없습니다. 먼저 개체를 마우스로 움직여주세요!");
+                    return;
+                }
+
+                const cssText = `transform: ${currentTransform};`;
+                navigator.clipboard.writeText(cssText).then(() => {
+                    const btn = document.getElementById('btnCopyKeyframe');
+                    const originalText = btn.innerText;
+                    btn.innerText = "✅ 복사 완료! (@keyframes 안에 Ctrl+V)";
+                    btn.style.background = "#bd93f9";
+                    btn.style.color = "#fff";
+                    
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.background = "#50fa7b";
+                        btn.style.color = "#282a36";
+                    }, 2000);
+                });
+            };
+
+            // 9-4. 잔상 모두 지우기
+            document.getElementById('btnClearGhosts').onclick = () => {
+                preview.querySelectorAll('.ghost-snapshot').forEach(el => el.remove());
+                syncCanvasToCode();
+            };
+
+            // 9-5. Transform 초기화
+            document.getElementById('btnResetTransform').onclick = () => {
+                if (!moveable.target) return;
+                moveable.target.removeAttribute('transform');
+                moveable.target.style.transform = '';
+                moveable.updateRect();
+                syncCanvasToCode();
+            };
+        });
+    </script>
+</body>
+</html>
