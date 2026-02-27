@@ -896,6 +896,15 @@
     "category": "모델 출시"
   },
   {
+    "date": "2025-11-23",
+    "link": "https://www.whitehouse.gov/presidential-actions/2025/11/launching-the-genesis-mission/",
+    "title": "제네시스 미션 (Genesis Mission)",
+    "description": "미국 백악관이 2025년 11월 행정명령을 통해 출범시킨 국가적 AI 프로젝트로, 미국 에너지부(DOE)와 국립연구소의 방대한 과학 데이터를 민간 기술 기업 및 학계와 통합해 AI 기반의 과학적 발견을 가속화하고 미국의 글로벌 AI 패권을 확보하려는 이니셔티브입니다.",
+    "additional_description": "행정명령의 핵심은 '미국 과학 및 안보 플랫폼(American Science and Security Platform)'이라는 통합 AI 플랫폼을 구축하는 것입니다. 이 플랫폼을 통해 수십 년간 축적된 연방 과학 데이터를 활용하여 기초 과학 모델을 훈련시키고, 새로운 가설을 테스트하며 연구 워크플로우를 자동화하는 AI 에이전트를 개발합니다. 정부 관계자들은 이 프로젝트의 규모와 중요성을 '맨해튼 프로젝트'나 '아폴로 계획'에 비유하고 있으며, 10년 내에 미국 R&D의 생산성과 영향을 두 배로 늘리는 것을 목표로 합니다. 후속 조치로 2026년 2월 11일, 에너지부(DOE)는 핵융합, 양자 컴퓨팅, 차세대 에너지 인프라 등 26개의 국가적 과학 기술 과제(challenges)를 공식 발표했습니다.",
+    "category": "정책 및 규제"
+}
+
+  {
     "date": "2025-11-24",
     "link": "https://www.microsoft.com/en-us/research/blog/fara-7b-an-efficient-agentic-model-for-computer-use/",
     "title": "Fara-7B",
@@ -1084,5 +1093,6 @@
 
 
 ]
+
 
 
