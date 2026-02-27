@@ -2221,7 +2221,7 @@
                 bottomCategoryNav.style.display = "none";
 
                 // 로컬/인라인 소스는 사용하지 않고, 지정된 GitHub raw URL만 사용합니다.
-                const remoteUrl = 'https://raw.githubusercontent.com/guessKoraia/guessKoraia.github.io/refs/heads/main/agi_timeline.json';
+                const remoteUrl = 'agi_timeline.json';
                 try {
                     console.log('Loading AGI timeline from remote only:', remoteUrl);
                     const res = await fetch(remoteUrl, { cache: 'no-store' });
