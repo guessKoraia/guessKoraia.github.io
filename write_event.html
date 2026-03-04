@@ -1527,6 +1527,7 @@
     };
 
     (async () => {
+        setLoading(true, "페이지를 불러오는 중", "에디터와 데이터를 준비하고 있습니다.");
         db = await openDB();
 
         await initEditor();
@@ -1876,6 +1877,8 @@
             if (!files.length) return;
             await addImages(files);
         });
+
+        setLoading(false);
     })();
 </script>
 

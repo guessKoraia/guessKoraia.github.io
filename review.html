@@ -297,6 +297,14 @@
     </div>
 </div>
 
+<div id="loadingOverlay" class="modal-backdrop" aria-hidden="true">
+    <div class="w-full max-w-sm border border-slate-200 bg-white p-6 text-center">
+        <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+        <div id="loadingTitle" class="mt-4 text-sm font-extrabold">불러오는 중</div>
+        <div id="loadingDesc" class="mt-1 text-xs font-bold text-slate-500">검토 목록을 불러오고 있습니다.</div>
+    </div>
+</div>
+
 <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
 <script>
@@ -583,7 +591,10 @@
                     const user = await supabaseAuthGetUser();
                     userEmail = (user && user.email) ? user.email : "";
                 }
-                const canApprove = typeof window.canApproveStep === "function" && window.canApproveStep(pStage, userEmail);
+                const userId = (typeof supabaseAuthGetUser === "function" && (await supabaseAuthGetUser()))?.id || "";
+                const isAuthor = currentPost && currentPost.userId && userId && currentPost.userId === userId;
+                const canApproveStage = typeof window.canApproveStep === "function" && window.canApproveStep(pStage, userEmail);
+                const canApprove = (pStage === 0 && isAuthor) || canApproveStage;
                 if (btnApprove) {
                     if (complete) {
                         btnApprove.textContent = "최종 승인 완료";
@@ -665,13 +676,18 @@
             return;
         }
         let approverEmail = "";
+        let approverId = "";
         if (typeof supabaseAuthGetUser === "function") {
             const user = await supabaseAuthGetUser();
             approverEmail = (user && user.email) ? user.email : "";
+            approverId = (user && user.id) ? user.id : "";
         }
         const steps = window.APPROVAL_STEPS;
         const stepInfo = steps && steps[stage];
-        if (typeof window.canApproveStep === "function" && !window.canApproveStep(stage, approverEmail)) {
+        const isAuthor = currentPost && currentPost.userId && approverId && currentPost.userId === approverId;
+        const canApproveStage = typeof window.canApproveStep === "function" && window.canApproveStep(stage, approverEmail);
+        const canApprove = (stage === 0 && isAuthor) || canApproveStage;
+        if (!canApprove) {
             const emails = stepInfo ? (stepInfo.allowedEmails || (stepInfo.allowedEmail ? [stepInfo.allowedEmail] : [])) : [];
             const names = emails.map(function (e) { return typeof window.getNameByEmail === "function" ? window.getNameByEmail(e) : "결재자"; });
             const msg = names.length > 0
@@ -840,6 +856,19 @@
         downloadTextFile(`${safe}.html`, doc);
     };
 
+    const setLoading = (on, title, desc) => {
+        const el = document.getElementById("loadingOverlay");
+        const t = document.getElementById("loadingTitle");
+        const d = document.getElementById("loadingDesc");
+        if (!el) return;
+
+        if (t && title) t.textContent = title;
+        if (d && desc) d.textContent = desc;
+
+        if (on) el.classList.add("show");
+        else el.classList.remove("show");
+    };
+
     const updateAuthUI = (user) => {
         var btnLogin = $("btnLogin");
         var btnLogout = $("btnLogout");
@@ -859,62 +888,67 @@
     };
 
     (async () => {
-        try { db = await openDB(); } catch (_) { db = null; }
+        setLoading(true, "목록을 불러오는 중", "제출된 문서와 결재 정보를 불러오고 있습니다.");
+        try {
+            try { db = await openDB(); } catch (_) { db = null; }
 
-        if (typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
-            try {
-                var config = await supabaseGetApprovalConfig();
-                if (config) window.initApprovalConfig(config);
-            } catch (_) {}
-        }
-        if (typeof supabaseAuthGetSession === "function") {
-            var ses = await supabaseAuthGetSession();
-            if (ses && ses.data && ses.data.session) {
-                updateAuthUI(ses.data.session.user);
+            if (typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
+                try {
+                    var config = await supabaseGetApprovalConfig();
+                    if (config) window.initApprovalConfig(config);
+                } catch (_) {}
+            }
+            if (typeof supabaseAuthGetSession === "function") {
+                var ses = await supabaseAuthGetSession();
+                if (ses && ses.data && ses.data.session) {
+                    updateAuthUI(ses.data.session.user);
+                } else {
+                    updateAuthUI(null);
+                }
             } else {
                 updateAuthUI(null);
             }
-        } else {
-            updateAuthUI(null);
-        }
-        if (typeof supabaseAuthOnAuthStateChange === "function") {
-            supabaseAuthOnAuthStateChange(async function (event, session) {
-                updateAuthUI(session ? session.user : null);
-                if (session && typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
-                    try {
-                        var cfg = await supabaseGetApprovalConfig();
-                        if (cfg) window.initApprovalConfig(cfg);
-                    } catch (_) {}
-                }
-            });
-        }
-        if ($("btnLogin")) $("btnLogin").addEventListener("click", function () {
-            if (typeof supabaseAuthSignIn === "function") supabaseAuthSignIn();
-        });
-        if ($("btnLogout")) $("btnLogout").addEventListener("click", async function () {
-            try {
-                if (typeof supabaseAuthSignOut === "function") await supabaseAuthSignOut();
-            } catch (e) {
-                console.warn("로그아웃:", e);
+            if (typeof supabaseAuthOnAuthStateChange === "function") {
+                supabaseAuthOnAuthStateChange(async function (event, session) {
+                    updateAuthUI(session ? session.user : null);
+                    if (session && typeof supabaseGetApprovalConfig === "function" && typeof window.initApprovalConfig === "function") {
+                        try {
+                            var cfg = await supabaseGetApprovalConfig();
+                            if (cfg) window.initApprovalConfig(cfg);
+                        } catch (_) {}
+                    }
+                });
             }
-            updateAuthUI(null);
-        });
+            if ($("btnLogin")) $("btnLogin").addEventListener("click", function () {
+                if (typeof supabaseAuthSignIn === "function") supabaseAuthSignIn();
+            });
+            if ($("btnLogout")) $("btnLogout").addEventListener("click", async function () {
+                try {
+                    if (typeof supabaseAuthSignOut === "function") await supabaseAuthSignOut();
+                } catch (e) {
+                    console.warn("로그아웃:", e);
+                }
+                updateAuthUI(null);
+            });
 
-        $("btnRefresh").addEventListener("click", renderList);
-        $("fAuthor").addEventListener("input", renderList);
-        $("fTitle").addEventListener("input", renderList);
-        $("fDate").addEventListener("input", renderList);
+            $("btnRefresh").addEventListener("click", renderList);
+            $("fAuthor").addEventListener("input", renderList);
+            $("fTitle").addEventListener("input", renderList);
+            $("fDate").addEventListener("input", renderList);
 
-        $("btnModalClose").addEventListener("click", () => {
-            closeModal();
-            currentPost = null;
-        });
-        $("btnApprove").addEventListener("click", approveCurrent);
-        if ($("btnReject")) $("btnReject").addEventListener("click", rejectCurrent);
-        if ($("btnWithdraw")) $("btnWithdraw").addEventListener("click", withdrawCurrent);
-        $("btnDownload").addEventListener("click", downloadCurrent);
+            $("btnModalClose").addEventListener("click", () => {
+                closeModal();
+                currentPost = null;
+            });
+            $("btnApprove").addEventListener("click", approveCurrent);
+            if ($("btnReject")) $("btnReject").addEventListener("click", rejectCurrent);
+            if ($("btnWithdraw")) $("btnWithdraw").addEventListener("click", withdrawCurrent);
+            $("btnDownload").addEventListener("click", downloadCurrent);
 
-        await renderList();
+            await renderList();
+        } finally {
+            setLoading(false);
+        }
     })();
 </script>
 </body>
