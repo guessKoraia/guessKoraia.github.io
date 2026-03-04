@@ -1176,7 +1176,7 @@
                 }
                 _thumbnailUrl = thumbnailUrl || _thumbnailUrl;
                 _thumbnailDataUrl = null;
-                await savePost("submitted");
+                await savePost("submitted", { approvalStage: 1, approvalHistory: payload.approvalHistory });
                 if (typeof supabaseInvokeSlackApproval === "function") {
                     supabaseInvokeSlackApproval({
                         title: payload.title,
@@ -1523,9 +1523,9 @@
                 statusBanner.textContent = message;
             };
             
-            // 임시저장(draft)이고 stage 0인 경우에만 작성자 수정 가능. submitted이면 결재자만 수정 가능.
-            if (status === "draft" && stage === 0 && !isRejected) {
-                showBanner("📝 임시저장 상태입니다. 수정 후 미리보기 및 제출을 눌러 주세요.", "draft");
+            // 기획 및 초안 작성 단계(stage 0)에서는 글 작성자가 수정 가능
+            if (stage === 0 && !isRejected && authorEmail && userEmail && authorEmail.trim().toLowerCase() === userEmail.trim().toLowerCase()) {
+                showBanner(status === "draft" ? "📝 임시저장 상태입니다. 수정 후 미리보기 및 제출을 눌러 주세요." : "📝 기획 및 초안 작성 단계입니다. 작성자로서 수정할 수 있습니다. 수정 후 미리보기 및 제출을 눌러 주세요.", "draft");
                 return; // 일반 모드 유지
             }
             

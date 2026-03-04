@@ -97,7 +97,8 @@ window.canEditAtStage = function (stage, userEmail, authorEmail, status) {
         return window.canApproveStep(stage, userEmail);
     }
 
-    if (status === "draft" && (!stage || stage === 0)) {
+    // 기획 및 초안 작성 단계(stage 0)에서는 글 작성자만 수정 가능
+    if (!stage || stage === 0) {
         if (authorEmail && authorEmail.trim().toLowerCase() === normalizedUserEmail) {
             return true;
         }
