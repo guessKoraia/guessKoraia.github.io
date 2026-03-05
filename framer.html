@@ -42,6 +42,13 @@ textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   
   <div class="bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white p-8 md:p-10">
     
+    <div class="mb-8 flex items-center justify-between bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+      <div class="flex items-center gap-3">
+        <input type="checkbox" id="use-original" checked class="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+        <label for="use-original" class="text-sm font-bold text-slate-800 cursor-pointer select-none">원본 설정값 적용하기 (체크 시 하단 설정값이 무시되고 원본 HTML 데이터를 유지합니다)</label>
+      </div>
+    </div>
+
     <div class="mb-6">
       <label class="block text-sm font-bold text-slate-700 mb-4">사이트 이름 (Site Name)</label>
       
@@ -52,18 +59,16 @@ textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
           <div class="w-3 h-3 rounded-full bg-green-400"></div>
         </div>
         <div class="bg-white px-4 py-2 rounded-t-xl flex items-center gap-3 w-64 shadow-sm border border-b-0 border-slate-200 relative translate-y-[1px]">
-          
           <div id="tab-favicon-container" class="w-4 h-4 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-sm shrink-0 flex items-center justify-center overflow-hidden">
-            <svg id="tab-favicon-default" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+            <svg id="tab-favicon-default" class="w-3 h-3 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
             <img id="tab-favicon-img" class="w-full h-full object-cover hidden" alt="favicon">
           </div>
-          
-          <span id="tab-preview-text" class="text-sm text-slate-600 truncate font-medium select-none">이곳에 표시됩니다</span>
+          <span id="tab-preview-text" class="text-sm text-slate-400 truncate font-medium select-none">원본 설정값 적용중</span>
           <svg class="w-4 h-4 text-slate-400 ml-auto shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </div>
       </div>
       
-      <input type="text" id="site-name" class="w-full px-5 py-4 bg-white border border-slate-200 rounded-b-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-700 font-medium placeholder:text-slate-400" placeholder="예: 골드 러시 파트너스 | 한국인공지능협회">
+      <input type="text" id="site-name" disabled class="w-full px-5 py-4 bg-white border border-slate-200 rounded-b-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-700 font-medium placeholder:text-slate-400 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed" placeholder="예: 테스트2 | 한국인공지능협회">
     </div>
 
     <div class="mb-10 p-6 bg-slate-50/50 rounded-2xl border border-slate-200/70">
@@ -74,26 +79,26 @@ textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
       <div class="space-y-4">
         <div class="flex flex-col sm:flex-row gap-4">
           <div class="flex-1">
-            <label class="block text-xs font-semibold text-slate-600 mb-1">사이트의 메인 주소를 입력해 주세요. (Canonical URL)</label>
-            <input type="url" id="site-canonical" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="https://example.com">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">대표 웹사이트 주소 (Canonical URL)</label>
+            <input type="url" id="site-canonical" disabled class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed" placeholder="https://example.com">
           </div>
           <div class="flex-1">
             <label class="block text-xs font-semibold text-slate-600 mb-1">대표 키워드를 쉼표(, )로 구분해서 3~5개 작성해 주세요. (Keywords)</label>
-            <input type="text" id="site-keywords" value="한국인공지능협회, " class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="키워드1, 키워드2...">
+            <input type="text" id="site-keywords" value="한국인공지능협회, " disabled class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed" placeholder="키워드1, 키워드2...">
           </div>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">사이트에 대해 설명해 주세요.</label>
-          <input type="text" id="site-description" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="예: 세상을 바꾸는 혁신적인 AI 솔루션">
+          <input type="text" id="site-description" disabled class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed" placeholder="예: 세상을 바꾸는 혁신적인 AI 솔루션">
         </div>
         <div class="flex flex-col sm:flex-row gap-4">
           <div class="flex-1">
             <label class="block text-xs font-semibold text-slate-600 mb-1">파비콘 이미지 URL을 입력해 주세요. (Favicon)</label>
-            <input type="url" id="site-favicon" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="https://example.com/favicon.png">
+            <input type="url" id="site-favicon" disabled class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed" placeholder="https://example.com/favicon.png">
           </div>
           <div class="flex-1">
             <label class="block text-xs font-semibold text-slate-600 mb-1">SNS 공유용 썸네일 이미지 URL을 입력해 주세요. (OG Image)</label>
-            <input type="url" id="site-og-image" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400" placeholder="https://example.com/og-image.jpg">
+            <input type="url" id="site-og-image" disabled class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-slate-700 placeholder:text-slate-400 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed" placeholder="https://example.com/og-image.jpg">
           </div>
         </div>
       </div>
@@ -138,44 +143,64 @@ textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 </div>
 
 <script>
-const siteNameInput = document.getElementById('site-name');
+const useOriginalCheckbox = document.getElementById('use-original');
+const inputs = [
+  document.getElementById('site-name'),
+  document.getElementById('site-canonical'),
+  document.getElementById('site-keywords'),
+  document.getElementById('site-description'),
+  document.getElementById('site-favicon'),
+  document.getElementById('site-og-image')
+];
 const tabPreviewText = document.getElementById('tab-preview-text');
-const siteFaviconInput = document.getElementById('site-favicon');
 const tabFaviconDefault = document.getElementById('tab-favicon-default');
 const tabFaviconImg = document.getElementById('tab-favicon-img');
 const tabFaviconContainer = document.getElementById('tab-favicon-container');
 
-// 사이트 이름 탭 미리보기 연동
-siteNameInput.addEventListener('input', (e) => {
-  const value = e.target.value.trim();
-  tabPreviewText.textContent = value || '이곳에 표시됩니다';
-  if (value) {
-    tabPreviewText.classList.remove('text-slate-400');
-    tabPreviewText.classList.add('text-slate-700');
-  } else {
-    tabPreviewText.classList.remove('text-slate-700');
-    tabPreviewText.classList.add('text-slate-400');
-  }
-});
+function updateUI() {
+  const isChecked = useOriginalCheckbox.checked;
+  inputs.forEach(input => {
+    input.disabled = isChecked;
+  });
 
-// 파비콘 탭 아이콘 미리보기 연동
-siteFaviconInput.addEventListener('input', (e) => {
-  const url = e.target.value.trim();
-  if (url) {
-    tabFaviconImg.src = url;
-    tabFaviconImg.classList.remove('hidden');
-    tabFaviconDefault.classList.add('hidden');
-    tabFaviconContainer.classList.remove('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
-    tabFaviconContainer.classList.add('bg-transparent');
-  } else {
-    tabFaviconImg.src = '';
+  if (isChecked) {
+    tabPreviewText.textContent = '원본 설정값 적용중';
+    tabPreviewText.classList.add('text-slate-400');
+    tabPreviewText.classList.remove('text-slate-700');
     tabFaviconImg.classList.add('hidden');
-    tabFaviconDefault.classList.remove('hidden');
+    tabFaviconDefault.classList.add('hidden');
     tabFaviconContainer.classList.add('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
     tabFaviconContainer.classList.remove('bg-transparent');
+  } else {
+    const nameVal = inputs[0].value.trim();
+    tabPreviewText.textContent = nameVal || '이곳에 표시됩니다';
+    if (nameVal) {
+      tabPreviewText.classList.remove('text-slate-400');
+      tabPreviewText.classList.add('text-slate-700');
+    } else {
+      tabPreviewText.classList.remove('text-slate-700');
+      tabPreviewText.classList.add('text-slate-400');
+    }
+    
+    const favVal = inputs[4].value.trim();
+    if (favVal) {
+      tabFaviconImg.src = favVal;
+      tabFaviconImg.classList.remove('hidden');
+      tabFaviconDefault.classList.add('hidden');
+      tabFaviconContainer.classList.remove('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
+      tabFaviconContainer.classList.add('bg-transparent');
+    } else {
+      tabFaviconImg.src = '';
+      tabFaviconImg.classList.add('hidden');
+      tabFaviconDefault.classList.remove('hidden');
+      tabFaviconContainer.classList.add('bg-gradient-to-tr', 'from-blue-500', 'to-cyan-400');
+      tabFaviconContainer.classList.remove('bg-transparent');
+    }
   }
-});
+}
 
+useOriginalCheckbox.addEventListener('change', updateUI);
+inputs.forEach(input => input.addEventListener('input', updateUI));
 tabFaviconImg.addEventListener('error', () => {
   tabFaviconImg.classList.add('hidden');
   tabFaviconDefault.classList.remove('hidden');
@@ -184,18 +209,9 @@ tabFaviconImg.addEventListener('error', () => {
 });
 
 function processHtml() {
-  const siteName = document.getElementById('site-name').value;
   const rawHtml = document.getElementById('raw-html').value;
-  
-  // SEO 입력값 가져오기
-  const siteCanonical = document.getElementById('site-canonical').value.trim();
-  const siteKeywords = document.getElementById('site-keywords').value.trim();
-  const siteDesc = document.getElementById('site-description').value.trim();
-  const siteFavicon = document.getElementById('site-favicon').value.trim();
-  const siteOgImage = document.getElementById('site-og-image').value.trim();
-
-  if (!siteName || !rawHtml) {
-    alert('사이트 이름과 HTML 코드를 모두 입력해주세요.');
+  if (!rawHtml) {
+    alert('HTML 코드를 입력해주세요.');
     return null;
   }
 
@@ -208,91 +224,72 @@ function processHtml() {
     if (headOnlyMatch) headContent = headOnlyMatch[1];
   }
 
-  // --- 기존의 방해되는 태그를 완벽하게 지우는 철벽 방어 정규식 ---
+  const oT = ((rawHtml.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || '').trim();
+  const oC = ((rawHtml.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["']/i) || [])[1] || '').trim();
+  const oK = ((rawHtml.match(/<meta[^>]*name=["']keywords["'][^>]*content=["']([^"']*)["']/i) || [])[1] || '').trim();
+  const oD = ((rawHtml.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i) || rawHtml.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']*)["']/i) || [])[1] || '').trim();
+  const oF = ((rawHtml.match(/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*href=["']([^"']+)["']/i) || rawHtml.match(/<link[^>]*rel=["']apple-touch-icon["'][^>]*href=["']([^"']+)["']/i) || [])[1] || '').trim();
+  const oO = ((rawHtml.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["']/i) || [])[1] || '').trim();
+
+  const chk = document.getElementById('use-original').checked;
+  const fT = chk ? oT : (document.getElementById('site-name').value.trim() || oT);
+  const fC = chk ? oC : (document.getElementById('site-canonical').value.trim() || oC);
+  const fK = chk ? oK : (document.getElementById('site-keywords').value.trim() || oK);
+  const fD = chk ? oD : (document.getElementById('site-description').value.trim() || oD);
+  const fF = chk ? oF : (document.getElementById('site-favicon').value.trim() || oF);
+  const fO = chk ? oO : (document.getElementById('site-og-image').value.trim() || oO);
+
   headContent = headContent.replace(/<title[^>]*>[\s\S]*?<\/title>/gi, '');
-
-  const metaTagsToRemove = [
-    'og:title', 'twitter:title', 'title', 
-    'description', 'og:description', 'twitter:description', 
-    'og:image', 'twitter:image', 
-    'og:type', 'twitter:card', 'og:site_name',
-    'og:url', 'author', 'keywords'
-  ];
-  const metaPattern = metaTagsToRemove.join('|');
-  const metaStripRegex = new RegExp(`<meta[^>]*(?:name|property)\\s*=\\s*["'](?:${metaPattern})["'][^>]*>`, 'gi');
-  headContent = headContent.replace(metaStripRegex, '');
-
-  const linkStripRegex = /<link[^>]*rel\s*=\s*["'][^"']*(?:icon|apple-touch-icon|canonical)[^"']*["'][^>]*>/gi;
-  headContent = headContent.replace(linkStripRegex, '');
-  
-  // 기존 원본에 혹시라도 존재할지 모를 구조화된 데이터(ld+json) 제거
+  const mr = ['og:title', 'twitter:title', 'title', 'description', 'og:description', 'twitter:description', 'og:image', 'twitter:image', 'og:type', 'twitter:card', 'og:site_name', 'og:url', 'author', 'keywords'];
+  const mp = mr.join('|');
+  const ms = new RegExp(`<meta[^>]*(?:name|property)\\s*=\\s*["'](?:${mp})["'][^>]*>`, 'gi');
+  headContent = headContent.replace(ms, '');
+  const ls = /<link[^>]*rel\s*=\s*["'][^"']*(?:icon|apple-touch-icon|canonical)[^"']*["'][^>]*>/gi;
+  headContent = headContent.replace(ls, '');
   headContent = headContent.replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
 
-  // 바디 영역 추출
-  const bodyRegex = /<body[^>]*>([\s\S]*?)<\/body>/i;
-  const bodyMatch = rawHtml.match(bodyRegex);
-  let bodyContent = bodyMatch ? bodyMatch[1] : '';
+  let bodyContent = rawHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
 
-  function removeDivById(htmlStr, id) {
-    let idIndex = htmlStr.indexOf('id="' + id + '"');
-    if (idIndex === -1) idIndex = htmlStr.indexOf("id='" + id + "'");
-    if (idIndex === -1) return htmlStr;
-    
-    const startIndex = htmlStr.lastIndexOf('<div', idIndex);
-    if (startIndex === -1) return htmlStr;
-    
-    let openTags = 0;
-    let i = startIndex;
-    
-    while (i < htmlStr.length) {
-      if (htmlStr.substr(i, 4).toLowerCase() === '<div') {
-        openTags++;
+  function rm(s, id) {
+    let idx = s.indexOf('id="' + id + '"');
+    if (idx === -1) idx = s.indexOf("id='" + id + "'");
+    if (idx === -1) return s;
+    const start = s.lastIndexOf('<div', idx);
+    if (start === -1) return s;
+    let o = 0;
+    let i = start;
+    while (i < s.length) {
+      if (s.substr(i, 4).toLowerCase() === '<div') {
+        o++;
         i += 4;
-      } else if (htmlStr.substr(i, 5).toLowerCase() === '</div') {
-        openTags--;
-        if (openTags === 0) {
-          const endIndex = htmlStr.indexOf('>', i) + 1;
-          return htmlStr.slice(0, startIndex) + htmlStr.slice(endIndex);
+      } else if (s.substr(i, 5).toLowerCase() === '</div') {
+        o--;
+        if (o === 0) {
+          const e = s.indexOf('>', i) + 1;
+          return s.slice(0, start) + s.slice(e);
         }
         i += 5;
       } else {
         i++;
       }
     }
-    return htmlStr;
+    return s;
   }
 
-  bodyContent = removeDivById(bodyContent, '__framer-badge-container');
-  bodyContent = removeDivById(bodyContent, '__framer-editorbar-container');
+  bodyContent = rm(bodyContent, '__framer-badge-container');
+  bodyContent = rm(bodyContent, '__framer-editorbar-container');
 
-  // --- 사용자 입력 + 하드코딩 기반 새 SEO 데이터 생성 ---
-  let seoTags = `\n  <meta name="author" content="한국인공지능협회">`;
-  
-  // 키워드 (기본값 처리)
-  const finalKeywords = siteKeywords ? siteKeywords : '한국인공지능협회';
-  seoTags += `\n  <meta name="keywords" content="${finalKeywords}">`;
+  let st = `\n  <meta name="author" content="한국인공지능협회">`;
+  const rK = fK ? fK : '한국인공지능협회';
+  st += `\n  <meta name="keywords" content="${rK}">`;
 
-  if (siteName) {
-    seoTags += `\n  <meta property="og:title" content="${siteName}">\n  <meta property="og:site_name" content="${siteName}">\n  <meta name="twitter:title" content="${siteName}">\n  <meta property="og:type" content="website">`;
-  }
-  if (siteCanonical) {
-    seoTags += `\n  <link rel="canonical" href="${siteCanonical}">\n  <meta property="og:url" content="${siteCanonical}">`;
-  }
-  if (siteDesc) {
-    seoTags += `\n  <meta name="description" content="${siteDesc}">\n  <meta property="og:description" content="${siteDesc}">\n  <meta name="twitter:description" content="${siteDesc}">`;
-  }
-  if (siteFavicon) {
-    seoTags += `\n  <link rel="icon" href="${siteFavicon}">\n  <link rel="apple-touch-icon" href="${siteFavicon}">`;
-  }
-  if (siteOgImage) {
-    seoTags += `\n  <meta property="og:image" content="${siteOgImage}">\n  <meta name="twitter:image" content="${siteOgImage}">\n  <meta name="twitter:card" content="summary_large_image">`;
-  }
+  if (fT) st += `\n  <meta property="og:title" content="${fT}">\n  <meta property="og:site_name" content="${fT}">\n  <meta name="twitter:title" content="${fT}">\n  <meta property="og:type" content="website">`;
+  if (fC) st += `\n  <link rel="canonical" href="${fC}">\n  <meta property="og:url" content="${fC}">`;
+  if (fD) st += `\n  <meta name="description" content="${fD}">\n  <meta property="og:description" content="${fD}">\n  <meta name="twitter:description" content="${fD}">`;
+  if (fF) st += `\n  <link rel="icon" href="${fF}">\n  <link rel="apple-touch-icon" href="${fF}">`;
+  if (fO) st += `\n  <meta property="og:image" content="${fO}">\n  <meta name="twitter:image" content="${fO}">\n  <meta name="twitter:card" content="summary_large_image">`;
 
-  const SCRIPT_START = '<' + 'script>';
-  const SCRIPT_END = '<' + '/script>';
-
-  // --- ld+json (구조화된 데이터 - AI 검색엔진 최적화) 주입 ---
-  const ldJsonData = {
+  const ld = {
     "@context": "https://schema.org",
     "@type": "NGO",
     "name": "한국인공지능협회",
@@ -311,105 +308,94 @@ function processHtml() {
       "https://www.youtube.com/channel/UClmlU0giEZJauHuiA0Yf2yw"
     ]
   };
-  if (siteCanonical) {
-    ldJsonData.url = siteCanonical;
-  }
-  
-  seoTags += `\n  <script type="application/ld+json">\n${JSON.stringify(ldJsonData, null, 4)}\n  <${'/'}script>`;
+  if (fC) ld.url = fC;
 
-  // React(Framer)의 동적 덮어쓰기를 막는 옵저버
-  const safeSiteName = siteName ? siteName.replace(/"/g, '\\"') : '';
-  let seoLockScript = `\n  ${SCRIPT_START}
+  st += `\n  <script type="application/ld+json">\n${JSON.stringify(ld, null, 4)}\n  <${'/'}script>`;
+
+  const ss = fT ? fT.replace(/"/g, '\\"') : '';
+  let sl = '';
+  if (ss) {
+    sl = `\n  <script>
     (function() {
-      var targetTitle = "${safeSiteName}";
-      if (!targetTitle) return;
-      document.title = targetTitle;
+      var t = "${ss}";
+      if (!t) return;
+      document.title = t;
       window.addEventListener('DOMContentLoaded', function() {
-        document.title = targetTitle;
-        var observer = new MutationObserver(function() {
-          if (document.title !== targetTitle) {
-            document.title = targetTitle;
-          }
+        document.title = t;
+        var o = new MutationObserver(function() {
+          if (document.title !== t) document.title = t;
         });
-        var titleEl = document.querySelector('title');
-        if (titleEl) {
-          observer.observe(titleEl, { childList: true, characterData: true, subtree: true });
-        }
-        observer.observe(document.head, { childList: true, subtree: true });
+        var e = document.querySelector('title');
+        if (e) o.observe(e, { childList: true, characterData: true, subtree: true });
+        o.observe(document.head, { childList: true, subtree: true });
       });
     })();
-  ${SCRIPT_END}\n`;
+  <${'/'}script>\n`;
+  }
 
-  // 최종 조합
-  headContent = seoTags + headContent + `\n  <style>#__framer-badge-container, #__framer-editorbar-container { display: none !important; opacity: 0 !important; pointer-events: none !important; }</style>\n` + seoLockScript;
+  const loadingCss = `\n  <style>
+    #__framer-badge-container, #__framer-editorbar-container { display: none !important; opacity: 0 !important; pointer-events: none !important; }
+    #loading-screen { position: fixed; inset: 0; background-color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2147483647; transition: opacity 0.3s ease; color: #333; font-family: sans-serif; }
+    #loading-screen .spinner { width: 40px; height: 40px; border: 4px solid #e5e7eb; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @media (prefers-color-scheme: dark) { #loading-screen { background-color: #0f172a; color: #f3f4f6; } #loading-screen .spinner { border-color: #334155; border-top-color: #3b82f6; } }
+  </style>`;
 
+  headContent = st + headContent + loadingCss + sl;
+
+  const SCRIPT_START = '<' + 'script>';
+  const SCRIPT_END = '<' + '/script>';
   const BODY_END = '<' + '/body>';
   const HTML_END = '<' + '/html>';
 
-  const template = `<!doctype html>
+  return `<!doctype html>
 <html lang="ko">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <meta name="generator" content="Framer 904da2c">
-  
-  <title>${siteName}</title>${headContent}
+  <title>${fT}</title>${headContent}
 </head>
-
 <body>
   <div id="loading-screen">
     <div class="spinner"></div>
     <p>로딩 중...</p>
   </div>
-
-${bodyContent}
   ${SCRIPT_START}
     document.addEventListener('DOMContentLoaded', function () {
-      let resourcesLoaded = false;
-      let timeoutPassed = false;
-
+      let r = false;
+      let t = false;
       setTimeout(function () {
-        timeoutPassed = true;
-        if (resourcesLoaded) {
-          hideLoadingScreen();
-        }
+        t = true;
+        if (r) h();
       }, 1000);
-
       window.addEventListener('load', function () {
         setTimeout(function () {
-          resourcesLoaded = true;
-          if (timeoutPassed) {
-            hideLoadingScreen();
-          }
+          r = true;
+          if (t) h();
         }, 500);
       });
-
-      function hideLoadingScreen() {
-        const loadingScreen = document.getElementById('loading-screen');
-        if (loadingScreen) {
-          loadingScreen.style.opacity = '0';
+      function h() {
+        const l = document.getElementById('loading-screen');
+        if (l) {
+          l.style.opacity = '0';
           setTimeout(function () {
-            loadingScreen.style.display = 'none';
+            l.style.display = 'none';
           }, 300);
         }
       }
     });
   ${SCRIPT_END}
+${bodyContent}
 ${BODY_END}
-
 ${HTML_END}`;
-
-  return template;
 }
 
 document.getElementById('btn-preview').addEventListener('click', () => {
   const finalHtml = processHtml();
   if (!finalHtml) return;
-
   const modal = document.getElementById('modal');
   const iframe = document.getElementById('preview-frame');
-  
   iframe.srcdoc = finalHtml;
   modal.classList.remove('hidden');
 });
@@ -425,7 +411,6 @@ document.getElementById('modal-backdrop').addEventListener('click', closeModal);
 document.getElementById('btn-export').addEventListener('click', () => {
   const finalHtml = processHtml();
   if (!finalHtml) return;
-
   const blob = new Blob([finalHtml], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
