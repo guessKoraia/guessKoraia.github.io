@@ -961,7 +961,7 @@
   },
   {
     "date": "2026-01-21",
-    "link": "https://www.scmp.com/tech/tech-trends/article/3340866/baidu-launches-ernie-50-firms-ai-assistant-users-reach-200-million-month",
+    "link": "https://baike.baidu.com/en/item/Ernie%20Large%20Model%205.0/665362",
     "title": "ERNIE 5.0 (文心 5.0)",
     "description": "중국 최대 검색 기업 바이두가 2026년 1월 21일, 텍스트·이미지·음성·영상을 하나의 모델에서 처리하는 완전 멀티모달 AI 모델 ERNIE 5.0을 공식 출시했습니다. 글로벌 AI 리더보드 LMArena에서 중국 모델 1위, 전 세계 8위를 기록했습니다.",
     "additional_description": "2조 4000억 개의 파라미터를 보유한 초대형 MoE 구조이지만, 실제 추론 시 전체 파라미터의 3% 미만만 활성화해 효율적으로 작동합니다. 텍스트, 이미지, 오디오, 영상을 하나의 통합 모델로 처리하는 '네이티브 풀모달' 구조를 구현했으며, 월 2억 명의 AI 어시스턴트 이용자를 보유하고 있습니다.",
@@ -983,6 +983,14 @@
     "additional_description": "사용자는 설정의 개인화 메뉴에서 기본 스타일, 톤, 따뜻함, 이모지 사용 등을 조정할 수 있습니다.",
     "category": "모델 출시"
   },
+  {
+  "date": "2026-01-23",
+  "link": "https://claude.com/blog/cowork-research-preview",
+  "title": "Claude Cowork",
+  "description": "Anthropic이 2026년 1월, Claude 기반 AI 업무 자동화 도구 'Claude Cowork'를 연구 프리뷰 형태로 공개했습니다.",
+  "additional_description": "Claude Cowork는 단순한 챗봇을 넘어 파일 정리, 데이터 분석, 문서 작성, 코드 실행 등 실제 업무를 수행하는 AI 에이전트 형태의 도구입니다. 데스크톱 환경에서 파일과 애플리케이션에 접근해 작업을 수행하며, Google Workspace, Excel, PowerPoint 등 다양한 업무 도구와 연결해 다단계 작업을 자동화할 수 있습니다. 현재 Pro, Max, Team, Enterprise 구독자를 대상으로 연구 프리뷰 형태로 제공되고 있습니다.",
+  "category": "비즈니스 및 산업"
+},
   {
     "date": "2026-01-24",
     "link": "https://blog.gitguardian.com/moltbot-personal-assistant-goes-viral-and-so-do-your-secrets/",
@@ -1072,6 +1080,14 @@
     "category": "모델 출시"
 },
   {
+  "date": "2026-02-16",
+  "link": "https://qwen.ai/blog?id=qwen3.5",
+  "title": "Qwen3.5",
+  "description": "Alibaba가 2026년 2월 16일 차세대 AI 모델 시리즈 'Qwen3.5'를 공개하며 에이전틱 AI 시대를 위한 새로운 모델 아키텍처를 발표했습니다.",
+  "additional_description": "Qwen3.5는 다양한 크기의 모델로 구성된 시리즈로, 0.8B·2B·4B·9B 등 소형 모델부터 27B·35B·122B 등 대형 모델까지 제공됩니다. 특히 Qwen3.5-9B 모델은 GPQA Diamond에서 81.7점을 기록하며 120B 규모 모델보다 높은 성능을 보였고, MMMU-Pro 시각 추론 벤치마크에서 70.1점을 기록해 Gemini 2.5 Flash-Lite를 능가했습니다. 텍스트·이미지·영상 이해가 가능한 네이티브 멀티모달 구조를 지원하며, 일부 모델은 Apache 2.0 라이선스로 공개되어 로컬 환경과 기업 서비스에 활용할 수 있습니다. Alibaba는 이 모델이 이전 세대 대비 비용을 약 60% 절감하고 복잡한 작업을 자동 수행하는 'Agentic AI' 활용을 목표로 설계되었다고 밝혔습니다.",
+  "category": "모델 출시"
+},
+  {
     "date": "2026-02-19",
     "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
     "title": "Gemini 3.1 Pro",
@@ -1086,11 +1102,44 @@
     "description": "Google이 2026년 2월 26일, 기존 '나노바나나 프로'의 고품질 추론 능력과 '플래시' 계열의 빠른 생성 속도를 결합한 차세대 AI 이미지 생성 및 편집 모델 '나노바나나2'를 공식 출시했습니다.",
     "additional_description": "공식 명칭은 'Gemini 3.1 Flash Image'입니다. 한 번의 작업으로 최대 5명의 등장인물과 14개의 물체를 일관되게 유지할 수 있어 이야기 연출에 적합하며, 이미지 내 텍스트의 정확성과 다국어 렌더링 능력이 크게 향상되었습니다. 4K 초고화질부터 512픽셀 저해상도까지 지원하고, 4:1 및 1:8 등 다양한 화면 비율을 제공합니다. 출시와 동시에 Gemini 앱 전체의 기본 이미지 생성 모델로 적용되며, Google Search(Lens 및 AI 모드), 동영상 편집 도구 Flow에서도 기본 모델로 사용됩니다. 개발자는 Gemini API, Vertex API, AI Studio, Antigravity를 통해 프리뷰로 이용할 수 있으며, 생성된 모든 이미지에는 SynthID 워터마크가 적용됩니다.",
     "category": "모델 출시"
+},
+  {
+    "date": "2026-02-26",
+    "link": "https://www.businessinsider.com/openai-google-employee-petition-military-ai-use-anthropic-pentagon-defense-2026-2",
+    "title": "Google 및 OpenAI 개발자들의 군사적 AI 무기화 반대 시위",
+    "description": "미 국방부가 Anthropic을 굴복시키려 하자, Google과 OpenAI의 수백 명의 직원들이 연대하여 자사의 AI 기술을 군사적 목적으로 넘기지 말 것을 요구하는 청원에 서명했습니다.",
+    "additional_description": "펜타곤(미 국방부)은 Anthropic을 제재한 후, 자신들의 요구(군사 작전을 위한 AI 모델 맞춤화 등)를 관철하기 위해 Google 및 OpenAI와 협상을 시도했습니다. 이에 위기감을 느낀 Google과 OpenAI의 직원들은 '인간의 통제 없는 자율 살상 무기나 대규모 감시에 AI를 사용해서는 안 된다'는 원칙을 지키기 위해 집단 항의에 나섰습니다. 직원들은 정부가 '한 회사가 굴복하면 다른 회사도 무너진다'는 공포 심리를 이용해 빅테크들을 갈라치기 하려 한다고 비판하며, 기업들이 확실한 안전장치 없이 국방부와 타협해서는 안 된다고 강력히 촉구하고 있습니다.",
+    "category": "문화 및 사회"
+},
+  {
+    "date": "2026-03-01",
+    "link": "https://biz.chosun.com/en/en-it/2026/03/02/7NV225L4YRF3NLRPCN5K6I6ZHM/",
+    "title": "미국 정부의 Anthropic 공급망 배제 및 이란 공습 사용 논란",
+    "description": "트럼프 행정부와 미 국방부가 자율 살상 무기 및 대규모 감시에 AI 사용을 거부한 Anthropic(Claude 개발사)을 '국가 안보 공급망 위험'으로 지정하며 전면 제재를 가했습니다.",
+    "additional_description": "다리오 아모데이(Dario Amodei) Anthropic CEO는 모델이 인간의 개입 없는 자율 살상 무기나 대규모 대중 감시에 사용되는 것을 명시적으로 거부했습니다. 이에 미 국방부는 동맹국이나 적국이 아닌 미국 자국 기업 최초로 Anthropic을 공급망 배제 기업으로 지정하여 군수업체들과의 거래를 막았습니다. 그러나 아이러니하게도, 이러한 제재 명령이 내려진 직후 벌어진 미국의 이란 공습 작전에서 미군이 여전히 Anthropic의 AI(Claude)를 사용한 것으로 밝혀져 큰 논란이 되었습니다. 군사 시스템에 너무 깊이 통합되어 있어 즉각적인 대체가 불가능했기 때문입니다.",
+    "category": "정책 및 규제"
+},
+{
+    "date": "2026-03-02",
+    "link": "https://openai.com/index/gpt-5-3-instant/",
+    "title": "GPT-5.3 Instant 출시",
+    "description": "OpenAI가 2026년 3월 2일, 빠르고 일상적인 대화에 최적화된 새로운 기본 모델 'GPT-5.3 Instant'를 공식 출시했습니다.",
+    "additional_description": "이 모델은 기존 모델이 지나치게 로봇 같고 '설교하는 듯한(preachy)' 어조를 사용하거나 불필요하게 답변을 거부하던 문제를 크게 개선했습니다. 환각(거짓 정보) 비율을 웹 검색에서 최대 26.8%, 내부 지식에서 19.7% 줄였으며, 웹 검색 결과를 단순히 요약하는 것을 넘어 자신의 추론과 결합해 더 정확하고 유용한 맥락을 제공합니다. 기존 GPT-5.2 Instant는 유료 사용자를 위해 3개월간 유지된 후 2026년 6월 3일에 은퇴할 예정입니다.",
+    "category": "모델 출시"
+},
+  {
+  "date": "2026-03-03",
+  "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-flash-lite/",
+  "title": "Gemini 3.1 Flash-Lite",
+  "description": "Google이 2026년 3월 3일, Gemini 3 시리즈 중 가장 빠르고 비용 효율적인 모델인 Gemini 3.1 Flash-Lite를 프리뷰로 출시했습니다.",
+  "additional_description": "Gemini 3.1 Flash-Lite는 대규모 트래픽 처리와 저지연 응답을 목표로 설계된 경량 모델로, Gemini API와 Vertex AI를 통해 제공됩니다. 입력 토큰 100만 기준 약 0.25달러, 출력 토큰 100만 기준 1.50달러 수준의 낮은 비용을 제공하며, 이전 Gemini 2.5 Flash 대비 최초 응답 토큰 생성 속도가 약 2.5배 빨라지고 출력 속도도 약 45% 향상되었습니다. GPQA Diamond 86.9%, MMMU Pro 76.8% 등의 벤치마크를 기록하며 일부 이전 세대 Gemini 모델보다 높은 성능을 보입니다.",
+  "category": "모델 출시"
 }
 
 
 
 
 ]
+
 
 
