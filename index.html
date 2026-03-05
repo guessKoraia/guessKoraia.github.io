@@ -1086,7 +1086,10 @@ async function loadHomePage() {
 
             const hero = poolShuffled[0];
             if (!heroPref.custom || heroPref.useLatestNews) {
-                document.getElementById('hero-title').textContent = hero.title;
+                // 💡 첫 번째 수정: Hero 영역의 타이틀에서 '|' 뒷부분 제거
+                const cleanHeroTitle = hero.title.split('|')[0].trim();
+                document.getElementById('hero-title').textContent = cleanHeroTitle;
+                
                 document.getElementById('hero-link').href = hero.url;
                 document.getElementById('hero-time').textContent = relativeDate(hero.created_at);
                 const desc = document.getElementById('hero-desc');
@@ -1100,12 +1103,16 @@ async function loadHomePage() {
                 const fav = getFaviconUrl(a.url);
                 const evLabel = isEventUrl(a.url) ? '<span class="label-event">행사</span> ' : '';
                 const rpLabel = isReportUrl(a.url) ? '<span class="label-report">보고서</span> ' : '';
+                
+                // 💡 두 번째 수정: 리스트 항목의 타이틀에서 '|' 뒷부분 제거
+                const cleanListTitle = a.title.split('|')[0].trim();
+                
                 return `
                 <a href="${a.url}" target="_blank" onclick="markRead('read_articles','${a.id}')" 
                    class="flex items-start gap-3 py-3 px-4 group hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${isRead?'article-visited':''}">
                     ${fav ? `<img src="${fav}" class="w-4 h-4 mt-1 shrink-0 rounded-sm" onerror="this.style.display='none'" alt="">` : ''}
                     <div class="flex-1 min-w-0">
-                        <div class="text-sm font-medium leading-snug line-clamp-2">${evLabel}${rpLabel}${escapeHtml(truncate(a.title, 100))}</div>
+                        <div class="text-sm font-medium leading-snug line-clamp-2">${evLabel}${rpLabel}${escapeHtml(truncate(cleanListTitle, 100))}</div>
                     </div>
                     <span class="shrink-0 text-xs text-text-secondary whitespace-nowrap">${relativeDate(a.created_at)}</span>
                 </a>`;
