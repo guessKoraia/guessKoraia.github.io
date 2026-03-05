@@ -1331,13 +1331,16 @@ async function loadNewsPage(page) {
             const rpLabel = isReportUrl(a.url) ? '<span class="label-report">보고서</span> ' : '';
             const readBadge = isRead ? '<span class="read-badge-sm">읽음</span>' : '';
             
+            // 💡 추가된 부분: '|' 기준으로 나누고 첫 번째 요소만 가져온 뒤 양옆 공백 제거
+            const cleanTitle = a.title.split('|')[0].trim();
+            
             return `
             <div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${isRead?'article-visited':''}" id="news-item-${a.id}">
                 <span class="text-xs text-text-secondary w-8 text-right shrink-0 hidden sm:block">${num}</span>
                 ${fav ? `<img src="${fav}" class="w-4 h-4 shrink-0 rounded-sm" onerror="this.style.display='none'" alt="">` : ''}
                 <a href="${a.url}" target="_blank" onclick="markRead('read_articles','${a.id}');document.getElementById('news-item-${a.id}').classList.add('article-visited')" 
                    class="flex-1 text-sm font-medium hover:text-primary transition-colors line-clamp-1 min-w-0">
-                    ${evLabel}${rpLabel}${hl(truncate(a.title, 120), newsState.query)}${readBadge}
+                    ${evLabel}${rpLabel}${hl(truncate(cleanTitle, 120), newsState.query)}${readBadge}
                 </a>
                 <span class="shrink-0 text-xs text-text-secondary whitespace-nowrap hidden sm:block">${relativeDate(a.created_at)}</span>
                 <a href="${a.url}" target="_blank" onclick="markRead('read_articles','${a.id}')" 
