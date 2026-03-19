@@ -1142,7 +1142,16 @@
   "description": "OpenAI는 2026년 3월 5일, 자사 최고 성능의 업무용 프런티어 모델 GPT-5.4를 출시하고 ChatGPT에 'GPT-5.4 Thinking'으로 탑재했습니다. 이 모델은 기존 GPT-5.3-Codex의 코딩 능력과 강화된 추론·에이전트·컴퓨터 사용 능력을 통합한 통합 플래그십 모델입니다.",
   "additional_description": "GPT-5.4는 GPT-5.3-Codex의 최상급 코딩 성능에 더해, 복잡한 업무를 위한 추론 능력과 장기 작업 안정성을 크게 개선했습니다. 특히 '네이티브 컴퓨터 사용(native computer use)' 기능이 핵심으로, 화면 스크린샷을 이해하고, 마우스·키보드 동작을 내보내며, Playwright 같은 도구를 이용해 웹·앱 UI를 직접 조작하는 에이전트 시나리오를 지원합니다. API 버전(gpt-5.4)은 최대 100만 토큰(실험적) 컨텍스트 윈도우를 제공하며, 이전 세대보다 적은 토큰으로 같은 문제를 해결하는 효율성을 달성했습니다. OSWorld-Verified·WebArena Verified 같은 컴퓨터 사용 벤치마크에서 최고 점수를 기록했고, 지식 노동 평가인 GDPval에서도 83%에 도달해 OpenAI 내부 기록을 경신했습니다. ChatGPT에서는 Plus·Team·Pro 사용자를 대상으로 'GPT-5.4 Thinking'과 고급 업무용 'GPT-5.4 Pro'가 제공되고, Codex 및 OpenAI API에서도 동일 계열 모델로 노출됩니다. 이 릴리스와 함께 GPT-5.2 Thinking은 레거시 모델로 이동한 뒤 2026년 6월 5일에 완전히 퇴역할 예정입니다.",
   "category": "모델 출시"
+},
+{
+"date": "2026-03-17",
+"link": "https://openai.com/ko-KR/index/introducing-gpt-5-4-mini-and-nano/",
+"title": "GPT-5.4 mini 및 nano",
+"description": "OpenAI는 GPT-5.4 계열의 소형 모델인 GPT-5.4 mini와 GPT-5.4 nano를 출시했습니다. 두 모델은 빠른 응답 속도와 비용 효율이 중요한 대량 처리 작업에 맞춰 설계됐습니다.",
+"additional_description": "GPT-5.4 mini는 GPT-5 mini보다 2배 이상 빠르며, 코딩·추론·멀티모달 이해·도구 사용 성능이 크게 향상됐습니다. SWE-Bench Pro와 OSWorld-Verified 같은 평가에서는 상위 모델 GPT-5.4에 근접하는 성능을 보이며, 400k 컨텍스트 윈도우를 지원합니다. ChatGPT, Codex, API에서 사용할 수 있고, 특히 코딩 워크플로우·컴퓨터 사용·서브에이전트 작업에 적합합니다. GPT-5.4 nano는 GPT-5.4 계열 중 가장 작고 저렴한 모델로, 분류·데이터 추출·랭킹·간단한 코딩 보조 작업에 최적화됐으며 API에서만 제공됩니다.",
+"category": "모델 출시"
 }
+
 
 
 
