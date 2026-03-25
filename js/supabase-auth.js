@@ -67,11 +67,50 @@
         if (!client) return Promise.resolve(false);
         return client.auth.getUser()
             .then(function (r) {
-                var uid = r.data.user?.id;
-                if (!uid) return false;
-                return client.from("allowed_writers").select("user_id").eq("user_id", uid).maybeSingle();
+                var user = r && r.data ? r.data.user : null;
+                var uid = user?.id;
+                if (!uid) return { uid: null, isGoogle: false };
+
+                // provider 판별이 가능한 경우에만 google 여부로 제한.
+                // (판별 정보가 없으면, 이 프로젝트 UI가 google만 사용하므로 true로 간주)
+                var isGoogle = true;
+                try {
+                    if (user && Array.isArray(user.identities) && user.identities.length > 0) {
+                        isGoogle = user.identities.some(function (it) {
+                            return it && it.provider === "google";
+                        });
+                    } else if (user && user.app_metadata && typeof user.app_metadata.provider === "string") {
+                        isGoogle = user.app_metadata.provider === "google";
+                    }
+                } catch (_) {
+                    isGoogle = true;
+                }
+
+                return { uid: uid, isGoogle: !!isGoogle };
             })
-            .then(function (r) { return !!(r.data && r.data.user_id); });
+            .then(function (ctx) {
+                if (!ctx || !ctx.uid) return false;
+
+                // 이미 등록된 경우 true
+                return client.from("allowed_writers")
+                    .select("user_id")
+                    .eq("user_id", ctx.uid)
+                    .maybeSingle()
+                    .then(function (r) {
+                        if (r && r.data && r.data.user_id) return true;
+
+                        // 최초 로그인 시 자동 등록 (중복은 upsert이 처리)
+                        if (!ctx.isGoogle) return false;
+
+                        return client.from("allowed_writers")
+                            .upsert({ user_id: ctx.uid }, { onConflict: "user_id" })
+                            .then(function () { return true; })
+                            .catch(function (err) {
+                                console.warn("allowed_writers 자동 등록 실패:", err);
+                                return false;
+                            });
+                    });
+            });
     };
 
     /** 검토 목록 전체 조회 허용 여부 (allowed_reviewers에 있으면 true) */
