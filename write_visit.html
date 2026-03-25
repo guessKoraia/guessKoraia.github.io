@@ -277,11 +277,26 @@
     </button>
 
     <div class="mx-auto max-w-4xl">
-        <div class="mt-4">
-            <div class="relative">
-                <div id="editorWrap" class="relative">
-                    <textarea id="editor"></textarea>
+        <!-- 임시저장용 제목/작성자(메인 화면) -->
+        <div class="mt-4 mb-4 p-4 bg-slate-50 border border-slate-200 rounded">
+            <div class="mb-3 text-xs font-extrabold text-slate-600">임시저장 기본 정보</div>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <div>
+                    <div class="mb-1 text-xs font-extrabold text-slate-600">제목</div>
+                    <input id="draftMetaTitle" class="w-full border border-slate-200 p-3 text-sm outline-none bg-white"
+                           placeholder="[행사명]: [핵심주제/타겟]를 위한 [행사성격] (개최 안내/후기)" />
                 </div>
+                <div>
+                    <div class="mb-1 text-xs font-extrabold text-slate-600">작성자</div>
+                    <input id="draftMetaAuthor" class="w-full border border-slate-200 p-3 text-sm outline-none bg-white"
+                           placeholder="홍길동" />
+                </div>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div id="editorWrap" class="relative">
+                <textarea id="editor"></textarea>
             </div>
         </div>
     </div>
@@ -564,29 +579,49 @@
             .replaceAll('"', "&quot;")
             .replaceAll("'", "&#039;");
 
-    const validateMeta = () => {
-        const title = $("metaTitle").value.trim();
-        const author = $("metaAuthor").value.trim();
-        const date = $("metaDate").value.trim();
-        const place = $("metaPlace").value.trim();
+    const validateMeta = (status) => {
+        const isDraft = status === "draft" || !status;
+
+        const titleEl = isDraft ? $("draftMetaTitle") : $("metaTitle");
+        const authorEl = isDraft ? $("draftMetaAuthor") : $("metaAuthor");
+        const title = (titleEl && titleEl.value ? titleEl.value : "").trim();
+        const author = (authorEl && authorEl.value ? authorEl.value : "").trim();
+
         if (!title) return "제목을 입력해 주세요.";
         if (!author) return "작성자를 입력해 주세요.";
-        if (!date) return "방문 일자를 입력해 주세요.";
-        if (!place) return "장소를 입력해 주세요.";
+
+        // 제출/수정 단계에서만 방문 일자/장소를 필수로 요구
+        if (!isDraft) {
+            const dateEl = $("metaDate");
+            const placeEl = $("metaPlace");
+            const date = (dateEl && dateEl.value ? dateEl.value : "").trim();
+            const place = (placeEl && placeEl.value ? placeEl.value : "").trim();
+            if (!date) return "방문 일자를 입력해 주세요.";
+            if (!place) return "장소를 입력해 주세요.";
+        }
+
         return null;
     };
 
     const collectPost = (statusOverride) => {
         const ed = tinymce.get("editor");
         const html = ed ? ed.getContent({ format: "html" }) : "";
+        const status = statusOverride || "draft";
+        const isDraft = status === "draft";
+
+        const titleEl = isDraft ? $("draftMetaTitle") : $("metaTitle");
+        const authorEl = isDraft ? $("draftMetaAuthor") : $("metaAuthor");
+        const title = (titleEl && titleEl.value ? titleEl.value : "").trim();
+        const authorName = (authorEl && authorEl.value ? authorEl.value : "").trim();
+
         const post = {
             id: editingId,
             type: "visit",
-            status: statusOverride || "draft",
-            title: $("metaTitle").value.trim(),
-            authorName: $("metaAuthor").value.trim(),
-            date: $("metaDate").value.trim(),
-            place: $("metaPlace").value.trim(),
+            status: status,
+            title: title,
+            authorName: authorName,
+            date: ($("metaDate") && $("metaDate").value ? $("metaDate").value : "").trim(),
+            place: ($("metaPlace") && $("metaPlace").value ? $("metaPlace").value : "").trim(),
             editorHtml: html,
             updatedAt: nowISO(),
             thumbnailUrl: _thumbnailUrl || null,
@@ -636,7 +671,7 @@
     };
 
     const savePost = async (status, options) => {
-        const err = validateMeta();
+        const err = validateMeta(status);
         if (err) return alert(err);
 
         const post = collectPost(status);
@@ -723,6 +758,10 @@
         $("metaAuthor").value = post.authorName || "";
         $("metaDate").value = post.date || "";
         $("metaPlace").value = post.place || "";
+        const draftTitleEl = $("draftMetaTitle");
+        const draftAuthorEl = $("draftMetaAuthor");
+        if (draftTitleEl) draftTitleEl.value = post.title || "";
+        if (draftAuthorEl) draftAuthorEl.value = post.authorName || "";
         $("statusLine").textContent = `${post.status} · ${post.id.slice(0, 8)}`;
         const ed = tinymce.get("editor");
         if (ed) ed.setContent(post.editorHtml || TEMPLATE_VISIT);
@@ -1008,7 +1047,7 @@
     };
 
     const exportZip = async () => {
-        const err = validateMeta();
+        const err = validateMeta("draft");
         if (err) return alert(err);
         if (typeof JSZip === "undefined") return alert("ZIP 모듈(JSZip)을 불러오지 못했습니다.");
 
@@ -1045,7 +1084,14 @@
         downloadBlob(`${safeName}.zip`, zipBlob);
     };
 
-    const openModal = () => $("previewModal").classList.add("show");
+    const openModal = () => {
+        // 메인에서 수정한 제목/작성자가 모달 제출에도 반영되도록 동기화
+        const draftTitleEl = $("draftMetaTitle");
+        const draftAuthorEl = $("draftMetaAuthor");
+        if (draftTitleEl && $("metaTitle")) $("metaTitle").value = draftTitleEl.value || "";
+        if (draftAuthorEl && $("metaAuthor")) $("metaAuthor").value = draftAuthorEl.value || "";
+        $("previewModal").classList.add("show");
+    };
 
     const closeModal = () => $("previewModal").classList.remove("show");
 
@@ -1063,6 +1109,12 @@
                 // 썸네일은 이미 로드되어 있음
             }
         }
+
+        // 임시저장용(메인) 입력값을 모달에도 동기화
+        const draftTitleEl = $("draftMetaTitle");
+        const draftAuthorEl = $("draftMetaAuthor");
+        if (draftTitleEl && $("metaTitle")) $("metaTitle").value = draftTitleEl.value || "";
+        if (draftAuthorEl && $("metaAuthor")) $("metaAuthor").value = draftAuthorEl.value || "";
 
         const post = collectPost("draft");
         post.editorHtml = normalizeEditorHtmlForSave(post.editorHtml);
@@ -1090,7 +1142,7 @@
         const ok = confirm(editingId ? "수정하시겠습니까?" : "제출하시겠습니까?");
         if (!ok) return;
 
-        const err = validateMeta();
+        const err = validateMeta("submitted");
         if (err) return alert(err);
 
         // 중복 제출 방지: 이미 제출된 상태인지 확인 (새 제출일 때만)
@@ -1312,6 +1364,10 @@
         $("metaAuthor").value = "";
         $("metaDate").value = "";
         $("metaPlace").value = "";
+        const draftTitleEl = $("draftMetaTitle");
+        const draftAuthorEl = $("draftMetaAuthor");
+        if (draftTitleEl) draftTitleEl.value = "";
+        if (draftAuthorEl) draftAuthorEl.value = "";
         $("statusLine").textContent = `draft · ${editingId.slice(0, 8)}`;
 
         const ed = tinymce.get("editor");
@@ -1322,7 +1378,7 @@
     };
 
     const exportHtml = async () => {
-        const err = validateMeta();
+        const err = validateMeta("draft");
         if (err) return alert(err);
 
         const post = collectPost("draft");
@@ -1580,6 +1636,10 @@
                     $("metaAuthor").setAttribute("readonly", true);
                     $("metaDate").setAttribute("readonly", true);
                     $("metaPlace").setAttribute("readonly", true);
+                    const draftTitleEl = $("draftMetaTitle");
+                    const draftAuthorEl = $("draftMetaAuthor");
+                    if (draftTitleEl) draftTitleEl.setAttribute("readonly", true);
+                    if (draftAuthorEl) draftAuthorEl.setAttribute("readonly", true);
                     
                     // 이미지 추가 버튼 숨김
                     const imageInput = $("imageInput");
@@ -1615,6 +1675,10 @@
                 $("metaAuthor").setAttribute("readonly", true);
                 $("metaDate").setAttribute("readonly", true);
                 $("metaPlace").setAttribute("readonly", true);
+                const draftTitleEl = $("draftMetaTitle");
+                const draftAuthorEl = $("draftMetaAuthor");
+                if (draftTitleEl) draftTitleEl.setAttribute("readonly", true);
+                if (draftAuthorEl) draftAuthorEl.setAttribute("readonly", true);
                 
                 showBanner("✅ 최종 승인 완료 - 이 문서는 발행되어 더 이상 수정할 수 없습니다.", "complete");
             }
