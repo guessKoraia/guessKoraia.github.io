@@ -1,5 +1,69 @@
 [
   {
+    "date": "2025-12-01",
+    "link": "https://mistral.ai/news/mistral-3",
+    "title": "Mistral 3",
+    "description": "Mistral AI는 2025년 12월 1일, 차세대 모델군 Mistral 3를 공개했습니다. 이 제품군에는 14B, 8B, 3B의 소형 고밀도 모델과 자사 최고 성능 모델인 Mistral Large 3가 포함됩니다.",
+    "additional_description": "Mistral Large 3는 41B 활성 파라미터와 675B 총 파라미터를 사용하는 희소 MoE 구조이며, 전체 모델군은 Apache 2.0 라이선스로 공개됐습니다. Mistral은 이 발표를 통해 오픈 웨이트와 기업용 활용성을 동시에 밀겠다는 전략을 분명히 했습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-12-08",
+    "link": "https://mistral.ai/news/devstral-2-vibe-cli",
+    "title": "Devstral 2 및 Mistral Vibe CLI",
+    "description": "Mistral AI는 2025년 12월 8일, 오픈소스 에이전트 코딩 모델 계열 Devstral 2와 이를 위한 네이티브 CLI 에이전트 Mistral Vibe를 공개했습니다.",
+    "additional_description": "Devstral 2는 123B와 24B 두 가지 크기로 나왔으며, 코드 생성뿐 아니라 도구 호출과 자동화 워크플로우에 초점을 맞췄습니다. Vibe CLI는 개발자가 터미널에서 코드 작성, 수정, 실행을 에이전트 방식으로 처리할 수 있게 설계됐습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-01-27",
+    "link": "https://mistral.ai/news/mistral-vibe-2-0",
+    "title": "Mistral Vibe 2.0",
+    "description": "Mistral AI는 2026년 1월 27일, 터미널 기반 코딩 에이전트의 대규모 업그레이드 버전인 Mistral Vibe 2.0을 출시했습니다.",
+    "additional_description": "이 버전은 Devstral 2 계열을 기반으로 하며, 사용자 맞춤 서브에이전트, 실행 전 확인, 슬래시 명령 기반 스킬 로딩, 사용자별 워크플로우 구성을 지원합니다. 단순 코드 생성보다 실제 개발 작업 흐름을 자동화하는 데 초점이 맞춰졌습니다.",
+    "category": "비즈니스 및 산업"
+  },
+  {
+    "date": "2026-03-15",
+    "link": "https://mistral.ai/news/mistral-small-4",
+    "title": "Mistral Small 4",
+    "description": "Mistral AI는 2026년 3월 15일, 속도와 추론, 멀티모달 기능을 하나로 통합한 소형 범용 모델 Mistral Small 4를 공개했습니다.",
+    "additional_description": "회사에 따르면 이 모델은 Mistral Small 3 대비 종단 지연 시간을 40% 줄이고, 처리량은 3배 높였습니다. 빠른 응답형 모델, 추론형 모델, 멀티모달 모델을 따로 고를 필요 없이 하나로 통합한 점이 핵심입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-03-15",
+    "link": "https://mistral.ai/news/leanstral",
+    "title": "Leanstral",
+    "description": "Mistral AI는 2026년 3월 15일, 정형 검증 언어 Lean 4를 위한 오픈소스 코드 에이전트 Leanstral을 공개했습니다.",
+    "additional_description": "이 프로젝트는 고위험 코드나 수학적 검증이 필요한 작업에서 사람이 일일이 검토해야 하는 병목을 줄이기 위한 시도입니다. '믿을 수 있는 바이브 코딩'을 위한 기반 기술로 포지셔닝됐습니다.",
+    "category": "연구 및 논문"
+  },
+  {
+    "date": "2026-03-16",
+    "link": "https://mistral.ai/news/mistral-ai-and-nvidia-partner-to-accelerate-open-frontier-models",
+    "title": "NVIDIA Nemotron Coalition 참여",
+    "description": "Mistral AI는 2026년 3월 16일, NVIDIA Nemotron Coalition의 창립 멤버로 참여한다고 발표했습니다.",
+    "additional_description": "Mistral은 자사의 모델 아키텍처, 멀티모달 역량, 엔터프라이즈 파인튜닝 도구를 제공하고, NVIDIA는 대규모 연산 자원과 합성 데이터 파이프라인을 지원합니다. 양사는 함께 오픈 프런티어 모델을 공동 개발하겠다고 밝혔습니다.",
+    "category": "비즈니스 및 산업"
+  },
+  {
+    "date": "2026-03-16",
+    "link": "https://mistral.ai/news/forge",
+    "title": "Forge",
+    "description": "Mistral AI는 2026년 3월 16일, 기업이 자사 내부 데이터와 지식을 바탕으로 프런티어급 AI 모델을 만들 수 있게 하는 시스템 Forge를 공개했습니다.",
+    "additional_description": "Forge는 공개 데이터에 맞춘 범용 모델 대신, 기업의 코드베이스·정책·프로세스·업무 맥락을 반영한 맞춤형 모델 구축을 목표로 합니다. ASML, Ericsson, ESA, Reply 등과 협력 사례도 함께 제시됐습니다.",
+    "category": "비즈니스 및 산업"
+  },
+  {
+    "date": "2026-03-22",
+    "link": "https://mistral.ai/news/voxtral-tts",
+    "title": "Voxtral TTS",
+    "description": "Mistral AI는 2026년 3월 22일, 첫 텍스트-투-스피치 모델인 Voxtral TTS를 공개했습니다.",
+    "additional_description": "이 모델은 다국어 음성 생성에 초점을 맞췄고, 빠른 속도와 적응형 음성 생성, 사람처럼 자연스러운 발화를 강조했습니다. 음성 에이전트용 오픈 웨이트 음성 모델 라인업을 강화하는 발표로 볼 수 있습니다.",
+    "category": "모델 출시"
+  },
+  {
     "date": "2015-11-09",
     "link": "https://www.wired.com/2015/11/google-open-sources-its-artificial-intelligence-engine",
     "title": "TensorFlow",
@@ -1150,6 +1214,14 @@
 "description": "OpenAI는 GPT-5.4 계열의 소형 모델인 GPT-5.4 mini와 GPT-5.4 nano를 출시했습니다. 두 모델은 빠른 응답 속도와 비용 효율이 중요한 대량 처리 작업에 맞춰 설계됐습니다.",
 "additional_description": "GPT-5.4 mini는 GPT-5 mini보다 2배 이상 빠르며, 코딩·추론·멀티모달 이해·도구 사용 성능이 크게 향상됐습니다. SWE-Bench Pro와 OSWorld-Verified 같은 평가에서는 상위 모델 GPT-5.4에 근접하는 성능을 보이며, 400k 컨텍스트 윈도우를 지원합니다. ChatGPT, Codex, API에서 사용할 수 있고, 특히 코딩 워크플로우·컴퓨터 사용·서브에이전트 작업에 적합합니다. GPT-5.4 nano는 GPT-5.4 계열 중 가장 작고 저렴한 모델로, 분류·데이터 추출·랭킹·간단한 코딩 보조 작업에 최적화됐으며 API에서만 제공됩니다.",
 "category": "모델 출시"
+},
+  {
+  "date": "2026-03-25",
+  "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-flash-live/",
+  "title": "Gemini 3.1 Flash Live",
+  "description": "Google은 2026년 3월 25일, 자연스럽고 신뢰할 수 있는 실시간 대화를 위한 오디오·음성 모델 Gemini 3.1 Flash Live를 공개했습니다. 이 모델은 Gemini Live API를 통해 개발자 프리뷰로 제공되며, Gemini Live와 Search Live의 핵심 음성 모델로도 적용됩니다.",
+  "additional_description": "Gemini 3.1 Flash Live는 기존 2.5 Flash Native Audio보다 지연 시간이 더 낮고, 음높이·속도 같은 음향적 뉘앙스를 더 잘 인식합니다. 교통 소음이나 TV 소리 같은 배경음을 더 효과적으로 걸러내며, 더 빠른 응답과 더 적은 어색한 침묵을 제공하고, 대화 맥락도 더 오래 유지할 수 있습니다. 개발자는 Google AI Studio의 Live API에서 preview 모델명 'gemini-3.1-flash-live-preview'로 사용할 수 있고, 함수 호출과 검색 grounding도 지원합니다. Google은 이 모델을 바탕으로 Search Live를 200개 이상의 국가와 지역으로 확대했다고 밝혔습니다.",
+  "category": "모델 출시"
 }
 
 
