@@ -1186,6 +1186,26 @@
                         }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
                     }
                     alert("재제출되었습니다. 1차 검수 단계로 진행됩니다.");
+                } else if (post && (post.status === "draft" || (post.status == null && (post.approvalStage == null || post.approvalStage === 0)))) {
+                    // 임시저장(draft)에서 최초 제출 → 1차 검수(stage 1)
+                    const now = new Date().toISOString();
+                    const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+                    const step1 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[1];
+                    const stepName0 = step0 ? step0.name : "기획 및 초안 작성";
+                    const stepName1 = step1 ? step1.name : "1차 검수 및 표준화";
+                    const approvalHistory = [{ step: 0, step_name: stepName0, approver_name: post.authorName || "", approved_at: now }];
+                    await savePost("submitted", { approvalStage: 1, approvalHistory });
+                    if (typeof supabaseInvokeSlackApproval === "function") {
+                        supabaseInvokeSlackApproval({
+                            title: post.title,
+                            authorName: post.authorName,
+                            stage: 1,
+                            stepName: stepName1,
+                            postId: post.id,
+                            eventType: "submit"
+                        }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
+                    }
+                    alert("제출이 완료되었습니다. 1차 검수 단계로 진행됩니다.");
                 } else {
                     await savePost("submitted");
                     alert("수정이 완료되었습니다.");
@@ -1209,6 +1229,9 @@
 
                 const now = new Date().toISOString();
                 const step0 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[0];
+                const step1 = window.APPROVAL_STEPS && window.APPROVAL_STEPS[1];
+                const stepName0 = step0 ? step0.name : "기획 및 초안 작성";
+                const stepName1 = step1 ? step1.name : "1차 검수 및 표준화";
                 const payload = {
                     id: post.id,
                     type: "visit",
@@ -1220,7 +1243,7 @@
                     editorHtml: finalHtml,
                     updatedAt: now,
                     approvalStage: 1,
-                    approvalHistory: [{ step: 0, step_name: step0 ? step0.name : "기획 및 초안 작성", approver_name: post.authorName || "", approved_at: now }],
+                    approvalHistory: [{ step: 0, step_name: stepName0, approver_name: post.authorName || "", approved_at: now }],
                 };
                 if (thumbnailUrl) payload.thumbnailUrl = thumbnailUrl;
                 if (typeof supabaseUpsertPost === "function" && window._canWrite) {
@@ -1234,7 +1257,7 @@
                         title: payload.title,
                         authorName: payload.authorName,
                         stage: 1,
-                        stepName: "1차 검수 및 표준화",
+                        stepName: stepName1,
                         postId: payload.id,
                         eventType: "submit"
                     }).catch(function (err) { console.warn("Slack 알림 실패:", err); });
