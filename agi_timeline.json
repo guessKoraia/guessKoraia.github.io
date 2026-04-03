@@ -1296,6 +1296,14 @@
     "category": "모델 출시"
   },
   {
+    "date": "2026-04-01",
+    "link": "https://docs.z.ai/release-notes/new-released",
+    "title": "GLM-5V-Turbo",
+    "description": "Z.ai는 2026년 4월 1일, 비전 기반 코딩과 GUI 작업에 특화된 GLM-5V-Turbo를 출시했습니다.",
+    "additional_description": "이 모델은 이미지, 비디오, 텍스트를 함께 이해하며, 인터페이스 해석, 문서·차트 이해, 다음 행동 계획, 멀티모달 도구 사용과 엔드투엔드 에이전트 워크플로우 수행을 강화했습니다. (고난도/최고성능: GLM-5.1, 중상급/균형형: GLM-5, 실무형/고속형/가성비형: GLM-5-Turbo)",
+    "category": "모델 출시"
+  },
+  {
     "date": "2026-04-02",
     "link": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/",
     "title": "Gemma 4",
