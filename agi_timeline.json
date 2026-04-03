@@ -1222,7 +1222,87 @@
   "description": "Google은 2026년 3월 25일, 자연스럽고 신뢰할 수 있는 실시간 대화를 위한 오디오·음성 모델 Gemini 3.1 Flash Live를 공개했습니다. 이 모델은 Gemini Live API를 통해 개발자 프리뷰로 제공되며, Gemini Live와 Search Live의 핵심 음성 모델로도 적용됩니다.",
   "additional_description": "Gemini 3.1 Flash Live는 기존 2.5 Flash Native Audio보다 지연 시간이 더 낮고, 음높이·속도 같은 음향적 뉘앙스를 더 잘 인식합니다. 교통 소음이나 TV 소리 같은 배경음을 더 효과적으로 걸러내며, 더 빠른 응답과 더 적은 어색한 침묵을 제공하고, 대화 맥락도 더 오래 유지할 수 있습니다. 개발자는 Google AI Studio의 Live API에서 preview 모델명 'gemini-3.1-flash-live-preview'로 사용할 수 있고, 함수 호출과 검색 grounding도 지원합니다. Google은 이 모델을 바탕으로 Search Live를 200개 이상의 국가와 지역으로 확대했다고 밝혔습니다.",
   "category": "모델 출시"
-}
+},
+  {
+    "date": "2024-02-20",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-open-models/",
+    "title": "Gemma",
+    "description": "Google이 Gemini를 만들 때 사용한 연구와 기술을 바탕으로, 개발자가 직접 내려받아 실행하고 튜닝할 수 있는 경량 오픈 모델 패밀리 Gemma를 공개했습니다.",
+    "additional_description": "초기에는 2B와 7B 모델로 시작했으며, 노트북·워크스테이션·클라우드에서 실행할 수 있도록 설계됐습니다. Google은 Gemma와 함께 책임 있는 생성형 AI 개발을 위한 툴킷도 함께 공개했습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2024-05-13",
+    "link": "https://blog.google/technology/developers/gemini-gemma-developer-updates-may-2024/",
+    "title": "PaliGemma",
+    "description": "Google이 첫 비전-언어 오픈 모델 PaliGemma를 공개했습니다. 이 모델은 이미지 캡셔닝, 시각 질문응답, 이미지 라벨링 같은 작업에 맞춰 최적화됐습니다.",
+    "additional_description": "PaliGemma는 Gemma 계열이 텍스트 중심 모델에서 멀티모달 모델로 확장되기 시작한 첫 신호였습니다. 같은 발표에서 Google은 CodeGemma와 RecurrentGemma도 Gemma 파생 계열로 언급했습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2024-06-26",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/google-gemma-2/",
+    "title": "Gemma 2",
+    "description": "Google이 Gemma의 차세대 버전인 Gemma 2를 연구자와 개발자에게 공개했습니다. Gemma 2는 더 높은 성능과 속도, 그리고 다양한 하드웨어에서의 활용성을 강조한 후속 세대입니다.",
+    "additional_description": "Google은 Gemma 2를 통해 오픈 모델 경쟁력을 본격적으로 강화했고, Hugging Face·NVIDIA·Ollama 같은 생태계와의 연동도 계속 확대했습니다. 이 시점부터 Gemma는 단순 경량 모델이 아니라 실전 개발용 공개 모델 라인업으로 자리잡기 시작했습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-03-11",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-3/",
+    "title": "Gemma 3",
+    "description": "Google이 Gemini 2.0 기반의 새로운 오픈 모델 Gemma 3를 공개했습니다. Gemma 3는 더 긴 128K 컨텍스트와 함수 호출 지원을 포함해, 더 복잡한 작업을 처리할 수 있도록 개선됐습니다.",
+    "additional_description": "양자화 버전도 함께 제공돼 더 적은 연산 자원으로 빠르게 실행할 수 있었고, 개발자 도구 생태계와의 호환성도 강화됐습니다. 이 발표와 함께 이미지 안전성 점검용 파생 모델 ShieldGemma 2도 같이 공개됐습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-03-11",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-3/",
+    "title": "ShieldGemma 2",
+    "description": "Google이 Gemma 3 발표와 함께 이미지 안전성 점검용 모델 ShieldGemma 2를 공개했습니다. 이 모델은 위험 콘텐츠, 성적 노출, 폭력성 같은 안전 라벨을 출력하는 4B 이미지 안전성 체커입니다.",
+    "additional_description": "개발자는 이를 그대로 쓰거나 자신의 안전 정책에 맞게 추가 조정할 수 있습니다. Gemma 계열이 단순 생성 모델을 넘어 안전성 도구까지 포함하는 방향으로 확장됐다는 점에서 의미가 큽니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-09-03",
+    "link": "https://developers.googleblog.com/en/introducing-embeddinggemma/",
+    "title": "EmbeddingGemma",
+    "description": "Google이 온디바이스 임베딩 생성에 최적화된 오픈 모델 EmbeddingGemma를 공개했습니다. 이 모델은 검색, RAG, 시맨틱 검색 같은 작업을 로컬 하드웨어에서 수행할 수 있도록 설계됐습니다.",
+    "additional_description": "308M 파라미터 크기의 경량 설계로, 인터넷 연결 없이도 고품질 임베딩을 생성하는 점이 특징입니다. Gemma 계열이 텍스트 생성뿐 아니라 검색 인프라용 기본 모델로도 넓어졌음을 보여준 발표였습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-12-17",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/functiongemma/",
+    "title": "FunctionGemma",
+    "description": "Google이 함수 호출에 특화된 경량 모델 FunctionGemma를 공개했습니다. 이 모델은 Gemma 3 270M 기반으로 미세조정되어, 대화형 응답보다 실제 행동 실행에 더 초점을 맞췄습니다.",
+    "additional_description": "알림 설정, 시스템 제어, 다단계 작업 자동화처럼 온디바이스 에이전트에 필요한 기능을 안정적으로 수행하도록 설계됐습니다. 업계가 챗봇에서 에이전트로 이동하는 흐름을 Gemma 계열에서도 반영한 사례입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2025-12-17",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/t5gemma-2/",
+    "title": "T5Gemma 2",
+    "description": "Google이 인코더-디코더 계열 후속 모델 T5Gemma 2를 공개했습니다. 이 모델은 Gemma 3 기반으로 재설계되었고, 멀티모달과 장문맥 처리를 지원하는 것이 특징입니다.",
+    "additional_description": "단순 재학습 버전이 아니라 구조적 변화가 포함된 차세대 모델로 소개됐습니다. Gemma 계열이 디코더 중심 라인업을 넘어 다양한 아키텍처 실험으로 확장되고 있다는 점을 보여줍니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-01-15",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/",
+    "title": "TranslateGemma",
+    "description": "Google이 Gemma 3 기반의 공개 번역 모델군 TranslateGemma를 공개했습니다. 이 모델은 55개 언어 간 번역을 지원하도록 설계됐습니다.",
+    "additional_description": "Gemma 계열의 다국어 활용성을 실제 번역 작업으로 확장한 모델이며, 글로벌 커뮤니케이션과 로컬 언어 지원에 초점을 맞췄습니다. 경량 공개 모델을 언어 장벽 해소에 직접 활용하려는 시도가 반영된 발표입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-02",
+    "link": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/",
+    "title": "Gemma 4",
+    "description": "Google이 최신 오픈 모델 패밀리 Gemma 4를 공개했습니다. Gemma 4는 고급 추론과 에이전트 워크플로우를 위해 설계된, 지금까지 가장 강력한 Gemma 계열입니다.",
+    "additional_description": "E2B, E4B, 26B MoE, 31B Dense의 네 가지 크기로 제공되며, 이미지·비디오 이해를 지원하고 일부 경량 모델은 오디오 입력도 처리합니다. 작은 모델은 128K, 큰 모델은 256K 컨텍스트를 제공하고, 함수 호출·구조화된 JSON 출력·시스템 프롬프트를 지원하며 Apache 2.0 라이선스로 배포됩니다.",
+    "category": "모델 출시"
+  }
 
 
 
