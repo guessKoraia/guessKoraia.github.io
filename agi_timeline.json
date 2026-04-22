@@ -1310,6 +1310,54 @@
     "description": "Google이 최신 오픈 모델 패밀리 Gemma 4를 공개했습니다. Gemma 4는 고급 추론과 에이전트 워크플로우를 위해 설계된, 지금까지 가장 강력한 Gemma 계열입니다.",
     "additional_description": "E2B, E4B, 26B MoE, 31B Dense의 네 가지 크기로 제공되며, 이미지·비디오 이해를 지원하고 일부 경량 모델은 오디오 입력도 처리합니다. 작은 모델은 128K, 큰 모델은 256K 컨텍스트를 제공하고, 함수 호출·구조화된 JSON 출력·시스템 프롬프트를 지원하며 Apache 2.0 라이선스로 배포됩니다.",
     "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-07",
+    "link": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html",
+    "title": "Claude Mythos Preview",
+    "description": "Anthropic이 사이버보안, 자율 코딩, 장기 에이전트 작업에 초점을 둔 게이트드 연구 프리뷰 모델 Claude Mythos Preview를 공개했습니다.",
+    "additional_description": "1M 컨텍스트와 128K 출력 토큰을 지원하며, 방어적 사이버보안 용도에 우선 접근이 허용됩니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-07",
+    "link": "https://help.apiyi.com/ko/glm-5-1-open-source-api-launched-on-apiyi-ko.html",
+    "title": "GLM-5.1",
+    "description": "Z.ai가 GLM-5.1 전체 가중치를 MIT 라이선스로 오픈소스 공개했습니다.",
+    "additional_description": "장기 에이전트 코딩과 SWE-Bench Pro 성능을 앞세운 오픈웨이트 플래그십 모델로 소개됐습니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-07",
+    "link": "https://www.reddit.com/r/MachineLearning/comments/1sdh08w/p_dante2b_im_training_a_21b_bilingual_fully_open/",
+    "title": "Dante-2B",
+    "description": "2.1B 규모의 이탈리아어·영어 이중언어 오픈 LLM Dante-2B가 공개 논의되었습니다.",
+    "additional_description": "소규모 GPU 자원으로도 만들 수 있는 완전 오픈 모델 사례로, 경량 오픈웨이트 흐름을 보여줍니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-16",
+    "link": "https://www.gpters.org/news/post/claude-opus-47-update-COHkB9x9qDNIOFb",
+    "title": "Claude Opus 4.7",
+    "description": "Anthropic이 Claude Opus 4.7을 정식 출시했습니다.",
+    "additional_description": "고난도 코딩, 비전 해상도, 장기 작업 처리 능력을 강화한 최신 플래그십 업데이트입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-19",
+    "link": "https://aitrends.kr/articles/47846",
+    "title": "Qwen3.6-Max-Preview",
+    "description": "Alibaba가 코딩 에이전트와 도구 사용 능력을 강화한 Qwen3.6-Max-Preview를 공개했습니다.",
+    "additional_description": "기존 Qwen3.6 Plus를 기반으로 일반 지식, 지시 이행, 에이전트 작업 성능을 더 끌어올린 프리뷰 모델입니다.",
+    "category": "모델 출시"
+  },
+  {
+    "date": "2026-04-20",
+    "link": "https://news.hada.io/topic?id=28736",
+    "title": "Kimi K2.6",
+    "description": "Moonshot AI 계열의 Kimi K2.6이 공개되었습니다.",
+    "additional_description": "장기 구간 코딩과 에이전트형 작업에서 성능을 끌어올린 오픈소스 모델로 소개됐습니다.",
+    "category": "모델 출시"
   }
 
 
