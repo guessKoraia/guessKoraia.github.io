@@ -1315,48 +1315,40 @@
     "date": "2026-04-07",
     "link": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html",
     "title": "Claude Mythos Preview",
-    "description": "Anthropic이 사이버보안, 자율 코딩, 장기 에이전트 작업에 초점을 둔 게이트드 연구 프리뷰 모델 Claude Mythos Preview를 공개했습니다.",
-    "additional_description": "1M 컨텍스트와 128K 출력 토큰을 지원하며, 방어적 사이버보안 용도에 우선 접근이 허용됩니다.",
+    "description": "Anthropic이 Project Glasswing을 통해 Claude Mythos Preview를 게이트드 연구 프리뷰로 공개했습니다.",
+    "additional_description": "사이버보안 파트너에게 우선 제공되며, SWE-Bench Verified 93.9% 등 최상위 성능을 기록했습니다.",
     "category": "모델 출시"
   },
   {
     "date": "2026-04-07",
     "link": "https://help.apiyi.com/ko/glm-5-1-open-source-api-launched-on-apiyi-ko.html",
     "title": "GLM-5.1",
-    "description": "Z.ai가 GLM-5.1 전체 가중치를 MIT 라이선스로 오픈소스 공개했습니다.",
-    "additional_description": "장기 에이전트 코딩과 SWE-Bench Pro 성능을 앞세운 오픈웨이트 플래그십 모델로 소개됐습니다.",
-    "category": "모델 출시"
-  },
-  {
-    "date": "2026-04-07",
-    "link": "https://www.reddit.com/r/MachineLearning/comments/1sdh08w/p_dante2b_im_training_a_21b_bilingual_fully_open/",
-    "title": "Dante-2B",
-    "description": "2.1B 규모의 이탈리아어·영어 이중언어 오픈 LLM Dante-2B가 공개 논의되었습니다.",
-    "additional_description": "소규모 GPU 자원으로도 만들 수 있는 완전 오픈 모델 사례로, 경량 오픈웨이트 흐름을 보여줍니다.",
+    "description": "Z.ai가 장기 에이전트 코딩 모델 GLM-5.1 전체 가중치를 MIT 라이선스로 오픈소스 공개했습니다.",
+    "additional_description": "SWE-Bench Pro 1위로 기록되며, 754B MoE 구조의 플래그십 오픈웨이트 모델입니다.",
     "category": "모델 출시"
   },
   {
     "date": "2026-04-16",
-    "link": "https://www.gpters.org/news/post/claude-opus-47-update-COHkB9x9qDNIOFb",
+    "link": "https://www.anthropic.com/news/claude-opus-4-7",
     "title": "Claude Opus 4.7",
-    "description": "Anthropic이 Claude Opus 4.7을 정식 출시했습니다.",
-    "additional_description": "고난도 코딩, 비전 해상도, 장기 작업 처리 능력을 강화한 최신 플래그십 업데이트입니다.",
+    "description": "Anthropic이 고난도 소프트웨어 엔지니어링에 특화된 Claude Opus 4.7을 정식 출시했습니다.",
+    "additional_description": "Claude.ai와 API에서 즉시 사용 가능하며, 고해상도 이미지 지원(2576px)과 장기 작업 처리 능력이 강화됐습니다.",
     "category": "모델 출시"
   },
   {
     "date": "2026-04-19",
-    "link": "https://aitrends.kr/articles/47846",
+    "link": "https://www.alibabacloud.com/blog/qwen3-6-max-preview",
     "title": "Qwen3.6-Max-Preview",
-    "description": "Alibaba가 코딩 에이전트와 도구 사용 능력을 강화한 Qwen3.6-Max-Preview를 공개했습니다.",
-    "additional_description": "기존 Qwen3.6 Plus를 기반으로 일반 지식, 지시 이행, 에이전트 작업 성능을 더 끌어올린 프리뷰 모델입니다.",
+    "description": "Alibaba가 Qwen 시리즈 신규 플래그십 프리뷰 Qwen3.6-Max-Preview를 공개했습니다.",
+    "additional_description": "에이전트 프로그래밍, 월드 지식, 명령 준수 능력을 강화했으며, Qwen Studio와 Bailian API에서 사용 가능합니다.",
     "category": "모델 출시"
   },
   {
     "date": "2026-04-20",
-    "link": "https://news.hada.io/topic?id=28736",
+    "link": "https://huggingface.co/moonshotai/Kimi-K2.6",
     "title": "Kimi K2.6",
-    "description": "Moonshot AI 계열의 Kimi K2.6이 공개되었습니다.",
-    "additional_description": "장기 구간 코딩과 에이전트형 작업에서 성능을 끌어올린 오픈소스 모델로 소개됐습니다.",
+    "description": "Moonshot AI가 장기 코딩과 에이전트 스웜에 특화된 오픈소스 모델 Kimi K2.6을 Hugging Face에 공개했습니다.",
+    "additional_description": "1T 파라미터 MoE(32B 활성), HLE w/ tools 54.0, SWE-Bench Pro 58.6 등에서 Claude Opus 4.6을 앞선 벤치마크를 기록했습니다.",
     "category": "모델 출시"
   }
 
