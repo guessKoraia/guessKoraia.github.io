@@ -1313,7 +1313,7 @@
   },
   {
     "date": "2026-04-07",
-    "link": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html",
+    "link": "https://www.anthropic.com/glasswing",
     "title": "Claude Mythos Preview",
     "description": "Anthropic이 Project Glasswing을 통해 Claude Mythos Preview를 게이트드 연구 프리뷰로 공개했습니다.",
     "additional_description": "사이버보안 파트너에게 우선 제공되며, SWE-Bench Verified 93.9% 등 최상위 성능을 기록했습니다.",
@@ -1321,7 +1321,7 @@
   },
   {
     "date": "2026-04-07",
-    "link": "https://help.apiyi.com/ko/glm-5-1-open-source-api-launched-on-apiyi-ko.html",
+    "link": "https://docs.z.ai/guides/llm/glm-5.1",
     "title": "GLM-5.1",
     "description": "Z.ai가 장기 에이전트 코딩 모델 GLM-5.1 전체 가중치를 MIT 라이선스로 오픈소스 공개했습니다.",
     "additional_description": "SWE-Bench Pro 1위로 기록되며, 754B MoE 구조의 플래그십 오픈웨이트 모델입니다.",
@@ -1337,7 +1337,7 @@
   },
   {
     "date": "2026-04-19",
-    "link": "https://www.alibabacloud.com/blog/qwen3-6-max-preview",
+    "link": "https://qwen.ai/blog?id=qwen3.6-max-preview",
     "title": "Qwen3.6-Max-Preview",
     "description": "Alibaba가 Qwen 시리즈 신규 플래그십 프리뷰 Qwen3.6-Max-Preview를 공개했습니다.",
     "additional_description": "에이전트 프로그래밍, 월드 지식, 명령 준수 능력을 강화했으며, Qwen Studio와 Bailian API에서 사용 가능합니다.",
