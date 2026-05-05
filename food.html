@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>식권 사용 가능 매장</title>
+<link rel="icon" sizes="192x192" href="https://raw.githubusercontent.com/koraia-trend/koraia-trend.github.io/refs/heads/main/koraia_circle_icon_2.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #faf7f2;
+    --ink: #1a1a1a;
+    --accent: #c8472d;
+    --accent-soft: #e8a08f;
+    --paper: #ffffff;
+    --line: #e5e0d6;
+    --muted: #7a7268;
+  }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 48px 20px;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(200, 71, 45, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(232, 160, 143, 0.08) 0%, transparent 50%);
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: var(--accent);
+    padding: 6px 14px;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .title {
+    font-family: 'Gowun Batang', serif;
+    font-size: clamp(36px, 6vw, 52px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+
+  .title .accent {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 40px auto;
+    max-width: 200px;
+    color: var(--muted);
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .divider span {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    font-weight: 500;
+  }
+
+  .stores {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .store {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+  }
+
+  .store:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(26, 26, 26, 0.08);
+    border-color: var(--accent-soft);
+  }
+
+  .store-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--line);
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+  }
+
+  .store-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    background: #f0ebe1;
+  }
+
+  .store:hover .store-images img {
+    transform: scale(1.04);
+  }
+
+  .store-body {
+    padding: 22px 26px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .store-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .store-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .store-number {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+  }
+
+  .store-location-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    background: rgba(200, 71, 45, 0.08);
+    padding: 3px 9px;
+    border-radius: 4px;
+  }
+
+  .store-name {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .store-desc {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .store-arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .store:hover .store-arrow {
+    background: var(--accent);
+    color: white;
+    transform: rotate(-45deg);
+  }
+
+  .store-arrow svg {
+    width: 16px;
+    height: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-mark {
+    display: inline-block;
+    margin: 0 8px;
+    color: var(--accent);
+  }
+
+  
+  .notice {
+    margin-top: 32px;
+    padding: 36px 28px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+ 
+  .notice::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(200, 71, 45, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 80% 50%, rgba(232, 160, 143, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+ 
+  .notice > * {
+    position: relative;
+    z-index: 1;
+  }
+ 
+  .notice-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    font-weight: 700;
+    color: var(--accent-soft);
+    margin-bottom: 14px;
+  }
+ 
+  .notice-date {
+    font-family: 'Gowun Batang', serif;
+    font-size: clamp(44px, 8vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+ 
+  .notice-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(250, 247, 242, 0.85);
+    letter-spacing: 0.02em;
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 32px 16px;
+    }
+
+    .store-body {
+      padding: 18px 20px 20px;
+    }
+
+    .store-name {
+      font-size: 17px;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .store {
+    animation: fadeInUp 0.5s ease backwards;
+  }
+
+  .store:nth-child(1) { animation-delay: 0.1s; }
+  .store:nth-child(2) { animation-delay: 0.2s; }
+  .store:nth-child(3) { animation-delay: 0.3s; }
+  .store:nth-child(4) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <span class="badge">MEAL TICKET</span>
+      <h1 class="title">식권 사용 <span class="accent">가능</span> 매장</h1>
+      <p class="subtitle">코엑스몰 · 점심 한 끼 잘 챙겨드세요</p>
+    </header>
+
+    <div class="divider">
+      <span>STORES</span>
+    </div>
+
+    <main class="stores">
+      <a href="https://naver.me/GipBT6FZ" target="_blank" rel="noopener" class="store">
+        <div class="store-images">
+          <img src="하동관_1.png" alt="하동관 사진 1" loading="lazy">
+          <img src="하동관_2.png" alt="하동관 사진 2" loading="lazy">
+        </div>
+        <div class="store-body">
+          <div class="store-info">
+            <div class="store-meta">
+              <span class="store-number">01</span>
+              <span class="store-location-tag">B1 · J101</span>
+            </div>
+            <div class="store-name">하동관</div>
+            <div class="store-desc">코엑스 직영몰 · 곰탕</div>
+          </div>
+          <div class="store-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H8M17 7V16"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://naver.me/GHvqSnrG" target="_blank" rel="noopener" class="store">
+        <div class="store-images">
+          <img src="미사리_1.png" alt="미사리밀빛 초계국수 사진 1" loading="lazy">
+          <img src="미사리_2.png" alt="미사리밀빛 초계국수 사진 2" loading="lazy">
+        </div>
+        <div class="store-body">
+          <div class="store-info">
+            <div class="store-meta">
+              <span class="store-number">02</span>
+              <span class="store-location-tag">B1 · J114</span>
+            </div>
+            <div class="store-name">미사리밀빛 초계국수</div>
+            <div class="store-desc">삼성 코엑스몰점 · 초계국수</div>
+          </div>
+          <div class="store-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H8M17 7V16"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://naver.me/x0UPIjKD" target="_blank" rel="noopener" class="store">
+        <div class="store-images">
+          <img src="호호_1.png" alt="호호식당 사진 1" loading="lazy">
+          <img src="호호_2.png" alt="호호식당 사진 2" loading="lazy">
+        </div>
+        <div class="store-body">
+          <div class="store-info">
+            <div class="store-meta">
+              <span class="store-number">03</span>
+              <span class="store-location-tag">B1 · H103A</span>
+            </div>
+            <div class="store-name">호호식당</div>
+            <div class="store-desc">스타필드 코엑스 · 일식 가정식</div>
+          </div>
+          <div class="store-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H8M17 7V16"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://naver.me/57VZAOA9" target="_blank" rel="noopener" class="store">
+        <div class="store-images">
+          <img src="이비티_1.png" alt="이비티 사진 1" loading="lazy">
+          <img src="이비티_2.png" alt="이비티 사진 2" loading="lazy">
+        </div>
+        <div class="store-body">
+          <div class="store-info">
+            <div class="store-meta">
+              <span class="store-number">04</span>
+              <span class="store-location-tag">B1 · 103</span>
+            </div>
+            <div class="store-name">이비티</div>
+            <div class="store-desc">코엑스점 · 한식</div>
+          </div>
+          <div class="store-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H8M17 7V16"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+    </main>
+
+    <footer class="footer">
+      매장명을 클릭하면 네이버 지도로 이동합니다 <span class="footer-mark">·</span> 총 4개 매장
+    </footer>
+
+    <div class="notice">
+      <div class="notice-label">NOTICE</div>
+      <div class="notice-date">5월 7일</div>
+      <div class="notice-text">당일에만 사용 가능합니다</div>
+    </div>
+  </div>
+</body>
+</html>
