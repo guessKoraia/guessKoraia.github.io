@@ -58,7 +58,51 @@
     margin-bottom: 20px;
     text-transform: uppercase;
   }
+.store--disabled {
+  position: relative;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
+.store--disabled .store-images img {
+  filter: grayscale(100%) brightness(0.7);
+}
+
+.store--disabled .store-name,
+.store--disabled .store-desc,
+.store--disabled .store-number,
+.store--disabled .store-location-tag {
+  color: #b8b0a5;
+  background: transparent;
+}
+
+.store--disabled .store-arrow {
+  opacity: 0.3;
+}
+
+.store-disabled-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.store-disabled-badge {
+  background: #c8472d;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 12px 28px;
+  border-radius: 100px;
+  box-shadow: 0 8px 24px rgba(200, 71, 45, 0.4);
+  transform: rotate(-4deg);
+}
   .title {
     font-family: 'Gowun Batang', serif;
     font-size: clamp(36px, 6vw, 52px);
@@ -398,7 +442,32 @@
         </div>
       </a>
 
-      <a href="https://naver.me/57VZAOA9" target="_blank" rel="noopener" class="store">
+     <div class="store store--disabled">
+  <div class="store-disabled-overlay">
+    <span class="store-disabled-badge">사용 불가</span>
+  </div>
+  <div class="store-images">
+    <img src="이비티_1.png" alt="이비티 사진 1" loading="lazy">
+    <img src="이비티_2.png" alt="이비티 사진 2" loading="lazy">
+  </div>
+  <div class="store-body">
+    <div class="store-info">
+      <div class="store-meta">
+        <span class="store-number">04</span>
+        <span class="store-location-tag">B1 · 103</span>
+      </div>
+      <div class="store-name">이비티</div>
+      <div class="store-desc">코엑스점 · 한식</div>
+    </div>
+    <div class="store-arrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 17L17 7M17 7H8M17 7V16"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+      <!-- <a href="https://naver.me/57VZAOA9" target="_blank" rel="noopener" class="store">
         <div class="store-images">
           <img src="이비티_1.png" alt="이비티 사진 1" loading="lazy">
           <img src="이비티_2.png" alt="이비티 사진 2" loading="lazy">
@@ -418,7 +487,7 @@
             </svg>
           </div>
         </div>
-      </a>
+      </a> -->
     </main>
 
     <footer class="footer">
