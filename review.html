@@ -443,8 +443,30 @@
             const isStep0Done = (i === 0 && stage >= 1);
             const isDone = (rec && !rec.rejected) || isStep0Done;
             const isRejected = rec && rec.rejected;
-            const hadRejectedBefore = history.some(h => h.step === i && h.rejected);
-            const resubmitted = (post.approvalStage != null ? post.approvalStage : 0) > i;
+            const rejectionsForStep = history.filter(h => h.step === i && h.rejected);
+            const hadRejectedBefore = rejectionsForStep.length > 0;
+            const lastRejection = rejectionsForStep.length ? rejectionsForStep.reduce((x, y) => {
+                const ax = x && (x.approved_at || x.updatedAt || x.updated_at) ? new Date(x.approved_at || x.updatedAt || x.updated_at) : new Date(0);
+                const ay = y && (y.approved_at || y.updatedAt || y.updated_at) ? new Date(y.approved_at || y.updatedAt || y.updated_at) : new Date(0);
+                return ay > ax ? y : x;
+            }) : null;
+
+            // Detect resubmission: document updated after last rejection
+            let resubmitted = false;
+            const postUpdatedRaw = post.updatedAt || post.updated_at || post.modifiedAt || post.modified_at || post.createdAt || post.created_at || "";
+            if (lastRejection && postUpdatedRaw) {
+                try {
+                    const rejTime = new Date(lastRejection.approved_at || lastRejection.updatedAt || lastRejection.updated_at || 0);
+                    const postTime = new Date(postUpdatedRaw);
+                    if (!isNaN(rejTime.getTime()) && !isNaN(postTime.getTime())) {
+                        resubmitted = postTime > rejTime;
+                    }
+                } catch (e) { /* ignore parse errors */ }
+            }
+            // fallback: if approvalStage advanced beyond this step
+            if (!resubmitted) {
+                resubmitted = (post.approvalStage != null ? post.approvalStage : 0) > i;
+            }
             let boxCls = "approval-step-box";
             if (isRejected) boxCls += " rejected";
             else if (isDone) boxCls += " done";
