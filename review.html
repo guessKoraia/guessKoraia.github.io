@@ -443,6 +443,8 @@
             const isStep0Done = (i === 0 && stage >= 1);
             const isDone = (rec && !rec.rejected) || isStep0Done;
             const isRejected = rec && rec.rejected;
+            const hadRejectedBefore = history.some(h => h.step === i && h.rejected);
+            const resubmitted = (post.approvalStage != null ? post.approvalStage : 0) > i;
             let boxCls = "approval-step-box";
             if (isRejected) boxCls += " rejected";
             else if (isDone) boxCls += " done";
@@ -461,7 +463,15 @@
             } else if (rec && rec.withdrawn) {
                 label = "게시중단 및 철회" + dateHtml;
             } else {
-                label = isRejected ? "반려 " + approverLabel + dateHtml : (isDone ? approverLabel + dateHtml : (isCurrent ? "진행 중" : "대기"));
+                if (isRejected) {
+                    if (resubmitted || hadRejectedBefore && resubmitted) {
+                        label = "반려됐으나 재결재 요청중" + dateHtml;
+                    } else {
+                        label = "반려 " + approverLabel + dateHtml;
+                    }
+                } else {
+                    label = isDone ? approverLabel + dateHtml : (isCurrent ? "진행 중" : "대기");
+                }
             }
             const pointerContent = isCurrent ? '<span class="approval-step-pointer">▼ 현재</span>' : '';
             parts.push('<div class="approval-step-wrapper"><div class="approval-step-pointer-slot">' + pointerContent + '</div><div class="' + boxCls + '"><div class="step-name">' + escapeHtml(s.name) + "</div><div class=\"step-email\">" + label + "</div></div></div>");
