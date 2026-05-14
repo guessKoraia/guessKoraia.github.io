@@ -531,7 +531,25 @@
     const renderList = async (useCached) => {
         if (!useCached) {
             const all = await loadAllPosts();
-            reviewFiltered = applyFilters(all).sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+            reviewFiltered = applyFilters(all).sort((a, b) => {
+                const getStage = (p) => (p.approvalStage != null ? p.approvalStage : 0);
+                const isInProgress = (p) => {
+                    const stage = getStage(p);
+                    if (typeof window.isApprovalComplete === "function") {
+                        try { return !window.isApprovalComplete(stage) && stage > 0; } catch (e) { return stage > 0; }
+                    }
+                    return stage > 0;
+                };
+
+                const ai = isInProgress(a), bi = isInProgress(b);
+                if (ai && !bi) return -1;
+                if (!ai && bi) return 1;
+
+                // 동일한 진행상태면 최근 수정일 또는 생성일 순으로 내림차순 정렬
+                const at = String(a.updatedAt || a.createdAt || "");
+                const bt = String(b.updatedAt || b.createdAt || "");
+                return bt.localeCompare(at);
+            });
             reviewCurrentPage = 1;
         }
         const totalPages = Math.max(1, Math.ceil(reviewFiltered.length / REVIEW_PAGE_SIZE));
