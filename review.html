@@ -223,9 +223,19 @@
         @keyframes toastFadeOut { to { opacity: 0; transform: translateX(100%); } }
         .toast-item.hiding { animation: toastFadeOut 0.25s ease-in forwards; }
         /* History summary / expanded styles */
-        .history-summary { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-        .history-container { display: flex; align-items: center; gap: 8px; }
-        .history-expanded { padding-left: 0; }
+        .history-summary { white-space: normal; line-height: 1.45; max-width: 100%; }
+        .history-container { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+        .history-expanded { margin-left: 4px; padding-left: 12px; border-left: 2px solid #e5e7eb; }
+        .history-entry { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; }
+        .history-chip { display: inline-flex; align-items: center; border: 1px solid transparent; border-radius: 9999px; padding: 2px 8px; font-size: 11px; font-weight: 700; line-height: 1.4; }
+        .history-chip.step { background: #fff; border-color: #cbd5e1; color: #334155; }
+        .history-chip.approve { background: #ecfdf5; border-color: #bbf7d0; color: #047857; }
+        .history-chip.reject { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+        .history-chip.withdraw { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
+        .history-chip.actor { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+        .history-chip.time { background: #f8fafc; border-color: #e2e8f0; color: #64748b; }
+        .status-chip { transition: all 0.15s ease; }
+        .status-chip.active { background: #2563eb; border-color: #2563eb; color: #fff; }
     </style>
 </head>
 
@@ -272,6 +282,15 @@
                 <div class="mb-1 text-xs font-extrabold text-slate-600">일자</div>
                 <input id="fDate" class="w-full border border-slate-200 p-3 text-sm outline-none min-h-[44px] rounded" placeholder="2026-02" />
             </div>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center gap-2" id="statusFilterWrap">
+            <button type="button" class="status-chip border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm font-bold rounded-full min-h-[40px]" data-status="all">전체</button>
+            <button type="button" class="status-chip border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm font-bold rounded-full min-h-[40px]" data-status="in-progress">진행중</button>
+            <button type="button" class="status-chip border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm font-bold rounded-full min-h-[40px]" data-status="re-requested">재결재 요청중</button>
+            <button type="button" class="status-chip border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm font-bold rounded-full min-h-[40px]" data-status="rejected">반려</button>
+            <button type="button" class="status-chip border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm font-bold rounded-full min-h-[40px]" data-status="complete">승인완료</button>
+            <button type="button" class="status-chip border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm font-bold rounded-full min-h-[40px]" data-status="withdrawn">게시중단</button>
         </div>
     </div>
 
@@ -339,6 +358,7 @@
     const REVIEW_PAGE_SIZE = 10;
     let reviewFiltered = [];
     let reviewCurrentPage = 1;
+    let reviewStatusFilter = "all";
 
     const openDB = () =>
         new Promise((resolve, reject) => {
@@ -409,12 +429,29 @@
         const fd = $("fDate").value.trim();
 
         return posts.filter((p) => {
-            if (p.status !== "submitted" && p.status !== "approved") return false;
+            const statusMeta = getReviewStatusMeta(p);
+            if (reviewStatusFilter !== "all" && statusMeta.key !== reviewStatusFilter) return false;
             if (fa && !String(p.authorName || "").includes(fa)) return false;
             if (ft && !String(p.title || "").includes(ft)) return false;
             if (fd && !String(p.date || "").includes(fd)) return false;
             return true;
         });
+    };
+
+    const getReviewStatusMeta = (post) => {
+        const stage = post.approvalStage != null ? post.approvalStage : 0;
+        const history = Array.isArray(post.approvalHistory) ? post.approvalHistory : [];
+        const getTs = (item) => new Date(item.approved_at || item.updatedAt || item.updated_at || item.time || 0).getTime() || 0;
+        const latestRejection = history.filter((h) => h.rejected).sort((a, b) => getTs(a) - getTs(b)).pop() || null;
+        const latestWithdrawal = history.filter((h) => h.withdrawn).sort((a, b) => getTs(a) - getTs(b)).pop() || null;
+        const isComplete = typeof window.isApprovalComplete === "function" ? window.isApprovalComplete(stage) : stage >= 4;
+        const resubmitted = !!(latestRejection && (post.updatedAt || post.updated_at || post.modifiedAt || post.modified_at) && new Date(post.updatedAt || post.updated_at || post.modifiedAt || post.modified_at).getTime() > getTs(latestRejection));
+        if (latestWithdrawal) return { key: "withdrawn", label: "게시중단", className: "bg-amber-50 text-amber-800 border-amber-200" };
+        if (isComplete) return { key: "complete", label: "승인완료", className: "bg-emerald-50 text-emerald-700 border-emerald-200" };
+        if (latestRejection && !resubmitted) return { key: "rejected", label: "반려", className: "bg-rose-50 text-rose-700 border-rose-200" };
+        if (latestRejection && resubmitted) return { key: "re-requested", label: "재결재 요청중", className: "bg-indigo-50 text-indigo-700 border-indigo-200" };
+        if (stage > 0) return { key: "in-progress", label: "진행중", className: "bg-sky-50 text-sky-700 border-sky-200" };
+        return { key: "draft", label: "대기", className: "bg-slate-50 text-slate-700 border-slate-200" };
     };
 
     const getCurrentStepLabel = (post) => {
@@ -424,6 +461,16 @@
         const steps = window.APPROVAL_STEPS;
         const next = steps && steps[stage];
         return next ? next.name + " 대기" : "단계 " + stage + " 대기";
+    };
+
+    const syncStatusFilterUI = () => {
+        const wrap = $("statusFilterWrap");
+        if (!wrap) return;
+        wrap.querySelectorAll("button[data-status]").forEach((btn) => {
+            const active = btn.getAttribute("data-status") === reviewStatusFilter;
+            btn.classList.toggle("active", active);
+            btn.setAttribute("aria-pressed", active ? "true" : "false");
+        });
     };
 
     const formatKST = (isoStr) => {
@@ -509,20 +556,38 @@
     const buildApprovalHistorySummaryHtml = (post) => {
         const history = Array.isArray(post.approvalHistory) ? post.approvalHistory.slice() : [];
         if (history.length === 0) return "";
-        history.sort((a, b) => {
+        const normalized = history.slice();
+        const stage = post.approvalStage != null ? post.approvalStage : 0;
+        if (typeof window.isApprovalComplete === "function" ? window.isApprovalComplete(stage) : stage >= 5) {
+            const hasFinalStep = normalized.some((h) => Number(h.step) === 4);
+            if (!hasFinalStep) {
+                normalized.push({
+                    step: 4,
+                    approver_name: post.lastApproverName || post.approver_name || "최종 승인자",
+                    approved_at: post.updatedAt || post.updated_at || post.modifiedAt || post.modified_at || post.createdAt || post.created_at || "",
+                    synthetic: true,
+                    rejected: false,
+                    withdrawn: false
+                });
+            }
+        }
+        normalized.sort((a, b) => {
             const ta = new Date(a.approved_at || a.updatedAt || a.updated_at || a.time || 0).getTime() || 0;
             const tb = new Date(b.approved_at || b.updatedAt || b.updated_at || b.time || 0).getTime() || 0;
             return ta - tb;
         });
-        const parts = history.map((h) => {
-            const stepName = (window.APPROVAL_STEPS && window.APPROVAL_STEPS[h.step] && window.APPROVAL_STEPS[h.step].name) ? window.APPROVAL_STEPS[h.step].name : ("단계 " + h.step);
+        const parts = normalized.map((h) => {
+            const stepIndex = Number(h.step);
+            const stepName = (window.APPROVAL_STEPS && window.APPROVAL_STEPS[stepIndex] && window.APPROVAL_STEPS[stepIndex].name) ? window.APPROVAL_STEPS[stepIndex].name : ("단계 " + stepIndex);
             const who = h.approver_name || h.approver || "";
             const when = h.approved_at || h.updatedAt || h.updated_at ? formatKST(h.approved_at || h.updatedAt || h.updated_at) : "";
             const action = h.withdrawn ? "게시중단" : (h.rejected ? "반려" : "승인");
-            const bits = [];
-            bits.push(escapeHtml(stepName) + ": " + escapeHtml(action + (who ? " " + who : "")));
-            if (when) bits.push(escapeHtml(when));
-            return bits.join(" ");
+            const actorLabel = h.withdrawn ? "철회자" : (h.rejected ? "반려자" : "승인자");
+            const stageLabel = escapeHtml((stepIndex === 0 ? "기획 및 초안 작성" : stepName) + " (" + stepIndex + "단계)");
+            const actionLabel = escapeHtml(action);
+            const whoLabel = who ? escapeHtml(who) : "";
+            const timeLabel = when ? escapeHtml(when) : "";
+            return `${stageLabel} · ${actionLabel}${whoLabel ? ` · ${whoLabel}` : ""}${timeLabel ? ` · ${timeLabel}` : ""}`;
         });
         return parts.join(" · ");
     };
@@ -530,17 +595,43 @@
     const buildApprovalHistoryExpandedHtml = (post) => {
         const history = Array.isArray(post.approvalHistory) ? post.approvalHistory.slice() : [];
         if (history.length === 0) return "";
-        history.sort((a, b) => {
+        const normalized = history.slice();
+        const stage = post.approvalStage != null ? post.approvalStage : 0;
+        if (typeof window.isApprovalComplete === "function" ? window.isApprovalComplete(stage) : stage >= 5) {
+            const hasFinalStep = normalized.some((h) => Number(h.step) === 4);
+            if (!hasFinalStep) {
+                normalized.push({
+                    step: 4,
+                    approver_name: post.lastApproverName || post.approver_name || "최종 승인자",
+                    approved_at: post.updatedAt || post.updated_at || post.modifiedAt || post.modified_at || post.createdAt || post.created_at || "",
+                    synthetic: true,
+                    rejected: false,
+                    withdrawn: false
+                });
+            }
+        }
+        normalized.sort((a, b) => {
             const ta = new Date(a.approved_at || a.updatedAt || a.updated_at || a.time || 0).getTime() || 0;
             const tb = new Date(b.approved_at || b.updatedAt || b.updated_at || b.time || 0).getTime() || 0;
             return ta - tb;
         });
-        const parts = history.map((h) => {
-            const stepName = (window.APPROVAL_STEPS && window.APPROVAL_STEPS[h.step] && window.APPROVAL_STEPS[h.step].name) ? window.APPROVAL_STEPS[h.step].name : ("단계 " + h.step);
+        const parts = normalized.map((h) => {
+            const stepIndex = Number(h.step);
+            const stepName = (window.APPROVAL_STEPS && window.APPROVAL_STEPS[stepIndex] && window.APPROVAL_STEPS[stepIndex].name) ? window.APPROVAL_STEPS[stepIndex].name : ("단계 " + stepIndex);
             const who = h.approver_name || h.approver || "";
             const when = h.approved_at || h.updatedAt || h.updated_at ? formatKST(h.approved_at || h.updatedAt || h.updated_at) : "";
             const action = h.withdrawn ? "게시중단" : (h.rejected ? "반려" : "승인");
-            return `<div class="py-1">${escapeHtml(stepName)} · ${escapeHtml(action + (who ? ' ' + who : ''))}${when ? ' · ' + escapeHtml(when) : ''}</div>`;
+            const actorLabel = h.withdrawn ? "철회자" : (h.rejected ? "반려자" : "승인자");
+            const actionClass = h.withdrawn ? "withdraw" : (h.rejected ? "reject" : "approve");
+            return `
+                <div class="history-entry">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="history-chip step">${escapeHtml(stepIndex === 0 ? "기획/초안" : stepName)} · ${stepIndex}단계</span>
+                        <span class="history-chip ${actionClass}">${escapeHtml(action)}</span>
+                        ${who ? `<span class="history-chip actor">${escapeHtml(actorLabel)}: ${escapeHtml(who)}</span>` : ""}
+                        ${when ? `<span class="history-chip time">${escapeHtml(when)}</span>` : ""}
+                    </div>
+                </div>`;
         });
         return parts.join("");
     };
@@ -648,6 +739,7 @@
             const row = document.createElement("div");
             row.className = "border border-slate-200 p-4";
 
+            const statusMeta = getReviewStatusMeta(p);
             const typeLabel = p.type === "event" ? "행사" : "탐방";
             const t = escapeHtml(p.title || "");
             const a = escapeHtml(p.authorName || "");
@@ -659,7 +751,10 @@
             row.innerHTML = `
             <div class="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-start justify-between gap-3">
               <div class="min-w-0 flex-1">
-                <div class="text-xs font-extrabold text-slate-500">${typeLabel} · ${p.id.slice(0, 8)}</div>
+                                <div class="flex flex-wrap items-center gap-2 text-xs font-extrabold text-slate-500">
+                                    <span>${typeLabel} · ${p.id.slice(0, 8)}</span>
+                                    <span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-bold ${statusMeta.className}">${statusMeta.label}</span>
+                                </div>
                 <div class="mt-1 text-sm font-extrabold break-words line-clamp-2 sm:truncate">${t}</div>
                 <div class="mt-2 text-xs font-bold text-slate-600 break-words">${a} · ${d} · ${place}</div>
                                 <div class="mt-3 overflow-x-auto -mx-1">${flowHtml}</div>
@@ -1050,6 +1145,16 @@
             $("fAuthor").addEventListener("input", renderList);
             $("fTitle").addEventListener("input", renderList);
             $("fDate").addEventListener("input", renderList);
+            if ($("statusFilterWrap")) {
+                $("statusFilterWrap").querySelectorAll("button[data-status]").forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        reviewStatusFilter = btn.getAttribute("data-status") || "all";
+                        syncStatusFilterUI();
+                        renderList();
+                    });
+                });
+                syncStatusFilterUI();
+            }
 
             $("btnModalClose").addEventListener("click", () => {
                 closeModal();
