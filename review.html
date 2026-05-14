@@ -502,6 +502,27 @@
         return '<div class="' + wrapCls + '">' + parts.join("") + "</div>";
     };
 
+    const buildApprovalHistorySummaryHtml = (post) => {
+        const history = Array.isArray(post.approvalHistory) ? post.approvalHistory.slice() : [];
+        if (history.length === 0) return "";
+        history.sort((a, b) => {
+            const ta = new Date(a.approved_at || a.updatedAt || a.updated_at || a.time || 0).getTime() || 0;
+            const tb = new Date(b.approved_at || b.updatedAt || b.updated_at || b.time || 0).getTime() || 0;
+            return ta - tb;
+        });
+        const parts = history.map((h) => {
+            const stepName = (window.APPROVAL_STEPS && window.APPROVAL_STEPS[h.step] && window.APPROVAL_STEPS[h.step].name) ? window.APPROVAL_STEPS[h.step].name : ("단계 " + h.step);
+            const who = h.approver_name || h.approver || "";
+            const when = h.approved_at || h.updatedAt || h.updated_at ? formatKST(h.approved_at || h.updatedAt || h.updated_at) : "";
+            const action = h.withdrawn ? "게시중단" : (h.rejected ? "반려" : "승인");
+            const bits = [];
+            bits.push(escapeHtml(stepName) + ": " + escapeHtml(action + (who ? " " + who : "")));
+            if (when) bits.push(escapeHtml(when));
+            return bits.join(" ");
+        });
+        return parts.join(" · ");
+    };
+
     const renderApprovalWorkflow = (post) => {
         const wrap = $("approvalWorkflowWrap");
         if (!wrap) return;
@@ -619,7 +640,8 @@
                 <div class="text-xs font-extrabold text-slate-500">${typeLabel} · ${p.id.slice(0, 8)}</div>
                 <div class="mt-1 text-sm font-extrabold break-words line-clamp-2 sm:truncate">${t}</div>
                 <div class="mt-2 text-xs font-bold text-slate-600 break-words">${a} · ${d} · ${place}</div>
-                <div class="mt-3 overflow-x-auto -mx-1">${flowHtml}</div>
+                                <div class="mt-3 overflow-x-auto -mx-1">${flowHtml}</div>
+                                ${(() => { const h = buildApprovalHistorySummaryHtml(p); return h ? `<div class="mt-2 text-xs text-slate-500 break-words">히스토리: ${h}</div>` : ""; })()}
               </div>
               <div class="flex flex-row gap-2 flex-shrink-0 mt-1 sm:mt-0">
                 <button data-open="1" type="button" class="flex-1 sm:flex-none min-h-[44px] border border-slate-200 px-3 py-2.5 sm:py-2 text-sm font-bold touch-manipulation">결재하기</button>
